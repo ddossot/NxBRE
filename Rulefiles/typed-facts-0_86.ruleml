@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<rulebase xmlns="http://www.ruleml.org/0.86/xsd" xsi:schemaLocation="http://www.ruleml.org/0.86/xsd ruleml-0_86-nafdatalog.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" direction="forward">
+	<_rbaselab>
+		<ind>Typed Facts Creation Samples</ind>
+	</_rbaselab>
+	<!-- To create a typed fact, use an embedded C# expression -->
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Test for System.Int32</rel>
+				</_opr>
+				<ind>expr:123</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Another test for System.Int32</rel>
+				</_opr>
+				<ind>expr:(int)123</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Yet another test for System.Int32</rel>
+				</_opr>
+				<ind>expr:System.Convert.ToInt32(123)</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Test for System.Single</rel>
+				</_opr>
+				<ind>expr:123f</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Another test for System.Single</rel>
+				</_opr>
+				<ind>expr:(float)123</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Yet another test for System.Single</rel>
+				</_opr>
+				<ind>expr:System.Convert.ToSingle(123)</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Test for System.DateTime</rel>
+				</_opr>
+				<ind>expr:System.DateTime.Parse("1999/12/31 23:59:59")</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Another test for System.DateTime</rel>
+				</_opr>
+				<ind>expr:new System.DateTime(1999, 12, 31)</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Yet another test for System.DateTime</rel>
+				</_opr>
+				<ind>expr:System.Convert.ToDateTime("1999/12/31 23:59:59")</ind>
+			</atom>
+		</_head>
+	</fact>
+</rulebase>

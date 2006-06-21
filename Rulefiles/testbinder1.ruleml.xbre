@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xBusinessRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://nxbre.org/xBusinessRules.xsd">
+	<Set id="BeforeProcess">
+		<ObjectLookup id="SENTENCE" objectId="THEDUKE" member="Sentence"/>
+		<ObjectLookup objectId="NxBRE-IE" member="AssertNewFactOrFail">
+			<Argument value="talking"/>
+			<Argument valueId="THEDUKE"/>
+			<Argument valueId="SENTENCE"/>
+		</ObjectLookup>
+		
+		<ObjectLookup id="SENTENCE" objectId="BOBBYBOB" member="Sentence"/>
+		<ObjectLookup objectId="NxBRE-IE" member="AssertNewFactOrFail">
+			<Argument value="talking"/>
+			<Argument valueId="BOBBYBOB"/>
+			<Argument valueId="SENTENCE"/>
+		</ObjectLookup>
+	</Set>
+	
+	<Set id="Evaluate_isStartingWith_Arg0">
+		<ObjectLookup id="IE-RESULT" objectId="IE-PREDICATE" member="StartsWith">
+			<Argument valueId="Arg0"/>
+		</ObjectLookup>
+	</Set>
+	
+	<Set id="Evaluate_isFinishingWith_Arg0">
+		<ObjectLookup id="IE-RESULT" objectId="IE-PREDICATE" member="EndsWith">
+			<Argument valueId="Arg0"/>
+		</ObjectLookup>
+	</Set>
+	
+	<Set id="AfterProcess">
+		<ObjectLookup id="SENTENCE" objectId="JOHNQDOE" member="Sentence"/>
+		<ObjectLookup objectId="NxBRE-IE" member="AssertNewFact">
+			<Argument value="talking"/>
+			<Argument valueId="JOHNQDOE"/>
+			<Argument valueId="SENTENCE"/>
+		</ObjectLookup>
+
+		<ObjectLookup id="SENTENCE" objectId="DANNYDAN" member="Sentence"/>
+		<ObjectLookup objectId="NxBRE-IE" member="AssertNewFact">
+			<Argument value="talking"/>
+			<Argument valueId="DANNYDAN"/>
+			<Argument valueId="SENTENCE"/>
+		</ObjectLookup>
+	</Set>
+</xBusinessRules>

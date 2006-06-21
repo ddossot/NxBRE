@@ -1,0 +1,25 @@
+namespace org.nxbre.examples
+{
+	using System;
+	
+	using org.nxbre.ie.adapters;
+	using org.nxbre.ie.core;
+	
+	public class ExamsBinder:AbstractBinder {
+		public ExamsBinder():base(BindingTypes.BeforeAfter) {}
+		
+		public override bool Relate(string function, object[] predicates) {
+			IEF.DispatchLog("Exams Binder Relating: " + function, 1);
+
+			switch(function) {
+				case "WithinTolerance_Arg0_Arg1_Arg2":
+					return Convert.ToDouble(predicates[0])
+								 >=
+								 (Convert.ToDouble(predicates[1]) * (100d - Convert.ToDouble(predicates[2])) * .01d);
+			}
+			
+			throw new Exception("Binder can not evaluate " + function);
+		}
+		
+	}
+}

@@ -1,0 +1,24 @@
+namespace org.nxbre.test.ie
+{
+	using System;
+	using System.Collections;
+	
+	using org.nxbre.ie.adapters;
+	using org.nxbre.ie.core;
+	using org.nxbre.ie.rule;
+	using org.nxbre.util;
+	
+	public class ExtraTestBinder:AbstractBinder {
+		public ExtraTestBinder():base(BindingTypes.BeforeAfter) {}
+		
+		public override object Compute(string operationName, IDictionary arguments) {
+			if (operationName == "subtract") {
+				IList operandNames = (IList)arguments[typeof(Parameter)];
+				return Convert.ToInt32(arguments[operandNames[0]])-Convert.ToInt32(arguments[operandNames[1]]);
+				}
+			else {
+				throw new NotImplementedException("Operation '" + operationName + "' is not supported by this binder.");
+				}
+			}
+	}
+}

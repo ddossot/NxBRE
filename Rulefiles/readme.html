@@ -1,0 +1,510 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>NxBRE Sample Rule Files</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 2.0  (Win32)">
+	<META NAME="AUTHOR" CONTENT="David Dossot">
+	<META NAME="CREATED" CONTENT="20041203;17092892">
+	<META NAME="CHANGEDBY" CONTENT="David Dossot">
+	<META NAME="CHANGED" CONTENT="20060208;10451372">
+	<STYLE>
+	<!--
+		@page { size: 27.94cm 21.59cm; margin: 2.01cm }
+		TD P { margin-bottom: 0.2cm }
+		H1 { margin-bottom: 0.2cm }
+		H1.western { font-family: "Arial", sans-serif; font-size: 16pt }
+		H1.cjk { font-family: "Lucida Sans Unicode"; font-size: 16pt }
+		H1.ctl { font-family: "Tahoma"; font-size: 16pt }
+		P { margin-bottom: 0.2cm }
+		H3 { margin-bottom: 0.2cm }
+		H3.western { font-family: "Arial", sans-serif; font-size: 12pt; font-style: italic; font-weight: medium }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-US" DIR="LTR">
+<H1 CLASS="western" ALIGN=CENTER>NxBRE</H1>
+<H1 CLASS="western" ALIGN=CENTER>Sample Rule Files</H1>
+<H3 CLASS="western"><FONT SIZE=2><SPAN STYLE="background: #ffff99">NB.
+Recent additions are shown on a yellow background.</SPAN></FONT></H3>
+<H3 CLASS="western">Flow Engine files</H3>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=5 CELLSPACING=0>
+	<COL WIDTH=58*>
+	<COL WIDTH=198*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TD WIDTH=23%>
+				<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>discount.bre</FONT></FONT></P>
+			</TD>
+			<TD WIDTH=77%>
+				<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>Discount
+				rules in native syntax.</FONT></FONT></P>
+			</TD>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=23%>
+				<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>discount.xbre</B></FONT></FONT></P>
+			</TD>
+			<TD WIDTH=77%>
+				<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Discount
+				rules in extended syntax.</FONT></FONT></P>
+				<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Usage:</FONT></FONT></P>
+				<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Discount
+				-l %1 -e %2 &quot;C:/NxBRE/Rulefiles/discount.xbre&quot;</FONT></FONT></P>
+				<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><I>where
+				%1 is the log trace level (1-9) and %2 the error trace level
+				(1-9)</I></FONT></FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=23%>
+				<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>login.xbre</B></FONT></FONT></P>
+			</TD>
+			<TD WIDTH=77%>
+				<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Login
+				rules in extended syntax.</FONT></FONT></P>
+				<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Usage:</FONT></FONT></P>
+				<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Login
+				-l %1 -e %2 &quot;C:/NxBRE/Rulefiles/login.xbre&quot;</FONT></FONT></P>
+				<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><I>where
+				%1 is the log trace level (1-9) and %2 the error trace level
+				(1-9)</I></FONT></FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=23%>
+				<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>test.xbre</FONT></FONT></P>
+			</TD>
+			<TD WIDTH=77%>
+				<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>Regression
+				tests file that demonstrates all the possible language constructs
+				of the extended syntax.</FONT></FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=23%>
+				<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>Pseudocode
+				(folder)</FONT></FONT></P>
+			</TD>
+			<TD WIDTH=77%>
+				<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>The
+				files in this folder demonstrate the pseudo-code rendition of
+				Flow Engine rule files in HTML (open frames.html to see the
+				result).</FONT></FONT></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H3 CLASS="western">Inference Engine &ndash; XML Schema Files</H3>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=5 CELLSPACING=0>
+	<COL WIDTH=66*>
+	<COL WIDTH=190*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TD WIDTH=26%>
+				<P ALIGN=LEFT STYLE="margin-left: 0.1cm; margin-right: 0.1cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>ruleml-0_86-datalog.xsd</FONT></FONT></P>
+			</TD>
+			<TD WIDTH=74%>
+				<P ALIGN=LEFT STYLE="margin-left: 0.1cm; margin-right: 0.1cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>RuleML
+				0.86 Datalog XML Schema.</FONT></FONT></P>
+			</TD>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=26%>
+				<P ALIGN=LEFT STYLE="margin-left: 0.1cm; margin-right: 0.1cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>ruleml-0_86-nafdatalog.xsd</B></FONT></FONT></P>
+			</TD>
+			<TD WIDTH=74%>
+				<P ALIGN=LEFT STYLE="margin-left: 0.1cm; margin-right: 0.1cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>RuleML
+				0.86 NafDatalog XML Schema</FONT></FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=26% BGCOLOR="#ffff99">
+				<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>ruleml-0_9-nafdatalog.xsd</B></FONT></FONT></P>
+			</TD>
+			<TD WIDTH=74% BGCOLOR="#ffff99">
+				<P ALIGN=LEFT STYLE="margin-left: 0.1cm; margin-right: 0.1cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>RuleML
+				0.9 NafDatalog XML Schema (recommended for the inference engine)</FONT></FONT></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H3 CLASS="western">Inference Engine rule bases</H3>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>Usage
+: Inference Engine Console.</B></FONT></FONT></P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=5 CELLSPACING=0>
+	<COL WIDTH=69*>
+	<COL WIDTH=187*>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>discount.ruleml<BR><SPAN STYLE="background: #ffff99">discount-0_9.ruleml</SPAN></B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=73%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>Discount
+			rules.</FONT></FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>discount_lab.ruleml</B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=73%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>Labeled
+			discount rule.</FONT></FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>discount.vdx</B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=73%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>Discount
+			rules in Visio 2003 DatadiagramML.</FONT></FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>facts.ruleml</B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=73%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>Rule
+			base containing only typeless facts.</FONT></FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B><SPAN STYLE="background: #ffff99">typed-facts-0_9.ruleml</SPAN><BR>typed-facts-0_86.ruleml</B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=73%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>Rule
+			base containing samples of typed facts. <SPAN STYLE="background: #ffff99">Syntax
+			shown in version 0.9 must be preferred.</SPAN></FONT></FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>gedcom-relations-0_9.ruleml<BR>gedcom-relations-0_86.ruleml</B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=73%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>Family
+			rules from the Genealogical Data Communication (GEDCOM) data
+			model.</FONT></FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>gedcom-relations.hrf</B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=73%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>The
+			GEDCOM rule base in Human Readable Format.</FONT></FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>fire-alarm.ruleml</B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=73%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>Fire
+			Alarm Management system.</FONT></FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>fire-alarm.vdx</B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=73%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>Same
+			in Visio 2003 DatadiagramML.</FONT></FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>exams.ruleml</B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=73%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>Graduation
+			Management system.</FONT></FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>exams-binderless.ruleml</B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=73%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>Graduation
+			Management system, which does not need a binder to execute.</FONT></FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>chocolatebox.ruleml<BR>chocolatebox.vdx</B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=73%>
+			<P ALIGN=LEFT STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Chocolate
+			Box Weight Calculation system.</FONT></FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>chocolatebox-binderless.ruleml<BR>chocolatebox-binderless.vdx</B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=73%>
+			<P ALIGN=LEFT STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Chocolate
+			Box Weight Calculation system, which does not need a binder to
+			execute.</FONT></FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>exams.vdx</B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=73%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>Same
+			in Visio 2003 DatadiagramML.</FONT></FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>fraudcontrol.ruleml</B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=73%>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Fraud
+			control rules used for detecting potential suspicious transactions
+			and customers.</FONT></FONT></P>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Usage:</FONT></FONT></P>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>FraudControl
+			%1 &quot;C:\NxBRE\Rulefiles\fraudcontrol.ruleml&quot;</FONT></FONT></P>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><I>where
+			%1 is the number of tens of dummy customers data to create
+			(advice: use 10 or more)</I></FONT></FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>telco-rating.ruleml</B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=73%>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Telecom
+			call rating rules.</FONT></FONT></P>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Usage:</FONT></FONT></P>
+			<P ALIGN=LEFT STYLE="margin-bottom: 0cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Telco
+			%1 &quot;C:\My
+			Documents\Development\NxBRE\Rulefiles\telco-rating.ruleml&quot;</FONT></FONT></P>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><I>where
+			%1 is the number of dozens of dummy calls data to create (advice:
+			use 100 or more)</I></FONT></FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27% BGCOLOR="#ffff99">
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>own_compact.ruleml<BR>own.ruleml<BR>own_expanded.ruleml</B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=73% BGCOLOR="#ffff99">
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>Object
+			ownership rules demonstrating the three syntax models of RuleML
+			0.9.</FONT></FONT></P>
+		</TD>
+	</TR>
+</TABLE>
+<H3 CLASS="western"><BR>Inference Engine - Test rule bases</H3>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=5 CELLSPACING=0>
+	<COL WIDTH=58*>
+	<COL WIDTH=198*>
+	<TR VALIGN=TOP>
+		<TD WIDTH=23%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B><SPAN STYLE="background: transparent">test-0_86.ruleml<BR><SPAN STYLE="background: #ffff99">test-0_9.ruleml</SPAN><BR>test.hrf</SPAN></B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=77%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><SPAN STYLE="background: transparent">Regression
+			tests files.</SPAN></FONT></FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=23%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>testbinder.ruleml</B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=77%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>Test
+			file for the binding mechanism.</FONT></FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=23%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>endlessloop.ruleml</B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=77%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>Test
+			file for the maximum iteration limit parameter.</FONT></FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=23%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B><SPAN STYLE="background: transparent">events-test.ruleml</SPAN></B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=77%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><SPAN STYLE="background: transparent">Test
+			file for the engine's events support.</SPAN></FONT></FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=23%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>test-2_1.vdx<BR>test-2_2.vdx<BR>test-2_3.vdx</B></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=77%>
+			<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>Test
+			files for checking the features support of the Visio 2003 adapter.</FONT></FONT></P>
+		</TD>
+	</TR>
+</TABLE>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H3 CLASS="western">Inference Engine - Binder Files</H3>
+<TABLE WIDTH=100% BORDER=2 BORDERCOLOR="#000000" CELLPADDING=5 CELLSPACING=0>
+	<COL WIDTH=66*>
+	<COL WIDTH=190*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TD WIDTH=26%>
+				<P ALIGN=LEFT STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>exams.ruleml.ccb</B></FONT></FONT></P>
+			</TD>
+			<TD WIDTH=74%>
+				<P ALIGN=LEFT STYLE="margin-right: 0.02cm; margin-bottom: 0cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>On-the-fly
+				compiled C# binder for the Graduation Management system.</FONT></FONT></P>
+				<P ALIGN=LEFT STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Class
+				name: org.nxbre.examples.ExamsBinder</FONT></FONT></P>
+			</TD>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=26%>
+				<P ALIGN=LEFT STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>exams.ruleml.xbre</B></FONT></FONT></P>
+			</TD>
+			<TD WIDTH=74%>
+				<P ALIGN=LEFT STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Flow
+				Engine binder for the Graduation Management system.</FONT></FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=26%>
+				<P ALIGN=LEFT STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>fraudcontrol.ruleml.xbre</FONT></FONT></P>
+			</TD>
+			<TD WIDTH=74%>
+				<P ALIGN=LEFT STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Flow
+				Engine binder for the fraud control system.</FONT></FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=26%>
+				<P ALIGN=LEFT STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>fraudcontrol.ruleml.ccb</FONT></FONT></P>
+			</TD>
+			<TD WIDTH=74%>
+				<P ALIGN=LEFT STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Compiled
+				C# binder for the fraud control system.</FONT></FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=26%>
+				<P ALIGN=LEFT STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>telco-rating.ruleml.ccb</FONT></FONT></P>
+			</TD>
+			<TD WIDTH=74%>
+				<P ALIGN=LEFT STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Compiled
+				C# binder for the telecom call rating system.</FONT></FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=26%>
+				<P ALIGN=LEFT STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>testbinder1.ruleml.xbre</FONT></FONT></P>
+			</TD>
+			<TD WIDTH=74%>
+				<P ALIGN=LEFT STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Test
+				file for the binding mechanism, demonstrating the BeforeAfter
+				binding mode.</FONT></FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=26%>
+				<P ALIGN=JUSTIFY STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>testbinder2.ruleml.xbre</FONT></FONT></P>
+			</TD>
+			<TD WIDTH=74%>
+				<P ALIGN=JUSTIFY STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Test
+				file for the binding mechanism, demonstrating the Control binding
+				mode.</FONT></FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=26%>
+				<P ALIGN=JUSTIFY STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>testbinder3.ruleml.xbre
+				testbinder4.ruleml.xbre</FONT></FONT></P>
+			</TD>
+			<TD WIDTH=74%>
+				<P ALIGN=LEFT STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Test
+				files for the binding mechanism, demonstrating that retraction in
+				the After phase of a BeforeAfter binder restarts inference.</FONT></FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=26%>
+				<P ALIGN=JUSTIFY STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>events-test.ruleml.ccb<BR>events-test.ruleml.xbre</FONT></FONT></P>
+			</TD>
+			<TD WIDTH=74%>
+				<P ALIGN=LEFT STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Test
+				files for the binding mechanism, demonstrating engine's events
+				support.</FONT></FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=26%>
+				<P ALIGN=JUSTIFY STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>chocolatebox.ruleml.ccb<BR>chocolatebox.vdx.ccb<BR>chocolatebox.ruleml.xbre</FONT></FONT></P>
+			</TD>
+			<TD WIDTH=74%>
+				<P ALIGN=LEFT STYLE="margin-right: 0.02cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Compiled
+				C# and Flow Engine binders for the Chocolate Box Weight
+				Calculation system.</FONT></FONT></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H3 CLASS="western">Inference Engine - Other Files</H3>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=5 CELLSPACING=0>
+	<COL WIDTH=66*>
+	<COL WIDTH=190*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TD WIDTH=26%>
+				<P ALIGN=LEFT STYLE="margin-left: 0.1cm; margin-right: 0.1cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>NxBRE-IE-2_3.vsx</B></FONT></FONT></P>
+			</TD>
+			<TD WIDTH=74%>
+				<P ALIGN=LEFT STYLE="margin-left: 0.1cm; margin-right: 0.1cm"><FONT FACE="Courier New, monospace"><FONT SIZE=2>Visio
+				2003 Stencil containing shapes for designing rule bases.</FONT></FONT></P>
+			</TD>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=26%>
+				<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2><B>discount_spoiled.vdx</B></FONT></FONT></P>
+			</TD>
+			<TD WIDTH=74%>
+				<P ALIGN=LEFT><FONT FACE="Courier New, monospace"><FONT SIZE=2>This
+				file is a purposefully altered version of discount.vdx used for
+				testing the realiability of the Visio adapter.</FONT></FONT></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0cm"><BR>
+</P>
+</BODY>
+</HTML>

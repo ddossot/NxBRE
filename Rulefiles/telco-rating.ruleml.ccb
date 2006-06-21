@@ -1,0 +1,40 @@
+namespace org.nxbre.examples
+{
+	using System;
+	using System.Collections;
+	
+	using org.nxbre.ie;
+	using org.nxbre.ie.adapters;
+	using org.nxbre.ie.core;
+	
+	public class TelcoRatingBinder:AbstractBinder {
+		public TelcoRatingBinder():base(BindingTypes.Control) {}
+		
+		public override void ControlProcess() {
+			foreach(CallData cd in (ArrayList)BusinessObjects["CALLSDATA"]) {
+				IEF.NewWorkingMemory(WorkingMemoryTypes.Isolated);
+
+				IEF.AssertNewFactOrFail("Hour", new object[]{cd, cd.Time.Hour});
+				IEF.AssertNewFactOrFail("Type", new object[]{cd, cd.Type});
+				IEF.AssertNewFactOrFail("Destination", new object[]{cd, cd.Destination});
+				IEF.AssertNewFactOrFail("Client Scheme", new object[]{cd, cd.ClientScheme});
+
+				IEF.Process();
+				
+				IEF.DisposeIsolatedMemory();
+			}
+		}
+		
+		public override NewFactEvent OnNewFact {
+			get {
+				return new NewFactEvent(NewFactHandler);
+			}
+		}
+
+		private void NewFactHandler(NewFactEventArgs nfea) {
+			if (nfea.Fact.Type == "Rating Scheme")
+				((CallData)nfea.Fact.GetPredicateValue(0)).RatingScheme = (string)nfea.Fact.GetPredicateValue(1);
+		}
+
+	}
+}

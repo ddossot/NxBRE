@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<RuleML xmlns="http://www.ruleml.org/0.9/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.ruleml.org/0.9/xsd ruleml-0_9-nafdatalog.xsd">
+	<Assert>
+		<Atom>
+			<op>
+				<Rel>Test for System.Uri</Rel>
+			</op>
+			<Data xsi:type="xs:anyURI">http://nxbre.org</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test for System.Byte[]</Rel>
+			</op>
+			<Data xsi:type="xs:base64Binary">aGVsbG8gd29ybGQ=</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test for System.Boolean</Rel>
+			</op>
+			<Data xsi:type="xs:boolean">true</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test for System.SByte</Rel>
+			</op>
+			<Data xsi:type="xs:byte">123</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #1 for System.DateTime</Rel>
+			</op>
+			<Data xsi:type="xs:date">1999-12-31</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #2 for System.DateTime</Rel>
+			</op>
+			<Data xsi:type="xs:dateTime">1999-12-31T23:59:59Z</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #1 for System.Decimal</Rel>
+			</op>
+			<Data xsi:type="xs:decimal">123.00</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test for System.Double</Rel>
+			</op>
+			<Data xsi:type="xs:double">123.456</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test for System.TimeSpan</Rel>
+			</op>
+			<Data xsi:type="xs:duration">P5Y2M10D</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test for System.Single</Rel>
+			</op>
+			<Data xsi:type="xs:float">123.456</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #3 for System.DateTime</Rel>
+			</op>
+			<Data xsi:type="xs:gDay">---25</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #4 for System.DateTime</Rel>
+			</op>
+			<Data xsi:type="xs:gMonthDay">--01-25</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #5 for System.DateTime</Rel>
+			</op>
+			<Data xsi:type="xs:gYear">2005</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #6 for System.DateTime</Rel>
+			</op>
+			<Data xsi:type="xs:gYearMonth">2005-12</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Another Test for System.Byte[]</Rel>
+			</op>
+			<Data xsi:type="xs:hexBinary">322034</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #1 for System.String</Rel>
+			</op>
+			<Data xsi:type="xs:ID">A123</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #2 for System.String</Rel>
+			</op>
+			<Data xsi:type="xs:ID">B456</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #3 for System.String</Rel>
+			</op>
+			<Data xsi:type="xs:IDREF">A123</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test for System.String[]</Rel>
+			</op>
+			<Data xsi:type="xs:IDREFS">A123 B456</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Another test for System.Int32</Rel>
+			</op>
+			<Data xsi:type="xs:int">123</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #2 for System.Decimal</Rel>
+			</op>
+			<Data xsi:type="xs:integer">123</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #4 for System.String</Rel>
+			</op>
+			<Data xsi:type="xs:language">en</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test for System.Int64</Rel>
+			</op>
+			<Data xsi:type="xs:long">123</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #7 for System.DateTime</Rel>
+			</op>
+			<Data xsi:type="xs:gMonth">--12--</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #5 for System.String</Rel>
+			</op>
+			<Data xsi:type="xs:Name">NxBRE</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #6 for System.String</Rel>
+			</op>
+			<Data xsi:type="xs:NCName">NxBRE</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #3 for System.Decimal</Rel>
+			</op>
+			<Data xsi:type="xs:negativeInteger">-123</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #7 for System.String</Rel>
+			</op>
+			<Data xsi:type="xs:NMTOKEN">NxBRE</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Another Test for System.String[]</Rel>
+			</op>
+			<Data xsi:type="xs:NMTOKENS">NxBRE Rocks</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #4 for System.Decimal</Rel>
+			</op>
+			<Data xsi:type="xs:nonNegativeInteger">123</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #5 for System.Decimal</Rel>
+			</op>
+			<Data xsi:type="xs:nonPositiveInteger">-123</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #8 for System.String</Rel>
+			</op>
+			<Data xsi:type="xs:normalizedString">NxBRE</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #9 for System.String</Rel>
+			</op>
+			<Data xsi:type="xs:NOTATION">NxBRE</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #6 for System.Decimal</Rel>
+			</op>
+			<Data xsi:type="xs:positiveInteger">123</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test for System.Xml.XmlQualifiedName</Rel>
+			</op>
+			<Data xsi:type="xs:QName">xsi:type</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test for System.Int16</Rel>
+			</op>
+			<Data xsi:type="xs:short">123</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #10 for System.String</Rel>
+			</op>
+			<Data xsi:type="xs:string">NxBRE</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #8 for System.DateTime</Rel>
+			</op>
+			<Data xsi:type="xs:time">23:59:59Z</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test #11 for System.String</Rel>
+			</op>
+			<Data xsi:type="xs:token">NxBRE</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test for System.Byte</Rel>
+			</op>
+			<Data xsi:type="xs:unsignedByte">123</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test for System.UInt32</Rel>
+			</op>
+			<Data xsi:type="xs:unsignedInt">123</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test for System.UInt64</Rel>
+			</op>
+			<Data xsi:type="xs:unsignedLong">123</Data>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>Test for System.UInt16</Rel>
+			</op>
+			<Data xsi:type="xs:unsignedShort">123</Data>
+		</Atom>
+	</Assert>
+</RuleML>

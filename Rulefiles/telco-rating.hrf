@@ -1,0 +1,109 @@
+/* 
+
+  NxBRE Inference Engine Sample Rule Base
+
+  Author: David Dossot
+
+  Remark: This rule base uses mutual exclusion mechanism, forcing to isolate the facts of the different call data. A faster approach would be to write the rules differently, with no more usage of mutual exclusion, then expose all the call data in one operation.
+
+*/
+
+#DIRECTION_FORWARD
+
+[Telecom Rating Rules];
+
+/*
+  Global LOCal and INTernational Call Rating Assertions
+*/
+[label:LOC;priority:10]
+Type{?Call, LOC}
+-> Rating Scheme{?Call, PerSecond:0.001};
+
+[label:INT Zone A;priority:10;mutex:PRO INT]
+Type{?Call, INT}
+& Destination{?Call, ?Country}
+& Zone A{?Country}
+-> Rating Scheme{?Call, FirstMinuteFeeThenPerSecond:0.25;0.002};
+
+[label:Day INT Zone B;priority:10;mutex:PRO INT]
+Type{?Call, INT}
+& Destination{?Call, ?Country}
+& Zone B{?Country}
+-> Rating Scheme{?Call, FirstMinuteFeeThenPerSecond:0.50;0.003};
+
+/*
+  Nightly INT Call Exceptions
+*/
+[label:Night INT Zone A;priority:20;mutex:INT Zone A]
+Time Scheme{?Call, Night}
+& Type{?Call, INT}
+& Destination{?Call, ?Country}
+& Zone A{?Country}
+-> Rating Scheme{?Call, PerSecond:0.002};
+
+/*
+  Professional Customers INT Call Exceptions
+*/
+[label:PRO INT;priority:30]
+Type{?Call, INT}
+& Client Scheme{?Call, PRO}
+-> Rating Scheme{?Call, FirstMinuteFeeThenPerSecond:0.15;0.0015};
+
+/*
+  Day Time / Night Time Assertions (Night is between 9 pm and 6 am)
+		
+  Note: This might look inefficient but it is faster than using min/max functions...
+*/
+[label:Day Time;priority:80]
+Hour{?Call, ?Anytime}
+-> Time Scheme{?Call, Day};
+
+[label:9pm Night Time;priority:90;mutex:Day Time]
+Hour{?Call, 21}
+-> Time Scheme{?Call, Night};
+
+[label:10pm Night Time;priority:90;mutex:Day Time]
+Hour{?Call, 22}
+-> Time Scheme{?Call, Night};
+
+[label:11pm Night Time;priority:90;mutex:Day Time]
+Hour{?Call, 23}
+-> Time Scheme{?Call, Night};
+
+[label:12pm Night Time;priority:90;mutex:Day Time]
+Hour{?Call, 0}
+-> Time Scheme{?Call, Night};
+
+[label:1am Night Time;priority:90;mutex:Day Time]
+Hour{?Call, 1}
+-> Time Scheme{?Call, Night};
+
+[label:2am Night Time;priority:90;mutex:Day Time]
+Hour{?Call, 2}
+-> Time Scheme{?Call, Night};
+
+[label:3am Night Time;priority:90;mutex:Day Time]
+Hour{?Call, 3}
+-> Time Scheme{?Call, Night};
+
+[label:4am Night Time;priority:90;mutex:Day Time]
+Hour{?Call, 4}
+-> Time Scheme{?Call, Night};
+
+[label:5am Night Time;priority:90;mutex:Day Time]
+Hour{?Call, 5}
+-> Time Scheme{?Call, Night};
+
+[label:6am Night Time;priority:90;mutex:Day Time]
+Hour{?Call, 6}
+-> Time Scheme{?Call, Night};
+
+/*
+  Country Destinations Zones Facts
+*/
++Zone A{CC01};
+
++Zone A{CC02};
+
++Zone B{CC99};
+

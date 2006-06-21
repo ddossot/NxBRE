@@ -1,0 +1,33 @@
+<Project name="FraudControl" standardNamespace="FraudControl" description="" newfilesearch="None" enableviewstate="True" version="1.1" projecttype="C#">
+  <Contents>
+    <File name=".\fraudcontrol" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\fraudcontrol\Customer.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\fraudcontrol\Money.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\fraudcontrol\MoneyConverter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\fraudcontrol\FraudControl.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\fraudcontrol\Transaction.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\fraudcontrol\DummyData.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\fraudcontrol\CustomBinder.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+  </Contents>
+  <References>
+    <Reference type="Assembly" refto="..\bin\Debug\NxBRE.dll" localcopy="True" />
+  </References>
+  <DeploymentInformation target="" script="" strategy="File" />
+  <Configuration runwithwarnings="False" name="Debug">
+    <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="Standard" warninglevel="4" nowarn="" includedebuginformation="False" optimize="False" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Exe" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+    <Execution commandlineparameters="1 C:\DOCUME~1\DAVIDD~1\MYDOCU~1\NxBRE\RULEFI~1\fraudcontrol.hrf" consolepause="True" />
+    <Output directory=".\bin\Debug" assembly="FraudControl" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+  </Configuration>
+  <Configurations active="Debug">
+    <Configuration runwithwarnings="False" name="Debug">
+      <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="Standard" warninglevel="4" nowarn="" includedebuginformation="False" optimize="False" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Exe" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+      <Execution commandlineparameters="1 C:\DOCUME~1\DAVIDD~1\MYDOCU~1\NxBRE\RULEFI~1\fraudcontrol.hrf" consolepause="True" />
+      <Output directory=".\bin\Debug" assembly="FraudControl" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+    <Configuration runwithwarnings="True" name="Release">
+      <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="Standard" warninglevel="4" nowarn="" includedebuginformation="False" optimize="True" unsafecodeallowed="False" generateoverflowchecks="False" mainclass="" target="Exe" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+      <Execution commandlineparameters="5 C:\DOCUME~1\DAVIDD~1\MYDOCU~1\NxBRE\RULEFI~1\fraudcontrol.hrf" consolepause="True" />
+      <Output directory=".\bin\Release" assembly="FraudControl" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+  </Configurations>
+</Project>
