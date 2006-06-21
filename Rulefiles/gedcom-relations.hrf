@@ -1,0 +1,170 @@
+#DIRECTION_FORWARD
+
+[gedcom-relations];
+
+/*  The http://www.daml.org/2001/01/gedom/gedcom.daml ontology is based on the
+existing Genealogical Data Communication (GEDCOM) data model,
+which is essentially "normalized" with no information duplicated
+between Individual and Family instances, but is not in the most
+convenient form for many operations.
+These rules express familiar family relationships.
+It's hoped that they can be used in queries and other reasoning
+applications as if they were defined directly as properties.
+A minor note:  with GEDCOM one should assume that any given piece of
+information could be missing (e.g. sex may not be known, and
+determininig that 2 people are first
+cousins shouldn't depend on knowing who their common grandparent is).
+Relations in these rules refer to the childIn and spouseIn properties
+in gedcom.daml or to other rules.
+   */
+
+[parent]
+childIn{?child, ?family}
+& spouseIn{?parent, ?family}
+-> parent{?child, ?parent};
+
+[father]
+parent{?child, ?parent}
+& sex{?parent, M}
+-> father{?child, ?parent};
+
+[mother]
+parent{?child, ?parent}
+& sex{?parent, F}
+-> mother{?child, ?parent};
+
+[child]
+parent{?child, ?parent}
+-> child{?parent, ?child};
+
+[son]
+child{?parent, ?child}
+& sex{?child, M}
+-> son{?parent, ?child};
+
+[daughter]
+child{?parent, ?child}
+& sex{?child, F}
+-> daughter{?parent, ?child};
+
+[grandparent]
+parent{?child, ?parent}
+& parent{?parent, ?grandparent}
+-> grandparent{?child, ?grandparent};
+
+[grandfather]
+grandparent{?child, ?grandparent}
+& sex{?grandparent, M}
+-> grandfather{?child, ?grandparent};
+
+[grandmother]
+grandparent{?child, ?grandparent}
+& sex{?grandparent, F}
+-> grandmother{?child, ?grandparent};
+
+[grandchild]
+grandparent{?child, ?grandparent}
+-> grandchild{?grandparent, ?child};
+
+[grandson]
+grandparent{?child, ?grandparent}
+& sex{?child, M}
+-> grandson{?grandparent, ?child};
+
+[granddaughter]
+grandparent{?child, ?grandparent}
+& sex{?child, F}
+-> granddaughter{?child, ?grandparent};
+
+[sibling]
+childIn{?child1, ?family}
+& childIn{?child2, ?family}
+-> sibling{?child1, ?child2};
+
+[siblingSymmetric]
+sibling{?child2, ?child1}
+-> sibling{?child1, ?child2};
+
+[brother]
+sibling{?child, ?sibling}
+& sex{?sibling, M}
+-> brother{?child, ?sibling};
+
+[sister]
+sibling{?child, ?sibling}
+& sex{?sibling, F}
+-> sister{?child, ?sibling};
+
+[spouse]
+spouseIn{?spouse1, ?family}
+& spouseIn{?spouse2, ?family}
+-> spouse{?spouse1, ?spouse2};
+
+[spouseSymmetric]
+spouse{?spouse2, ?spouse1}
+-> spouse{?spouse1, ?spouse2};
+
+[husband]
+spouse{?spouse, ?husband}
+& sex{?husband, M}
+-> husband{?spouse, ?husband};
+
+[wife]
+spouse{?spouse, ?wife}
+& sex{?wife, F}
+-> wife{?spouse, ?wife};
+
+[uncle1]
+parent{?child, ?parent}
+& brother{?parent, ?uncle}
+-> uncle{?child, ?uncle};
+
+[uncle2]
+aunt{?child, ?aunt}
+& spouse{?aunt, ?uncle}
+-> uncle{?child, ?uncle};
+
+[aunt1]
+parent{?child, ?parent}
+& sister{?parent, ?aunt}
+-> aunt{?child, ?aunt};
+
+[aunt2]
+uncle{?child, ?uncle}
+& spouse{?uncle, ?aunt}
+-> aunt{?child, ?aunt};
+
+[niece]
+daughter{?parent, ?child}
+& sibling{?parent, ?sibling}
+-> niece{?sibling, ?child};
+
+[nephew]
+son{?parent, ?child}
+& sibling{?parent, ?sibling}
+-> nephew{?sibling, ?child};
+
+[firstCousin]
+parent{?cousin1, ?sibling1}
+& parent{?cousin2, ?sibling2}
+& sibling{?sibling1, ?sibling2}
+-> firstCousin{?cousin1, ?cousin2};
+
+[ancestor1]
+parent{?child, ?parent}
+-> ancestor{?child, ?parent};
+
+[ancestor2]
+parent{?child, ?parent}
+& ancestor{?parent, ?ancestor}
+-> ancestor{?child, ?ancestor};
+
+[descendent]
+ancestor{?child, ?ancestor}
+-> descendent{?ancestor, ?child};
+
+[cousin]
+sibling{?sibling1, ?sibling2}
+& descendent{?sibling1, ?descendent1}
+& descendent{?sibling2, ?descendent2}
+-> cousin{?descendent1, ?descendent2};

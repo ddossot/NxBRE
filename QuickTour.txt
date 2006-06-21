@@ -1,0 +1,28 @@
+If you want to get a feeling on how the Inference Engine runs: 
+- start the console 
+- open "discount_lab.ruleml" 
+- list the facts in the working memory with Ctrl+L 
+- run the query with F6, see how it returns nothing, 
+- make the engine infer with F5 
+- see the facts it deducts 
+- list the facts in the WM again 
+- run the query again 
+ 
+You can then start playing with the WM: 
+- re-open the "discount_lab.ruleml" rule base (Ctrl+O), 
+- create a new isolated memory with Ctrl+I 
+- infer with F5 
+- Ctrl+L 
+- roll back to to global WM Ctrl+G 
+- Ctrl+L 
+ 
+Redo this but this time commit to the global memory and see how the asserted facts are "copied" to the global WM. 
+ 
+Another exercise consists in manually asserting/retracting facts the rule base can understand: 
+- re-open the "discount_lab.ruleml" rule base, 
+- process F5 
+- process again : nothing is deducted 
+- assert luxury{Ferrari} with Ctrl+A 
+- process again and see how new deductions are made. 
+
+This quick tour gives a first feeling on how the Inference Engine works & behaves.

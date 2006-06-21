@@ -1,0 +1,106 @@
+<!-- An XML DTD for a Datalog RuleML Sublanguage -->
+<!-- http://www.ruleml.org/dtd/0.8/ruleml-datalog.dtd -->
+<!-- Last Modification: 2002-04-01 -->
+
+<!-- ENTITY Declarations -->
+<!-- in this ruleml-datalog.dtd, parameter entities set two *.module switches to INCLUDE -->
+<!ENTITY % datalog.module "INCLUDE">
+<!ENTITY % datalog-and-hornlog.module "INCLUDE">
+
+<!-- hence all conditional sections "<![%*.module;[" . . . "]]>" activate their content; -->
+<!-- in a stand-alone use of the current DTD "<![%*.module;[" and "]]>" are thus no-ops -->
+<!-- ENTITY and ATTLIST Declarations only for upward compatibility with XML Schema -->
+<!-- URI-valued (CDATA) attributes optionally specify an XML Schema on 'rulebase' root -->
+<!ENTITY % URI "CDATA">
+<!ATTLIST rulebase xsi:noNamespaceSchemaLocation %URI; #IMPLIED>
+<!ATTLIST rulebase xmlns:xsi %URI; #IMPLIED>
+
+<!-- ELEMENT and ATTLIST Declarations -->
+<!-- 'rulebase' root element uses 'imp' rules and 'fact' assertions along with 'query' tests as top-level elements -->
+<!-- It has an optional label.  -->
+<!-- direction attribute indicates the intended direction of imp inferencing;  -->
+<!-- it is a preliminary design choice and has a 'neutral' default value -->
+<!ELEMENT rulebase (( (_rbaselab, (imp | fact | query)* ) | ((imp | fact | query)+, _rbaselab?) )?) >
+<!ATTLIST rulebase direction (forward | backward | bidirectional) "bidirectional">
+
+<!-- 'imp' is short for "implication"; it is a kind of rule -->
+<!-- 'imp' rules are usable on the rulebase top-level -->
+<!-- 'imp' element uses a conclusion role _head followed by a premise role _body, or equivalently -->
+<!-- (since roles constitute unordered elements), uses a premise role _body followed by a conclusion role _head -->
+<!-- "<imp>_head _body</imp>" stands for "_head is implied by _body", i.e., "_head is true is implied by _body is true", or equivalently, -->
+<!-- "<imp>_body _head</imp>" stands for "_body implies _head", i.e., "_body is true implies _head is true" -->
+<!-- rule label is a handle for the imp: for various uses, including prioritization -->
+<!ELEMENT imp ((_rlab, ((_head, _body) | (_body, _head))) |
+               (_head, ((_rlab, _body) | (_body, _rlab?))) |
+               (_body, ((_rlab, _head) | (_head, _rlab?)))) >
+ 
+<!-- 'fact' assertions are usable as degenerate rules on the rulebase top-level -->
+<!-- 'fact' element uses just a conclusion role _head -->
+<!-- "<fact>_head</fact>" stands for "_head is implied by true", i.e., "_head is true" -->
+<!-- "_rlab" is a handle for the fact: for various uses, including editing -->
+<!-- NOTE:  for now, fact is not required to be ground -->
+<!-- FUTURE DESIGN:  perhaps require fact to be ground; 
+     note that any requirement of groundedness of fact's must be enforced beyond the DTD validation -->
+<!ELEMENT fact ((_rlab, _head) | (_head, _rlab?)) >
+
+<!-- 'query' elements are usable as degenerate rules on the rulebase top-level -->
+<!-- 'query' element uses just a premise role _body -->
+<!-- "<query>_body</query>" stands for "false is implied by _body", i.e., "_body cannot be proved", which is to be refuted by generating the bindings for free variables in _body -->
+<!-- "_rlab" is a handle for the query: for various uses, including editing -->
+<!ELEMENT query ((_rlab, _body) | (_body, _rlab?)) >
+
+<![%datalog-and-hornlog.module;[
+<!-- _head role is usable within 'imp' rules and 'fact' assertions -->
+<!-- _body role is usable within 'imp' rules and 'query' tests -->
+<!-- _head uses an atomic formula -->
+<!-- _body uses an atomic formula or an 'and' -->
+<!ELEMENT _head (atom)>
+<!ELEMENT _body (atom | and)>
+
+<!-- an 'and' is usable within _body's -->
+<!-- 'and' uses zero or more atomic formulas -->
+<!-- "<and>atom</and>" is equivalent to "atom"-->
+<!-- "<and></and>" is equivalent to "true"-->
+<!ELEMENT and (atom*)>
+]]>
+
+<![%datalog.module;[
+
+<!-- "_rbaselab" is is short for "rulebase label"; must be ind(ividual);
+     this allows naming of an entire individual rulebase in a fashion that is accessible
+     within the knowledge representation; -->
+<!-- e.g., this can help for representing prioritization between rulebases, or perhaps
+     to enable forward inferencing of selected rulebase(s)  -->
+<!ELEMENT _rbaselab (ind)>
+
+<!-- "_rlab" is short for "rule label"; must be ind(ividual);
+     this allows naming of a rule (either imp or fact) in a fashion that is accessible
+     within the knowledge representation; -->
+<!-- e.g., this can help for representing prioritization between rules -->
+<!-- NOTE:  rule labels are not required to be unique within a rulebase -->
+<!ELEMENT _rlab (ind)>
+
+<!-- atomic formulas are usable within _head's, _body's, and 'and's -->
+<!-- atom element uses an: -->
+<!-- _opr ("operator of relations") role followed by a sequence of zero or more arguments, or similarly -->
+<!-- (since roles constitute unordered elements, and the zero-argument case must not cause ambiguity), -->
+<!-- a sequence of one or more arguments followed by an _opr role -->
+<!-- the arguments may be ind(ividual)s or var(iable)s -->
+<!ELEMENT atom ((_opr, (ind | var)*) | ((ind | var)+, _opr))>
+]]>
+
+<!-- _opr is usable within atoms -->
+<!-- _opr uses rel(ation) symbol -->
+<!ELEMENT _opr (rel)>
+
+<!-- there is one kind of fixed argument -->
+<!-- individual constant, as in predicate logic -->
+<!ELEMENT ind  (#PCDATA)>
+  
+<!-- there is one kind of variable argument -->
+<!-- logical variable, as in logic programming -->
+<!ELEMENT var  (#PCDATA)>
+  
+<!-- there are only fixed (first-order) relations -->
+<!-- relation or predicate symbol -->
+<!ELEMENT rel  (#PCDATA)>

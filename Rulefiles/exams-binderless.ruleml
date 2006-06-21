@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<rulebase xmlns="http://www.ruleml.org/0.86/xsd" xsi:schemaLocation="http://www.ruleml.org/0.86/xsd ruleml-0_86-nafdatalog.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" direction="forward">
+	<!-- This rulebase demonstrates the counting implications and the expression relation atoms.  -->
+	<_rbaselab>
+		<ind>Graduation Management System</ind>
+	</_rbaselab>
+	<fact>
+		<_rlab>
+			<ind>Maths Score</ind>
+		</_rlab>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Score</rel>
+				</_opr>
+				<ind>Maths</ind>
+				<ind>expr:80</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Score</rel>
+				</_opr>
+				<ind>Biology</ind>
+				<ind>expr:63</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Score</rel>
+				</_opr>
+				<ind>Cobol</ind>
+				<ind>expr:10</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Score</rel>
+				</_opr>
+				<ind>Physics</ind>
+				<ind>expr:92</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Score</rel>
+				</_opr>
+				<ind>Poetry</ind>
+				<ind>expr:76</ind>
+			</atom>
+		</_head>
+	</fact>
+	<!--
+	
+		Previous facts are student specific, following ones are the definition of the different success thresholds
+		
+	-->
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Score Percent Tolerance</rel>
+				</_opr>
+				<ind>expr:10</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Score Threshold</rel>
+				</_opr>
+				<ind>Maths</ind>
+				<ind>expr:90</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Score Threshold</rel>
+				</_opr>
+				<ind>Biology</ind>
+				<ind>expr:75</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Score Threshold</rel>
+				</_opr>
+				<ind>Physics</ind>
+				<ind>expr:90</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Score Threshold</rel>
+				</_opr>
+				<ind>Cobol</ind>
+				<ind>expr:25</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Score Threshold</rel>
+				</_opr>
+				<ind>Poetry</ind>
+				<ind>expr:50</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Minimum Passed</rel>
+				</_opr>
+				<ind>expr:3</ind>
+			</atom>
+		</_head>
+	</fact>
+	<!--
+		
+		After the definitions, let's add the implications !
+		
+		Counting implications have a low priority to be fired after other implications have given results
+		
+	-->
+	<imp>
+		<_rlab>
+			<ind>label:Count Number Of Passed;action:count;priority:25</ind>
+		</_rlab>
+		<_body>
+			<atom>
+				<_opr>
+					<rel>Result</rel>
+				</_opr>
+				<var>Subject</var>
+				<ind>Passed</ind>
+			</atom>
+		</_body>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Result Count</rel>
+				</_opr>
+				<var>Value</var>
+				<ind>Passed</ind>
+			</atom>
+		</_head>
+	</imp>
+	<!--
+			 The threshold & tolerance for success are passed as a facts, hence they can not directly be used in a rule with a comparison at predicate level
+			 but must be compared with an atom relation function as shown below
+	-->
+	<imp>
+		<_rlab>
+			<ind>Exam Success Estimation</ind>
+		</_rlab>
+		<_body>
+			<and>
+				<!-- The first three atoms gather values for var predicates -->
+				<atom>
+					<_opr>
+						<rel>Score</rel>
+					</_opr>
+					<var>Subject</var>
+					<var>Value</var>
+				</atom>
+				<atom>
+					<_opr>
+						<rel>Score Threshold</rel>
+					</_opr>
+					<var>Subject</var>
+					<var>Threshold</var>
+				</atom>
+				<atom>
+					<_opr>
+						<rel>Score Percent Tolerance</rel>
+					</_opr>
+					<var>Percent Tolerance</var>
+				</atom>
+				<!-- then the atom with function relation makes the comparison: this atom is unable to extract data from the rulebase on its own -->
+				<atom>
+					<_opr>
+						<rel>expr:{var:Value} >= ({var:Threshold} * (100d - {var:Percent Tolerance}) * .01d)</rel>
+					</_opr>
+					<var>Value</var>
+					<var>Threshold</var>
+					<var>Percent Tolerance</var>
+				</atom>
+			</and>
+		</_body>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Result</rel>
+				</_opr>
+				<var>Subject</var>
+				<ind>Passed</ind>
+			</atom>
+		</_head>
+	</imp>
+	<imp>
+		<_rlab>
+			<ind>Graduation Success Estimation</ind>
+		</_rlab>
+		<_body>
+			<and>
+				<!-- The first two atoms gather values for var predicates -->
+				<atom>
+					<_opr>
+						<rel>Result Count</rel>
+					</_opr>
+					<var>Value</var>
+					<ind>Passed</ind>
+				</atom>
+				<atom>
+					<_opr>
+						<rel>Minimum Passed</rel>
+					</_opr>
+					<var>Threshold</var>
+				</atom>
+				<!-- then the atom with function relation makes the comparison: this atom is unable to extract data from the rulebase on its own -->
+				<atom>
+					<_opr>
+						<rel>NxBRE:GreaterThanEqualTo()</rel>
+					</_opr>
+					<var>Value</var>
+					<var>Threshold</var>
+				</atom>
+			</and>
+		</_body>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Graduation Success</rel>
+				</_opr>
+			</atom>
+		</_head>
+	</imp>
+</rulebase>

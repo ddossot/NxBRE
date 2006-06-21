@@ -1,0 +1,59 @@
+namespace org.nxbre.ri.helpers.operators
+{
+	using System;
+	using System.Collections;
+
+	using org.nxbre.rule;
+
+	/// <summary> Checks if one object is the instance of another
+	/// *
+	/// </summary>
+	/// <P>
+	/// <PRE>
+	/// CHANGELOG:
+	/// v1.5	- Created
+	/// </PRE>
+	/// </P>
+	/// <author>  Sloan Seaman </author>
+	/// <author>  David Dossot </author>
+	/// <version>  1.8.3 </version>
+	public sealed class InstanceOf : IBREOperator
+	{
+		/// <summary>Defines whether an operator is ablt to deal with empty operands</summary>
+		/// <returns>True for the current operator</returns>
+		public bool AcceptsNulls {
+			get {
+				return true;
+			}
+		}
+		
+		/// <summary> Checks if one object is the instance of another
+		/// *
+		/// </summary>
+		/// <param name="aBRC">The BRERuleContext object containing all the state
+		/// information for use by this method.
+		/// </param>
+		/// <param name="aMap">Not used. A Map object containing the parameters from the XML
+		/// </param>
+		/// <param name="aObj">The object (value) to compare against.
+		/// </param>
+		/// <param name="aCompareTo">The object to compare it to.
+		/// </param>
+		/// <returns>True if they meet the condition, False otherwise.
+		/// 
+		/// </returns>
+		public bool ExecuteComparison(IBRERuleContext aBRC, Hashtable aMap, object aObj, object aCompareTo)
+		{
+			try {
+				if ((aObj.GetType().IsInstanceOfType(aCompareTo)) 
+					|| (aObj.GetType().IsSubclassOf(aCompareTo.GetType())))
+						return true;
+				else
+						return false;
+			}
+			catch(Exception) {}
+			
+			return false;
+		}
+	}
+}

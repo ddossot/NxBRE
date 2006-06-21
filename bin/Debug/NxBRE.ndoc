@@ -1,0 +1,65 @@
+<project SchemaVersion="1.3">
+    <assemblies>
+        <assembly location="C:\Documents and Settings\David Dossot\My Documents\NxBRE\bin\Debug\NxBRE.dll" documentation="C:\Documents and Settings\David Dossot\My Documents\NxBRE\bin\Debug\NxBRE.xml" />
+    </assemblies>
+    <namespaces>
+        <namespace name="net.ideaity.util">NxBRE - Supporting Utilities from Ideaity</namespace>
+        <namespace name="net.ideaity.util.events">NxBRE - Supporting Utilities from Ideaity</namespace>
+        <namespace name="org.nxbre">NxBRE - Root Package</namespace>
+        <namespace name="org.nxbre.ie">NxBRE - Inference Engine</namespace>
+        <namespace name="org.nxbre.ie.adapters">NxBRE - Inference Engine</namespace>
+        <namespace name="org.nxbre.ie.adapters.hrf086">NxBRE - Inference Engine</namespace>
+        <namespace name="org.nxbre.ie.core">NxBRE - Inference Engine</namespace>
+        <namespace name="org.nxbre.ie.predicates">NxBRE - Inference Engine</namespace>
+        <namespace name="org.nxbre.ie.rule">NxBRE - Inference Engine</namespace>
+        <namespace name="org.nxbre.ri">NxBRE - Flow Engine / Rule Interpreter</namespace>
+        <namespace name="org.nxbre.ri.drivers">NxBRE - Flow Engine / Rule Interpreter</namespace>
+        <namespace name="org.nxbre.ri.factories">NxBRE - Flow Engine / Rule Interpreter</namespace>
+        <namespace name="org.nxbre.ri.helpers.operators">NxBRE - Flow Engine / Rule Interpreter</namespace>
+        <namespace name="org.nxbre.ri.helpers.rule">NxBRE - Flow Engine / Rule Interpreter</namespace>
+        <namespace name="org.nxbre.ri.rule">NxBRE - Flow Engine / Rule Interpreter</namespace>
+        <namespace name="org.nxbre.rule">NxBRE - Flow Engine / Rule Interpreter</namespace>
+        <namespace name="org.nxbre.util">NxBRE - Supporting Utilities</namespace>
+    </namespaces>
+    <documenters>
+        <documenter name="JavaDoc">
+            <property name="OutputDirectory" value=".\doc\" />
+        </documenter>
+        <documenter name="LaTeX">
+            <property name="OutputDirectory" value=".\doc\" />
+            <property name="TextFileFullName" value="Documentation.tex" />
+            <property name="TexFileBaseName" value="Documentation" />
+            <property name="LatexCompiler" value="latex" />
+            <property name="TexFileFullPath" value=".\doc\Documentation.tex" />
+        </documenter>
+        <documenter name="LinearHtml">
+            <property name="OutputDirectory" value=".\doc\" />
+            <property name="Title" value="An NDoc Documented Class Library" />
+        </documenter>
+        <documenter name="MSDN">
+            <property name="OutputDirectory" value=".\doc\" />
+            <property name="HtmlHelpName" value="NxBRE-API-2_5_1" />
+            <property name="Title" value="NxBRE API Documentation" />
+            <property name="OutputTarget" value="HtmlHelp" />
+            <property name="SkipNamespacesWithoutSummaries" value="True" />
+            <property name="AssemblyVersionInfo" value="AssemblyVersion" />
+            <property name="CopyrightText" value="Copyright (C) 2003-2006 David Dossot et al." />
+            <property name="FeedbackEmailAddress" value="contact@nxbre.org" />
+            <property name="AutoPropertyBackerSummaries" value="True" />
+            <property name="IncludeDefaultThreadSafety" value="False" />
+            <property name="CleanIntermediates" value="True" />
+        </documenter>
+        <documenter name="MSDN 2003">
+            <property name="OutputDirectory" value=".\doc\" />
+            <property name="Title" value="An NDoc Documented Class Library" />
+        </documenter>
+        <documenter name="VS.NET 2003">
+            <property name="OutputDirectory" value=".\doc\" />
+            <property name="HtmlHelpName" value="Documentation" />
+            <property name="Title" value="An NDoc documented library" />
+        </documenter>
+        <documenter name="XML">
+            <property name="OutputFile" value=".\doc\doc.xml" />
+        </documenter>
+    </documenters>
+</project>

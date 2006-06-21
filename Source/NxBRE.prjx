@@ -1,0 +1,196 @@
+<Project name="NxBRE" standardNamespace="" description="" newfilesearch="None" enableviewstate="True" version="1.1" projecttype="C#">
+  <Contents>
+    <File name=".\org\nxbre\IBRE.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\BREException.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\rule\AbstractBRERuleContext.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\rule\AbstractBRERuleMetaData.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\rule\AbstractBRERuleResult.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\rule\IBREOperator.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\rule\IBRERuleContext.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\rule\BRERuleException.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\rule\IBRERuleFactory.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\rule\BRERuleFatalException.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\rule\IBRERuleMetaData.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\rule\IBRERuleResult.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\BREImpl.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\drivers\AbstractRulesDriver.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\drivers\BusinessRulesFileDriver.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\drivers\IRulesDriver.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\drivers\XBusinessRulesFileDriver.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\drivers\XSLTRulesFileDriver.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\helpers\operators\Equals.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\helpers\operators\GreaterThan.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\helpers\operators\GreaterThanEqualTo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\helpers\operators\InstanceOf.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\helpers\operators\LessThan.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\helpers\operators\LessThanEqualTo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\helpers\operators\NotEquals.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\helpers\rule\Decrement.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\helpers\rule\Exception.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\helpers\rule\False.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\helpers\rule\FatalException.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\helpers\rule\Increment.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\helpers\rule\True.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\helpers\rule\Value.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\rule\BRERuleContextImpl.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\rule\BRERuleMetaDataImpl.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\rule\BRERuleResultImpl.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\net\ideaity\util\InitializationException.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\net\ideaity\util\Arguments.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\net\ideaity\util\IInitializable.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\net\ideaity\util\AbstractInitializable.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\net\ideaity\util\events\AbstractExceptionEvent.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\net\ideaity\util\events\AbstractLogEvent.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\net\ideaity\util\events\IExceptionEvent.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\net\ideaity\util\events\ExceptionEventImpl.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\net\ideaity\util\events\ILogEvent.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\net\ideaity\util\events\LogEventImpl.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\rule\BRERuleFactory.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\helpers\rule\ObjectLookup.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\rule\BRERuleObject.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\factories\BREFactory.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\factories\BREFactoryConsole.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\drivers" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\net\ideaity\util\events\ILogDispatcher.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\net\ideaity\util\events\IExceptionDispatcher.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\net\ideaity\util\events\AbstractLogExceptionDispatcher.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\rule\IBREDispatcher.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\rule\AbstractBREDispatcher.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\ri\TestBREImpl.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\TestObject.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\helpers\rule\IncrementInit.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\factories\BRECloneFactory.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\factories" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\util" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\util\Misc.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\util\PseudoCodeRenderer.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\AssemblyInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\TestUtil.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\ri\TestDrivers.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\drivers\XBusinessRulesStringDriver.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\resource\xBusinessRules.xsd" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\resource\pseudocode_body.xsl" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\resource\pseudocode_frames.xsl" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\resource\pseudocode_index.xsl" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\resource\transformXRules.xsl" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\resource\businessRules.xsd" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\org\nxbre\util\Parameter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\net\ideaity\util\events\AbstractLogDispatcher.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\TestDataSet.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\util\Reflection.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\util\Maths.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\util\DataAccess.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\ri" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\rule\Atom.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\ie\TestCore.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\core\FactBase.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\rule\Query.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\predicates\AbstractPredicate.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\rule\Implication.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters\RuleML086NafDatalogAdapter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\IEImpl.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\ie" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\ie\TestEngineMisc.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\predicates\Variable.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\predicates\Individual.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\predicates" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\predicates\IPredicate.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\core\Agenda.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\rule\Fact.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\rule" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\core" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\core\NewFactEvent.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\core\QueryBase.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\core\ImplicationBase.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\core\ThreadSafeWorkingMemory.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\ie\TestAdapter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\core\MutexManager.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\core\PreconditionManager.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\core\AbstractChainManager.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters\IRuleBaseAdapter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\core\QueryResultSet.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ri\drivers\XBusinessRulesStreamDriver.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters\FlowEngineBinder.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\predicates\Function.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\ie\TestBinder.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\ie\AbstractTestEngine.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters\IEFacade.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters\IBinder.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters\AbstractBinder.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\rule\AtomGroup.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters\CSharpBinderFactory.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters\RuleML08DatalogAdapter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\resource\vdx2nxbre-ie.xsl" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters\Visio2003Adapter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters\RuleML086DatalogAdapter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\rule\AtomFunction.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\resource\ruleml-nafdatalog-0_86-2hrf.xsl" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters\HRF086Adapter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\ie\TestEngineCoreFeaturesRuleML09.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\ie\TestEngineCoreFeaturesHRF.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters\hrf086" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters\hrf086\Token.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters\hrf086\Buffer.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters\hrf086\Errors.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters\hrf086\Parser.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters\hrf086\Scanner.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\resource\ruleml-0_86-nafdatalog.xsd" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\resource\ruleml-0_86-datalog.xsd" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\org\nxbre\util\Compilation.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\predicates\Formula.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\TestCompilation.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\NxBRE.build" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name=".\resource\strict-vdx2nxbre-ie.xsl" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\org\nxbre\ie\core\WorkingMemory.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\core\IWorkingMemory.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\core\WorkingMemoryFactory.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\core\AbstractWorkingMemory.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\ie\TestEngineMiscThreadSafeWM.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\ie\TestEngineMiscHotSwapWM.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\resource\ruleml-0_9-nafdatalog.xsd" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters\RuleML09NafDatalogAdapter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters\AbstractRuleMLAdapter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\ie\TestEngineCoreFeaturesRuleML086.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\ie\TestEngineRuleML09MultiSyntax.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\util\Schema.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\ie\TestTypedFacts.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\TestSchema.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\core\IMatchedFactStorage.cs.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\core\HashtableMatchedFactStorage.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\core\DataTableMatchedFactStorage.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\core\AbstractFactEnumerator.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters\IFactBaseAdapter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\rule\Equivalent.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\adapters\IExtendedRuleBaseAdapter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\IntegrityException.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\ie\predicates\Slot.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\ie\TestEngineCoreFeaturesRule09Compact.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\test\ie\TestEngineCoreFeaturesRule09Expanded.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\IFlowEngine.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\org\nxbre\IInferenceEngine.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+  </Contents>
+  <References>
+    <Reference type="Gac" refto="nunit.framework, Version=2.2.0.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" localcopy="True" />
+  </References>
+  <DeploymentInformation target="" script="" strategy="File" />
+  <Configuration runwithwarnings="True" name="Debug">
+    <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="Standard" warninglevel="4" nowarn="" includedebuginformation="True" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Library" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+    <Execution commandlineparameters="" consolepause="False" />
+    <Output directory="..\bin\Debug" assembly="NxBRE" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+  </Configuration>
+  <Configurations active="Debug">
+    <Configuration runwithwarnings="True" name="Debug">
+      <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="Standard" warninglevel="4" nowarn="" includedebuginformation="True" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Library" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+      <Execution commandlineparameters="" consolepause="False" />
+      <Output directory="..\bin\Debug" assembly="NxBRE" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+    <Configuration runwithwarnings="True" name="Release">
+      <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="Standard" warninglevel="4" nowarn="" includedebuginformation="False" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Library" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+      <Execution commandlineparameters="" consolepause="False" />
+      <Output directory="..\bin\Release" assembly="NxBRE" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+  </Configurations>
+</Project>

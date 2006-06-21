@@ -1,0 +1,48 @@
+namespace org.nxbre.test.ie
+{
+	using System;
+	using System.Collections;
+	
+	using org.nxbre.ie.adapters;
+	using org.nxbre.ie.core;
+	using org.nxbre.ie.rule;
+	
+	public class EventTestBinder:AbstractBinder {
+		public EventTestBinder():base(BindingTypes.BeforeAfter) {}
+		
+		public override void BeforeProcess() {
+		}
+		
+		public override NewFactEvent OnNewFact {
+			get {
+				return new NewFactEvent(AssertFactHandler);
+			}
+		}
+		
+		public override NewFactEvent OnDeleteFact {
+			get {
+				return new NewFactEvent(RetractFactHandler);
+			}
+		}
+		
+		public override NewFactEvent OnModifyFact {
+			get {
+				return new NewFactEvent(ModifyFactHandler);
+			}
+		}
+		
+		private void AssertFactHandler(NewFactEventArgs nfea) {
+			((ArrayList)BusinessObjects["ASSERTED"]).Add(nfea.Fact);
+		}
+		
+		private void RetractFactHandler(NewFactEventArgs nfea) {
+			((ArrayList)BusinessObjects["RETRACTED"]).Add(nfea.Fact);
+		}
+		
+		private void ModifyFactHandler(NewFactEventArgs nfea) {
+			((ArrayList)BusinessObjects["MODIFIED"]).Add(nfea.Fact);
+			((ArrayList)BusinessObjects["MODIFIED"]).Add(nfea.OtherFact);
+		}
+		
+	}
+}

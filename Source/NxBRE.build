@@ -1,0 +1,588 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project name="NxBRE" default="build">
+  <description>SharpDevelop generated NAnt 0.84 build file.</description>
+  <!--Set debug property if not set-->
+  <ifnot propertyexists="debug">
+    <property name="debug" value="false" />
+  </ifnot>
+  <!--The 'init' target.  Creates folders needed for the build.-->
+  <target name="init" depends="init.debug, init.release" />
+  <!--The 'clean' target.  Removes compiled output.-->
+  <target name="clean" depends="clean.debug, clean.release" />
+  <!--The 'gacreferences' target.-->
+  <target name="gacreferences" depends="gacreferences.debug, gacreferences.release" />
+  <!--The 'build' target.-->
+  <target name="build" depends="build.debug, build.release" />
+  <!--The 'test' target.-->
+  <target name="test" depends="test.debug, test.release" />
+  <!--Set up various properties that will be referred to in the various nant targets.-->
+  <!--The output directory.-->
+  <property name="outputdir.debug" value="..\bin\Debug">
+  </property>
+  <!--The name of the assembly.-->
+  <property name="assembly.debug" value="NxBRE">
+  </property>
+  <!--The output file's extension.-->
+  <property name="extension.debug" value="dll">
+  </property>
+  <!--The initialisation target.-->
+  <target name="init.debug" if="${debug}">
+    <mkdir dir="${outputdir.debug}" />
+  </target>
+  <!--The 'clean' target.  Here we delete the built output files and extra files which are not directly specified in 
+		      the .prjx file (e.g. ".pdb", ".xml").-->
+  <target name="clean.debug" if="${debug}">
+    <delete>
+      <fileset>
+        <includes name="${outputdir.debug}\${assembly.debug}.${extension.debug}" />
+        <includes name="${outputdir.debug}\${assembly.debug}.pdb" />
+        <includes name="${outputdir.debug}\${assembly.debug}.xml" />
+        <includes name="${outputdir.debug}\*.config" />
+      </fileset>
+    </delete>
+  </target>
+  <!--The 'build' target.-->
+  <target name="build.debug" depends="init.debug, gacreferences.debug" if="${debug}">
+    <!--Compiles the code -->
+    <csc target="library" output="${outputdir.debug}\${assembly.debug}.${extension.debug}" warninglevel="4" nowarn="" debug="True" optimize="True" unsafe="False" checked="True" noconfig="False" nostdlib="False" define="" win32icon="" warnaserror="False">
+      <sources>
+        <includes name=".\org\nxbre\IBRE.cs" />
+        <includes name=".\org\nxbre\BREException.cs" />
+        <includes name=".\org\nxbre\rule\AbstractBRERuleContext.cs" />
+        <includes name=".\org\nxbre\rule\AbstractBRERuleMetaData.cs" />
+        <includes name=".\org\nxbre\rule\AbstractBRERuleResult.cs" />
+        <includes name=".\org\nxbre\rule\IBREOperator.cs" />
+        <includes name=".\org\nxbre\rule\IBRERuleContext.cs" />
+        <includes name=".\org\nxbre\rule\BRERuleException.cs" />
+        <includes name=".\org\nxbre\rule\IBRERuleFactory.cs" />
+        <includes name=".\org\nxbre\rule\BRERuleFatalException.cs" />
+        <includes name=".\org\nxbre\rule\IBRERuleMetaData.cs" />
+        <includes name=".\org\nxbre\rule\IBRERuleResult.cs" />
+        <includes name=".\org\nxbre\ri\BREImpl.cs" />
+        <includes name=".\org\nxbre\ri\drivers\AbstractRulesDriver.cs" />
+        <includes name=".\org\nxbre\ri\drivers\BusinessRulesFileDriver.cs" />
+        <includes name=".\org\nxbre\ri\drivers\IRulesDriver.cs" />
+        <includes name=".\org\nxbre\ri\drivers\XBusinessRulesFileDriver.cs" />
+        <includes name=".\org\nxbre\ri\drivers\XSLTRulesFileDriver.cs" />
+        <includes name=".\org\nxbre\ri\helpers\operators\Equals.cs" />
+        <includes name=".\org\nxbre\ri\helpers\operators\GreaterThan.cs" />
+        <includes name=".\org\nxbre\ri\helpers\operators\GreaterThanEqualTo.cs" />
+        <includes name=".\org\nxbre\ri\helpers\operators\InstanceOf.cs" />
+        <includes name=".\org\nxbre\ri\helpers\operators\LessThan.cs" />
+        <includes name=".\org\nxbre\ri\helpers\operators\LessThanEqualTo.cs" />
+        <includes name=".\org\nxbre\ri\helpers\operators\NotEquals.cs" />
+        <includes name=".\org\nxbre\ri\helpers\rule\Decrement.cs" />
+        <includes name=".\org\nxbre\ri\helpers\rule\Exception.cs" />
+        <includes name=".\org\nxbre\ri\helpers\rule\False.cs" />
+        <includes name=".\org\nxbre\ri\helpers\rule\FatalException.cs" />
+        <includes name=".\org\nxbre\ri\helpers\rule\Increment.cs" />
+        <includes name=".\org\nxbre\ri\helpers\rule\True.cs" />
+        <includes name=".\org\nxbre\ri\helpers\rule\Value.cs" />
+        <includes name=".\org\nxbre\ri\rule\BRERuleContextImpl.cs" />
+        <includes name=".\org\nxbre\ri\rule\BRERuleMetaDataImpl.cs" />
+        <includes name=".\org\nxbre\ri\rule\BRERuleResultImpl.cs" />
+        <includes name=".\net\ideaity\util\InitializationException.cs" />
+        <includes name=".\net\ideaity\util\Arguments.cs" />
+        <includes name=".\net\ideaity\util\IInitializable.cs" />
+        <includes name=".\net\ideaity\util\AbstractInitializable.cs" />
+        <includes name=".\net\ideaity\util\events\AbstractExceptionEvent.cs" />
+        <includes name=".\net\ideaity\util\events\AbstractLogEvent.cs" />
+        <includes name=".\net\ideaity\util\events\IExceptionEvent.cs" />
+        <includes name=".\net\ideaity\util\events\ExceptionEventImpl.cs" />
+        <includes name=".\net\ideaity\util\events\ILogEvent.cs" />
+        <includes name=".\net\ideaity\util\events\LogEventImpl.cs" />
+        <includes name=".\org\nxbre\rule\BRERuleFactory.cs" />
+        <includes name=".\org\nxbre\ri\helpers\rule\ObjectLookup.cs" />
+        <includes name=".\org\nxbre\ri\rule\BRERuleObject.cs" />
+        <includes name=".\org\nxbre\ri\factories\BREFactory.cs" />
+        <includes name=".\org\nxbre\ri\factories\BREFactoryConsole.cs" />
+        <includes name=".\org\nxbre\ri\drivers" />
+        <includes name=".\net\ideaity\util\events\ILogDispatcher.cs" />
+        <includes name=".\net\ideaity\util\events\IExceptionDispatcher.cs" />
+        <includes name=".\net\ideaity\util\events\AbstractLogExceptionDispatcher.cs" />
+        <includes name=".\org\nxbre\rule\IBREDispatcher.cs" />
+        <includes name=".\org\nxbre\rule\AbstractBREDispatcher.cs" />
+        <includes name=".\org\nxbre\test\ri\TestBREImpl.cs" />
+        <includes name=".\org\nxbre\test\TestObject.cs" />
+        <includes name=".\org\nxbre\ri\helpers\rule\IncrementInit.cs" />
+        <includes name=".\org\nxbre\ri\factories\BRECloneFactory.cs" />
+        <includes name=".\org\nxbre\ri\factories" />
+        <includes name=".\org\nxbre\util" />
+        <includes name=".\org\nxbre\util\Misc.cs" />
+        <includes name=".\org\nxbre\util\PseudoCodeRenderer.cs" />
+        <includes name=".\AssemblyInfo.cs" />
+        <includes name=".\org\nxbre\test\TestUtil.cs" />
+        <includes name=".\org\nxbre\test\ri\TestDrivers.cs" />
+        <includes name=".\org\nxbre\ri\drivers\XBusinessRulesStringDriver.cs" />
+        <includes name=".\org\nxbre\util\Parameter.cs" />
+        <includes name=".\net\ideaity\util\events\AbstractLogDispatcher.cs" />
+        <includes name=".\org\nxbre\test\TestDataSet.cs" />
+        <includes name=".\org\nxbre\util\Reflection.cs" />
+        <includes name=".\org\nxbre\util\Maths.cs" />
+        <includes name=".\org\nxbre\util\DataAccess.cs" />
+        <includes name=".\org\nxbre\test" />
+        <includes name=".\org\nxbre\test\ri" />
+        <includes name=".\org\nxbre\ie\rule\Atom.cs" />
+        <includes name=".\org\nxbre\test\ie\TestCore.cs" />
+        <includes name=".\org\nxbre\ie\core\FactBase.cs" />
+        <includes name=".\org\nxbre\ie\rule\Query.cs" />
+        <includes name=".\org\nxbre\ie\predicates\AbstractPredicate.cs" />
+        <includes name=".\org\nxbre\ie\rule\Implication.cs" />
+        <includes name=".\org\nxbre\ie\adapters\RuleML086NafDatalogAdapter.cs" />
+        <includes name=".\org\nxbre\ie\IEImpl.cs" />
+        <includes name=".\org\nxbre\ie" />
+        <includes name=".\org\nxbre\test\ie" />
+        <includes name=".\org\nxbre\ie\adapters" />
+        <includes name=".\org\nxbre\test\ie\TestEngineMisc.cs" />
+        <includes name=".\org\nxbre\ie\predicates\Variable.cs" />
+        <includes name=".\org\nxbre\ie\predicates\Individual.cs" />
+        <includes name=".\org\nxbre\ie\predicates" />
+        <includes name=".\org\nxbre\ie\predicates\IPredicate.cs" />
+        <includes name=".\org\nxbre\ie\core\Agenda.cs" />
+        <includes name=".\org\nxbre\ie\rule\Fact.cs" />
+        <includes name=".\org\nxbre\ie\rule" />
+        <includes name=".\org\nxbre\ie\core" />
+        <includes name=".\org\nxbre\ie\core\NewFactEvent.cs" />
+        <includes name=".\org\nxbre\ie\core\QueryBase.cs" />
+        <includes name=".\org\nxbre\ie\core\ImplicationBase.cs" />
+        <includes name=".\org\nxbre\ie\core\ThreadSafeWorkingMemory.cs" />
+        <includes name=".\org\nxbre\test\ie\TestAdapter.cs" />
+        <includes name=".\org\nxbre\ie\core\MutexManager.cs" />
+        <includes name=".\org\nxbre\ie\core\PreconditionManager.cs" />
+        <includes name=".\org\nxbre\ie\core\AbstractChainManager.cs" />
+        <includes name=".\org\nxbre\ie\adapters\IRuleBaseAdapter.cs" />
+        <includes name=".\org\nxbre\ie\core\QueryResultSet.cs" />
+        <includes name=".\org\nxbre\ri\drivers\XBusinessRulesStreamDriver.cs" />
+        <includes name=".\org\nxbre\ie\adapters\FlowEngineBinder.cs" />
+        <includes name=".\org\nxbre\ie\predicates\Function.cs" />
+        <includes name=".\org\nxbre\test\ie\TestBinder.cs" />
+        <includes name=".\org\nxbre\test\ie\AbstractTestEngine.cs" />
+        <includes name=".\org\nxbre\ie\adapters\IEFacade.cs" />
+        <includes name=".\org\nxbre\ie\adapters\IBinder.cs" />
+        <includes name=".\org\nxbre\ie\adapters\AbstractBinder.cs" />
+        <includes name=".\org\nxbre\ie\rule\AtomGroup.cs" />
+        <includes name=".\org\nxbre\ie\adapters\CSharpBinderFactory.cs" />
+        <includes name=".\org\nxbre\ie\adapters\RuleML08DatalogAdapter.cs" />
+        <includes name=".\org\nxbre\ie\adapters\Visio2003Adapter.cs" />
+        <includes name=".\org\nxbre\ie\adapters\RuleML086DatalogAdapter.cs" />
+        <includes name=".\org\nxbre\ie\rule\AtomFunction.cs" />
+        <includes name=".\org\nxbre\ie\adapters\HRF086Adapter.cs" />
+        <includes name=".\org\nxbre\test\ie\TestEngineCoreFeaturesRuleML09.cs" />
+        <includes name=".\org\nxbre\test\ie\TestEngineCoreFeaturesHRF.cs" />
+        <includes name=".\org\nxbre\ie\adapters\hrf086" />
+        <includes name=".\org\nxbre\ie\adapters\hrf086\Token.cs" />
+        <includes name=".\org\nxbre\ie\adapters\hrf086\Buffer.cs" />
+        <includes name=".\org\nxbre\ie\adapters\hrf086\Errors.cs" />
+        <includes name=".\org\nxbre\ie\adapters\hrf086\Parser.cs" />
+        <includes name=".\org\nxbre\ie\adapters\hrf086\Scanner.cs" />
+        <includes name=".\org\nxbre\util\Compilation.cs" />
+        <includes name=".\org\nxbre\ie\predicates\Formula.cs" />
+        <includes name=".\org\nxbre\test\TestCompilation.cs" />
+        <includes name=".\org\nxbre\ie\core\WorkingMemory.cs" />
+        <includes name=".\org\nxbre\ie\core\IWorkingMemory.cs" />
+        <includes name=".\org\nxbre\ie\core\WorkingMemoryFactory.cs" />
+        <includes name=".\org\nxbre\ie\core\AbstractWorkingMemory.cs" />
+        <includes name=".\org\nxbre\test\ie\TestEngineMiscThreadSafeWM.cs" />
+        <includes name=".\org\nxbre\test\ie\TestEngineMiscHotSwapWM.cs" />
+        <includes name=".\org\nxbre\ie\adapters\RuleML09NafDatalogAdapter.cs" />
+        <includes name=".\org\nxbre\ie\adapters\AbstractRuleMLAdapter.cs" />
+        <includes name=".\org\nxbre\test\ie\TestEngineCoreFeaturesRuleML086.cs" />
+        <includes name=".\org\nxbre\test\ie\TestEngineRuleML09MultiSyntax.cs" />
+        <includes name=".\org\nxbre\util\Schema.cs" />
+        <includes name=".\org\nxbre\test\ie\TestTypedFacts.cs" />
+        <includes name=".\org\nxbre\test\TestSchema.cs" />
+        <includes name=".\org\nxbre\ie\core\IMatchedFactStorage.cs.cs" />
+        <includes name=".\org\nxbre\ie\core\HashtableMatchedFactStorage.cs" />
+        <includes name=".\org\nxbre\ie\core\DataTableMatchedFactStorage.cs" />
+        <includes name=".\org\nxbre\ie\core\AbstractFactEnumerator.cs" />
+        <includes name=".\org\nxbre\ie\adapters\IFactBaseAdapter.cs" />
+        <includes name=".\org\nxbre\ie\rule\Equivalent.cs" />
+        <includes name=".\org\nxbre\ie\adapters\IExtendedRuleBaseAdapter.cs" />
+        <includes name=".\org\nxbre\ie\IntegrityException.cs" />
+        <includes name=".\org\nxbre\ie\predicates\Slot.cs" />
+        <includes name=".\org\nxbre\test\ie\TestEngineCoreFeaturesRule09Compact.cs" />
+        <includes name=".\org\nxbre\test\ie\TestEngineCoreFeaturesRule09Expanded.cs" />
+        <includes name=".\org\nxbre\IFlowEngine.cs" />
+        <includes name=".\org\nxbre\IInferenceEngine.cs" />
+      </sources>
+      <references>
+        <includes name="${nunit.framework, Version=2.2.0.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77.filename}" />
+      </references>
+      <resources>
+        <includes name=".\resource\xBusinessRules.xsd" />
+        <includes name=".\resource\pseudocode_body.xsl" />
+        <includes name=".\resource\pseudocode_frames.xsl" />
+        <includes name=".\resource\pseudocode_index.xsl" />
+        <includes name=".\resource\transformXRules.xsl" />
+        <includes name=".\resource\businessRules.xsd" />
+        <includes name=".\resource\vdx2nxbre-ie.xsl" />
+        <includes name=".\resource\ruleml-nafdatalog-0_86-2hrf.xsl" />
+        <includes name=".\resource\ruleml-0_86-nafdatalog.xsd" />
+        <includes name=".\resource\ruleml-0_86-datalog.xsd" />
+        <includes name=".\resource\strict-vdx2nxbre-ie.xsl" />
+        <includes name=".\resource\ruleml-0_9-nafdatalog.xsd" />
+      </resources>
+    </csc>
+    <!--Copy app.config file to output folder and rename it appropriately -->
+  </target>
+  <!--The test target.  Only supports Nunit 2 -->
+  <target name="test.debug" depends="build.debug" if="${debug}">
+    <nunit2>
+      <formatter type="Plain" />
+      <test assemblyname="${outputdir.debug}\${assembly.debug}.${extension.debug}" appconfig="${outputdir.debug}\${assembly.debug}.${extension.debug}.config" />
+    </nunit2>
+  </target>
+  <!--Generates a property for each Gac reference.  The property name is set to the name of the assembly-->
+  <target name="gacreferences.debug" if="${debug}">
+    <echo message="Generating Gac references..." />
+    <!-- Script to get the full filenames for assemblies in the Gac.  As soon as nant 0.85 is released this code can be 
+				replaced by a nant function call (assembly::getcodebase). -->
+    <script language="C#" mainclass="Gac">
+      <code>
+				public class Gac
+				{
+					///
+					/// Gets the Gac path for an assembly reference and stores it
+					/// in a Nant property named after the assembly reference.
+					/// 
+					public static void ScriptMain( Project project ) 
+					{
+						try
+						{
+							string ReferenceName = "nunit.framework, Version=2.2.0.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77";
+
+							string ReferenceFilename = Gac.GetGacPath( ReferenceName );
+
+							if( ReferenceFilename.Length == 0 )
+							{
+								// Use reference name as gac path.
+
+								ReferenceFilename = ReferenceName;
+							}
+
+							project.Properties[ String.Concat( ReferenceName, ".filename" ) ] = ReferenceFilename;
+						}
+						catch( Exception Ex )
+						{
+							throw new NAnt.Core.BuildException( String.Format( Ex.Message ), Ex );
+						}
+					}
+
+					///
+					/// Gets the gac path for the specified assembly name.
+					///
+					public static string GetGacPath( string assemblyName )
+					{
+						string CodeBase = GetCodeBase( assemblyName );
+
+						return CodeBase.Replace( "file:///", "" );
+					}
+
+					/// 
+					/// Gets the code base for the specified assembly name.
+					/// 
+					public static string GetCodeBase( string assemblyName )
+					{
+						string CodeBase = String.Empty;
+		
+						System.Reflection.Assembly Assembly = 
+							System.Reflection.Assembly.LoadWithPartialName( assemblyName );
+		
+						if( Assembly != null )
+						{
+							CodeBase = Assembly.CodeBase;
+						}
+
+						return CodeBase;
+					}
+				}
+				</code>
+    </script>
+    <echo message="reference= ${nunit.framework, Version=2.2.0.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77.filename}" />
+  </target>
+  <!--Set up various properties that will be referred to in the various nant targets.-->
+  <!--The output directory.-->
+  <property name="outputdir.release" value="..\bin\Release">
+  </property>
+  <!--The name of the assembly.-->
+  <property name="assembly.release" value="NxBRE">
+  </property>
+  <!--The output file's extension.-->
+  <property name="extension.release" value="dll">
+  </property>
+  <!--The initialisation target.-->
+  <target name="init.release" unless="${debug}">
+    <mkdir dir="${outputdir.release}" />
+  </target>
+  <!--The 'clean' target.  Here we delete the built output files and extra files which are not directly specified in 
+		      the .prjx file (e.g. ".pdb", ".xml").-->
+  <target name="clean.release" unless="${debug}">
+    <delete>
+      <fileset>
+        <includes name="${outputdir.release}\${assembly.release}.${extension.release}" />
+        <includes name="${outputdir.release}\${assembly.release}.pdb" />
+        <includes name="${outputdir.release}\${assembly.release}.xml" />
+        <includes name="${outputdir.release}\*.config" />
+      </fileset>
+    </delete>
+  </target>
+  <!--The 'build' target.-->
+  <target name="build.release" depends="init.release, gacreferences.release" unless="${debug}">
+    <!--Compiles the code -->
+    <csc target="library" output="${outputdir.release}\${assembly.release}.${extension.release}" warninglevel="4" nowarn="" debug="False" optimize="True" unsafe="False" checked="True" noconfig="False" nostdlib="False" define="" win32icon="" warnaserror="False">
+      <sources>
+        <includes name=".\org\nxbre\IBRE.cs" />
+        <includes name=".\org\nxbre\BREException.cs" />
+        <includes name=".\org\nxbre\rule\AbstractBRERuleContext.cs" />
+        <includes name=".\org\nxbre\rule\AbstractBRERuleMetaData.cs" />
+        <includes name=".\org\nxbre\rule\AbstractBRERuleResult.cs" />
+        <includes name=".\org\nxbre\rule\IBREOperator.cs" />
+        <includes name=".\org\nxbre\rule\IBRERuleContext.cs" />
+        <includes name=".\org\nxbre\rule\BRERuleException.cs" />
+        <includes name=".\org\nxbre\rule\IBRERuleFactory.cs" />
+        <includes name=".\org\nxbre\rule\BRERuleFatalException.cs" />
+        <includes name=".\org\nxbre\rule\IBRERuleMetaData.cs" />
+        <includes name=".\org\nxbre\rule\IBRERuleResult.cs" />
+        <includes name=".\org\nxbre\ri\BREImpl.cs" />
+        <includes name=".\org\nxbre\ri\drivers\AbstractRulesDriver.cs" />
+        <includes name=".\org\nxbre\ri\drivers\BusinessRulesFileDriver.cs" />
+        <includes name=".\org\nxbre\ri\drivers\IRulesDriver.cs" />
+        <includes name=".\org\nxbre\ri\drivers\XBusinessRulesFileDriver.cs" />
+        <includes name=".\org\nxbre\ri\drivers\XSLTRulesFileDriver.cs" />
+        <includes name=".\org\nxbre\ri\helpers\operators\Equals.cs" />
+        <includes name=".\org\nxbre\ri\helpers\operators\GreaterThan.cs" />
+        <includes name=".\org\nxbre\ri\helpers\operators\GreaterThanEqualTo.cs" />
+        <includes name=".\org\nxbre\ri\helpers\operators\InstanceOf.cs" />
+        <includes name=".\org\nxbre\ri\helpers\operators\LessThan.cs" />
+        <includes name=".\org\nxbre\ri\helpers\operators\LessThanEqualTo.cs" />
+        <includes name=".\org\nxbre\ri\helpers\operators\NotEquals.cs" />
+        <includes name=".\org\nxbre\ri\helpers\rule\Decrement.cs" />
+        <includes name=".\org\nxbre\ri\helpers\rule\Exception.cs" />
+        <includes name=".\org\nxbre\ri\helpers\rule\False.cs" />
+        <includes name=".\org\nxbre\ri\helpers\rule\FatalException.cs" />
+        <includes name=".\org\nxbre\ri\helpers\rule\Increment.cs" />
+        <includes name=".\org\nxbre\ri\helpers\rule\True.cs" />
+        <includes name=".\org\nxbre\ri\helpers\rule\Value.cs" />
+        <includes name=".\org\nxbre\ri\rule\BRERuleContextImpl.cs" />
+        <includes name=".\org\nxbre\ri\rule\BRERuleMetaDataImpl.cs" />
+        <includes name=".\org\nxbre\ri\rule\BRERuleResultImpl.cs" />
+        <includes name=".\net\ideaity\util\InitializationException.cs" />
+        <includes name=".\net\ideaity\util\Arguments.cs" />
+        <includes name=".\net\ideaity\util\IInitializable.cs" />
+        <includes name=".\net\ideaity\util\AbstractInitializable.cs" />
+        <includes name=".\net\ideaity\util\events\AbstractExceptionEvent.cs" />
+        <includes name=".\net\ideaity\util\events\AbstractLogEvent.cs" />
+        <includes name=".\net\ideaity\util\events\IExceptionEvent.cs" />
+        <includes name=".\net\ideaity\util\events\ExceptionEventImpl.cs" />
+        <includes name=".\net\ideaity\util\events\ILogEvent.cs" />
+        <includes name=".\net\ideaity\util\events\LogEventImpl.cs" />
+        <includes name=".\org\nxbre\rule\BRERuleFactory.cs" />
+        <includes name=".\org\nxbre\ri\helpers\rule\ObjectLookup.cs" />
+        <includes name=".\org\nxbre\ri\rule\BRERuleObject.cs" />
+        <includes name=".\org\nxbre\ri\factories\BREFactory.cs" />
+        <includes name=".\org\nxbre\ri\factories\BREFactoryConsole.cs" />
+        <includes name=".\org\nxbre\ri\drivers" />
+        <includes name=".\net\ideaity\util\events\ILogDispatcher.cs" />
+        <includes name=".\net\ideaity\util\events\IExceptionDispatcher.cs" />
+        <includes name=".\net\ideaity\util\events\AbstractLogExceptionDispatcher.cs" />
+        <includes name=".\org\nxbre\rule\IBREDispatcher.cs" />
+        <includes name=".\org\nxbre\rule\AbstractBREDispatcher.cs" />
+        <includes name=".\org\nxbre\test\ri\TestBREImpl.cs" />
+        <includes name=".\org\nxbre\test\TestObject.cs" />
+        <includes name=".\org\nxbre\ri\helpers\rule\IncrementInit.cs" />
+        <includes name=".\org\nxbre\ri\factories\BRECloneFactory.cs" />
+        <includes name=".\org\nxbre\ri\factories" />
+        <includes name=".\org\nxbre\util" />
+        <includes name=".\org\nxbre\util\Misc.cs" />
+        <includes name=".\org\nxbre\util\PseudoCodeRenderer.cs" />
+        <includes name=".\AssemblyInfo.cs" />
+        <includes name=".\org\nxbre\test\TestUtil.cs" />
+        <includes name=".\org\nxbre\test\ri\TestDrivers.cs" />
+        <includes name=".\org\nxbre\ri\drivers\XBusinessRulesStringDriver.cs" />
+        <includes name=".\org\nxbre\util\Parameter.cs" />
+        <includes name=".\net\ideaity\util\events\AbstractLogDispatcher.cs" />
+        <includes name=".\org\nxbre\test\TestDataSet.cs" />
+        <includes name=".\org\nxbre\util\Reflection.cs" />
+        <includes name=".\org\nxbre\util\Maths.cs" />
+        <includes name=".\org\nxbre\util\DataAccess.cs" />
+        <includes name=".\org\nxbre\test" />
+        <includes name=".\org\nxbre\test\ri" />
+        <includes name=".\org\nxbre\ie\rule\Atom.cs" />
+        <includes name=".\org\nxbre\test\ie\TestCore.cs" />
+        <includes name=".\org\nxbre\ie\core\FactBase.cs" />
+        <includes name=".\org\nxbre\ie\rule\Query.cs" />
+        <includes name=".\org\nxbre\ie\predicates\AbstractPredicate.cs" />
+        <includes name=".\org\nxbre\ie\rule\Implication.cs" />
+        <includes name=".\org\nxbre\ie\adapters\RuleML086NafDatalogAdapter.cs" />
+        <includes name=".\org\nxbre\ie\IEImpl.cs" />
+        <includes name=".\org\nxbre\ie" />
+        <includes name=".\org\nxbre\test\ie" />
+        <includes name=".\org\nxbre\ie\adapters" />
+        <includes name=".\org\nxbre\test\ie\TestEngineMisc.cs" />
+        <includes name=".\org\nxbre\ie\predicates\Variable.cs" />
+        <includes name=".\org\nxbre\ie\predicates\Individual.cs" />
+        <includes name=".\org\nxbre\ie\predicates" />
+        <includes name=".\org\nxbre\ie\predicates\IPredicate.cs" />
+        <includes name=".\org\nxbre\ie\core\Agenda.cs" />
+        <includes name=".\org\nxbre\ie\rule\Fact.cs" />
+        <includes name=".\org\nxbre\ie\rule" />
+        <includes name=".\org\nxbre\ie\core" />
+        <includes name=".\org\nxbre\ie\core\NewFactEvent.cs" />
+        <includes name=".\org\nxbre\ie\core\QueryBase.cs" />
+        <includes name=".\org\nxbre\ie\core\ImplicationBase.cs" />
+        <includes name=".\org\nxbre\ie\core\ThreadSafeWorkingMemory.cs" />
+        <includes name=".\org\nxbre\test\ie\TestAdapter.cs" />
+        <includes name=".\org\nxbre\ie\core\MutexManager.cs" />
+        <includes name=".\org\nxbre\ie\core\PreconditionManager.cs" />
+        <includes name=".\org\nxbre\ie\core\AbstractChainManager.cs" />
+        <includes name=".\org\nxbre\ie\adapters\IRuleBaseAdapter.cs" />
+        <includes name=".\org\nxbre\ie\core\QueryResultSet.cs" />
+        <includes name=".\org\nxbre\ri\drivers\XBusinessRulesStreamDriver.cs" />
+        <includes name=".\org\nxbre\ie\adapters\FlowEngineBinder.cs" />
+        <includes name=".\org\nxbre\ie\predicates\Function.cs" />
+        <includes name=".\org\nxbre\test\ie\TestBinder.cs" />
+        <includes name=".\org\nxbre\test\ie\AbstractTestEngine.cs" />
+        <includes name=".\org\nxbre\ie\adapters\IEFacade.cs" />
+        <includes name=".\org\nxbre\ie\adapters\IBinder.cs" />
+        <includes name=".\org\nxbre\ie\adapters\AbstractBinder.cs" />
+        <includes name=".\org\nxbre\ie\rule\AtomGroup.cs" />
+        <includes name=".\org\nxbre\ie\adapters\CSharpBinderFactory.cs" />
+        <includes name=".\org\nxbre\ie\adapters\RuleML08DatalogAdapter.cs" />
+        <includes name=".\org\nxbre\ie\adapters\Visio2003Adapter.cs" />
+        <includes name=".\org\nxbre\ie\adapters\RuleML086DatalogAdapter.cs" />
+        <includes name=".\org\nxbre\ie\rule\AtomFunction.cs" />
+        <includes name=".\org\nxbre\ie\adapters\HRF086Adapter.cs" />
+        <includes name=".\org\nxbre\test\ie\TestEngineCoreFeaturesRuleML09.cs" />
+        <includes name=".\org\nxbre\test\ie\TestEngineCoreFeaturesHRF.cs" />
+        <includes name=".\org\nxbre\ie\adapters\hrf086" />
+        <includes name=".\org\nxbre\ie\adapters\hrf086\Token.cs" />
+        <includes name=".\org\nxbre\ie\adapters\hrf086\Buffer.cs" />
+        <includes name=".\org\nxbre\ie\adapters\hrf086\Errors.cs" />
+        <includes name=".\org\nxbre\ie\adapters\hrf086\Parser.cs" />
+        <includes name=".\org\nxbre\ie\adapters\hrf086\Scanner.cs" />
+        <includes name=".\org\nxbre\util\Compilation.cs" />
+        <includes name=".\org\nxbre\ie\predicates\Formula.cs" />
+        <includes name=".\org\nxbre\test\TestCompilation.cs" />
+        <includes name=".\org\nxbre\ie\core\WorkingMemory.cs" />
+        <includes name=".\org\nxbre\ie\core\IWorkingMemory.cs" />
+        <includes name=".\org\nxbre\ie\core\WorkingMemoryFactory.cs" />
+        <includes name=".\org\nxbre\ie\core\AbstractWorkingMemory.cs" />
+        <includes name=".\org\nxbre\test\ie\TestEngineMiscThreadSafeWM.cs" />
+        <includes name=".\org\nxbre\test\ie\TestEngineMiscHotSwapWM.cs" />
+        <includes name=".\org\nxbre\ie\adapters\RuleML09NafDatalogAdapter.cs" />
+        <includes name=".\org\nxbre\ie\adapters\AbstractRuleMLAdapter.cs" />
+        <includes name=".\org\nxbre\test\ie\TestEngineCoreFeaturesRuleML086.cs" />
+        <includes name=".\org\nxbre\test\ie\TestEngineRuleML09MultiSyntax.cs" />
+        <includes name=".\org\nxbre\util\Schema.cs" />
+        <includes name=".\org\nxbre\test\ie\TestTypedFacts.cs" />
+        <includes name=".\org\nxbre\test\TestSchema.cs" />
+        <includes name=".\org\nxbre\ie\core\IMatchedFactStorage.cs.cs" />
+        <includes name=".\org\nxbre\ie\core\HashtableMatchedFactStorage.cs" />
+        <includes name=".\org\nxbre\ie\core\DataTableMatchedFactStorage.cs" />
+        <includes name=".\org\nxbre\ie\core\AbstractFactEnumerator.cs" />
+        <includes name=".\org\nxbre\ie\adapters\IFactBaseAdapter.cs" />
+        <includes name=".\org\nxbre\ie\rule\Equivalent.cs" />
+        <includes name=".\org\nxbre\ie\adapters\IExtendedRuleBaseAdapter.cs" />
+        <includes name=".\org\nxbre\ie\IntegrityException.cs" />
+        <includes name=".\org\nxbre\ie\predicates\Slot.cs" />
+        <includes name=".\org\nxbre\test\ie\TestEngineCoreFeaturesRule09Compact.cs" />
+        <includes name=".\org\nxbre\test\ie\TestEngineCoreFeaturesRule09Expanded.cs" />
+        <includes name=".\org\nxbre\IFlowEngine.cs" />
+        <includes name=".\org\nxbre\IInferenceEngine.cs" />
+      </sources>
+      <references>
+        <includes name="${nunit.framework, Version=2.2.0.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77.filename}" />
+      </references>
+      <resources>
+        <includes name=".\resource\xBusinessRules.xsd" />
+        <includes name=".\resource\pseudocode_body.xsl" />
+        <includes name=".\resource\pseudocode_frames.xsl" />
+        <includes name=".\resource\pseudocode_index.xsl" />
+        <includes name=".\resource\transformXRules.xsl" />
+        <includes name=".\resource\businessRules.xsd" />
+        <includes name=".\resource\vdx2nxbre-ie.xsl" />
+        <includes name=".\resource\ruleml-nafdatalog-0_86-2hrf.xsl" />
+        <includes name=".\resource\ruleml-0_86-nafdatalog.xsd" />
+        <includes name=".\resource\ruleml-0_86-datalog.xsd" />
+        <includes name=".\resource\strict-vdx2nxbre-ie.xsl" />
+        <includes name=".\resource\ruleml-0_9-nafdatalog.xsd" />
+      </resources>
+    </csc>
+    <!--Copy app.config file to output folder and rename it appropriately -->
+  </target>
+  <!--The test target.  Only supports Nunit 2 -->
+  <target name="test.release" depends="build.release" unless="${debug}">
+    <nunit2>
+      <formatter type="Plain" />
+      <test assemblyname="${outputdir.release}\${assembly.release}.${extension.release}" appconfig="${outputdir.release}\${assembly.release}.${extension.release}.config" />
+    </nunit2>
+  </target>
+  <!--Generates a property for each Gac reference.  The property name is set to the name of the assembly-->
+  <target name="gacreferences.release" unless="${debug}">
+    <echo message="Generating Gac references..." />
+    <!-- Script to get the full filenames for assemblies in the Gac.  As soon as nant 0.85 is released this code can be 
+				replaced by a nant function call (assembly::getcodebase). -->
+    <script language="C#" mainclass="Gac">
+      <code>
+				public class Gac
+				{
+					///
+					/// Gets the Gac path for an assembly reference and stores it
+					/// in a Nant property named after the assembly reference.
+					/// 
+					public static void ScriptMain( Project project ) 
+					{
+						try
+						{
+							string ReferenceName = "nunit.framework, Version=2.2.0.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77";
+
+							string ReferenceFilename = Gac.GetGacPath( ReferenceName );
+
+							if( ReferenceFilename.Length == 0 )
+							{
+								// Use reference name as gac path.
+
+								ReferenceFilename = ReferenceName;
+							}
+
+							project.Properties[ String.Concat( ReferenceName, ".filename" ) ] = ReferenceFilename;
+						}
+						catch( Exception Ex )
+						{
+							throw new NAnt.Core.BuildException( String.Format( Ex.Message ), Ex );
+						}
+					}
+
+					///
+					/// Gets the gac path for the specified assembly name.
+					///
+					public static string GetGacPath( string assemblyName )
+					{
+						string CodeBase = GetCodeBase( assemblyName );
+
+						return CodeBase.Replace( "file:///", "" );
+					}
+
+					/// 
+					/// Gets the code base for the specified assembly name.
+					/// 
+					public static string GetCodeBase( string assemblyName )
+					{
+						string CodeBase = String.Empty;
+		
+						System.Reflection.Assembly Assembly = 
+							System.Reflection.Assembly.LoadWithPartialName( assemblyName );
+		
+						if( Assembly != null )
+						{
+							CodeBase = Assembly.CodeBase;
+						}
+
+						return CodeBase;
+					}
+				}
+				</code>
+    </script>
+    <echo message="reference= ${nunit.framework, Version=2.2.0.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77.filename}" />
+  </target>
+</project>
