@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<rulebase xmlns="http://www.ruleml.org/0.86/xsd" xsi:schemaLocation="http://www.ruleml.org/0.86/xsd ruleml-0_86-nafdatalog.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" direction="forward">
+	<_rbaselab>
+		<ind>Fire Alarm Management System</ind>
+	</_rbaselab>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Detector In Room</rel>
+				</_opr>
+				<ind>A100</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Detector In Room</rel>
+				</_opr>
+				<ind>A101</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Detector In Room</rel>
+				</_opr>
+				<ind>A102</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Fire Event In Room</rel>
+				</_opr>
+				<ind>Smoke Detected</ind>
+				<ind>A100</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Fire Event In Room</rel>
+				</_opr>
+				<ind>Sprinkler On</ind>
+				<ind>A101</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Fire Alarm In Room</rel>
+				</_opr>
+				<ind>A101</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Firemen In Room</rel>
+				</_opr>
+				<ind>A102</ind>
+			</atom>
+		</_head>
+	</fact>
+	<!--
+		We first try to locate any alarm fault
+	-->
+	<imp>
+		<_rlab><ind>label:Alarm Fault Detection;priority:100</ind></_rlab>
+		<_body>
+			<and>
+				<naf>
+					<atom>
+						<_opr>
+							<rel>Fire Alarm In Room</rel>
+						</_opr>
+						<var>Room Number</var>
+					</atom>
+				</naf>
+				<atom>
+					<_opr>
+						<rel>Fire Event In Room</rel>
+					</_opr>
+					<var>Event Type</var>
+					<var>Room Number</var>
+				</atom>
+			</and>
+		</_body>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Alarm Fault In Room</rel>
+				</_opr>
+				<var>Event Type</var>
+				<var>Room Number</var>
+			</atom>
+		</_head>
+	</imp>
+	<!--
+		Then we estimate safe rooms for evac
+	-->
+	<imp>
+		<_rlab><ind>label:Safe Room Estimation;priority:50</ind></_rlab>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>Safe Room</rel>
+				</_opr>
+				<var>Room Number</var>
+			</atom>
+		</_head>
+		<_body>
+			<and>
+				<!-- The "Room Number" variables of the two NAF atoms must be fed with values collected somewhere...
+						 ...so we are using the building room/zone relations to provide the implication with a list of rooms to test -->
+				<atom>
+					<_opr>
+						<rel>Detector In Room</rel>
+					</_opr>
+					<var>Room Number</var>
+				</atom>
+				<or>
+					<and>
+						<naf>
+							<atom>
+								<_opr>
+									<rel>Alarm Fault In Room</rel>
+								</_opr>
+								<var>Event Type</var>
+								<var>Room Number</var>
+							</atom>
+						</naf>
+						<naf>
+							<atom>
+								<_opr>
+									<rel>Fire Alarm In Room</rel>
+								</_opr>
+								<var>Room Number</var>
+							</atom>
+						</naf>
+					</and>
+					<atom>
+						<_opr>
+							<rel>Firemen In Room</rel>
+						</_opr>
+						<var>Room Number</var>
+					</atom>
+				</or>
+			</and>
+		</_body>
+	</imp>
+	<!--
+		This query is simply the one underlying the "Safe Room Estimation" implication
+		It is interesting running it before and after infering on the rule base to see that room A100 has lost the "safe" status
+	-->
+	<query>
+		<_rlab>
+			<ind>Safe Room List</ind>
+		</_rlab>
+		<_body>
+			<and>
+				<atom>
+					<_opr>
+						<rel>Detector In Room</rel>
+					</_opr>
+					<var>Room Number</var>
+				</atom>
+				<or>
+					<and>
+						<naf>
+							<atom>
+								<_opr>
+									<rel>Alarm Fault In Room</rel>
+								</_opr>
+								<var>Event Type</var>
+								<var>Room Number</var>
+							</atom>
+						</naf>
+						<naf>
+							<atom>
+								<_opr>
+									<rel>Fire Alarm In Room</rel>
+								</_opr>
+								<var>Room Number</var>
+							</atom>
+						</naf>
+					</and>
+					<atom>
+						<_opr>
+							<rel>Firemen In Room</rel>
+						</_opr>
+						<var>Room Number</var>
+					</atom>
+				</or>
+			</and>
+		</_body>
+	</query>
+</rulebase>

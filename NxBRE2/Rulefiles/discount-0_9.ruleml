@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<RuleML
+xmlns="http://www.ruleml.org/0.9/xsd"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.ruleml.org/0.9/xsd ruleml-0_9-nafdatalog.xsd">
+
+<Assert mapClosure="universal">
+
+<!--
+BUSINESS RULES IN RuleML                            Harold Boley, 1 Apr. 2002
+(revised June 2004)
+
+Discounting rules were discussed as an example of prioritized conflict handling
+in Benjamin N. Grosof, Yannis Labrou, Hoi Y. Chan: A Declarative Approach to
+Business Rules in Contracts: Courteous Logic Programs in XML. Proc. EC99.
+
+This rulebase defines non-prioritized business rules on customer-and-product
+discounting (Implications 1 and 2) and, using chaining, on premium customers
+(Imp 3).
+
+It also gives business facts on products (Facts 1 and 2)
+and on a specific customer (Fact 3).
+
+Finally, it asks a test query for the rulebase (Query 1).
+
+These examples could be easily extended by further categories of customers,
+product discounting conditions, etc.
+
+This entire RuleML 0.86 document validates w.r.t. the XSD given in the
+line below.
+-->
+
+
+<!--  Implies 1
+The discount for a customer buying a product is 5.0 percent
+if the customer is premium and the product is regular.
+
+Notice that an individual constant can syntactically be an entire phrase
+like "5.0 percent". It will unify only with variables and with individuals
+having exactly the same spelling (incl. spaces). One could refine this markup
+by introducing a constructor term for "percent[5.0]", thus leaving Datalog
+towards full Horn logic.
+-->
+
+<Implies>
+  <head>
+    <Atom>
+      <op><Rel>discount</Rel></op>
+      <Var>customer</Var>
+      <Var>product</Var>
+      <Ind>5.0 percent</Ind>
+    </Atom>
+  </head>
+  <body>
+    <And>
+      <Atom>
+        <op><Rel>premium</Rel></op>
+        <Var>customer</Var>
+      </Atom>
+      <Atom>
+        <op><Rel>regular</Rel></op>
+        <Var>product</Var>
+      </Atom>
+    </And>
+  </body>
+</Implies>
+
+
+<!--  Implies 2
+The discount for a customer buying a product is 7.5 percent
+if the customer is premium and the product is luxury.
+-->
+
+<Implies>
+  <head>
+    <Atom>
+      <op><Rel>discount</Rel></op>
+      <Var>customer</Var>
+      <Var>product</Var>
+      <Ind>7.5 percent</Ind>
+    </Atom>
+  </head>
+  <body>
+    <And>
+      <Atom>
+        <op><Rel>premium</Rel></op>
+        <Var>customer</Var>
+      </Atom>
+      <Atom>
+        <op><Rel>luxury</Rel></op>
+        <Var>product</Var>
+      </Atom>
+    </And>
+  </body>
+</Implies>
+
+
+<!--  Implies 3
+A customer is premium if
+their spending has been min 5000 euro in the previous year.
+
+Notice that "previous year" can again be regarded as an individual constant
+consisting of an entire phrase. It can also be regarded as a semi-formal construct
+transitionally used in the process of formalizing a given English business rule in
+a logic allowing backward temporal references.
+
+Similarly, "min 5000 euro" can as well be regarded as an individual constant phrase.
+It can also be regarded as a semi-formal construct ultimately to be replaced by a
+'greater-than' comparison over numbers with units.
+-->
+
+<Implies>
+  <head>
+    <Atom>
+      <op><Rel>premium</Rel></op>
+      <Var>customer</Var>
+    </Atom>
+  </head>
+  <body>
+    <Atom>
+      <op><Rel>spending</Rel></op>
+      <Var>customer</Var>
+      <Ind>min 5000 euro</Ind>
+      <Ind>previous year</Ind>
+    </Atom>
+  </body>
+</Implies>
+
+
+<!--  Fact 1
+A Porsche is luxury.
+-->
+ 
+  <Atom>
+    <op><Rel>luxury</Rel></op>
+    <Ind>Porsche</Ind>
+  </Atom>
+
+
+<!--  Fact 2
+A Honda is regular.
+-->
+
+  <Atom>
+    <op><Rel>regular</Rel></op>
+    <Ind>Honda</Ind>
+  </Atom>
+
+
+<!--  Fact 3
+Peter Miller's spending has been min 5000 euro in the previous year.
+
+Notice that "min 5000 euro" and "previous year" directly unify with
+the identical individual constant phrases of Imp 3. Thus, these
+semi-formal constructs can be used for debugging the rules already
+in an early phase of the formalization process.
+-->
+
+  <Atom>
+    <op><Rel>spending</Rel></op>
+    <Ind>Peter Miller</Ind>
+    <Ind>min 5000 euro</Ind>
+    <Ind>previous year</Ind>
+  </Atom>
+
+
+</Assert>
+
+<!--  Query 1
+Give the discount amounts for all customers buying any products.
+-->
+
+<Query>
+    <Atom>
+      <op><Rel>discount</Rel></op>
+      <Var>customer</Var>
+      <Var>product</Var>
+      <Var>amount</Var>
+    </Atom>
+</Query>
+
+</RuleML>

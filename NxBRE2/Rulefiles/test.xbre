@@ -1,0 +1,837 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+		NxBRE v.2.2 Unit Test File
+
+-->
+<xBusinessRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://nxbre.org/xBusinessRules.xsd">
+	<!-- 
+		These rules will execute, no matter what.
+		Their values will be used in the business logic below
+		
+		They instantiate simple value objects. See in the REFLECTION demo rule set below for more complex object instantiation.
+		
+		Assert is the generic statement, where type should be :
+			- Exception | Boolean | Byte | Short | Integer | Long | Single | Double | Decimal | Date  | DateTime  | Time | String
+			- or should be a fully qualified class name (with optionaly the assembly name after a coma).
+	-->
+	<Assert id="5i" type="Integer" value="5"/>
+	<Assert id="xmas2003_A" type="Date" value="2003-12-25"/>
+	<Assert id="manOnMoon_A" type="DateTime" value="1969-07-21T02:56:00"/>
+	<Assert id="wakeUpCall_A" type="Time" value="07:15:30"/>
+	<!--
+		Assert is derived in specific tags where the type is used as tag name.
+	-->
+	<Boolean id="TRUE" value="true"/>
+	<Byte id="8b" value="8"/>
+	<Date id="xmas2003" value="2003-12-25"/>
+	<DateTime id="manOnMoon" value="1969-07-21T02:56:00"/>
+	<Time id="wakeUpCall" value="07:15:30"/>
+	<Decimal id="3.14m" value="3.14"/>
+	<Double id="3.14d" value="3.14"/>
+	<Integer id="ZERO" value="0"/>
+	<Integer id="10i" value="10"/>
+	<Short id="16s" value="16"/>
+	<Single id="3.14" value="3.14"/>
+	<String id="hello" value="world"/>
+	<!--
+		The following are short boolean syntax for CONSTANTS.
+	-->
+	<False id="STORED_FALSE"/>
+	<!--
+		We can not modify the value of such a boolean - Modify will be ignored.
+	-->
+	<True id="STORED_TRUE"/>
+	<Modify id="STORED_TRUE" type="Boolean" value="false"/>
+	<!--
+		Basic test that is always executed
+	-->
+	<Logic>
+		<If>
+			<And>
+				<IsTrue valueId="STORED_TRUE"/>
+				<IsFalse valueId="STORED_FALSE"/>
+			</And>
+			<Do>
+				<True id="RT1"/>
+			</Do>
+		</If>
+		<Else>
+			<ThrowFatalException value="RT1"/>
+		</Else>
+	</Logic>
+	<!--
+		Tests	: This to check that globals are correctly processed
+	-->
+	<Evaluate id="GlobalCounter"/>
+	<!--
+		Tests	: Set test
+		Notes	: None
+		Result	: This will not fire to prove that this set gets skipped..
+	-->
+	<Set id="BROKENSET">
+		<Log msg="BROKENSET unexpectidly running" level="5"/>
+		<True id="BROKENSET"/>
+	</Set>
+	<!--
+		Tests	: Set test
+		Notes	: None
+		Result	: Should execute..
+	-->
+	<Set id="WORKINGSET">
+		<Log msg="WORKINGSET running" level="5"/>
+		<True id="WORKINGSET"/>
+		<!--
+			Tests	: Dynamic Log
+			Notes	: 
+			Result	: Sends a log event with a message equals to the ToString() of an asserted object.
+		-->
+		<Log msgId="hello" level="3"/>
+		<!--
+			Tests	: Exceptions 1
+			Notes	: The rule engine simply pass the exception to the handler and does not break on exception raised in the rules file
+					( See later for an example of fatal exception)
+			Result	: Immediatly throws an exceptions with a default message.
+		-->
+		<ThrowException/>
+		<!--
+			Tests	: Exceptions 2
+			Notes	: None
+			Result	: Immediatly throws an exception and stores the exception object in the rules context under a specific id
+		-->
+		<ThrowException id="EXCP" value="This is another exception!"/>
+		<!--
+			Tests	: Exceptions 3
+			Notes	: None
+			Result	: Immediatly throws an exception with a message equals to the ToString() of an asserted object.
+		-->
+		<ThrowException valueId="hello"/>
+		<!--
+			Tests	: While loop test 1
+			Notes	: An increment is by default initialized at 0
+			Result	: Should go 9 * 4 times (while ++INC_X < 10 (while ++INC_Y < 5 ))
+		-->
+		<While>
+			<And>
+				<LessThan leftId="INC_X" rightId="10i">
+					<Increment id="INC_X" step="1"/>
+				</LessThan>
+			</And>
+			<Do>
+				<While>
+					<And>
+						<LessThan leftId="INC_Y" rightId="5i">
+							<Increment id="INC_Y" step="1"/>
+						</LessThan>
+					</And>
+					<Do>
+						<Evaluate id="WhileCounter"/>
+					</Do>
+				</While>
+				<!-- Set the incrementor value to 0. Another syntax would have been value="0" instead of ruleValue - see below for example -->
+				<Increment id="INC_Y" valueId="ZERO"/>
+			</Do>
+		</While>
+		<!--
+			Tests	: While loop test 2
+			Notes   : This test has been added to help pinpoint bug 870783
+			Result	: Should not go because the previous while loop left the incrementor above the upper bound
+		-->
+		<While>
+			<And>
+				<LessThan leftId="INC_X" rightId="10i">
+					<Increment id="INC_X" step="1"/>
+				</LessThan>
+			</And>
+			<Do>
+				<ThrowFatalException value="WLT2"/>
+			</Do>
+		</While>
+		<!--
+			Tests	: While loop test 3
+			Notes   : 
+			Result	: After reseting INC_X to 6, the test should go 3 times
+		-->
+		<Increment id="INC_X" value="6"/>
+		<While>
+			<And>
+				<LessThan leftId="INC_X" rightId="10i">
+					<Increment id="INC_X" step="1"/>
+				</LessThan>
+			</And>
+			<Do>
+				<Evaluate id="WhileCounter"/>
+			</Do>
+		</While>
+		<!--
+			Tests	: ForEach test 1
+			Notes   : ForEach interates on enumerable objects.
+			Result	: Calls the delegates bound to "ForEachTester", which checks that the asserted "Parser" object is correct
+					  The first evaluation is needed to load up the result of the call to GetEnumerable delegate into the context
+		-->
+		<Evaluate id="GetEnumerable"/>
+		<ForEach id="ForEachParser" valueId="GetEnumerable">
+			<Evaluate id="ForEachTester"/>
+		</ForEach>
+		<!--
+			Tests	: If a parameter can get to a value from another rule
+			Result	: Should display "It worked"
+		-->
+		<Logic>
+			<If>
+				<And>
+					<Equals leftId="T1" rightId="V1">
+						<True id="T1"/>
+						<!-- this actually takes the value from the rule with and ID of STORED_TRUE -->
+						<Assert id="V1" type="Boolean" valueId="STORED_TRUE"/>
+					</Equals>
+				</And>
+				<Do>
+					<True id="RT2"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="RT2"/>
+			</Else>
+		</Logic>
+		<!--
+			Tests	: Delegation to programmatic rules test
+			Result	: Should go while the compare is TRUE
+		-->
+		<Logic>
+			<If>
+				<And>
+					<Equals leftId="50i" rightId="mulBy5i">
+						<!-- must perform an evaluation to ensure custom code is called before evaluation -->
+						<Evaluate id="50i"/>
+						<Evaluate id="mulBy5i">
+							<!-- it is up to mulBy5i to cast the parameter from String to Integer -->
+							<Parameter name="myParam" value="10"/>
+						</Evaluate>
+					</Equals>
+					<Equals leftId="50i" rightId="mulBy5i">
+						<Evaluate id="50i"/>
+						<Evaluate id="mulBy5i">
+							<!-- this time, we pass the value of an asserted integer -->
+							<Parameter name="myParam" valueId="10i"/>
+						</Evaluate>
+					</Equals>
+				</And>
+				<Do>
+					<True id="RT3"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="RT3"/>
+			</Else>
+		</Logic>
+		<!-- 
+			Tests	: If two booleans are equal.
+			Notes	: Rules are executed at time of compare
+			Result	: Should be TRUE since both are equal to TRUE
+		-->
+		<Logic>
+			<If>
+				<And>
+					<IsTrue valueId="VALUE1">
+						<Boolean id="VALUE1" value="true"/>
+					</IsTrue>
+				</And>
+				<Do>
+					<True id="LT1"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="LT1"/>
+			</Else>
+		</Logic>
+		<!-- 
+			Tests	: If two booleans are not equal.
+			Notes	: Uses two preloaded rules, modified the parameters of one of them
+			Result	: Should be true since VALUE1 is modified to FALSE
+		-->
+		<Logic>
+			<If>
+				<And>
+					<IsFalse valueId="VALUE1">
+						<Modify id="VALUE1" type="Boolean" value="FALSE"/>
+					</IsFalse>
+				</And>
+				<Do>
+					<True id="LT2"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="LT2"/>
+			</Else>
+		</Logic>
+		<!--
+			Tests	: If two booleans are equal.
+			Notes	: Uses two preloaded, not Rule tag (to check issue resolution with v1.0.2)
+			Result	: Should be false since VALUE1 was modified to FALSE in the above 
+		-->
+		<Logic>
+			<If>
+				<And>
+					<Equals leftId="STORED_TRUE" rightId="VALUE1"/>
+				</And>
+				<Do>
+					<ThrowFatalException value="LT3"/>
+				</Do>
+			</If>
+			<Else>
+				<True id="LT3"/>
+			</Else>
+		</Logic>
+		<!--
+			Tests	: Condition And
+			Notes	: Uses preloaded Rules
+			Result	: Should be FALSE since TRUE does not equals VALUE1
+		-->
+		<Logic>
+			<If>
+				<And>
+					<NotEquals leftId="TRUE" rightId="VALUE1"/>
+					<Equals leftId="TRUE" rightId="VALUE1"/>
+				</And>
+				<Do>
+					<ThrowFatalException value="LT4"/>
+				</Do>
+			</If>
+			<Else>
+				<True id="LT4"/>
+			</Else>
+		</Logic>
+		<!--
+			Tests	: Condition Or
+			Notes	: Uses preloaded Rules
+			Result	: Should be TRUE because TRUE equals VALUE1
+		-->
+		<Logic>
+			<If>
+				<Or>
+					<NotEquals leftId="TRUE" rightId="VALUE1"/>
+					<Equals leftId="TRUE" rightId="VALUE1"/>
+				</Or>
+				<Do>
+					<True id="LT5"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="LT5"/>
+			</Else>
+		</Logic>
+		<!--
+			Tests	: Condition And
+			Notes	: Uses preloaded Rules
+			Result	: Should be TRUE since FALSE1 equals VALUE1
+						and TRUE does not equal VALUE1
+		-->
+		<Logic>
+			<If>
+				<And>
+					<NotEquals leftId="TRUE" rightId="VALUE1"/>
+					<Equals leftId="FALSE1" rightId="VALUE1">
+						<False id="FALSE1"/>
+					</Equals>
+				</And>
+				<Do>
+					<True id="LT6"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="LT6"/>
+			</Else>
+		</Logic>
+		<!--
+			Tests	: Integer comparison
+			Notes	: None
+			Result	: Should be TRUE since 5i equals VALUE2 and 10i is more than VALUE2
+		-->
+		<Logic>
+			<If>
+				<And>
+					<Equals leftId="5i" rightId="VALUE2">
+						<Integer id="VALUE2" value="5"/>
+					</Equals>
+					<GreaterThanEqualTo leftId="10i" rightId="VALUE2"/>
+				</And>
+				<Do>
+					<True id="LT7"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="LT7"/>
+			</Else>
+		</Logic>
+		<!--
+			Tests	: Integer comparison
+			Notes	: None
+			Result	: Should be FALSE since ZERO does not equal VALUE2
+		-->
+		<Logic>
+			<If>
+				<And>
+					<Equals leftId="ZERO" rightId="VALUE2"/>
+				</And>
+				<Do>
+					<ThrowFatalException value="LT8"/>
+				</Do>
+			</If>
+			<Else>
+				<True id="LT8"/>
+			</Else>
+		</Logic>
+		<!--
+			Tests	: InstanceOf test
+			Notes	: None
+			Result	: Should be TRUE since EXCP and VALUE3 are both exceptions..
+		-->
+		<Logic>
+			<If>
+				<And>
+					<InstanceOf leftId="EXCP" rightId="VALUE3">
+						<Exception id="VALUE3" value="Test exception from XML"/>
+					</InstanceOf>
+				</And>
+				<Do>
+					<True id="LT9"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="LT9"/>
+			</Else>
+		</Logic>
+		<!--
+			Tests	: "Not" test 
+			Notes	: None
+			Result	: Should be TRUE
+		-->
+		<Logic>
+			<If>
+				<And>
+					<Not>
+						<And>
+							<Equals leftId="STORED_FALSE" rightId="STORED_TRUE"/>
+							<Equals leftId="STORED_TRUE" rightId="STORED_FALSE"/>
+						</And>
+					</Not>
+					<Equals leftId="STORED_FALSE" rightId="STORED_FALSE"/>
+				</And>
+				<Do>
+					<True id="LT10"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="LT10"/>
+			</Else>
+		</Logic>
+		<!--
+			Tests	: ElseIf test 
+			Notes	: None
+			Result	: Should be TRUE
+		-->
+		<Logic>
+			<If>
+				<And>
+					<Equals leftId="STORED_TRUE" rightId="STORED_FALSE"/>
+				</And>
+				<Do>
+					<ThrowFatalException value="LT11"/>
+				</Do>
+			</If>
+			<ElseIf>
+				<And>
+					<Equals leftId="STORED_FALSE" rightId="STORED_FALSE"/>
+				</And>
+				<Do>
+					<True id="LT11"/>
+				</Do>
+			</ElseIf>
+			<Else>
+				<ThrowFatalException value="LT11"/>
+			</Else>
+		</Logic>
+		<!--
+			Tests	: Between test 2
+			Notes	: Between is transformed into (leftId LessThan{EqualTo} valueId) And (valueIdLessThan{EqualTo} rightId)
+			Result	: Should be TRUE since 0 and 10 are between 0 and 10 - when bounds are included
+					  and 5 is between 0 and 10 even if bounds are excluded
+		-->
+		<Logic>
+			<If>
+				<And>
+					<Between valueId="ZERO" leftId="ZERO" rightId="10i"/>
+					<Between valueId="5i" leftId="ZERO" rightId="10i" excludeLeft="true" excludeRight="true"/>
+					<Between valueId="10i" leftId="ZERO" rightId="10i"/>
+				</And>
+				<Do>
+					<True id="LT12"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="LT12"/>
+			</Else>
+		</Logic>
+		<!--
+			Tests	: Between test 2
+			Notes	: None
+			Result	: Should be FALSE since 0 and 10 are not between 0 and 10 - when bounds are excluded
+		-->
+		<Logic>
+			<If>
+				<Or>
+					<Between valueId="ZERO" leftId="ZERO" rightId="10i" excludeLeft="true"/>
+					<Between valueId="10i" leftId="ZERO" rightId="10i" excludeRight="true"/>
+				</Or>
+				<Do>
+					<ThrowFatalException value="LT13"/>
+				</Do>
+			</If>
+			<Else>
+				<True id="LT13"/>
+			</Else>
+		</Logic>
+		<!--
+			Tests	: In test
+			Notes	: In is transformed into (valueId Equals idList[0]) Or (valueId Equals idList[1]) ...
+			Result	: Should be TRUE
+		-->
+		<Logic>
+			<If>
+				<And>
+					<In valueId="5i" idList="5i,10i"/>
+					<In valueId="5i" idList="ZERO,10i,NewValue">
+						<Integer id="NewValue" value="5"/>
+					</In>
+					<Not>
+						<In valueId="0K" idList="ZERO,5i,10i">
+							<!-- Avoid doing the following as the Integer will be asserted 3 times, one time for each member in the idList enumeration -->
+							<Integer id="0K" value="-273"/>
+						</In>
+					</Not>
+				</And>
+				<Do>
+					<True id="LT14"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="LT14"/>
+			</Else>
+		</Logic>
+		<!--
+			Tests	: IsAsserted test
+			Notes	: 
+			Result	: Should be TRUE
+		-->
+		<String id="testAssert" value="probe"/>
+		<Logic>
+			<If>
+				<And>
+					<IsAsserted valueId="testAssert"/>
+					<Not>
+						<IsAsserted valueId="turnip"/>
+					</Not>
+				</And>
+				<Do>
+					<True id="LT15"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="LT15"/>
+			</Else>
+		</Logic>
+		<!--
+			Tests	: Retract test
+			Notes	: 
+			Result	: Should be TRUE
+		-->
+		<Retract id="testAssert"/>
+		<Logic>
+			<If>
+				<Not>
+					<IsAsserted valueId="testAssert"/>
+				</Not>
+				<Do>
+					<True id="LT16"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="LT16"/>
+			</Else>
+		</Logic>
+		<!--
+			Tests	: Empty constructor object assertion test
+			Notes	: Bug #1044404
+			Result	: Should be true
+		-->
+		<Assert id="testAssertVersion" type="System.Version"/>
+		<Logic>
+			<If>
+				<And>
+					<Equals leftId="testAssertVersion" rightId="ReferenceAssertVersion"/>
+				</And>
+				<Do>
+					<True id="LT17"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="LT17"/>
+			</Else>
+		</Logic>
+		<!--
+			Tests	: Empty String assertion & comparison tests
+			Notes	: Bug #1190485
+			Result	: Should be true
+		-->
+		<String id="Empty1" value=""/>
+		<Logic>
+			<If>
+				<And>
+					<Equals leftId="Empty1" rightId="Empty2">
+						<String id="Empty2" value=""/>
+					</Equals>
+					<NotEquals leftId="Empty1" rightId="hello"/>
+				</And>
+				<Do>
+					<True id="LT20"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="LT20"/>
+			</Else>
+		</Logic>
+		<!--
+			Tests	: Empty String assertion & comparison tests
+			Notes	: So-called Bug #1182351
+			Result	: Should be true
+		-->
+		<Double id="6.32d" value="6.32"/>
+		<Double id="PI" value="3.14"/>
+		<Logic>
+			<If>
+				<And>
+					<Equals leftId="3.14d" rightId="PI"/>
+					<NotEquals leftId="3.14d" rightId="6.32d"/>
+					<LessThan leftId="3.14d" rightId="6.32d"/>
+					<LessThanEqualTo leftId="3.14d" rightId="PI"/>
+					<LessThanEqualTo leftId="PI" rightId="6.32d"/>
+					<GreaterThan leftId="6.32d" rightId="3.14d"/>
+					<GreaterThanEqualTo leftId="3.14d" rightId="PI"/>
+					<GreaterThanEqualTo leftId="6.32d" rightId="3.14d"/>
+				</And>
+				<Do>
+					<True id="LT21"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="LT21"/>
+			</Else>
+		</Logic>		
+		<!--
+			Tests	: Static rule set invocation
+			Result	: Should process all global rules and the ones in the set named REFLECTION
+			Notes	: None
+		-->
+		<InvokeSet id="REFLECTION"/>
+		<!--
+			Tests	: Dyamic rule set invocation
+			Result	: Should invoke the set whose Id is TestObject2.ToString().			
+			Notes	: Of course, this works also with asserted String objects!
+		-->
+		<InvokeSet valueId="TestObject2"/>
+		<!--
+			Tests	: Exceptions 3
+			Notes	: As said before, the engine does not break on exception: it is up to the user to stop its processing.
+					In the test handler, we have decided to break the execution for fatal exceptions, therefore FATEX should never be asserted.
+			Result	: Immediatly throws an exception and stop processing the rule file.
+		-->
+		<ThrowFatalException value="This is a fatal exception!"/>
+		<!-- The following will never be processed -->
+		<True id="FATEX"/>
+		<Log msg="WORKINGSET finished" level="5"/>
+	</Set>
+	<!--
+		Tests	: This to check that globals are correctly processed
+	-->
+	<Evaluate id="GlobalCounter"/>
+	<!--
+		Tests	: Reflection Test Set
+		Notes	: None
+		Result	: Should access and alter TestObject
+	-->
+	<Set id="REFLECTION">
+		<Log msg="REFLECTION running" level="5"/>
+		<True id="REFLECTION"/>
+		<!--
+			Tests	: IsNull Test
+			Notes	: InstanceOf returns false if the tested value is null
+			Result	: Should be TRUE
+		-->
+		<ObjectLookup id="TestObject_Null" objectId="TestObject" member="GetNull"/>
+		<Logic>
+			<If>
+				<And>
+					<IsTrue valueId="Null_Check">
+						<ObjectLookup id="Null_Check" type="org.nxbre.util.Reflection" member="IsNull">
+							<Argument valueId="TestObject_Null" />
+						</ObjectLookup>
+					</IsTrue>
+				</And>
+				<Do>
+					<True id="LT18"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="LT18"/>
+			</Else>
+		</Logic>
+		<!--
+			Tests	: Void Member Test should return null
+			Notes	: InstanceOf returns false if the tested value is null
+			Result	: Should be TRUE
+		-->
+		<ObjectLookup id="TestObject_Void" objectId="TestObject" member="VoidMember"/>
+		<Logic>
+			<If>
+				<And>
+					<IsTrue valueId="Void_Check">
+						<ObjectLookup id="Void_Check" type="org.nxbre.util.Reflection" member="IsNull">
+							<Argument valueId="TestObject_Void" />
+						</ObjectLookup>
+					</IsTrue>
+				</And>
+				<Do>
+					<True id="LT19"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="LT19"/>
+			</Else>
+		</Logic>
+		<!--
+			Tests	: Multi-signature Property access (like Item)
+			Notes   : These tests have been added to help pinpoint bug 918864
+			Result	: Context object Hashtable_Value should contain TestHashtable["two"]
+					  Context object TestHashtable should be updated like this TestHashtable["four"]="forth"
+		-->
+		<ObjectLookup id="Hashtable_Value" objectId="TestHashtable" member="Item">
+			<Argument value="two" type="String" />
+		</ObjectLookup>
+		<ObjectLookup objectId="TestHashtable" member="Item">
+			<Argument value="four" type="String" />
+			<Argument value="forth" type="String" />
+		</ObjectLookup>		
+		<!--
+			Tests	: RowSet Manipulation Access
+			Notes	: It is possible to access row sets through pure reflection, this demonstrate how to use the simple
+							helper methods in NxBRE v2
+			Result	: Context object TestRowSet_Col1 should contain TestRowSet["col1"]
+					  Context object TestRowSet should be updated like this TestRowSet["col2"]=1969
+		-->
+		<ObjectLookup id="TestRowSet_Col1" type="org.nxbre.util.DataAccess" member="GetDataRowColumnValue">
+			<Argument valueId="TestRowSet" />
+			<Argument value="col1" type="String" />
+		</ObjectLookup>
+		<ObjectLookup type="org.nxbre.util.DataAccess" member="SetDataRowColumnValue">
+			<Argument valueId="TestRowSet" />
+			<Argument value="col2" type="String" />
+			<Argument value="1969" type="Integer" />
+		</ObjectLookup>		
+		<!--
+			Tests	: Methods with Params Argument Access
+			Notes	: NxBRE v2 can directly access methods with one argument being a param array,
+			or if the param array is of a different type for the type just before
+			Result	: Context object TestMultiply should contain 2 * 5 * 9 = 90
+								Context object TestOperate1 should contain 0.5 * 4 * 7 = 14d
+		-->
+		<ObjectLookup id="TestMultiply" type="org.nxbre.util.Maths" member="Multiply">
+			<Argument value="2" type="Integer" />
+			<Argument value="5" type="Integer" />
+			<Argument value="9" type="Integer" />
+		</ObjectLookup>
+		<ObjectLookup id="TestOperate1" type="org.nxbre.test.TestObject" member="Operate1">
+			<Argument value="0.5" type="Double" />
+			<Argument value="4" type="Integer" />
+			<Argument value="7" type="Integer" />
+		</ObjectLookup>		
+		<!--
+			Tests	: Methods with Params Argument Access
+			Notes	: For methods with a parameter followed by a param array of same type, the params must be wrapped in an array
+			Result	: Context object TestOperate2 should contain -3 + (4 * 7) = 25
+		-->
+		<ObjectLookup id="TestOperate2" type="org.nxbre.test.TestObject" member="Operate2">
+			<Argument value="-3" type="Integer" />
+			<Argument value="4" type="Integer" />
+			<Argument value="7" type="Integer" />
+		</ObjectLookup>		
+		<!--
+			<Argument valueId="Temp_TestOperate2" />
+			Tests	: Advanced Reflection Tests
+		-->
+		<Logic>
+			<If>
+				<And>
+					<!-- Compares an object field with a loaded value. -->
+					<IsTrue valueId="TestObject_MyField">
+						<ObjectLookup id="TestObject_MyField" objectId="TestObject" member="MyField"/>
+					</IsTrue>
+				</And>
+				<Do>
+					<!-- Places an object property in the context. -->
+					<ObjectLookup id="TestObject_MyProperty" objectId="TestObject" member="MyProperty"/>
+					<!-- Calls a static method with expressions and values coming from the context
+					     and places the result in the context.
+						The method will be searched using the arguments' types.
+						Remember that using the "value" attribute gives a String type, unless you specify a type argument.
+						If you use "ruleValue", then the type will be of the asserted's object type.
+					     The Assembly name can be given after the coma.  -->
+					<ObjectLookup id="TestObject_NewProperty" type="org.nxbre.test.TestObject" member="Add">
+						<Argument valueId="10i"/>
+						<Argument valueId="TestObject_MyProperty"/>
+					</ObjectLookup>
+					<!-- Sets a property on an object available in the context. -->
+					<ObjectLookup objectId="TestObject" member="MyProperty">
+						<Argument valueId="TestObject_NewProperty"/>
+					</ObjectLookup>
+					<!-- Sets a field on an object available in the context. -->
+					<ObjectLookup objectId="TestObject" member="MyField">
+						<Argument valueId="STORED_FALSE"/>
+					</ObjectLookup>
+					<!-- Instantiates a new TestObject in the context
+						As for methods calls, the constructor used is selected using the arguments' types. -->
+					<Assert id="TestObject2" type="org.nxbre.test.TestObject">
+						<Argument valueId="STORED_TRUE"/>
+						<Argument value="99" type="Integer"/>
+						<Argument value="world"/>
+					</Assert>
+					<!-- Calls a method on TestObject. The method is void, therefore the Id does not matter -->
+					<ObjectLookup objectId="TestObject" member="InheritMethod">
+						<Argument valueId="TestObject2"/>
+					</ObjectLookup>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="REFLECTION"/>
+			</Else>
+		</Logic>
+		<Log msg="REFLECTION finished" level="5"/>
+	</Set>
+	<!--
+		Tests	: This to check that globals are correctly processed
+	-->
+	<Evaluate id="GlobalCounter"/>
+	<!--
+		Tests	: Another Test Set
+		Notes	: None
+	-->
+	<Set id="ANOTHER">
+		<Log msg="ANOTHER running" level="5"/>
+		<True id="ANOTHER"/>
+		<Log msg="ANOTHER finished" level="5"/>
+	</Set>
+	<!--
+		Tests	: This to check that globals are correctly processed
+	-->
+	<Evaluate id="GlobalCounter"/>
+</xBusinessRules>

@@ -1,0 +1,50 @@
+/* 
+
+  NxBRE Inference engine Sample Rule Base
+
+  Author: David Dossot
+  
+  Note: In a real fraud control system, instead of counting the risk factors as demonstrated in this rulebase, scores would be assigned to different risks and these scores would be added to a business object property via the new fact event.
+
+*/
+
+#DIRECTION_FORWARD
+
+[Fraud Control Knowledge Base];
+
+/*
+  Implications
+*/
+[Tax Haven Fraud Factor Assessment]
+Location{?Customer, ?Country Code}
+& Tax Haven{?Country Code}
+-> Fraud Factor{?Customer, Tax Haven};
+
+[Huge Transaction Assessment]
+Involved In{?Customer, ?Transaction}
+& Amount{?Transaction, min(150000,EUR)}
+-> Fraud Factor{?Customer, Huge Transaction};
+
+[Fraudulent Customer Assessment]
+Fraud Factor{?Customer, ?Type1}
+& Fraud Factor{?Customer, ?Type2}
+-> Fraudulent Customer{?Customer};
+
+/*
+  Facts
+*/
+[CC01-TH]
++Tax Haven{CC01};
+
+[CC02-TH]
++Tax Haven{CC02};
+
+[CC99-TH]
++Tax Haven{CC99};
+
+/*
+  Queries
+*/
+[Fraudulent Customers]
+Fraudulent Customer{?Customer};
+

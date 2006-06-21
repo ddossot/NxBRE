@@ -1,0 +1,28 @@
+<Combine fileversion="1.0" name="NxBRE-Examples" description="">
+  <StartMode startupentry="Telco" single="True">
+    <Execute entry="Login" type="None" />
+    <Execute entry="Discount" type="None" />
+    <Execute entry="FraudControl" type="None" />
+    <Execute entry="Telco" type="None" />
+  </StartMode>
+  <Entries>
+    <Entry filename=".\login.prjx" />
+    <Entry filename=".\Discount.prjx" />
+    <Entry filename=".\FraudControl.prjx" />
+    <Entry filename=".\Telco.prjx" />
+  </Entries>
+  <Configurations active="Debug">
+    <Configuration name="Release">
+      <Entry name="Login" configurationname="Debug" build="False" />
+      <Entry name="Discount" configurationname="Debug" build="False" />
+      <Entry name="FraudControl" configurationname="Debug" build="False" />
+      <Entry name="Telco" configurationname="Debug" build="False" />
+    </Configuration>
+    <Configuration name="Debug">
+      <Entry name="Login" configurationname="Debug" build="False" />
+      <Entry name="Discount" configurationname="Debug" build="False" />
+      <Entry name="FraudControl" configurationname="Debug" build="False" />
+      <Entry name="Telco" configurationname="Debug" build="False" />
+    </Configuration>
+  </Configurations>
+</Combine>

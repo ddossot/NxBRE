@@ -1,0 +1,42 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Login", "login.csproj", "{F6C0119B-323B-4219-9D54-D8F0CF7D63DF}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Discount", "Discount.csproj", "{DF245AC7-AABA-484C-97D8-B26D3E9C0681}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FraudControl", "FraudControl.csproj", "{B7BFCB53-6217-49DD-9EB4-605EA032E031}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telco", "Telco.csproj", "{EA3EED9B-5DB7-4CC1-B7D5-8A3C6536E635}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{F6C0119B-323B-4219-9D54-D8F0CF7D63DF}.Debug.ActiveCfg = Debug|.NET
+		{F6C0119B-323B-4219-9D54-D8F0CF7D63DF}.Debug.Build.0 = Debug|.NET
+		{F6C0119B-323B-4219-9D54-D8F0CF7D63DF}.Release.ActiveCfg = Release|.NET
+		{F6C0119B-323B-4219-9D54-D8F0CF7D63DF}.Release.Build.0 = Release|.NET
+		{DF245AC7-AABA-484C-97D8-B26D3E9C0681}.Debug.ActiveCfg = Debug|.NET
+		{DF245AC7-AABA-484C-97D8-B26D3E9C0681}.Debug.Build.0 = Debug|.NET
+		{DF245AC7-AABA-484C-97D8-B26D3E9C0681}.Release.ActiveCfg = Release|.NET
+		{DF245AC7-AABA-484C-97D8-B26D3E9C0681}.Release.Build.0 = Release|.NET
+		{B7BFCB53-6217-49DD-9EB4-605EA032E031}.Debug.ActiveCfg = Debug|.NET
+		{B7BFCB53-6217-49DD-9EB4-605EA032E031}.Debug.Build.0 = Debug|.NET
+		{B7BFCB53-6217-49DD-9EB4-605EA032E031}.Release.ActiveCfg = Release|.NET
+		{B7BFCB53-6217-49DD-9EB4-605EA032E031}.Release.Build.0 = Release|.NET
+		{EA3EED9B-5DB7-4CC1-B7D5-8A3C6536E635}.Debug.ActiveCfg = Debug|.NET
+		{EA3EED9B-5DB7-4CC1-B7D5-8A3C6536E635}.Debug.Build.0 = Debug|.NET
+		{EA3EED9B-5DB7-4CC1-B7D5-8A3C6536E635}.Release.ActiveCfg = Release|.NET
+		{EA3EED9B-5DB7-4CC1-B7D5-8A3C6536E635}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

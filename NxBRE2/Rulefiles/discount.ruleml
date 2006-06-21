@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE rulebase SYSTEM "ruleml-0_8-datalog.dtd">
+<!--
+BUSINESS RULES IN RuleML                            Harold Boley, 1 Apr. 2002
+
+
+Discounting rules were discussed as an example of prioritized conflict handling
+in Benjamin N. Grosof, Yannis Labrou, Hoi Y. Chan: A Declarative Approach to
+Business Rules in Contracts: Courteous Logic Programs in XML. Proc. EC99.
+
+This rulebase defines non-prioritized business rules on customer-and-product
+discounting (Implications 1 and 2) and, using chaining, on premium customers
+(Imp 3).
+
+It also gives business facts on products (Facts 1 and 2)
+and on a specific customer (Fact 3).
+
+Finally, it asks a test query for the rulebase (Query 1).
+
+These examples could be easily extended by further categories of customers,
+product discounting conditions, etc.
+
+This entire RuleML 0.8 document validates w.r.t. the DTD given in the
+second line above.
+-->
+<rulebase>
+	<!--  Imp 1
+The discount for a customer buying a product is 5.0 percent
+if the customer is premium and the product is regular.
+
+Notice that an individual constant can syntactically be an entire phrase
+like "5.0 percent". It will unify only with variables and with individuals
+having exactly the same spelling (incl. spaces). One could refine this markup
+by introducing a constructor term for "percent[5.0]", thus leaving Datalog
+towards full Horn logic.
+-->
+	<imp>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>discount</rel>
+				</_opr>
+				<var>customer</var>
+				<var>product</var>
+				<ind>5.0 percent</ind>
+			</atom>
+		</_head>
+		<_body>
+			<and>
+				<atom>
+					<_opr>
+						<rel>premium</rel>
+					</_opr>
+					<var>customer</var>
+				</atom>
+				<atom>
+					<_opr>
+						<rel>regular</rel>
+					</_opr>
+					<var>product</var>
+				</atom>
+			</and>
+		</_body>
+	</imp>
+	<!--  Imp 2
+The discount for a customer buying a product is 7.5 percent
+if the customer is premium and the product is luxury.
+-->
+	<imp>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>discount</rel>
+				</_opr>
+				<var>customer</var>
+				<var>product</var>
+				<ind>7.5 percent</ind>
+			</atom>
+		</_head>
+		<_body>
+			<and>
+				<atom>
+					<_opr>
+						<rel>premium</rel>
+					</_opr>
+					<var>customer</var>
+				</atom>
+				<atom>
+					<_opr>
+						<rel>luxury</rel>
+					</_opr>
+					<var>product</var>
+				</atom>
+			</and>
+		</_body>
+	</imp>
+	<!--  Imp 3
+A customer is premium if
+their spending has been min 5000 euro in the previous year.
+
+Notice that "previous year" can again be regarded as an individual constant
+consisting of an entire phrase. It can also be regarded as a semi-formal construct
+transitionally used in the process of formalizing a given English business rule in
+a logic allowing backward temporal references.
+
+Similarly, "min 5000 euro" can as well be regarded as an individual constant phrase.
+It can also be regarded as a semi-formal construct ultimately to be replaced by a
+'greater-than' comparison over numbers with units.
+-->
+	<imp>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>premium</rel>
+				</_opr>
+				<var>customer</var>
+			</atom>
+		</_head>
+		<_body>
+			<atom>
+				<_opr>
+					<rel>spending</rel>
+				</_opr>
+				<var>customer</var>
+				<ind>min 5000 euro</ind>
+				<ind>previous year</ind>
+			</atom>
+		</_body>
+	</imp>
+	<!--  Fact 1
+A Porsche is luxury.
+-->
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>luxury</rel>
+				</_opr>
+				<ind>Porsche</ind>
+			</atom>
+		</_head>
+	</fact>
+	<!--  Fact 2
+A Honda is regular.
+-->
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>regular</rel>
+				</_opr>
+				<ind>Honda</ind>
+			</atom>
+		</_head>
+	</fact>
+	<!--  Fact 3
+Peter Miller's spending has been min 5000 euro in the previous year.
+
+Notice that "min 5000 euro" and "previous year" directly unify with
+the identical individual constant phrases of Imp 3. Thus, these
+semi-formal constructs can be used for debugging the rules already
+in an early phase of the formalization process.
+-->
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>spending</rel>
+				</_opr>
+				<ind>Peter Miller</ind>
+				<ind>min 5000 euro</ind>
+				<ind>previous year</ind>
+			</atom>
+		</_head>
+	</fact>
+	<!--  Query 1
+Give the discount amounts for all customers buying any products.
+-->
+	<query>
+		<_body>
+			<atom>
+				<_opr>
+					<rel>discount</rel>
+				</_opr>
+				<var>customer</var>
+				<var>product</var>
+				<var>amount</var>
+			</atom>
+		</_body>
+	</query>
+</rulebase>
