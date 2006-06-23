@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xBusinessRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://nxbre.org/xBusinessRules.xsd">
+	<Set id="Compute_subtract">
+		<ObjectLookup id="operandNames" objectId="IE-ARGUMENTS" member="Item">
+			<Argument valueId="TYPEOF_PARAMETER"/>
+		</ObjectLookup>
+		
+		<ObjectLookup id="firstOperandName" objectId="operandNames" member="Item">
+			<Argument value="0" type="Integer"/>
+		</ObjectLookup>
+		
+		<ObjectLookup id="firstOperand" objectId="IE-ARGUMENTS" member="Item">
+			<Argument valueId="firstOperandName"/>
+		</ObjectLookup>
+		
+		<ObjectLookup id="secondOperandName" objectId="operandNames" member="Item">
+			<Argument value="1" type="Integer"/>
+		</ObjectLookup>
+		
+		<ObjectLookup id="secondOperand" objectId="IE-ARGUMENTS" member="Item">
+			<Argument valueId="secondOperandName"/>
+		</ObjectLookup>
+		
+		<ObjectLookup id="IE-RESULT" type="org.nxbre.util.Maths" member="Subtract">
+			<Argument valueId="firstOperand"/>
+			<Argument valueId="secondOperand"/>
+		</ObjectLookup>
+	</Set>
+</xBusinessRules>

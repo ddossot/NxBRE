@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE rulebase SYSTEM "ruleml-0_8-datalog.dtd">
+<rulebase>
+	<_rbaselab>
+		<ind>Extra Facts</ind>
+	</_rbaselab>
+	<fact>
+		<_rlab>
+			<ind>Jaguar Luxury</ind>
+		</_rlab>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>luxury</rel>
+				</_opr>
+				<ind>Jaguar</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_rlab>
+			<ind>Ford Regular</ind>
+		</_rlab>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>regular</rel>
+				</_opr>
+				<ind>Ford</ind>
+			</atom>
+		</_head>
+	</fact>
+</rulebase>

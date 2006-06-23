@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xBusinessRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://nxbre.org/xBusinessRules.xsd">
+	<Logic>
+		<If>
+			<And>
+				<GreaterThanEqualTo leftId="Incrementor" rightId="MaxAttempts">
+					<!-- this is because technically the rule, though loaded, has not been executed ever -->
+					<Evaluate id="Incrementor"/>
+					<Integer id="MaxAttempts" value="3"/>
+				</GreaterThanEqualTo>
+			</And>
+			<Do>
+				<False id="LoginResult"/>
+			</Do>
+		</If>
+		<Else>
+			<Evaluate id="Incrementor">
+				<Parameter name="Increment" value="1"/>
+			</Evaluate>
+		</Else>
+	</Logic>
+</xBusinessRules>
