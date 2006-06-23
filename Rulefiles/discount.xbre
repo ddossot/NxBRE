@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xBusinessRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://nxbre.org/xBusinessRules.xsd">
+	<!-- global values -->
+	<Integer id="10i" value="10"/>
+	<Integer id="40i" value="40"/>
+	<ObjectLookup id="QuantityOrdered" objectId="CurrentOrder" member="Quantity"/>
+	<Logic>
+		<If>
+			<And>
+				<GreaterThanEqualTo leftId="ClientRating" rightId="ClientRatingThreshold">
+					<ObjectLookup id="ClientRating" objectId="CurrentOrder" member="ClientRating"/>
+					<String id="ClientRatingThreshold" value="C"/>
+				</GreaterThanEqualTo>
+			</And>
+			<Do>
+				<!-- Discount rules for high rate customers -->
+				<Logic>
+					<If>
+						<And>
+							<GreaterThan leftId="QuantityOrdered" rightId="40i"/>
+						</And>
+						<Do>
+							<Evaluate id="AppliedDiscount">
+								<Parameter name="Percent" value=".7"/>
+							</Evaluate>
+						</Do>
+					</If>
+					<ElseIf>
+						<And>
+							<GreaterThan leftId="QuantityOrdered" rightId="10i"/>
+						</And>
+						<Do>
+							<Evaluate id="AppliedDiscount">
+								<Parameter name="Percent" value=".8"/>
+							</Evaluate>
+						</Do>
+					</ElseIf>
+					<Else>
+						<Evaluate id="AppliedDiscount">
+							<Parameter name="Percent" value=".9"/>
+						</Evaluate>
+					</Else>
+				</Logic>
+			</Do>
+		</If>
+		<Else>
+			<!-- Discount rules for low rate customers -->
+			<Logic>
+				<If>
+					<And>
+						<GreaterThan leftId="QuantityOrdered" rightId="40i"/>
+					</And>
+					<Do>
+						<Evaluate id="AppliedDiscount">
+							<Parameter name="Percent" value=".9"/>
+						</Evaluate>
+					</Do>
+				</If>
+				<Else>
+					<Evaluate id="AppliedDiscount">
+						<Parameter name="Percent" value="1"/>
+					</Evaluate>
+				</Else>
+			</Logic>
+		</Else>
+	</Logic>
+</xBusinessRules>

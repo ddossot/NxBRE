@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE rulebase SYSTEM "ruleml-0_8-datalog.dtd">
+<!--
+BUSINESS RULES IN RuleML                            Harold Boley, 1 Apr. 2002
+A labelized variation of discount.ruleml.
+-->
+<rulebase direction="forward">
+	<_rbaselab>
+		<ind>Discount Knowledge Base</ind>
+	</_rbaselab>
+	<!--
+		Implications
+	-->
+	<imp>
+		<_rlab>
+			<ind>Premium-Regular Discount</ind>
+		</_rlab>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>discount</rel>
+				</_opr>
+				<var>customer</var>
+				<var>product</var>
+				<ind>5.0 percent</ind>
+			</atom>
+		</_head>
+		<_body>
+			<and>
+				<atom>
+					<_opr>
+						<rel>premium</rel>
+					</_opr>
+					<var>customer</var>
+				</atom>
+				<atom>
+					<_opr>
+						<rel>regular</rel>
+					</_opr>
+					<var>product</var>
+				</atom>
+			</and>
+		</_body>
+	</imp>
+	<imp>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>discount</rel>
+				</_opr>
+				<var>customer</var>
+				<var>product</var>
+				<ind>7.5 percent</ind>
+			</atom>
+		</_head>
+		<_rlab>
+			<ind>Premium-Luxury Discount</ind>
+		</_rlab>
+		<_body>
+			<and>
+				<atom>
+					<_opr>
+						<rel>premium</rel>
+					</_opr>
+					<var>customer</var>
+				</atom>
+				<atom>
+					<_opr>
+						<rel>luxury</rel>
+					</_opr>
+					<var>product</var>
+				</atom>
+			</and>
+		</_body>
+	</imp>
+	<imp>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>premium</rel>
+				</_opr>
+				<var>customer</var>
+			</atom>
+		</_head>
+		<_body>
+			<atom>
+				<_opr>
+					<rel>spending</rel>
+				</_opr>
+				<var>customer</var>
+				<ind>min 5000 euro</ind>
+				<ind>previous year</ind>
+			</atom>
+		</_body>
+		<_rlab>
+			<ind>Premium Customer</ind>
+		</_rlab>
+	</imp>
+	<!--
+		Facts
+	-->
+	<fact>
+		<_rlab>
+			<ind>Porsche Luxury</ind>
+		</_rlab>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>luxury</rel>
+				</_opr>
+				<ind>Porsche</ind>
+			</atom>
+		</_head>
+	</fact>
+	<fact>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>regular</rel>
+				</_opr>
+				<ind>Honda</ind>
+			</atom>
+		</_head>
+		<_rlab>
+			<ind>Honda Regular</ind>
+		</_rlab>
+	</fact>
+	<fact>
+		<_rlab>
+			<ind>Peter Miller Spending</ind>
+		</_rlab>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>spending</rel>
+				</_opr>
+				<ind>Peter Miller</ind>
+				<ind>min 5000 euro</ind>
+				<ind>previous year</ind>
+			</atom>
+		</_head>
+	</fact>
+	<!--
+		Queries
+	-->
+	<query>
+		<_rlab>
+			<ind>Calculated Discounts</ind>
+		</_rlab>
+		<_body>
+			<atom>
+				<_opr>
+					<rel>discount</rel>
+				</_opr>
+				<var>customer</var>
+				<var>product</var>
+				<var>amount</var>
+			</atom>
+		</_body>
+	</query>
+</rulebase>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xBusinessRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://nxbre.org/xBusinessRules.xsd">
+	<Set id="BeforeProcess">
+		<!-- Assert facts about customers -->
+		<ForEach id="Customer" valueId="CUSTOMERS">
+			<ObjectLookup id="CustomerCountryCode" objectId="Customer" member="CountryCode"/>
+					
+			<ObjectLookup objectId="NxBRE-IE" member="AssertNewFactOrFail">
+				<Argument value="Location"/>
+				<Argument valueId="Customer"/>
+				<Argument valueId="CustomerCountryCode"/>
+			</ObjectLookup>
+			
+			<!-- Assert facts about customers' transactions -->
+			<ObjectLookup id="CustomerTransactions" objectId="Customer" member="Transactions"/>
+			
+			<ForEach id="Transaction" valueId="CustomerTransactions">
+				<ObjectLookup id="TransactionAmount" objectId="Transaction" member="Amount"/>
+
+				<ObjectLookup objectId="NxBRE-IE" member="AssertNewFactOrFail">
+					<Argument value="Involved In"/>
+					<Argument valueId="Customer"/>
+					<Argument valueId="Transaction"/>
+				</ObjectLookup>
+
+				<ObjectLookup objectId="NxBRE-IE" member="AssertNewFactOrFail">
+					<Argument value="Amount"/>
+					<Argument valueId="Transaction"/>
+					<Argument valueId="TransactionAmount"/>
+				</ObjectLookup>
+			</ForEach>
+			
+		</ForEach>
+	</Set>
+
+	<Set id="OnNewFact">
+		<!-- If the new Fact is of type 'Fraudulent Customer', update the Fraudulent flag of the concerned Customer -->
+		<Logic>
+			<If>
+				<And>
+					<Equals leftId="ActualType" rightId="ExpectedType">
+						<ObjectLookup id="ActualType" objectId="IE-NEWFACT" member="Type"/>
+						<String id="ExpectedType" value="Fraudulent Customer"/>
+					</Equals>
+				</And>
+				<Do>
+					<ObjectLookup id="Customer" objectId="IE-NEWFACT" member="GetPredicateValue">
+						<Argument value="0" type="Integer"/>
+					</ObjectLookup>
+					
+					<ObjectLookup objectId="Customer" member="Fraudulent">
+						<Argument value="true" type="Boolean"/>
+					</ObjectLookup>
+				</Do>
+			</If>
+		</Logic>
+	</Set>
+	
+	<Set id="Evaluate_min_Arg0_Arg1">
+		<Logic>
+			<If>
+				<And>
+					<GreaterThanEqualTo leftId="CurrentAmount" rightId="LimitAmount">
+						<ObjectLookup id="CurrentAmount" objectId="MNYCNV" member="Convert">
+							<Argument valueId="IE-PREDICATE"/>
+							<Argument valueId="Arg1"/>
+						</ObjectLookup>
+						<ObjectLookup id="LimitAmount" type="org.nxbre.util.Reflection" member="CastValue">
+							<Argument valueId="Arg0"/>
+							<Argument value="System.Double"/>
+						</ObjectLookup>
+					</GreaterThanEqualTo>
+				</And>
+				<Do>
+					<Boolean id="IE-RESULT" value="true"/>
+				</Do>
+			</If>
+			<Else>
+				<Boolean id="IE-RESULT" value="false"/>
+			</Else>
+		</Logic>
+	</Set>
+</xBusinessRules>

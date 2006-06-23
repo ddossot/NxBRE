@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xBusinessRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://nxbre.org/xBusinessRules.xsd">
+	<Set id="BeforeProcess"/>
+	
+	<Set id="OnNewFact">
+		<ObjectLookup objectId="ASSERTED" member="Add">
+			<Argument valueId="IE-NEWFACT"/>
+		</ObjectLookup>
+	</Set>
+	
+	<Set id="OnDeleteFact">
+		<ObjectLookup objectId="RETRACTED" member="Add">
+			<Argument valueId="IE-DELETEDFACT"/>
+		</ObjectLookup>
+	</Set>
+	
+	<Set id="OnModifyFact">
+		<ObjectLookup objectId="MODIFIED" member="Add">
+			<Argument valueId="IE-MODIFIEDFACT"/>
+		</ObjectLookup>
+		<ObjectLookup objectId="MODIFIED" member="Add">
+			<Argument valueId="IE-MODIFIEDOTHERFACT"/>
+		</ObjectLookup>
+	</Set>
+</xBusinessRules>

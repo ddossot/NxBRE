@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xBusinessRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://nxbre.org/xBusinessRules.xsd">
+	<Set id="ControlProcess">
+		<ForEach id="CHARACTER" valueId="CHARACTERS">
+			<ObjectLookup objectId="NxBRE-IE" member="NewWorkingMemory">
+				<Argument valueId="IE-ISOLATEDWM"/>
+			</ObjectLookup>
+
+			<ObjectLookup id="SENTENCE" objectId="CHARACTER" member="Sentence"/>
+			
+			<ObjectLookup objectId="NxBRE-IE" member="AssertNewFactOrFail">
+				<Argument value="talking"/>
+				<Argument valueId="CHARACTER"/>
+				<Argument valueId="SENTENCE"/>
+			</ObjectLookup>
+			
+			<ObjectLookup objectId="NxBRE-IE" member="Process"/>
+		</ForEach>
+	</Set>
+	
+	<Set id="OnNewFact">
+		<Logic>
+			<If>
+				<And>
+					<Equals leftId="ActualType" rightId="ExpectedType">
+						<ObjectLookup id="ActualType" objectId="IE-NEWFACT" member="Type"/>
+						<String id="ExpectedType" value="education"/>
+					</Equals>
+				</And>
+				<Do>
+					<ObjectLookup id="Character" objectId="IE-NEWFACT" member="GetPredicateValue">
+						<Argument value="0" type="Integer"/>
+					</ObjectLookup>
+					
+					<ObjectLookup id="Education" objectId="IE-NEWFACT" member="GetPredicateValue">
+						<Argument value="1" type="Integer"/>
+					</ObjectLookup>
+					
+					<ObjectLookup objectId="Character" member="Education">
+						<Argument valueId="Education"/>
+					</ObjectLookup>
+				</Do>
+			</If>
+		</Logic>
+	</Set>
+	
+	<Set id="Evaluate_isStartingWith_Arg0">
+		<ObjectLookup id="IE-RESULT" objectId="IE-PREDICATE" member="StartsWith">
+			<Argument valueId="Arg0"/>
+		</ObjectLookup>
+	</Set>
+	
+	<Set id="Evaluate_isFinishingWith_Arg0">
+		<ObjectLookup id="IE-RESULT" objectId="IE-PREDICATE" member="EndsWith">
+			<Argument valueId="Arg0"/>
+		</ObjectLookup>
+	</Set>
+</xBusinessRules>
