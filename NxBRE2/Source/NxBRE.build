@@ -204,6 +204,7 @@
         <includes name=".\org\nxbre\test\ie\TestEngineCoreFeaturesRule09Expanded.cs" />
         <includes name=".\org\nxbre\IFlowEngine.cs" />
         <includes name=".\org\nxbre\IInferenceEngine.cs" />
+        <includes name=".\org\nxbre\test\ri\TestRule.cs" />
       </sources>
       <references>
         <includes name="${nunit.framework, Version=2.2.0.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77.filename}" />
@@ -489,6 +490,7 @@
         <includes name=".\org\nxbre\test\ie\TestEngineCoreFeaturesRule09Expanded.cs" />
         <includes name=".\org\nxbre\IFlowEngine.cs" />
         <includes name=".\org\nxbre\IInferenceEngine.cs" />
+        <includes name=".\org\nxbre\test\ri\TestRule.cs" />
       </sources>
       <references>
         <includes name="${nunit.framework, Version=2.2.0.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77.filename}" />

@@ -1,4 +1,4 @@
-NxBRE README v2.5.1
+NxBRE README v2.5.2
 ===================
 
 .NET Version : David Dossot (david@dossot.net)
@@ -6,7 +6,7 @@ NxBRE README v2.5.1
              : Andre Weber
              : Stephane Joyeux
 JxBRE Author : Sloan Seaman (sloan@sgi.net)
-Date         : 20-MAY-2006
+Date         : 23-JUN-2006
 URL          : http://nxbre.org
 License      : LGPL
 
@@ -23,6 +23,8 @@ Thanks!
 ## REFACTORING ##
 
 Any refactoring suggestions are welcome and encouraged. There are some classes we are not satisfied with, we won't tell you which ones, but if you have similar feelings while contemplating the design of some parts of NxBRE and come up with a cool refactoring idea, please tell it to us!
+
+This refactoring will be the first step of NxBRE v3.0.
 
 
 
@@ -108,11 +110,29 @@ Command lines for running the examples:
 ## RELEASE NOTES ##
 
 
+v2.5.2
+
+ Inference Engine
+
+  *  The binder method Compute can now receive extra String parameters in the arguments (FR 1504353).
+
+ Flow Engine
+
+  * The ToString() overload in AbstractBRERuleResult could easily result in NullReferenceExceptions (bug 1502909).
+
+  * Testing of HTTP rule file loading has been disabled because it basically proves that .NET can read from a URL which is not so interesting.
+
+ Util
+
+  *  Code compiler was failing under heavy load (bug 1498862).
+
+
+
 v2.5.1
 
  Inference Engine
 
-  * Slots now contribute named values like variables (RFE 1483072): see PDF documentation and KB for more information.
+  * Slots now contribute named values like variables (FR 1483072): see PDF documentation and KB for more information.
 
   * Debugged compiled evaluator that was failin on dynamic modules (bug 1482753).
 
