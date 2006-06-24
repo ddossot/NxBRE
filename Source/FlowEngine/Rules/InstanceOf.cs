@@ -1,9 +1,9 @@
-namespace org.nxbre.ri.helpers.operators
+namespace NxBRE.FlowEngine.Rules
 {
 	using System;
 	using System.Collections;
 
-	using org.nxbre.rule;
+	using NxBRE.FlowEngine;
 
 	/// <summary> Checks if one object is the instance of another
 	/// *
@@ -51,7 +51,9 @@ namespace org.nxbre.ri.helpers.operators
 				else
 						return false;
 			}
-			catch(Exception) {}
+			catch(System.Exception) {
+				//TODO: log
+			}
 			
 			return false;
 		}

@@ -1,15 +1,16 @@
 //
 // NUnit v2.1 Test Class for NxBRE
 //
-namespace org.nxbre.test.ri
+namespace NxBRE.Test.FlowEngine
 {
 	using System;
 	using System.IO;
 	
-	using org.nxbre;
-	using org.nxbre.ri.drivers;
-	using org.nxbre.ri.factories;
-	using org.nxbre.util;
+	using NxBRE.FlowEngine;
+	using NxBRE.FlowEngine.IO;
+	using NxBRE.FlowEngine.Factories;
+	
+	using NxBRE.Util;
 
 	using NUnit.Framework;
 	

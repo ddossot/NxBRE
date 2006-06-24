@@ -1,4 +1,4 @@
-namespace org.nxbre.util
+namespace NxBRE.Util
 {
 	using System;
 	using System.Collections;
@@ -6,7 +6,7 @@ namespace org.nxbre.util
 	using System.Xml;
 	using System.Xml.Xsl;
 	
-	using org.nxbre.rule;
+	using NxBRE.FlowEngine;
 
 	/// <summary>Misc NxBRE utilities.</summary>
 	/// <author>David Dossot</author>

@@ -1,9 +1,9 @@
-namespace org.nxbre.ri.helpers.rule
+namespace NxBRE.FlowEngine.Rules
 {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.rule;
+	using NxBRE.FlowEngine;
 	
 	/// <summary> This rule will always return true.
 	/// *

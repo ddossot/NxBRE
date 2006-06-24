@@ -1,8 +1,8 @@
-namespace org.nxbre.ri.rule
+namespace NxBRE.FlowEngine.Core
 {
 	using System;
 	
-	using org.nxbre.rule;
+	using NxBRE.FlowEngine;
 	
 	/// <summary> Strict implementation of BRERuleRuleResult
 	/// *
@@ -14,7 +14,7 @@ namespace org.nxbre.ri.rule
 	/// </P>
 	/// *
 	/// </summary>
-	/// <seealso cref="org.nxbre.rule.AbstractBRERuleResult">
+	/// <seealso cref="NxBRE.FlowEngine.AbstractBRERuleResult">
 	/// </seealso>
 	/// <author>  Sloan Seaman
 	/// </author>

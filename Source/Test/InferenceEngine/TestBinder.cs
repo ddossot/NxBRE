@@ -1,4 +1,4 @@
-namespace org.nxbre.test.ie {
+namespace NxBRE.Test.InferenceEngine {
 	using System;
 	using System.Collections;
 	using System.IO;
@@ -7,13 +7,11 @@ namespace org.nxbre.test.ie {
 
 	using net.ideaity.util.events;
 
-	using org.nxbre.ie;
-	using org.nxbre.ie.adapters;
-	using org.nxbre.ie.core;
-	using org.nxbre.ie.predicates;
-	using org.nxbre.ie.rule;
+	using NxBRE.InferenceEngine;
+	using NxBRE.InferenceEngine.IO;
+	using NxBRE.InferenceEngine.Rules;
 	
-	using org.nxbre.util;
+	using NxBRE.Util;
 	
 	[TestFixture]
 	public class TestBinder {
@@ -112,7 +110,7 @@ namespace org.nxbre.test.ie {
 			
 			ie.Process(bo);
 			
-			QueryResultSet qrs = ie.RunQuery("all polite");
+			IQueryResultSet qrs = ie.RunQuery("all polite");
 			Assert.AreEqual(2, qrs.Count, "polite Count");
 			
 			// here, we should have got one result (Danny Dan), but the politness of The Duke has
@@ -213,7 +211,7 @@ namespace org.nxbre.test.ie {
 			// use this binder load method to overcome loading problems because 
 			// the ccb file is not in the same folder as NxBRE.dll
 			using (StreamReader sr = File.OpenText(ruleFilesFolder + "events-test.ruleml.ccb")) {
-	      IInferenceEngine ie = new IEImpl(CSharpBinderFactory.LoadFromString("org.nxbre.test.ie.EventTestBinder", sr.ReadToEnd()));
+	      IInferenceEngine ie = new IEImpl(CSharpBinderFactory.LoadFromString("NxBRE.Test.InferenceEngine.EventTestBinder", sr.ReadToEnd()));
 	      RunTestBinderEvents(ie);
 			}
 		}
@@ -228,7 +226,7 @@ namespace org.nxbre.test.ie {
 		[Test]
 		public void BoundFormulasRuleMLCCB() {
 			using (StreamReader sr = File.OpenText(ruleFilesFolder + "testbinder-extra.ruleml.ccb")) {
-				RunTestBoundFormulas(CSharpBinderFactory.LoadFromString("org.nxbre.test.ie.ExtraTestBinder", sr.ReadToEnd()),
+				RunTestBoundFormulas(CSharpBinderFactory.LoadFromString("NxBRE.Test.InferenceEngine.ExtraTestBinder", sr.ReadToEnd()),
 				                     new RuleML09NafDatalogAdapter(ruleFilesFolder + "testbinder-extra.ruleml", FileAccess.Read));
 			}
 		}
@@ -236,7 +234,7 @@ namespace org.nxbre.test.ie {
 		[Test]
 		public void BoundFormulasVisioCCB() {
 			using (StreamReader sr = File.OpenText(ruleFilesFolder + "testbinder-extra.ruleml.ccb")) {
-				RunTestBoundFormulas(CSharpBinderFactory.LoadFromString("org.nxbre.test.ie.ExtraTestBinder", sr.ReadToEnd()),
+				RunTestBoundFormulas(CSharpBinderFactory.LoadFromString("NxBRE.Test.InferenceEngine.ExtraTestBinder", sr.ReadToEnd()),
 				                     new Visio2003Adapter(ruleFilesFolder + "testbinder-extra.vdx", FileAccess.Read));
 			}
 		}

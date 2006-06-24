@@ -7,7 +7,7 @@
  * Modified for RuleML086 by Ron Evans
  * 
  */
-namespace org.nxbre.ie.adapters.hrf086
+namespace NxBRE.InferenceEngine.IO.Hrf086
 {
 	using System.Collections;
 	using System.Text;

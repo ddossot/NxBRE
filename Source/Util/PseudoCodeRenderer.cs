@@ -1,4 +1,4 @@
-namespace org.nxbre.util
+namespace NxBRE.Util
 {
 	using System;
 	using System.IO;
@@ -8,8 +8,8 @@ namespace org.nxbre.util
 	using System.Xml.XPath;
 	using System.Xml.Xsl;
 	
-	using org.nxbre.ri.drivers;
-	using org.nxbre.util;
+	using NxBRE.FlowEngine.IO;
+	using NxBRE.Util;
 	
 	/// <summary>An helper class for rendering XBusinessRules in pseudo-code HTML.
 	/// The class can render the rules body, an index on these rules and a frameset

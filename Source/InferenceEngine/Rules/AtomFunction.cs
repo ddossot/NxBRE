@@ -1,11 +1,11 @@
-namespace org.nxbre.ie.rule {
+namespace NxBRE.InferenceEngine.Rules {
 	using System;
 	using System.Collections;
 
-	using org.nxbre.ie.adapters;
-	using org.nxbre.ie.core;
-	using org.nxbre.ie.predicates;
-	using org.nxbre.util;
+	using NxBRE.InferenceEngine.IO;
+	using NxBRE.InferenceEngine.Core;
+	using NxBRE.InferenceEngine.Rules;
+	using NxBRE.Util;
 	
 	/// <summary>
 	/// An AtomFunction represents a function-driven association of predicates. It is immutable.

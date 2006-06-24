@@ -1,9 +1,8 @@
-namespace org.nxbre.ie.core {
+namespace NxBRE.InferenceEngine.Core {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.ie.predicates;
-	using org.nxbre.ie.rule;
+	using NxBRE.InferenceEngine.Rules;
 	
 	/// <summary>
 	/// An abstract enumerator designed for enumerating facts, while potentially skipping some of them based on a list of excluded

@@ -1,7 +1,7 @@
 //
 // NUnit v2.1 Test Class for NxBRE
 //
-namespace org.nxbre.test.ri
+namespace NxBRE.Test.FlowEngine
 {
 	using System;
 	using System.Collections;
@@ -10,13 +10,11 @@ namespace org.nxbre.test.ri
 	using net.ideaity.util;
 	using net.ideaity.util.events;
 	
-	using org.nxbre;
-	using org.nxbre.ri;
-	using org.nxbre.ri.drivers;
-	using org.nxbre.ri.helpers;
-	using org.nxbre.util;
-	using org.nxbre.rule;
-	using org.nxbre.ri.rule;
+	using NxBRE.Util;
+
+	using NxBRE.FlowEngine;
+	using NxBRE.FlowEngine.IO;
+	using NxBRE.FlowEngine.Rules;
 
 	using NUnit.Framework;
 	
@@ -155,7 +153,6 @@ namespace org.nxbre.test.ri
 		
 				if (bre.Init(new XBusinessRulesFileDriver(testFile)))
 				{
-					
 					// This loads-up rules in the rule context that will be evaluated 
 					bre.RuleContext.SetFactory("50i",
 					    						           new BRERuleFactory(new ExecuteRuleDelegate(ContextlessDelegate)));
@@ -211,7 +208,7 @@ namespace org.nxbre.test.ri
 					forEachError = "";
 					bre.Process("WORKINGSET");
 				}
-			} catch (Exception e) {
+			} catch (System.Exception e) {
 				Console.Error.Write(e);
 				Assert.Fail(e.Message);
 			}
@@ -267,9 +264,9 @@ namespace org.nxbre.test.ri
 		[Test]
 		public void Exceptions() {
 			Assert.AreEqual(EXPECTED_EXCEPTION, exceptionCount, "Thrown Exceptions");
-			Assert.IsTrue(GetObject("EXCP").GetType().FullName == "org.nxbre.rule.BRERuleException",
+			Assert.IsTrue(GetObject("EXCP").GetType().FullName == "NxBRE.FlowEngine.BRERuleException",
 			              "Stored Exception Type");
-			Assert.IsTrue(((Exception)GetObject("EXCP")).Message == "This is another exception!",
+			Assert.IsTrue(((System.Exception)GetObject("EXCP")).Message == "This is another exception!",
 			              "Stored Exception Message");
 			Assert.IsTrue(foundDynamicException, "Dynamic Exception");
 			Assert.IsNull(GetObject("FATEX"), "Fatal Exception Did Not Stop!");

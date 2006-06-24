@@ -1,6 +1,6 @@
-namespace org.nxbre.test.ie {
+namespace NxBRE.Test.InferenceEngine {
 	
-	using org.nxbre.ie.adapters;
+	using NxBRE.InferenceEngine.IO;
 	
 	using NUnit.Framework;
 	

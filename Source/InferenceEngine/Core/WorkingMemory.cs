@@ -1,6 +1,6 @@
-namespace org.nxbre.ie.core {
-	using org.nxbre.ie;
-	using org.nxbre.ie.rule;
+namespace NxBRE.InferenceEngine.Core {
+	using NxBRE.InferenceEngine;
+	using NxBRE.InferenceEngine.Rules;
 	
 	/// <summary>
 	/// The WorkingMemory is the core class of the inference engine.
@@ -12,7 +12,7 @@ namespace org.nxbre.ie.core {
 	/// </description>
 	/// <remarks>Core classes are not supposed to be used directly.</remarks>
 	/// <author>David Dossot</author>
-	/// <see cref="org.nxbre.ie.IEImpl"/>
+	/// <see cref="NxBRE.InferenceEngine.IEImpl"/>
 	/// <version>2.4</version>
 	internal sealed class WorkingMemory:AbstractWorkingMemory {
 		public override WorkingMemoryTypes Type {

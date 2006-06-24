@@ -1,4 +1,4 @@
-namespace org.nxbre.ri
+namespace NxBRE.FlowEngine
 {
 	using System;
 	using System.IO;
@@ -12,11 +12,10 @@ namespace org.nxbre.ri
 	using net.ideaity.util;
 	using net.ideaity.util.events;
 	
-	using org.nxbre;
-	using org.nxbre.util;
-	using org.nxbre.rule;
-	using org.nxbre.ri.rule;
-	using org.nxbre.ri.drivers;
+	using NxBRE.Util;
+	using NxBRE.FlowEngine;
+	using NxBRE.FlowEngine.Core;
+	using NxBRE.FlowEngine.IO;
 	
 	/// <summary>The Rule Interpretor implementation of IBRE, the Flow Engine of NxBRE.</summary>
 	/// <remarks> Take a deep breath.... Inhale... Exhale... Lets begin:
@@ -113,7 +112,7 @@ namespace org.nxbre.ri
 	/// *
 	/// </PRE>
 	/// </P>
-	public sealed class BREImpl : AbstractBREDispatcher, IFlowEngine
+	public sealed class BREImpl : AbstractLogExceptionDispatcher, IFlowEngine
 	{
 		// XML Related info
 		private const string BUSINESS_RULES = "BusinessRules";
@@ -197,6 +196,8 @@ namespace org.nxbre.ri
 		private XPathDocument xmlDocument = null;
 		private IRulesDriver rulesDriver = null;
 		
+		public event DispatchRuleResult ResultHandlers;
+		
 		/// <summary> Returns or Sets the RuleContext in it's current state.
 		/// <P>
 		/// If the developer wishes to have a private copy, make sure
@@ -246,6 +247,16 @@ namespace org.nxbre.ri
 			{
 				return !running;
 			}
+		}
+		
+		//FIXME: improve this construct
+		private void DispatchRuleResult(IBRERuleResult ruleResult) {
+			if (ResultHandlers != null) ResultHandlers(this, ruleResult);
+		}
+		
+		//FIXME: improve this construct
+		private DispatchRuleResult GetResultHandlers() {
+			return ResultHandlers;
 		}
 			
 		/// <summary> Performs a shallow copy of a pre-initialized BRE, i.e. returns a new BRE
@@ -304,7 +315,7 @@ namespace org.nxbre.ri
 			else if (aObj is XPathDocument) xmlDocument = (XPathDocument) aObj;
 			else
 			{
-				DispatchException("Business Rules provided by external entity\nObject passed to init() must be of type System.Xml.XPath.XPathDocument or org.nxbre.ri.drivers.IRulesDriver and not "+aObj.GetType(), LogEventImpl.FATAL);
+				DispatchException("Business Rules provided by external entity\nObject passed to init() must be of type System.Xml.XPath.XPathDocument or NxBRE.FlowEngine.IO.IRulesDriver and not "+aObj.GetType(), LogEventImpl.FATAL);
 				return false;
 			}
 			DispatchLog("BRE Initializing...", LogEventImpl.INFO);

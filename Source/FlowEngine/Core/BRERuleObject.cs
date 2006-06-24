@@ -1,11 +1,11 @@
-namespace org.nxbre.ri.rule
+namespace NxBRE.FlowEngine.Core
 {
 	using System;
 	
-	using org.nxbre.rule;
+	using NxBRE.FlowEngine;
 	/// <summary>An helper class that allows adding business objects in the result context
 	/// </summary>
-	/// <seealso cref="org.nxbre.rule.AbstractBRERuleResult">
+	/// <seealso cref="NxBRE.FlowEngine.AbstractBRERuleResult">
 	/// </seealso>
 	/// <author>  David Dossot
 	/// </author>

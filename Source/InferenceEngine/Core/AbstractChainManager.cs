@@ -1,8 +1,8 @@
-namespace org.nxbre.ie.core {
+namespace NxBRE.InferenceEngine.Core {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.ie.rule;
+	using NxBRE.InferenceEngine.Rules;
 
 	///<summary>Abstract class for managing chains of implications engaged in relationships
 	/// like in mutex or pre-conditions.</summary>

@@ -1,8 +1,8 @@
-namespace org.nxbre.ie.core {
+namespace NxBRE.InferenceEngine.Core {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.ie.rule;
+	using NxBRE.InferenceEngine.Rules;
 	
 	///<summary>Class for managing chains of implications engaged in mutex relationships.
 	/// It analyzes the consistency of the mutual exclusion references in implications.

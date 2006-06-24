@@ -1,15 +1,14 @@
-namespace org.nxbre.test.ie {
+namespace NxBRE.Test.InferenceEngine {
 	using System;
 	using System.Collections;
 	
 	using NUnit.Framework;
 	
-	using org.nxbre.ie;
-	using org.nxbre.ie.core;
-	using org.nxbre.ie.predicates;
-	using org.nxbre.ie.rule;
+	using NxBRE.InferenceEngine;
+	using NxBRE.InferenceEngine.Core;
+	using NxBRE.InferenceEngine.Rules;
 	
-	using org.nxbre.util;
+	using NxBRE.Util;
 
 	[TestFixture]
 	public class TestCore {

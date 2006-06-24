@@ -1,4 +1,4 @@
-namespace org.nxbre.ie.adapters {
+namespace NxBRE.InferenceEngine.IO {
 
 	using System;
 	using System.Collections;
@@ -10,7 +10,7 @@ namespace org.nxbre.ie.adapters {
 	/// <description>Reading is supported by the getter of each member, while writing is supported by setters.
 	/// The engine calls dispose at the end of the load or save operation.
 	/// </description>
-	/// <see cref="org.nxbre.ie.IEImpl"/>
+	/// <see cref="NxBRE.InferenceEngine.IEImpl"/>
 	/// <author>David Dossot</author>
 	public interface IFactBaseAdapter:IDisposable {
 

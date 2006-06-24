@@ -1,4 +1,4 @@
-namespace org.nxbre.rule {
+namespace NxBRE.FlowEngine {
 	using net.ideaity.util.events;
 	
 	/// <summary>
@@ -10,7 +10,6 @@ namespace org.nxbre.rule {
 	/// </remarks>
 	public interface IBREDispatcher:ILogDispatcher,IExceptionDispatcher {
 		event DispatchRuleResult ResultHandlers;
-		void DispatchRuleResult(IBRERuleResult ruleResult);
 	}
 	
 	public delegate void DispatchRuleResult(object sender, IBRERuleResult ruleResult);

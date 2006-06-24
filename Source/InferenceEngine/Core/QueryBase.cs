@@ -1,9 +1,9 @@
-namespace org.nxbre.ie.core {
+namespace NxBRE.InferenceEngine.Core {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.ie.rule;
-	using org.nxbre.util;
+	using NxBRE.InferenceEngine.Rules;
+	using NxBRE.Util;
 	
 	/// <summary>
 	/// The QueryBase is the repository of queries for the inference engine.

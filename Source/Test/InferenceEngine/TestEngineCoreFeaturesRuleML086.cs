@@ -1,8 +1,8 @@
-namespace org.nxbre.test.ie {
+namespace NxBRE.Test.InferenceEngine {
 
 	using System.IO;
 	
-	using org.nxbre.ie.adapters;
+	using NxBRE.InferenceEngine.IO;
 	
 	public class TestEngineCoreFeaturesRuleML086:TestEngineCoreFeaturesRuleML09 {
 

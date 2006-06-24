@@ -1,4 +1,4 @@
-namespace org.nxbre.rule
+namespace NxBRE.FlowEngine.Core
 {
 	using System;
 	using System.Text;
@@ -8,7 +8,7 @@ namespace org.nxbre.rule
 	/// Use this if you wish to do inheritance.
 	/// *
 	/// </summary>
-	/// <seealso cref="org.nxbre.rule.IBRERuleMetaData"/>
+	/// <seealso cref="NxBRE.FlowEngine.IBRERuleMetaData"/>
 	/// <author>  Sloan Seaman
 	/// </author>
 	/// <version>  1.6

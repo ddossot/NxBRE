@@ -1,4 +1,4 @@
-namespace org.nxbre.ie.adapters {
+namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.IO;
 	using System.Reflection;
@@ -7,8 +7,8 @@ namespace org.nxbre.ie.adapters {
 	using System.Xml.XPath;
 	using System.Xml.Xsl;
 	
-	using org.nxbre.ie.adapters.hrf086;
-	using org.nxbre.util;
+	using NxBRE.InferenceEngine.IO.Hrf086;
+	using NxBRE.Util;
 
 	///<summary>Adapter supporting NxBRE-IE Human Readable Format (HRF) version 0.86.
 	/// HRF is parsed and transformed to RuleML NafDatalog 0.86

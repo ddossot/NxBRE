@@ -1,4 +1,4 @@
-namespace org.nxbre.ie.adapters {
+namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
 	using System.IO;
@@ -6,16 +6,14 @@ namespace org.nxbre.ie.adapters {
 	
 	using net.ideaity.util.events;
 	
-	using org.nxbre.rule;
-	using org.nxbre.util;
+	using NxBRE.Util;
 
-	using org.nxbre.ie.core;
-	using org.nxbre.ie.predicates;
+	using NxBRE.InferenceEngine.Core;
+	using NxBRE.InferenceEngine.Rules;
 
-	using org.nxbre.ri;
-	using org.nxbre.ri.rule;
-	using org.nxbre.ri.drivers;
-	using org.nxbre.ri.factories;
+	using NxBRE.FlowEngine;
+	using NxBRE.FlowEngine.IO;
+	using NxBRE.FlowEngine.Factories;
 	
 	/// <summary>
 	/// Provides an implementation of IBinder that is based on AbstractBinder
@@ -28,7 +26,7 @@ namespace org.nxbre.ie.adapters {
 	/// <remarks>
 	/// The business object keys should not contain the reserved keys.
 	/// </remarks>
-	/// <see cref="org.nxbre.ie.adapters.AbstractBinder"/>
+	/// <see cref="NxBRE.InferenceEngine.IO.AbstractBinder"/>
 	/// <seealso cref="org.nxbre.IBRE"/>
 	public sealed class FlowEngineBinder:AbstractBinder {
 		private const string EVALUATE_PREFIX = "Evaluate_";
@@ -243,7 +241,7 @@ namespace org.nxbre.ie.adapters {
 		/// Object available in the Flow Engine context (ID = Description):
 		/// IE-NEWFACT = The new fact, source of the event.
 		/// </remarks>
-		/// <see cref="org.nxbre.ie.core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
+		/// <see cref="NxBRE.InferenceEngine.Core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
 		public override NewFactEvent OnNewFact {
 			get {
 				if (HasFactEventHandler(ON_NEW_FACT)) return new NewFactEvent(NewFactHandler);
@@ -263,7 +261,7 @@ namespace org.nxbre.ie.adapters {
 		/// Object available in the Flow Engine context (ID = Description):
 		/// IE-DELETEDFACT = The deleted fact, source of the event.
 		/// </remarks>
-		/// <see cref="org.nxbre.ie.core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
+		/// <see cref="NxBRE.InferenceEngine.Core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
 		public override NewFactEvent OnDeleteFact {
 			get {
 				if (HasFactEventHandler(ON_DELETE_FACT)) return new NewFactEvent(DeleteFactHandler);
@@ -284,7 +282,7 @@ namespace org.nxbre.ie.adapters {
 		/// IE-MODIFIEDFACT = The modified fact.
 		/// IE-MODIFIEDOTHERFACT = The new fact after modification.
 		/// </remarks>
-		/// <see cref="org.nxbre.ie.core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
+		/// <see cref="NxBRE.InferenceEngine.Core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
 		public override NewFactEvent OnModifyFact {
 			get {
 				if (HasFactEventHandler(ON_MODIFY_FACT)) return new NewFactEvent(ModifyFactHandler);
@@ -373,7 +371,7 @@ namespace org.nxbre.ie.adapters {
 		/// <param name="functionName">The prefixed name of the helper operator to evaluate.</param>
 		/// <param name="values">The arguments to pass to the operator.</param>
 		/// <returns>True if the value matches the operator.</returns>
-		/// <see cref="org.nxbre.ri.helpers.operators.*"/>
+		/// <see cref="NxBRE.FlowEngine.Rules.*"/>
 		public static bool EvaluateFERIOperator(string functionName, params object[] values) {
 			if (values.Length != 2)
 				throw new BREException(values.Length +
@@ -381,7 +379,7 @@ namespace org.nxbre.ie.adapters {
 				                       functionName +
 				                       ", only 2 is supported.");
 			
-			string operatorType = "org.nxbre.ri.helpers.operators.";
+			string operatorType = "NxBRE.FlowEngine.Rules.";
 			
 			if (functionName.ToLower().StartsWith("nxbre:")) operatorType += functionName.Substring(6).Split(Parameter.PARENTHESIS)[0];
 			else operatorType += functionName.Split(Parameter.PARENTHESIS)[0];

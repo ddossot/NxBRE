@@ -1,8 +1,8 @@
-namespace org.nxbre.ie.core {
+namespace NxBRE.InferenceEngine.Core {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.ie.rule;
+	using NxBRE.InferenceEngine.Rules;
 
 	///<summary>Class for managing chains of implications engaged in pre-condition relationships.
 	/// It analyzes the consistency of the pre-condition references in implications.

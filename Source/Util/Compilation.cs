@@ -1,4 +1,4 @@
-namespace org.nxbre.util
+namespace NxBRE.Util
 {
 	using Microsoft.CSharp;
 	using Microsoft.VisualBasic;

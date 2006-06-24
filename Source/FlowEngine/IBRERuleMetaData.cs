@@ -1,4 +1,4 @@
-namespace org.nxbre.rule
+namespace NxBRE.FlowEngine
 {
 	using System;
 	using System.Collections;

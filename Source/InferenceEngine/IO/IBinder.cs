@@ -1,8 +1,8 @@
-namespace org.nxbre.ie.adapters {
+namespace NxBRE.InferenceEngine.IO {
 	using System.Collections;
 
-	using org.nxbre.ie.core;
-	using org.nxbre.ie.predicates;
+	using NxBRE.InferenceEngine.Core;
+	using NxBRE.InferenceEngine.Rules;
 
 	/// <summary>
 	/// The types of business object binding that determines the inversion of control
@@ -83,7 +83,7 @@ namespace org.nxbre.ie.adapters {
 		/// The implementer should refrain from performing any operation on the IEFacade object,
 		/// like asserting new facts.
 		/// </remarks>
-		/// <see cref="org.nxbre.ie.core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
+		/// <see cref="NxBRE.InferenceEngine.Core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
 	  NewFactEvent OnNewFact {
 	  	get;
 	  }
@@ -97,7 +97,7 @@ namespace org.nxbre.ie.adapters {
 		/// The implementer should refrain from performing any operation on the IEFacade object,
 		/// like asserting new facts.
 		/// </remarks>
-		/// <see cref="org.nxbre.ie.core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
+		/// <see cref="NxBRE.InferenceEngine.Core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
 	  NewFactEvent OnDeleteFact {
 	  	get;
 	  }
@@ -111,7 +111,7 @@ namespace org.nxbre.ie.adapters {
 		/// The implementer should refrain from performing any operation on the IEFacade object,
 		/// like asserting new facts.
 		/// </remarks>
-		/// <see cref="org.nxbre.ie.core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
+		/// <see cref="NxBRE.InferenceEngine.Core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
 	  NewFactEvent OnModifyFact {
 	  	get;
 	  }

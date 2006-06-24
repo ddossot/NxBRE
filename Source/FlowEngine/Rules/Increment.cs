@@ -1,10 +1,10 @@
-namespace org.nxbre.ri.helpers.rule
+namespace NxBRE.FlowEngine.Rules
 {
 	using System;
 	using System.Collections;
 	
 	using net.ideaity.util;
-	using org.nxbre.rule;
+	using NxBRE.FlowEngine;
 
 	/// <summary> This class is designed to be used to increment everytime the executeRule is called.
 	/// <P>
@@ -13,7 +13,7 @@ namespace org.nxbre.ri.helpers.rule
 	/// </P>
 	/// Example:<P>
 	/// <PRE>
-	/// <Rule id="VALUE1" factory="org.nxbre.ri.rule.helpers.Increment">
+	/// <Rule id="VALUE1" factory="NxBRE.FlowEngine.rule.helpers.Increment">
 	/// <Parameter name="Increment" value="1"/>
 	/// </Rule>
 	/// </PRE>

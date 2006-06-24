@@ -1,10 +1,10 @@
-namespace org.nxbre.ie.rule {
+namespace NxBRE.InferenceEngine.Rules {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.ie.predicates;
+	using NxBRE.InferenceEngine.Rules;
 	
-	using org.nxbre.util;
+	using NxBRE.Util;
 	
 	/// <summary>
 	/// A Query is a collection of non-fact atoms that can be labelled, which can be executed

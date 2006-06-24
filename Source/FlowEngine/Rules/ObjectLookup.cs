@@ -1,10 +1,10 @@
-namespace org.nxbre.ri.helpers.rule
+namespace NxBRE.FlowEngine.Rules
 {
 	using System;
 	using System.Collections;
 
-	using org.nxbre.rule;
-	using org.nxbre.util;
+	using NxBRE.FlowEngine;
+	using NxBRE.Util;
 
 	/// <summary> This class is designed to be used anytime you wish to access
 	/// a member of an object stored in the Rule Context and referenced by an Id
@@ -19,11 +19,11 @@ namespace org.nxbre.ri.helpers.rule
 	/// <P>
 	/// Example:
 	/// <PRE>
-	/// <Rule id="VALUE1" factory="org.nxbre.ri.rule.helpers.ObjectLookup">
+	/// <Rule id="VALUE1" factory="NxBRE.FlowEngine.rule.helpers.ObjectLookup">
 	/// <Parameter name="ObjectId" value="myObject"/>
 	/// <Parameter name="Member" value="myMethod"/>
 	/// </Rule>
-	/// <Rule id="VALUE2" factory="org.nxbre.ri.rule.helpers.ObjectLookup">
+	/// <Rule id="VALUE2" factory="NxBRE.FlowEngine.rule.helpers.ObjectLookup">
 	/// <Parameter name="Type" value="test.MyClass,MyAssembly"/>
 	/// <Parameter name="Member" value="myStaticMethod"/>
 	/// <Parameter name="Argument0" value="a_string"/>

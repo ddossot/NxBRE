@@ -1,10 +1,10 @@
-namespace org.nxbre.ie.rule {
+namespace NxBRE.InferenceEngine.Rules {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.ie.predicates;
+	using NxBRE.InferenceEngine.Rules;
 	
-	using org.nxbre.util;
+	using NxBRE.Util;
 	
 	/// <summary>
 	/// A Fact is a specialization of Atom, which can be labelled and

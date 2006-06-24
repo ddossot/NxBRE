@@ -1,4 +1,4 @@
-namespace org.nxbre.ri.drivers {
+namespace NxBRE.FlowEngine.IO {
 	using System;
 	using System.IO;
 	using System.Net;
@@ -7,11 +7,11 @@ namespace org.nxbre.ri.drivers {
 	using System.Xml.Schema;
 	
 	using net.ideaity.util.events;
-	using org.nxbre.rule;
+	using NxBRE.FlowEngine;
 	
 	/// <summary>
 	/// Driver for loading NxBRE rules from different sources.
-	/// <see cref="org.nxbre.ri.drivers.IRulesDriver"/>
+	/// <see cref="NxBRE.FlowEngine.IO.IRulesDriver"/>
 	/// </summary>
 	/// <author>David Dossot</author>
 	public abstract class AbstractRulesDriver:IRulesDriver {

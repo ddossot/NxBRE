@@ -1,11 +1,10 @@
-namespace org.nxbre.ie.adapters {
+namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.ie;
-	using org.nxbre.ie.core;
-	using org.nxbre.ie.predicates;
-	using org.nxbre.ie.rule;
+	using NxBRE.InferenceEngine;
+	using NxBRE.InferenceEngine.Core;
+	using NxBRE.InferenceEngine.Rules;
 	
 	/// <summary>
 	/// A facade of the Inference Engine of NxBRE for usage from the object binder.
@@ -232,8 +231,8 @@ namespace org.nxbre.ie.adapters {
 		/// </remarks>
 		/// <param name="query">The new Query to run.</param>
 		/// <returns>A QueryResultSet containing the results found.</returns>
-		/// <see cref="org.nxbre.ie.rule.QueryResultSet"/>
-		public QueryResultSet RunQuery(Query query) {
+		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
+		public IQueryResultSet RunQuery(Query query) {
 			return IE.RunQuery(query);
 		}
 		
@@ -242,9 +241,9 @@ namespace org.nxbre.ie.adapters {
 		/// </summary>
 		/// <param name="queryIndex">The query base index of the Query to run.</param>
 		/// <returns>A QueryResultSet containing the results found.</returns>
-		/// <see cref="org.nxbre.ie.rule.QueryResultSet"/>
+		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
 		/// <remarks>It is recommanded to use labelled queries.</remarks>
-		public QueryResultSet RunQuery(int queryIndex) {
+		public IQueryResultSet RunQuery(int queryIndex) {
 			return IE.RunQuery(queryIndex);
 		}
 		
@@ -253,8 +252,8 @@ namespace org.nxbre.ie.adapters {
 		/// </summary>
 		/// <param name="queryLabel">The label of the Query to run.</param>
 		/// <returns>A QueryResultSet containing the results found.</returns>
-		/// <see cref="org.nxbre.ie.rule.QueryResultSet"/>
-		public QueryResultSet RunQuery(string queryLabel) {
+		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
+		public IQueryResultSet RunQuery(string queryLabel) {
 			return IE.RunQuery(queryLabel);
 		}
 		

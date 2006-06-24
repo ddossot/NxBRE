@@ -1,4 +1,4 @@
-namespace org.nxbre.rule
+namespace NxBRE.FlowEngine
 {
 	using System;
 	/// <summary> This error is thrown when a severe error is generated from

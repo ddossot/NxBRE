@@ -1,10 +1,10 @@
-namespace org.nxbre.ri.helpers.rule
+namespace NxBRE.FlowEngine.Rules
 {
 	using System;
 	using System.Collections;
 	
 	using net.ideaity.util;
-	using org.nxbre.rule;
+	using NxBRE.FlowEngine;
 
 	/// <summary> This class is designed to reset increments or decrements
 	/// <P>
@@ -12,12 +12,12 @@ namespace org.nxbre.ri.helpers.rule
 	/// <P>
 	/// Examples:</P>
 	/// <PRE>
-	/// <Rule id="VALUE1" factory="org.nxbre.ri.rule.helpers.IncrementInit">
+	/// <Rule id="VALUE1" factory="NxBRE.FlowEngine.rule.helpers.IncrementInit">
 	/// <Parameter name="Id" value="INC_X"/>
 	/// <Parameter name="Init" value="25"/>
 	/// </Rule>
 	///
-	/// <Rule id="VALUE1" factory="org.nxbre.ri.rule.helpers.IncrementInit">
+	/// <Rule id="VALUE1" factory="NxBRE.FlowEngine.rule.helpers.IncrementInit">
 	/// <Parameter name="Id" value="INC_X"/>
 	/// <Parameter name="Init" ruleValue="abc"/>
 	/// </Rule>

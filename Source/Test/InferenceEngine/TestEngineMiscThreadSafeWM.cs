@@ -1,7 +1,7 @@
-namespace org.nxbre.test.ie
+namespace NxBRE.Test.InferenceEngine
 {
-	using org.nxbre.ie;
-	using org.nxbre.ie.adapters;
+	using NxBRE.InferenceEngine;
+	using NxBRE.InferenceEngine.IO;
 	
 	public class TestEngineMiscThreadSafeWM:TestEngineMisc
 	{

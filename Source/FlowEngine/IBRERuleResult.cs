@@ -1,4 +1,4 @@
-namespace org.nxbre.rule
+namespace NxBRE.FlowEngine
 {
 	using System;
 	/// <summary> This object defines the interface for all objects that wish to contain

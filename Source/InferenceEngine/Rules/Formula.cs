@@ -1,9 +1,9 @@
-namespace org.nxbre.ie.predicates {
+namespace NxBRE.InferenceEngine.Rules {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.ie.adapters;
-	using org.nxbre.util;
+	using NxBRE.InferenceEngine.IO;
+	using NxBRE.Util;
 	
 	/// <summary>
 	/// A Formula is a special predicate that represents an evaluation of a C# expression that produces a

@@ -1,4 +1,4 @@
-namespace org.nxbre.ie.adapters {
+namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.IO;
 	using System.Xml;

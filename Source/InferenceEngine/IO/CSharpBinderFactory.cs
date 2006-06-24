@@ -1,7 +1,7 @@
-namespace org.nxbre.ie.adapters {
+namespace NxBRE.InferenceEngine.IO {
 	using System;
 
-	using org.nxbre.util;
+	using NxBRE.Util;
 
 	/// <summary>
 	/// This class is a helper for instantiating IBinder objects from CSharp files,

@@ -1,12 +1,11 @@
-namespace org.nxbre.ri.factories
+namespace NxBRE.FlowEngine.Factories
 {
 	using System;
 	
 	using net.ideaity.util.events;
 
-	using org.nxbre;
-	using org.nxbre.rule;
-	using org.nxbre.ri.drivers;
+	using NxBRE.FlowEngine;
+	using NxBRE.FlowEngine.IO;
 	
 	/// <summary>This factory allows an easy creation of a BRE objects from a unique Clone,<br/>
 	/// which is very convenient for a multi-threaded environment where each thread will

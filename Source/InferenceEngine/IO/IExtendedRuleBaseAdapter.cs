@@ -1,4 +1,4 @@
-namespace org.nxbre.ie.adapters {
+namespace NxBRE.InferenceEngine.IO {
 
 	using System;
 	using System.Collections;
@@ -37,7 +37,7 @@ namespace org.nxbre.ie.adapters {
 	/// <remarks>
 	/// This class is currently internal, it will be made public when stabilized, ie when RuleML 1.0 will be released.
 	/// </remarks>
-	/// <see cref="org.nxbre.ie.IEImpl"/>
+	/// <see cref="NxBRE.InferenceEngine.IEImpl"/>
 	/// <author>David Dossot</author>
 	internal interface IExtendedRuleBaseAdapter:IRuleBaseAdapter {
 

@@ -1,9 +1,8 @@
-namespace org.nxbre.ie.rule {
+namespace NxBRE.InferenceEngine.Rules {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre;
-	using org.nxbre.util;
+	using NxBRE.Util;
 	
 	/// <summary>
 	/// Represents a container that can hold ordered atoms and other groups of atoms related together
