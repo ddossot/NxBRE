@@ -1,6 +1,7 @@
 namespace NxBRE.Test.InferenceEngine {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.IO;
 	
 	using NUnit.Framework;
@@ -165,8 +166,8 @@ namespace NxBRE.Test.InferenceEngine {
 			Assert.AreEqual("Discount Knowledge Base", ie.Label, "Label");
 			Assert.AreEqual(3, ie.FactsCount, "Facts Count");
 			Assert.AreEqual(1, ie.QueriesCount, "Queries Count");
-			string[] queryLabels = ie.QueryLabels;
-			Assert.AreEqual(1, queryLabels.Length, "Query Labels");
+			IList<string> queryLabels = ie.QueryLabels;
+			Assert.AreEqual(1, queryLabels.Count, "Query Labels");
 			Assert.AreEqual(3, ie.ImplicationsCount, "Implications Count");
 
 			ie.NewWorkingMemory(WorkingMemoryTypes.Isolated);

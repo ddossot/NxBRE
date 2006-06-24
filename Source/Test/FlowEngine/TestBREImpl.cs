@@ -55,29 +55,29 @@ namespace NxBRE.Test.FlowEngine
 		}
 		
 		// These methods demonstrate the callback possibilities from rules to code.
-		public object ContextlessDelegate(IBRERuleContext aBrc, Hashtable aMap, object aStep) {
+		public object ContextlessDelegate(IBRERuleContext aBrc, IDictionary aMap, object aStep) {
 			return 50;
 		}
-		public object ContextfullDelegate(IBRERuleContext aBrc, Hashtable aMap, object aStep) {
+		public object ContextfullDelegate(IBRERuleContext aBrc, IDictionary aMap, object aStep) {
 			object myParam = aMap["myParam"];
 			
 			return ((Int32)aBrc.GetObject("5i"))
 							* ((myParam is Int32)?(Int32)myParam:Int32.Parse((string)myParam));
 		}
-		public object WhileCounter(IBRERuleContext aBrc, Hashtable aMap, object aStep) {
+		public object WhileCounter(IBRERuleContext aBrc, IDictionary aMap, object aStep) {
 			whileCount++;
 			// we do not care about the returned value in the rules
 			return null; 
 		}
-		public object GlobalCounter(IBRERuleContext aBrc, Hashtable aMap, object aStep) {
+		public object GlobalCounter(IBRERuleContext aBrc, IDictionary aMap, object aStep) {
 			globalCount++;
 			// we do not care about the returned value in the rules
 			return null; 
 		}
-		public object GetEnumerable(IBRERuleContext aBrc, Hashtable aMap, object aStep) {
+		public object GetEnumerable(IBRERuleContext aBrc, IDictionary aMap, object aStep) {
 			return new ForEachSource();
 		}
-		public object ForEachTester(IBRERuleContext aBrc, Hashtable aMap, object aStep) {
+		public object ForEachTester(IBRERuleContext aBrc, IDictionary aMap, object aStep) {
 			int contextValue = (Int32)aBrc.GetObject("ForEachParser");
 			
 			if (contextValue != ARRAY[forEachProbe]) {

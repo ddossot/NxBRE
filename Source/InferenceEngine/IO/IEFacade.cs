@@ -1,6 +1,7 @@
 namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	
 	using NxBRE.InferenceEngine;
 	using NxBRE.InferenceEngine.Rules;
@@ -229,9 +230,9 @@ namespace NxBRE.InferenceEngine.IO {
 		/// and to use RunQuery(queryLabel)
 		/// </remarks>
 		/// <param name="query">The new Query to run.</param>
-		/// <returns>A QueryResultSet containing the results found.</returns>
+		/// <returns>An IList<IList<Fact>> containing the results found.</returns>
 		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
-		public IQueryResultSet RunQuery(Query query) {
+		public IList<IList<Fact>> RunQuery(Query query) {
 			return IE.RunQuery(query);
 		}
 		
@@ -239,10 +240,10 @@ namespace NxBRE.InferenceEngine.IO {
 		/// Runs a Query in the current working memory.
 		/// </summary>
 		/// <param name="queryIndex">The query base index of the Query to run.</param>
-		/// <returns>A QueryResultSet containing the results found.</returns>
+		/// <returns>An IList<IList<Fact>> containing the results found.</returns>
 		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
 		/// <remarks>It is recommanded to use labelled queries.</remarks>
-		public IQueryResultSet RunQuery(int queryIndex) {
+		public IList<IList<Fact>> RunQuery(int queryIndex) {
 			return IE.RunQuery(queryIndex);
 		}
 		
@@ -250,9 +251,9 @@ namespace NxBRE.InferenceEngine.IO {
 		/// Runs a Query in the current working memory.
 		/// </summary>
 		/// <param name="queryLabel">The label of the Query to run.</param>
-		/// <returns>A QueryResultSet containing the results found.</returns>
+		/// <returns>An IList<IList<Fact>> containing the results found.</returns>
 		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
-		public IQueryResultSet RunQuery(string queryLabel) {
+		public IList<IList<Fact>> RunQuery(string queryLabel) {
 			return IE.RunQuery(queryLabel);
 		}
 		
