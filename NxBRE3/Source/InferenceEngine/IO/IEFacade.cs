@@ -3,7 +3,6 @@ namespace NxBRE.InferenceEngine.IO {
 	using System.Collections;
 	
 	using NxBRE.InferenceEngine;
-	using NxBRE.InferenceEngine.Core;
 	using NxBRE.InferenceEngine.Rules;
 	
 	/// <summary>
@@ -262,6 +261,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// <param name="priority">Priority parameter</param>
 		/// <see cref="net.ideaity.util.events.AbstractLogDispatcher"/>
 		public void DispatchLog(string message, int priority) {
+			//TODO: use new logger
 			if (IE.HasLogListener) IE.ForceDispatchLog(message, priority);
 		}
 		

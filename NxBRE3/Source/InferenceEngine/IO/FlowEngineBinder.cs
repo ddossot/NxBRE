@@ -68,11 +68,11 @@ namespace NxBRE.InferenceEngine.IO {
 		private static IFlowEngine working_bre;
 		
 		/// <summary>
-		/// Gets or sets the hashtable of Business Objects, where the user is free to store whatever
+		/// Gets or sets the IDictionary of Business Objects, where the user is free to store whatever
 		/// fits his requirements. The key represents the type of object and the value a business object
 		/// or a collection of business objects of this type.
 		/// </summary>
-		public override Hashtable BusinessObjects {
+		public override IDictionary BusinessObjects {
 			get {
 				return businessObjectsMap;
 			}

@@ -15,7 +15,7 @@ namespace NxBRE.Test.FlowEngine
 	public class TestRule
 	{
 		private class MockBRERuleFactory : IBRERuleFactory {
-			public object ExecuteRule(IBRERuleContext aBRC, Hashtable aMap, object aStep) {
+			public object ExecuteRule(IBRERuleContext aBRC, IDictionary aMap, object aStep) {
 				return null;
 			}
 		}

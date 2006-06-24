@@ -17,9 +17,9 @@ namespace NxBRE.FlowEngine.Core
 	internal abstract class AbstractBRERuleContext : IBRERuleContext
 	{
 		protected Stack internalCallStack;
-		protected Hashtable factories = null;
-		protected Hashtable operators = null;
-		protected Hashtable results = null;
+		protected IDictionary factories = null;
+		protected IDictionary operators = null;
+		protected IDictionary results = null;
 		
 	
 		/// <summary> Returns a Stack of BRERuleFactory UID's that represents
@@ -43,7 +43,7 @@ namespace NxBRE.FlowEngine.Core
 		/// <returns> Map of RuleFactories
 		/// 
 		/// </returns>
-		virtual public Hashtable FactoryMap
+		virtual public IDictionary FactoryMap
 		{
 			get
 			{
@@ -57,7 +57,7 @@ namespace NxBRE.FlowEngine.Core
 		/// <returns> The Map object containing all parameters
 		/// 
 		/// </returns>
-		virtual public Hashtable OperatorMap
+		virtual public IDictionary OperatorMap
 		{
 			get
 			{
@@ -71,7 +71,7 @@ namespace NxBRE.FlowEngine.Core
 		/// <returns> Map of Results Map
 		/// 
 		/// </returns>
-		virtual public Hashtable ResultsMap
+		virtual public IDictionary ResultsMap
 		{
 			get
 			{
@@ -84,14 +84,14 @@ namespace NxBRE.FlowEngine.Core
 		/// </summary>
 		/// <param name="aStack">The Stack for the call stack
 		/// </param>
-		/// <param name="aResults">The Map for the RuleResults
+		/// <param name="aResults">The IDictionary for the RuleResults
 		/// </param>
-		/// <param name="aFactories">The Map for the RuleFactory's
+		/// <param name="aFactories">The IDictionary for the RuleFactory's
 		/// </param>
-		/// <param name="aOperators">The Map for the Operators
+		/// <param name="aOperators">The IDictionary for the Operators
 		/// 
 		/// </param>
-		protected internal AbstractBRERuleContext(System.Collections.Stack aStack, Hashtable aFactories, Hashtable aOperators, Hashtable aResults)
+		protected internal AbstractBRERuleContext(Stack aStack, IDictionary aFactories, IDictionary aOperators, IDictionary aResults)
 		{
 			internalCallStack = aStack;
 			factories = aFactories;
@@ -118,7 +118,7 @@ namespace NxBRE.FlowEngine.Core
 		/// </returns>
 		public virtual IBRERuleFactory GetFactory(object aId)
 		{
-			if ((factories != null) && (factories.ContainsKey(aId)))
+			if ((factories != null) && (factories.Contains(aId)))
 				return (IBRERuleFactory) factories[aId];
 			return null;
 		}
@@ -134,7 +134,7 @@ namespace NxBRE.FlowEngine.Core
 		/// </returns>
 		public virtual IBREOperator GetOperator(object aId)
 		{
-			if ((operators != null) && (operators.ContainsKey(aId)))
+			if ((operators != null) && (operators.Contains(aId)))
 				return (IBREOperator) operators[aId];
 			return null;
 		}
@@ -153,7 +153,7 @@ namespace NxBRE.FlowEngine.Core
 		/// </returns>
 		public virtual IBRERuleResult GetResult(object aId)
 		{
-			if ((results != null) && (results.ContainsKey(aId)))
+			if ((results != null) && (results.Contains(aId)))
 			{
 				return (IBRERuleResult) results[aId];
 			}
@@ -172,7 +172,7 @@ namespace NxBRE.FlowEngine.Core
 		public virtual void  SetFactory(object aId, IBRERuleFactory aFactory)
 		{
 			if (factories != null) {
-				if (factories.ContainsKey(aId)) factories.Remove(aId);
+				if (factories.Contains(aId)) factories.Remove(aId);
 				factories.Add(aId, aFactory);
 			}
 		}
@@ -188,7 +188,7 @@ namespace NxBRE.FlowEngine.Core
 		public virtual void  SetOperator(object aId, IBREOperator aValue)
 		{
 			if (operators != null) {
-				if (operators.ContainsKey(aId)) operators.Remove(aId);
+				if (operators.Contains(aId)) operators.Remove(aId);
 				operators.Add(aId, aValue);
 			}
 		}
@@ -204,7 +204,7 @@ namespace NxBRE.FlowEngine.Core
 		public virtual void  SetResult(object aId, IBRERuleResult aResult)
 		{
 			if (results != null) {
-				if (results.ContainsKey(aId)) results.Remove(aId);
+				if (results.Contains(aId)) results.Remove(aId);
 				results.Add(aId, aResult);
 			}
 		}

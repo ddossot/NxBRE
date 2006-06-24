@@ -49,23 +49,23 @@ namespace NxBRE.FlowEngine.Rules
 		/// </summary>
 		/// <param name="aBrc">- The BRERuleContext object
 		/// </param>
-		/// <param name="aMap">- The Map of parameters from the XML
+		/// <param name="aMap">- The IDictionary of parameters from the XML
 		/// </param>
 		/// <param name="aStep">- The step that it is on
 		/// </param>
 		/// <returns> The value cast to the specified type
 		/// 
 		/// </returns>
-		public object ExecuteRule(IBRERuleContext aBrc, Hashtable aMap, object aStep)
+		public object ExecuteRule(IBRERuleContext aBrc, IDictionary aMap, object aStep)
 		{
 			bool staticCall = false;
-			if (!aMap.ContainsKey(OBJECTID))
+			if (!aMap.Contains(OBJECTID))
 			{
-				if (!aMap.ContainsKey(TYPE))
+				if (!aMap.Contains(TYPE))
 					throw new BRERuleException("Parameter 'Type' or 'ObjectId' not found");
 				else staticCall = true;
 			}
-			if (!aMap.ContainsKey(MEMBER))
+			if (!aMap.Contains(MEMBER))
 			{
 				throw new BRERuleException("Parameter 'Member' not found");
 			}
@@ -82,10 +82,10 @@ namespace NxBRE.FlowEngine.Rules
 			}
 		}
 			
-		public object[] GetArguments(Hashtable aMap) {
+		public object[] GetArguments(IDictionary aMap) {
 			ArrayList arguments = new ArrayList();
 			int i=0;
-			while (aMap.ContainsKey(ARGUMENT + i)) {
+			while (aMap.Contains(ARGUMENT + i)) {
 				arguments.Add(aMap[ARGUMENT + i]);
 				i++;
 			}

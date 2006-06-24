@@ -33,12 +33,12 @@ namespace NxBRE.FlowEngine
 			/// <param name="aStep">The specific rule to execute.  This allows the same class
 			/// and method to be used for multiple Business Rules.
 			/// </param>
-			/// <param name="aMap">A Map object containing the parameters from the XML
+			/// <param name="aMap">An IDictionary object containing the parameters from the XML
 			/// </param>
 			/// <returns> The object containing the results of the
 			/// rule.
 			/// 
 			/// </returns>
-			object ExecuteRule(IBRERuleContext aBRC, Hashtable aMap, object aStep);
+			object ExecuteRule(IBRERuleContext aBRC, IDictionary aMap, object aStep);
 		}
 }

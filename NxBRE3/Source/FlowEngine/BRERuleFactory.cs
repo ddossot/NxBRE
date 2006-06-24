@@ -3,7 +3,7 @@ namespace NxBRE.FlowEngine
 	using System;
 	using System.Collections;
 
-	public delegate object ExecuteRuleDelegate(IBRERuleContext aBRC, Hashtable aMap, object aStep);
+	public delegate object ExecuteRuleDelegate(IBRERuleContext aBRC, IDictionary aMap, object aStep);
 	
 	/// <summary>An helper class that allows connecting business rules and custom functions
 	/// called by delegates.<br/>
@@ -29,7 +29,7 @@ namespace NxBRE.FlowEngine
 			                                                                    method);
 		}
 		
-		public object ExecuteRule(IBRERuleContext aBrc, Hashtable aMap, object aStep)
+		public object ExecuteRule(IBRERuleContext aBrc, IDictionary aMap, object aStep)
 		{
 			return executeRuleDelegate(aBrc, aMap, aStep);
 		}

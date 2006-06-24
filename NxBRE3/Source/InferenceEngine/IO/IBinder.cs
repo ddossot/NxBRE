@@ -45,11 +45,11 @@ namespace NxBRE.InferenceEngine.IO {
 		}
 		
 		/// <summary>
-		/// Gets or sets the hashtable of Business Objects, where the user is free to store whatever
+		/// Gets or sets the IDictionary of Business Objects, where the user is free to store whatever
 		/// fits his requirements. The key represents the type of object and the value a business object
 		/// or a collection of business objects of this type.
 		/// </summary>
-		Hashtable BusinessObjects {
+		IDictionary BusinessObjects {
 			get;
 			set;
 		}

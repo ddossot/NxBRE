@@ -25,40 +25,40 @@ namespace NxBRE.FlowEngine
 			/// <returns> An Stack of BRERuleFactory UID's
 			/// 
 			/// </returns>
-			System.Collections.Stack CallStack
+			Stack CallStack
 			{
 				get;
 				
 			}
-			/// <summary> Returns a Map of the RuleFactories
+			/// <summary> Returns an IDictionary of the RuleFactories
 			/// *
 			/// </summary>
-			/// <returns> Map of RuleFactories
+			/// <returns> IDictionary of RuleFactories
 			/// 
 			/// </returns>
-			Hashtable FactoryMap
+			IDictionary FactoryMap
 			{
 				get;
 				
 			}
-			/// <summary> Returns a Map of the Operator
+			/// <summary> Returns an IDictionary of the Operator
 			/// *
 			/// </summary>
-			/// <returns> Map of the Operators
+			/// <returns> IDictionary of the Operators
 			/// 
 			/// </returns>
-			Hashtable OperatorMap
+			IDictionary OperatorMap
 			{
 				get;
 				
 			}
-			/// <summary> Returns a Map of the Results
+			/// <summary> Returns an IDictionary of the Results
 			/// *
 			/// </summary>
-			/// <returns> Map of Results Map
+			/// <returns> IDictionary of Results Map
 			/// 
 			/// </returns>
-			Hashtable ResultsMap
+			IDictionary ResultsMap
 			{
 				get;
 				

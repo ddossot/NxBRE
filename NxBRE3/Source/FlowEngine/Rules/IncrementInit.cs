@@ -39,26 +39,26 @@ namespace NxBRE.FlowEngine.Rules
 		/// </summary>
 		/// <param name="aBrc">- The BRERuleContext object
 		/// </param>
-		/// <param name="aMap">- The Map of parameters from the XML
+		/// <param name="aMap">- The IDictionary of parameters from the XML
 		/// </param>
 		/// <param name="aStep">- The step that it is on
 		/// </param>
 		/// <returns> The current value of the index
 		/// 
 		/// </returns>
-		public object ExecuteRule(IBRERuleContext aBrc, Hashtable aMap, object aStep)
+		public object ExecuteRule(IBRERuleContext aBrc, IDictionary aMap, object aStep)
 		{
-			if (!aMap.ContainsKey(ID))
+			if (!aMap.Contains(ID))
 			{
 				throw new BRERuleException("Parameter 'Id' not found");
 			}
-			else if (!aMap.ContainsKey(INIT))
+			else if (!aMap.Contains(INIT))
 			{
 				throw new BRERuleException("Parameter 'Init' not found");
 			}
 			else
 			{
-				if (aBrc.FactoryMap.ContainsKey(aMap[ID]))
+				if (aBrc.FactoryMap.Contains(aMap[ID]))
 				{
 					((IInitializable)aBrc.GetFactory(aMap[ID])).Init(aMap[INIT]);
 				}

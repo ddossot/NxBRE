@@ -33,14 +33,14 @@ namespace NxBRE.FlowEngine.Rules
 		/// </summary>
 		/// <param name="aBrc">- The BRERuleContext object
 		/// </param>
-		/// <param name="aMap">- The Map of parameters from the XML
+		/// <param name="aMap">- The IDictionary of parameters from the XML
 		/// </param>
 		/// <param name="aStep">- The step that it is on
 		/// </param>
 		/// <returns> Nothing. It throws an exception each time
 		/// 
 		/// </returns>
-		public virtual object ExecuteRule(IBRERuleContext aBrc, Hashtable aMap, object aStep)
+		public virtual object ExecuteRule(IBRERuleContext aBrc, IDictionary aMap, object aStep)
 		{
 			string message = (string) aMap[MESSAGE];
 			if (message == null) throw new BRERuleException("Test Exception");

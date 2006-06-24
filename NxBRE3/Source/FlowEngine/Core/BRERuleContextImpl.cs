@@ -57,10 +57,10 @@ namespace NxBRE.FlowEngine.Core
 		/// containing shallow copies of its internal hashtables and stack
 		/// </summary>
 		public override object Clone() {
-			return new BRERuleContextImpl((Stack)internalCallStack.Clone(),
-			                              (Hashtable)factories.Clone(),
-			                              (Hashtable)operators.Clone(),
-			                              (Hashtable)results.Clone());
+			return new BRERuleContextImpl(new Stack(internalCallStack),
+			                              new Hashtable(factories),
+			                              new Hashtable(operators),
+			                              new Hashtable(results));
 		}
 		
 		/// <summary> Sets a business object
