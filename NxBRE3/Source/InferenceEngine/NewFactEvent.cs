@@ -15,7 +15,6 @@ namespace NxBRE.InferenceEngine {
 	/// DO NOT ASSERT OR RETRACT FACTS WHEN HANDLING THIS EVENT!
 	/// </remarks>
 	public sealed class NewFactEventArgs: EventArgs {
-		//FIXME: use IFact
 	  private readonly Fact fact;
 	  private readonly Fact otherFact;
 	

@@ -1,6 +1,8 @@
 namespace NxBRE.InferenceEngine {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
 
 	using net.ideaity.util.events;
 
@@ -738,13 +740,13 @@ namespace NxBRE.InferenceEngine {
 		/// <summary>
 		/// Gets the labels of the queries in the current rulebase.
 		/// </summary>
-		public string[] QueryLabels {
+		public IList<string> QueryLabels {
 			get {
 				CheckInitialized();				
 				string[] result = new string[QueriesCount];
 				int i = 0;
 				foreach(Query query in QB) result[i++] = query.Label;
-				return result;
+				return new ReadOnlyCollection<string>(result);
 			}
 		}
 		
@@ -756,9 +758,9 @@ namespace NxBRE.InferenceEngine {
 		/// and to use RunQuery(queryLabel)
 		/// </remarks>
 		/// <param name="query">The new Query to run.</param>
-		/// <returns>A QueryResultSet containing the results found.</returns>
+		/// <returns>An IList<IList<Fact>> containing the results found.</returns>
 		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
-		public IQueryResultSet RunQuery(Query query) {
+		public IList<IList<Fact>> RunQuery(Query query) {
 			return RunQuery(query, true);
 		}
 		
@@ -766,10 +768,10 @@ namespace NxBRE.InferenceEngine {
 		/// Runs a Query in the current working memory.
 		/// </summary>
 		/// <param name="queryIndex">The query base index of the Query to run.</param>
-		/// <returns>A QueryResultSet containing the results found.</returns>
+		/// <returns>An IList<IList<Fact>> containing the results found.</returns>
 		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
 		/// <remarks>It is recommanded to use labelled queries.</remarks>
-		public IQueryResultSet RunQuery(int queryIndex) {
+		public IList<IList<Fact>> RunQuery(int queryIndex) {
 			return RunQuery(QB.Get(queryIndex), false);
 		}
 		
@@ -777,9 +779,9 @@ namespace NxBRE.InferenceEngine {
 		/// Runs a Query in the current working memory.
 		/// </summary>
 		/// <param name="queryLabel">The label of the Query to run.</param>
-		/// <returns>A QueryResultSet containing the results found.</returns>
+		/// <returns>An IList<IList<Fact>> containing the results found.</returns>
 		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
-		public IQueryResultSet RunQuery(string queryLabel) {
+		public IList<IList<Fact>> RunQuery(string queryLabel) {
 			return RunQuery(QB.Get(queryLabel), false);
 		}
 
@@ -875,7 +877,7 @@ namespace NxBRE.InferenceEngine {
 			
 			// perform integrity checks
 			foreach(Query integrityQuery in IntegrityQueries) {
-				IQueryResultSet qrs = RunQuery(integrityQuery);
+				IList<IList<Fact>> qrs = RunQuery(integrityQuery);
 				if (qrs.Count == 0) throw new IntegrityException("Rulebase integrity violated: " + integrityQuery.Label);
 			}
 			
@@ -892,11 +894,11 @@ namespace NxBRE.InferenceEngine {
 																            LogEventImpl.DEBUG);
 		}
 		
-		private IQueryResultSet RunQuery(Query query, bool newQuery) {
+		private IList<IList<Fact>> RunQuery(Query query, bool newQuery) {
 			CheckInitialized();
 			if (query == null) throw new BREException("Query is null or not found.");
 			if (newQuery) WM.FB.RegisterAtoms(query.AtomGroup.AllAtoms);
-			return new QueryResultSet(WM.FB.RunQuery(query));
+			return WM.FB.RunQuery(query);
 		}
 		
 		private int RunImplication(Implication implication) {

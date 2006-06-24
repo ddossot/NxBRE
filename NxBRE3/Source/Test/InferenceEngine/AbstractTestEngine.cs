@@ -1,6 +1,7 @@
 namespace NxBRE.Test.InferenceEngine {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.IO;
 	
 	using NUnit.Framework;
@@ -21,7 +22,7 @@ namespace NxBRE.Test.InferenceEngine {
 		protected int deductionChecker;
 		protected string[] deductionsToCheck;
 		protected bool wrongDeduction;
-		protected IQueryResultSet qrs;
+		protected IList<IList<Fact>> qrs;
 		protected int logThreshold;
 		
 		protected readonly string ruleFilesFolder;

@@ -103,7 +103,6 @@
     <Compile Include="InferenceEngine\Core\MutexManager.cs" />
     <Compile Include="InferenceEngine\Core\PreconditionManager.cs" />
     <Compile Include="InferenceEngine\Core\QueryBase.cs" />
-    <Compile Include="InferenceEngine\Core\QueryResultSet.cs" />
     <Compile Include="InferenceEngine\Core\ThreadSafeWorkingMemory.cs" />
     <Compile Include="InferenceEngine\Core\WorkingMemory.cs" />
     <Compile Include="InferenceEngine\Core\WorkingMemoryFactory.cs" />
@@ -184,7 +183,6 @@
     <Compile Include="Test\TestDataSet.cs" />
     <Compile Include="Test\TestObject.cs" />
     <Compile Include="Test\TestSchema.cs" />
-    <Compile Include="InferenceEngine\IQueryResultSet.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />

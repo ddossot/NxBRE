@@ -1,6 +1,7 @@
 namespace NxBRE.Test.InferenceEngine {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.IO;
 	
 	using NUnit.Framework;
@@ -110,7 +111,7 @@ namespace NxBRE.Test.InferenceEngine {
 			
 			ie.Process(bo);
 			
-			IQueryResultSet qrs = ie.RunQuery("all polite");
+			IList<IList<Fact>> qrs = ie.RunQuery("all polite");
 			Assert.AreEqual(2, qrs.Count, "polite Count");
 			
 			// here, we should have got one result (Danny Dan), but the politness of The Duke has

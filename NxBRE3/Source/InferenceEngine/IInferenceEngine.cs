@@ -1,7 +1,7 @@
 namespace NxBRE.InferenceEngine
 {	
-	//FIXME: replace all Fact by IFact, Query by IQuery
 	using System.Collections;
+	using System.Collections.Generic;
 	
 	using net.ideaity.util.events;
 	
@@ -227,7 +227,7 @@ namespace NxBRE.InferenceEngine
 		/// <summary>
 		/// Gets the labels of the queries in the current rulebase.
 		/// </summary>
-		string[] QueryLabels { get; }
+		IList<string> QueryLabels { get; }
 		
 		/// <summary>
 		/// Runs a new Query in the current working memory.
@@ -237,25 +237,25 @@ namespace NxBRE.InferenceEngine
 		/// and to use RunQuery(queryLabel)
 		/// </remarks>
 		/// <param name="query">The new Query to run.</param>
-		/// <returns>A QueryResultSet containing the results found.</returns>
+		/// <returns>An IList<IList<Fact>> containing the results found.</returns>
 		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
-		IQueryResultSet RunQuery(Query query);
+		IList<IList<Fact>> RunQuery(Query query);
 		
 		/// <summary>
 		/// Runs a Query in the current working memory.
 		/// </summary>
 		/// <param name="queryIndex">The query base index of the Query to run.</param>
-		/// <returns>A QueryResultSet containing the results found.</returns>
+		/// <returns>An IList<IList<Fact>> containing the results found.</returns>
 		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
 		/// <remarks>It is recommanded to use labelled queries.</remarks>
-		IQueryResultSet RunQuery(int queryIndex);
+		IList<IList<Fact>> RunQuery(int queryIndex);
 		
 		/// <summary>
 		/// Runs a Query in the current working memory.
 		/// </summary>
 		/// <param name="queryLabel">The label of the Query to run.</param>
-		/// <returns>A QueryResultSet containing the results found.</returns>
+		/// <returns>An IList<IList<Fact>> containing the results found.</returns>
 		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
-		IQueryResultSet RunQuery(string queryLabel);
+		IList<IList<Fact>> RunQuery(string queryLabel);
 	}
 }

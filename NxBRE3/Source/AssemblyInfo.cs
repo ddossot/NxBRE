@@ -15,3 +15,4 @@ using System.Runtime.CompilerServices;
 [assembly:AssemblyKeyFile("")]
 [assembly:CLSCompliant(true)]
 
+//TODO: all ToArray() must be replaced with generic collections

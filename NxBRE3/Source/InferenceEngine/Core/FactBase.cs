@@ -1,6 +1,8 @@
 namespace NxBRE.InferenceEngine.Core {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
 	using System.Data;
 	
 	using NxBRE.InferenceEngine.Rules;
@@ -239,8 +241,8 @@ namespace NxBRE.InferenceEngine.Core {
 		/// Runs a Query against a the FactBase.
 		/// </summary>
 		/// <param name="query">The Query to run.</param>
-		/// <returns>An ArrayList containing references to facts matching the pattern of the Query.</returns>
-		public ArrayList RunQuery(Query query) {
+		/// <returns>An ICollection<IList<Fact>> containing references to facts matching the pattern of the Query.</returns>
+		public IList<IList<Fact>> RunQuery(Query query) {
 			return FilterDistinct(ProcessAtomGroup(query.AtomGroup));
 		}
 
@@ -407,11 +409,11 @@ namespace NxBRE.InferenceEngine.Core {
 		
 		//----------------------------- PRIVATE MEMBERS ------------------------------
 		
-		private static ArrayList FilterDistinct(ProcessResultSet processResults) {
-			Hashtable resultSet = new Hashtable();
+		private static IList<IList<Fact>> FilterDistinct(ProcessResultSet processResults) {
+			IDictionary<long, IList<Fact>> resultSet = new Dictionary<long, IList<Fact>>();
 			
 			foreach(ArrayList rps in processResults) {
-				ArrayList row = new ArrayList();
+				IList<Fact> row = new List<Fact>();
 				long rowLongHashCode = 0;
 	  		
 				foreach(ResultPocket rp in rps) {
@@ -424,11 +426,10 @@ namespace NxBRE.InferenceEngine.Core {
 				}
 				
 				// add only new rows to perform a "select distinct"
-				if (!resultSet.ContainsKey(rowLongHashCode))
-	  			resultSet.Add(rowLongHashCode, (Fact[])row.ToArray(typeof(Fact)));
+				if (!resultSet.ContainsKey(rowLongHashCode)) resultSet.Add(rowLongHashCode, new ReadOnlyCollection<Fact>(row));
 			}
 			
-			return new ArrayList(resultSet.Values);
+			return new ReadOnlyCollection<IList<Fact>>(new List<IList<Fact>>(resultSet.Values));
 		}
 		
 		private IMatchedFactStorage GetMatchingFactStorageTable(Atom atom) {
