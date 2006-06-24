@@ -37,10 +37,10 @@ namespace NxBRE.FlowEngine
 			/// Rule
 			/// *
 			/// </summary>
-			/// <returns> A MAP of the parameters
+			/// <returns> An IDictionary of the parameters
 			/// 
 			/// </returns>
-			Hashtable Parameters
+			IDictionary Parameters
 			{
 				get;
 				

@@ -62,7 +62,7 @@ namespace NxBRE.FlowEngine.Rules
 		/// <param name="aBRC">The BRERuleContext object containing all the state
 		/// information for use by this method.
 		/// </param>
-		/// <param name="aMap">Not used yet. A Map object containing the parameters from the XML
+		/// <param name="aMap">A IDictionary object containing the parameters from the XML
 		/// </param>
 		/// <param name="aObj">The object (value) to compare against.
 		/// </param>
@@ -71,7 +71,7 @@ namespace NxBRE.FlowEngine.Rules
 		/// <returns>s True if they meet the condition, False otherwise.
 		/// 
 		/// </returns>
-		public bool ExecuteComparison(IBRERuleContext aBRC, Hashtable aMap, object aObj, object aCompareTo)
+		public bool ExecuteComparison(IBRERuleContext aBRC, IDictionary aMap, object aObj, object aCompareTo)
 		{
 			Init(aMap);
 			

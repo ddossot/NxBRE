@@ -47,10 +47,10 @@ namespace NxBRE.FlowEngine.Core
 		/// Rule
 		/// *
 		/// </summary>
-		/// <returns> A MAP of the parameters
+		/// <returns> An IDictionary of the parameters
 		/// 
 		/// </returns>
-		virtual public Hashtable Parameters
+		virtual public IDictionary Parameters
 		{
 			get
 			{
@@ -93,7 +93,7 @@ namespace NxBRE.FlowEngine.Core
 		
 		private object id = null;
 		
-		private Hashtable params_Renamed = null;
+		private IDictionary params_Renamed = null;
 		
 		private int stackLoc = 0;
 		
@@ -106,14 +106,14 @@ namespace NxBRE.FlowEngine.Core
 		/// </param>
 		/// <param name="aFactory">The RuleFactory that create the RuleResult
 		/// </param>
-		/// <param name="aParams">A Map of the parameters
+		/// <param name="aParams">An IDictionary of the parameters
 		/// </param>
 		/// <param name="aStackLoc">The location on the stack of this RuleResult
 		/// </param>
 		/// <param name="aStep">The step within the rule
 		/// 
 		/// </param>
-		protected internal AbstractBRERuleMetaData(object aId, IBRERuleFactory aFactory, Hashtable aParams, int aStackLoc, object aStep)
+		protected internal AbstractBRERuleMetaData(object aId, IBRERuleFactory aFactory, IDictionary aParams, int aStackLoc, object aStep)
 		{
 			id = aId;
 			factory = aFactory;

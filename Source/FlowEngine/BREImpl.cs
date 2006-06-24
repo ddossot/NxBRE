@@ -607,7 +607,7 @@ namespace NxBRE.FlowEngine
 			else if (nodeName == RETRACT)
 			{
 				string idToRetract = aNode.GetAttribute(RETRACT_ATTRS.ID, String.Empty);
-				if (ruleContext.ResultsMap.ContainsKey(idToRetract))
+				if (ruleContext.ResultsMap.Contains(idToRetract))
 					ruleContext.ResultsMap.Remove(idToRetract);
 			}
 			else if (nodeName == RULE)
@@ -758,7 +758,7 @@ namespace NxBRE.FlowEngine
 		private IBREOperator GetOperator(string operatorId) {
 			IBREOperator ruleOperator = null;
 			
-			if (!ruleContext.OperatorMap.ContainsKey(operatorId)) {
+			if (!ruleContext.OperatorMap.Contains(operatorId)) {
 				DispatchLog("Loading Operator: " + operatorId, LogEventImpl.DEBUG);
 				ruleOperator = (IBREOperator) Assembly.GetExecutingAssembly().CreateInstance(operatorId);
 				ruleContext.SetOperator(operatorId, ruleOperator);

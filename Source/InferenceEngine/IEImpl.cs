@@ -545,8 +545,8 @@ namespace NxBRE.InferenceEngine {
 		/// If businessObjects is not Null and no binder has been provided in the constructor, throws
 		/// a BREException.
 		/// </summary>
-		/// <param name="businessObjects">An Hashtable of business objects, or Null.</param>
-		public void Process(Hashtable businessObjects) {
+		/// <param name="businessObjects">An IDictionary of business objects, or Null.</param>
+		public void Process(IDictionary businessObjects) {
 			CheckInitialized();
 			
 			iteration = 0;

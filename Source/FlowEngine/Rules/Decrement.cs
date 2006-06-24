@@ -67,16 +67,16 @@ namespace NxBRE.FlowEngine.Rules
 		/// </summary>
 		/// <param name="aBrc">- The BRERuleContext object
 		/// </param>
-		/// <param name="aMap">- The Map of parameters from the XML
+		/// <param name="aMap">- The IDictionary of parameters from the XML
 		/// </param>
 		/// <param name="aStep">- The step that it is on
 		/// </param>
 		/// <returns> The current value of the index
 		/// 
 		/// </returns>
-		public virtual object ExecuteRule(IBRERuleContext aBrc, Hashtable aMap, object aStep)
+		public virtual object ExecuteRule(IBRERuleContext aBrc, IDictionary aMap, object aStep)
 		{
-			if (aMap.ContainsKey(DECREMENT))
+			if (aMap.Contains(DECREMENT))
 			{
 				sIdx = sIdx - System.Int32.Parse((System.String) aMap[DECREMENT]);
 			}

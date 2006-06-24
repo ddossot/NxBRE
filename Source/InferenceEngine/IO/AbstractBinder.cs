@@ -16,7 +16,7 @@ namespace NxBRE.InferenceEngine.IO {
 	/// <see cref="NxBRE.InferenceEngine.IO.IBinder">IBinder definition.</see>
 	public abstract class AbstractBinder:IBinder {
 		[ThreadStatic]
-		protected static Hashtable businessObjectsMap;
+		protected static IDictionary businessObjectsMap;
 		
 		private BindingTypes bindingType;
 		private Regex regexFunction = null;
@@ -59,11 +59,11 @@ namespace NxBRE.InferenceEngine.IO {
 		}
 		
 		/// <summary>
-		/// Gets or sets the hashtable of Business Objects, where the user is free to store whatever
+		/// Gets or sets the IDictionary of Business Objects, where the user is free to store whatever
 		/// fits his requirements. The key represents the type of object and the value a business object
 		/// or a collection of business objects of this type.
 		/// </summary>
-		public virtual Hashtable BusinessObjects {
+		public virtual IDictionary BusinessObjects {
 			get {
 				return businessObjectsMap;
 			}
