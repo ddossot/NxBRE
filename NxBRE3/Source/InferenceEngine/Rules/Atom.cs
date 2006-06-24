@@ -1,10 +1,10 @@
-namespace org.nxbre.ie.rule {
+namespace NxBRE.InferenceEngine.Rules {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.ie.core;
-	using org.nxbre.ie.predicates;
-	using org.nxbre.util;
+	using NxBRE.InferenceEngine.Core;
+	using NxBRE.InferenceEngine.Rules;
+	using NxBRE.Util;
 	
 	/// <summary>
 	/// An Atom represents a typed association of predicates. It is immutable (because predicates are immutable so Members will not vary).

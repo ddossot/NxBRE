@@ -1,9 +1,8 @@
-namespace org.nxbre.ie.core {
+namespace NxBRE.InferenceEngine.Core {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.ie.predicates;
-	using org.nxbre.ie.rule;
+	using NxBRE.InferenceEngine.Rules;
 	
 	/// <summary>
 	/// Defines an interface that all fact storage should implement to be usable by NxBRE.

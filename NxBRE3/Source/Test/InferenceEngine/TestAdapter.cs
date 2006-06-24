@@ -1,4 +1,4 @@
-namespace org.nxbre.test.ie {
+namespace NxBRE.Test.InferenceEngine {
 	using System;
 	using System.Collections;
 	using System.IO;
@@ -7,11 +7,10 @@ namespace org.nxbre.test.ie {
 		
 	using NUnit.Framework;
 
-	using org.nxbre.ie;
-	using org.nxbre.ie.adapters;
-	using org.nxbre.ie.predicates;
-	using org.nxbre.ie.rule;
-	using org.nxbre.util;
+	using NxBRE.InferenceEngine;
+	using NxBRE.InferenceEngine.IO;
+	using NxBRE.InferenceEngine.Rules;
+	using NxBRE.Util;
 	
 	[TestFixture]
 	public class TestAdapter {

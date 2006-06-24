@@ -1,13 +1,14 @@
-namespace org.nxbre
-{
+namespace NxBRE.InferenceEngine
+{	
+	//FIXME: replace all Fact by IFact, Query by IQuery
 	using System.Collections;
 	
 	using net.ideaity.util.events;
 	
-	using org.nxbre.ie;
-	using org.nxbre.ie.adapters;
-	using org.nxbre.ie.core;
-	using org.nxbre.ie.rule;
+	using NxBRE.InferenceEngine;
+	using NxBRE.InferenceEngine.IO;
+	using NxBRE.InferenceEngine.Core;
+	using NxBRE.InferenceEngine.Rules;
 
 	/// <summary>
 	/// This interface defines the Inference Engine (IE) of NxBRE.
@@ -62,7 +63,7 @@ namespace org.nxbre
 		/// <remarks>
 		/// The adapter will be disposed at the end of the method's execution.
 		/// </remarks>
-		/// <see cref="org.nxbre.ie.adapters.IRuleBaseAdapter"/>
+		/// <see cref="NxBRE.InferenceEngine.IO.IRuleBaseAdapter"/>
 		void LoadRuleBase(IRuleBaseAdapter adapter);
 		
 		/// <summary>
@@ -73,7 +74,7 @@ namespace org.nxbre
 		/// <remarks>
 		/// The adapter will be disposed at the end of the method's execution.
 		/// </remarks>
-		/// <see cref="org.nxbre.ie.adapters.IRuleBaseAdapter"/>
+		/// <see cref="NxBRE.InferenceEngine.IO.IRuleBaseAdapter"/>
 		void LoadRuleBase(IRuleBaseAdapter adapter, IBinder businessObjectsBinder);
 		
 		/// <summary>
@@ -83,7 +84,7 @@ namespace org.nxbre
 		/// <remarks>
 		/// The adapter will be disposed at the end of the method's execution.
 		/// </remarks>
-		/// <see cref="org.nxbre.ie.adapters.IRuleBaseAdapter"/>
+		/// <see cref="NxBRE.InferenceEngine.IO.IRuleBaseAdapter"/>
 		void SaveRuleBase(IRuleBaseAdapter adapter);
 		
 		/// <summary>
@@ -237,24 +238,24 @@ namespace org.nxbre
 		/// </remarks>
 		/// <param name="query">The new Query to run.</param>
 		/// <returns>A QueryResultSet containing the results found.</returns>
-		/// <see cref="org.nxbre.ie.rule.QueryResultSet"/>
-		QueryResultSet RunQuery(Query query);
+		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
+		IQueryResultSet RunQuery(Query query);
 		
 		/// <summary>
 		/// Runs a Query in the current working memory.
 		/// </summary>
 		/// <param name="queryIndex">The query base index of the Query to run.</param>
 		/// <returns>A QueryResultSet containing the results found.</returns>
-		/// <see cref="org.nxbre.ie.rule.QueryResultSet"/>
+		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
 		/// <remarks>It is recommanded to use labelled queries.</remarks>
-		QueryResultSet RunQuery(int queryIndex);
+		IQueryResultSet RunQuery(int queryIndex);
 		
 		/// <summary>
 		/// Runs a Query in the current working memory.
 		/// </summary>
 		/// <param name="queryLabel">The label of the Query to run.</param>
 		/// <returns>A QueryResultSet containing the results found.</returns>
-		/// <see cref="org.nxbre.ie.rule.QueryResultSet"/>
-		QueryResultSet RunQuery(string queryLabel);
+		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
+		IQueryResultSet RunQuery(string queryLabel);
 	}
 }

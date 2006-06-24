@@ -1,15 +1,14 @@
-namespace org.nxbre.ie {
+namespace NxBRE.InferenceEngine {
 	using System;
 	using System.Collections;
 
 	using net.ideaity.util.events;
 
-	using org.nxbre.ie.core;
-	using org.nxbre.ie.adapters;
-	using org.nxbre.ie.predicates;
-	using org.nxbre.ie.rule;
+	using NxBRE.InferenceEngine.Core;
+	using NxBRE.InferenceEngine.IO;
+	using NxBRE.InferenceEngine.Rules;
 	
-	using org.nxbre.util;
+	using NxBRE.Util;
 
 	/// <summary>
 	/// The available types of working memory.
@@ -302,7 +301,7 @@ namespace org.nxbre.ie {
 		/// <remarks>
 		/// The adapter will be disposed at the end of the method's execution.
 		/// </remarks>
-		/// <see cref="org.nxbre.ie.adapters.IRuleBaseAdapter"/>
+		/// <see cref="NxBRE.InferenceEngine.IO.IRuleBaseAdapter"/>
 		public void LoadRuleBase(IRuleBaseAdapter adapter) {
 			LoadRuleBase(adapter, Binder);
 		}
@@ -315,7 +314,7 @@ namespace org.nxbre.ie {
 		/// <remarks>
 		/// The adapter will be disposed at the end of the method's execution.
 		/// </remarks>
-		/// <see cref="org.nxbre.ie.adapters.IRuleBaseAdapter"/>
+		/// <see cref="NxBRE.InferenceEngine.IO.IRuleBaseAdapter"/>
 		public void LoadRuleBase(IRuleBaseAdapter adapter, IBinder businessObjectsBinder) {
 			if (HasLogListener) ForceDispatchLog("NxBRE Inference Engine Rule Base Loading Started, using adapter " + adapter.GetType().FullName,
 			            													LogEventImpl.INFO);
@@ -415,7 +414,7 @@ namespace org.nxbre.ie {
 		/// <remarks>
 		/// The adapter will be disposed at the end of the method's execution.
 		/// </remarks>
-		/// <see cref="org.nxbre.ie.adapters.IRuleBaseAdapter"/>
+		/// <see cref="NxBRE.InferenceEngine.IO.IRuleBaseAdapter"/>
 		public void SaveRuleBase(IRuleBaseAdapter adapter) {
 			CheckInitialized();
 			if (HasLogListener) ForceDispatchLog("NxBRE Inference Engine Rule Base Saving Started, using adapter " + adapter.GetType().FullName,
@@ -758,8 +757,8 @@ namespace org.nxbre.ie {
 		/// </remarks>
 		/// <param name="query">The new Query to run.</param>
 		/// <returns>A QueryResultSet containing the results found.</returns>
-		/// <see cref="org.nxbre.ie.rule.QueryResultSet"/>
-		public QueryResultSet RunQuery(Query query) {
+		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
+		public IQueryResultSet RunQuery(Query query) {
 			return RunQuery(query, true);
 		}
 		
@@ -768,9 +767,9 @@ namespace org.nxbre.ie {
 		/// </summary>
 		/// <param name="queryIndex">The query base index of the Query to run.</param>
 		/// <returns>A QueryResultSet containing the results found.</returns>
-		/// <see cref="org.nxbre.ie.rule.QueryResultSet"/>
+		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
 		/// <remarks>It is recommanded to use labelled queries.</remarks>
-		public QueryResultSet RunQuery(int queryIndex) {
+		public IQueryResultSet RunQuery(int queryIndex) {
 			return RunQuery(QB.Get(queryIndex), false);
 		}
 		
@@ -779,8 +778,8 @@ namespace org.nxbre.ie {
 		/// </summary>
 		/// <param name="queryLabel">The label of the Query to run.</param>
 		/// <returns>A QueryResultSet containing the results found.</returns>
-		/// <see cref="org.nxbre.ie.rule.QueryResultSet"/>
-		public QueryResultSet RunQuery(string queryLabel) {
+		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
+		public IQueryResultSet RunQuery(string queryLabel) {
 			return RunQuery(QB.Get(queryLabel), false);
 		}
 
@@ -876,7 +875,7 @@ namespace org.nxbre.ie {
 			
 			// perform integrity checks
 			foreach(Query integrityQuery in IntegrityQueries) {
-				QueryResultSet qrs = RunQuery(integrityQuery);
+				IQueryResultSet qrs = RunQuery(integrityQuery);
 				if (qrs.Count == 0) throw new IntegrityException("Rulebase integrity violated: " + integrityQuery.Label);
 			}
 			
@@ -893,7 +892,7 @@ namespace org.nxbre.ie {
 																            LogEventImpl.DEBUG);
 		}
 		
-		private QueryResultSet RunQuery(Query query, bool newQuery) {
+		private IQueryResultSet RunQuery(Query query, bool newQuery) {
 			CheckInitialized();
 			if (query == null) throw new BREException("Query is null or not found.");
 			if (newQuery) WM.FB.RegisterAtoms(query.AtomGroup.AllAtoms);

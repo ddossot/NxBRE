@@ -1,4 +1,4 @@
-namespace org.nxbre.ie.adapters {
+namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
 	using System.IO;
@@ -7,7 +7,7 @@ namespace org.nxbre.ie.adapters {
 	using System.Xml.Xsl;
 	using System.Xml.XPath;
 
-	using org.nxbre.util;
+	using NxBRE.Util;
 	
 	///<summary>Adapter supporting Visio 2003 DatadiagramML Format (VDX file).</summary>
 	/// <remarks>Only READ is supported!</remarks>

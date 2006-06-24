@@ -1,10 +1,10 @@
-namespace org.nxbre.ri.helpers.rule
+namespace NxBRE.FlowEngine.Rules
 {
 	using System;
 	using System.Collections;
 	
 	using net.ideaity.util;
-	using org.nxbre.rule;
+	using NxBRE.FlowEngine;
 
 	/// <summary> This class is designed to be used to decrement everytime the executeRule is called
 	/// <P>
@@ -15,7 +15,7 @@ namespace org.nxbre.ri.helpers.rule
 	/// Example:
 	/// </P>
 	/// <PRE>
-	/// <Rule id="VALUE1" factory="org.nxbre.ri.rule.helpers.Decrement">
+	/// <Rule id="VALUE1" factory="NxBRE.FlowEngine.rule.helpers.Decrement">
 	/// <Parameter name="StartIdx" value="1"/>
 	/// </Rule>
 	/// </PRE>

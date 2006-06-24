@@ -1,7 +1,7 @@
-namespace org.nxbre.ie.core {
+namespace NxBRE.InferenceEngine {
 	using System;
-
-	using org.nxbre.ie.rule;
+	
+	using NxBRE.InferenceEngine.Rules;
 	
 	/// <summary>
 	/// Delegate for listening new events for Facts. This class is immutable.
@@ -15,6 +15,7 @@ namespace org.nxbre.ie.core {
 	/// DO NOT ASSERT OR RETRACT FACTS WHEN HANDLING THIS EVENT!
 	/// </remarks>
 	public sealed class NewFactEventArgs: EventArgs {
+		//FIXME: use IFact
 	  private readonly Fact fact;
 	  private readonly Fact otherFact;
 	

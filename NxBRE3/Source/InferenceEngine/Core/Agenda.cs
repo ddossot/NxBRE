@@ -1,8 +1,8 @@
-namespace org.nxbre.ie.core {
+namespace NxBRE.InferenceEngine.Core {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.ie.rule;
+	using NxBRE.InferenceEngine.Rules;
 
 	///<summary>
 	/// The agenda is the "maestro" of the inference engine.

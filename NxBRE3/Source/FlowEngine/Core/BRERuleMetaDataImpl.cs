@@ -1,9 +1,9 @@
-namespace org.nxbre.ri.rule
+namespace NxBRE.FlowEngine.Core
 {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.rule;
+	using NxBRE.FlowEngine;
 	
 	/// <summary> Strict implementation of BRERuleMetaData
 	/// <P>
@@ -16,7 +16,7 @@ namespace org.nxbre.ri.rule
 	/// </P>
 	/// *
 	/// </summary>
-	/// <seealso cref="org.nxbre.rule.AbstractBRERuleMetaData">
+	/// <seealso cref="NxBRE.FlowEngine.AbstractBRERuleMetaData">
 	/// </seealso>
 	/// <author>  Sloan Seaman
 	/// </author>

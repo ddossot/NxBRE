@@ -1,10 +1,10 @@
-namespace org.nxbre.util
+namespace NxBRE.Util
 {
 	using System;
 	using System.Runtime.Remoting.Metadata.W3cXsd2001;
 	using System.Xml;
 	
-	using org.nxbre.rule;
+	using NxBRE.FlowEngine;
 
 	/// <summary>Schema utilities.</summary>
 	/// <author>David Dossot</author>

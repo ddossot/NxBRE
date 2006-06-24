@@ -1,10 +1,10 @@
-namespace org.nxbre.ri.helpers.operators
+namespace NxBRE.FlowEngine.Rules
 {
 	using System;
 	using System.Collections;
 
 	using net.ideaity.util;
-	using org.nxbre.rule;
+	using NxBRE.FlowEngine;
 
 	/// <summary> Compares two objects to see if one is greater than the other
 	/// </summary>

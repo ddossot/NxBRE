@@ -1,11 +1,11 @@
-namespace org.nxbre
+namespace NxBRE.FlowEngine
 {
 	using System;
 	using System.Xml.XPath;
 	
 	using net.ideaity.util;
 
-	using org.nxbre.rule;
+	using NxBRE.FlowEngine;
 	
 	/// <summary>
 	/// This interface defines the Flow Engine (FE) of NxBRE.
@@ -55,6 +55,7 @@ namespace org.nxbre
 			/// </summary>
 			/// <returns> True if successful, False otherwise
 			/// </returns>
+			//FIXME: do not use object but a typed data!
 			bool Process(object aId);
 			
 			/// <summary> Violently stop the BRE 

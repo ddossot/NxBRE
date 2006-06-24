@@ -1,4 +1,4 @@
-namespace org.nxbre.ie.predicates {
+namespace NxBRE.InferenceEngine.Rules {
 	using System;
 	using System.Collections;
 	using System.Text.RegularExpressions;

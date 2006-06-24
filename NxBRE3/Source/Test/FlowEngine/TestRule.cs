@@ -1,13 +1,13 @@
 //
 // NUnit Test Class for NxBRE
 //
-namespace org.nxbre.test.ri
+namespace NxBRE.Test.FlowEngine
 {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.rule;
-	using org.nxbre.ri.rule;
+	using NxBRE.FlowEngine;
+	using NxBRE.FlowEngine.Core;
 
 	using NUnit.Framework;
 	
@@ -26,13 +26,13 @@ namespace org.nxbre.test.ri
 			IBRERuleMetaData rmd = new BRERuleMetaDataImpl("md-id", new MockBRERuleFactory(), null, 0, null);
 			
 			IBRERuleResult rr = new BRERuleResultImpl(rmd, "result1");
-			Assert.AreEqual("MetaData   :\nID Type : System.String\nID Str  : md-id\nFactory : org.nxbre.test.ri.TestRule+MockBRERuleFactory\nStack Loc: 0\nResult Type: System.String\nResult Str : result1\n", rr.ToString());
+			Assert.AreEqual("MetaData   :\nID Type : System.String\nID Str  : md-id\nFactory : NxBRE.Test.ri.TestRule+MockBRERuleFactory\nStack Loc: 0\nResult Type: System.String\nResult Str : result1\n", rr.ToString());
 			
 			rr = new BRERuleResultImpl(null, "result2");
 			Assert.AreEqual("Result Type: System.String\nResult Str : result2\n", rr.ToString());
 			
 			rr = new BRERuleResultImpl(rmd, null);
-			Assert.AreEqual("MetaData   :\nID Type : System.String\nID Str  : md-id\nFactory : org.nxbre.test.ri.TestRule+MockBRERuleFactory\nStack Loc: 0\n", rr.ToString());
+			Assert.AreEqual("MetaData   :\nID Type : System.String\nID Str  : md-id\nFactory : NxBRE.Test.ri.TestRule+MockBRERuleFactory\nStack Loc: 0\n", rr.ToString());
 		}
 		
 	}

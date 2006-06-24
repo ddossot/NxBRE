@@ -1,9 +1,9 @@
-namespace org.nxbre.ie.rule {
+namespace NxBRE.InferenceEngine.Rules {
 	using System;
 	using System.Collections;
 
-	using org.nxbre.ie.predicates;
-	using org.nxbre.util;
+	using NxBRE.InferenceEngine.Rules;
+	using NxBRE.Util;
 	
 	/// <summary>
 	/// The possibile implication actions.
@@ -57,7 +57,7 @@ namespace org.nxbre.ie.rule {
 		/// The Weight of the Implication is a combination of its Priority and Salience
 		/// and represents its global priority, used in the Agenda.
 		/// </summary>		
-		/// <see cref="org.nxbre.ie.core.Agenda"/>
+		/// <see cref="NxBRE.InferenceEngine.Core.Agenda"/>
 		public int Weight {
 			get {
 				return (1+ Priority) * 100 + Salience;
@@ -79,7 +79,7 @@ namespace org.nxbre.ie.rule {
 		/// This behaviour is enabled by assigning a higher salience to the implications that are higher
 		/// in the pre-condition chains.
 		/// </summary>
-		/// <see cref="org.nxbre.ie.core.PreconditionManager"/>
+		/// <see cref="NxBRE.InferenceEngine.Core.PreconditionManager"/>
 		public int Salience {
 			get {
 				return salience;
@@ -173,7 +173,7 @@ namespace org.nxbre.ie.rule {
 		/// <param name="precondition">String.Empty or the label of an implication that preconditions the new one.</param>
 		/// <param name="deduction">The Atom used as a prototype for what this Implication tries to proove.</param>
 		/// <param name="atomGroup">The top level group of atoms used in the query part (pattern matching) of the new Implication.</param>
-		/// <see cref="org.nxbre.ie.rule.ImplicationPriority"/>
+		/// <see cref="NxBRE.InferenceEngine.Rules.ImplicationPriority"/>
 		public Implication(string label,
 		                   ImplicationPriority priority,
 		                   string mutex,
@@ -197,8 +197,8 @@ namespace org.nxbre.ie.rule {
 		/// <param name="deduction">The Atom used as a prototype for what this Implication tries to proove.</param>
 		/// <param name="atomGroup">The top level group of atoms used in the query part (pattern matching) of the new Implication.</param>
 		/// <param name="action">The implication action.</param>
-		/// <see cref="org.nxbre.ie.rule.ImplicationAction"/>
-		/// <see cref="org.nxbre.ie.rule.ImplicationPriority"/>
+		/// <see cref="NxBRE.InferenceEngine.Rules.ImplicationAction"/>
+		/// <see cref="NxBRE.InferenceEngine.Rules.ImplicationPriority"/>
 		public Implication(string label,
 		                   ImplicationPriority priority,
 		                   string mutex,
@@ -222,7 +222,7 @@ namespace org.nxbre.ie.rule {
 		/// <param name="precondition">String.Empty or the label of an implication that preconditions the new one.</param>
 		/// <param name="deduction">The Atom used as a prototype for what this Implication tries to proove.</param>
 		/// <param name="atomGroup">The top level group of atoms used in the query part (pattern matching) of the new Implication.</param>
-		/// <see cref="org.nxbre.ie.rule.ImplicationPriority"/>
+		/// <see cref="NxBRE.InferenceEngine.Rules.ImplicationPriority"/>
 		public Implication(string label,
 		                   int priority,
 		                   string mutex,
@@ -246,8 +246,8 @@ namespace org.nxbre.ie.rule {
 		/// <param name="deduction">The Atom used as a prototype for what this Implication tries to proove.</param>
 		/// <param name="atomGroup">The top level group of atoms used in the query part (pattern matching) of the new Implication.</param>
 		/// <param name="action">The implication action.</param>
-		/// <see cref="org.nxbre.ie.rule.ImplicationAction"/>
-		/// <see cref="org.nxbre.ie.rule.ImplicationPriority"/>
+		/// <see cref="NxBRE.InferenceEngine.Rules.ImplicationAction"/>
+		/// <see cref="NxBRE.InferenceEngine.Rules.ImplicationPriority"/>
 		public Implication(string label,
 		                   int priority,
 		                   string mutex,

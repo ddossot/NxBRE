@@ -1,4 +1,4 @@
-namespace org.nxbre.ie {
+namespace NxBRE.InferenceEngine {
 	using System;
 	
 	/// <summary>

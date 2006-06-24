@@ -1,4 +1,4 @@
-namespace org.nxbre.ri.drivers {
+namespace NxBRE.FlowEngine.IO {
 	using System;
 	using System.IO;
 	using System.Reflection;
@@ -7,8 +7,8 @@ namespace org.nxbre.ri.drivers {
 	using System.Xml.XPath;
 	using System.Xml.Xsl;
 	
-	using org.nxbre.rule;
-	using org.nxbre.util;
+	using NxBRE.FlowEngine;
+	using NxBRE.Util;
 
 	/// <summary>
 	/// Driver for loading rules streams valid against xBusinessRules.xsd (simplified NxBRE grammar).

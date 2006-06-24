@@ -1,9 +1,9 @@
-namespace org.nxbre.ie.core {
+namespace NxBRE.InferenceEngine.Core {
 	using System;
 	using System.Threading;
 
-	using org.nxbre.ie;
-	using org.nxbre.ie.rule;
+	using NxBRE.InferenceEngine;
+	using NxBRE.InferenceEngine.Rules;
 	
 	/// <summary>
 	/// This is the ThreadSafe version of the WorkingMemory, which is the core class of the inference engine.
@@ -17,7 +17,7 @@ namespace org.nxbre.ie.core {
 	/// </description>
 	/// <remarks>Core classes are not supposed to be used directly.</remarks>
 	/// <author>David Dossot</author>
-	/// <see cref="org.nxbre.ie.IEImpl"/>
+	/// <see cref="NxBRE.InferenceEngine.IEImpl"/>
 	/// <version>2.4</version>
 	internal sealed class ThreadSafeWorkingMemory:AbstractWorkingMemory {
 		private ILockStrategy lockStrategy;

@@ -1,4 +1,4 @@
-namespace org.nxbre.ie.core {
+namespace NxBRE.InferenceEngine.Core {
 	/// <summary>
 	/// The WorkingMemory is the core class of the inference engine.
 	/// It contains references to the FactBase.
@@ -11,7 +11,7 @@ namespace org.nxbre.ie.core {
 	/// </description>
 	/// <remarks>Core classes are not supposed to be used directly.</remarks>
 	/// <author>David Dossot</author>
-	/// <see cref="org.nxbre.ie.IEImpl"/>
+	/// <see cref="NxBRE.InferenceEngine.IEImpl"/>
 	/// <version>2.4</version>
 	internal interface IWorkingMemory {
 		WorkingMemoryTypes Type {	get; set; }

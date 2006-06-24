@@ -1,4 +1,4 @@
-namespace org.nxbre.ie.adapters {
+namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
 	using System.IO;
@@ -8,10 +8,9 @@ namespace org.nxbre.ie.adapters {
 	using System.Xml.XPath;
 	using System.Xml.Schema;
 	
-	using org.nxbre.ie.predicates;
-	using org.nxbre.ie.rule;
+	using NxBRE.InferenceEngine.Rules;
 	
-	using org.nxbre.util;
+	using NxBRE.Util;
 	
 	/// <summary>
 	/// An abstract RuleML adapter that contains common methods for loading and saving rule bases.

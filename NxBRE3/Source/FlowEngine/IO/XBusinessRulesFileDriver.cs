@@ -1,11 +1,11 @@
-namespace org.nxbre.ri.drivers {
+namespace NxBRE.FlowEngine.IO {
 	using System.Reflection;
 	using System.Xml;
 	using System.Xml.Xsl;
 
 	using net.ideaity.util.events;
 	
-	using org.nxbre.util;
+	using NxBRE.Util;
 	
 	/// <summary>
 	/// Driver for loading rules files valid against xBusinessRules.xsd (simplified NxBRE grammar).

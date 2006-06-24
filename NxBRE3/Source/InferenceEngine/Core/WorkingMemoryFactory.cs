@@ -1,4 +1,4 @@
-namespace org.nxbre.ie.core
+namespace NxBRE.InferenceEngine.Core
 {
 	/// <summary>
 	/// A factory for creating WorkingMemory objects.

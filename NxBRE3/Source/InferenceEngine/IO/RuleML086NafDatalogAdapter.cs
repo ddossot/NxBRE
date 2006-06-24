@@ -1,4 +1,4 @@
-namespace org.nxbre.ie.adapters {
+namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
 	using System.IO;
@@ -6,9 +6,8 @@ namespace org.nxbre.ie.adapters {
 	using System.Xml.XPath;
 	using System.Xml.Schema;
 	
-	using org.nxbre.ie.predicates;
-	using org.nxbre.ie.rule;
-	using org.nxbre.util;
+	using NxBRE.InferenceEngine.Rules;
+	using NxBRE.Util;
 
 	///<summary>Adapter supporting RuleML 0.86 NafDatalog Sublanguage.</summary>
 	///<remarks>UTF-8 is the default encoding.</remarks>

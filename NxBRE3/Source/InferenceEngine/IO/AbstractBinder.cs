@@ -1,19 +1,19 @@
-namespace org.nxbre.ie.adapters {
+namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
 	using System.Text.RegularExpressions;
 
-	using org.nxbre.ie.core;
-	using org.nxbre.ie.predicates;
+	using NxBRE.InferenceEngine.Core;
+	using NxBRE.InferenceEngine.Rules;
 
-	using org.nxbre.util;
+	using NxBRE.Util;
 	
 	/// <summary>
 	/// Provides an abstract implementation of IBinder that implements the parameters
 	/// and AnalyzeIndividualPredicate using a regular expression for detecting
 	/// functions in Individual predicates.
 	/// </summary>
-	/// <see cref="org.nxbre.ie.adapters.IBinder">IBinder definition.</see>
+	/// <see cref="NxBRE.InferenceEngine.IO.IBinder">IBinder definition.</see>
 	public abstract class AbstractBinder:IBinder {
 		[ThreadStatic]
 		protected static Hashtable businessObjectsMap;
@@ -142,7 +142,7 @@ namespace org.nxbre.ie.adapters {
 		/// The implementer should refrain from performing any operation on the IEFacade object,
 		/// like asserting new facts.
 		/// </remarks>
-		/// <see cref="org.nxbre.ie.core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
+		/// <see cref="NxBRE.InferenceEngine.Core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
 		public virtual NewFactEvent OnNewFact {
 			get {
 				// default: no handler
@@ -159,7 +159,7 @@ namespace org.nxbre.ie.adapters {
 		/// The implementer should refrain from performing any operation on the IEFacade object,
 		/// like asserting new facts.
 		/// </remarks>
-		/// <see cref="org.nxbre.ie.core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
+		/// <see cref="NxBRE.InferenceEngine.Core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
 	  public virtual NewFactEvent OnDeleteFact {
 			get {
 				// default: no handler
@@ -176,7 +176,7 @@ namespace org.nxbre.ie.adapters {
 		/// The implementer should refrain from performing any operation on the IEFacade object,
 		/// like asserting new facts.
 		/// </remarks>
-		/// <see cref="org.nxbre.ie.core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
+		/// <see cref="NxBRE.InferenceEngine.Core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
 	  public virtual NewFactEvent OnModifyFact {
 			get {
 				// default: no handler

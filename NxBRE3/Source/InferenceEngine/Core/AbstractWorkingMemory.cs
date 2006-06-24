@@ -1,4 +1,4 @@
-namespace org.nxbre.ie.core
+namespace NxBRE.InferenceEngine.Core
 {
 	using System;
 	using System.Threading;

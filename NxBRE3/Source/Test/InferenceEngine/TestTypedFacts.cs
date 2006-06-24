@@ -1,4 +1,4 @@
-namespace org.nxbre.test.ie {
+namespace NxBRE.Test.InferenceEngine {
 	using System;
 	using System.Collections;
 	using System.IO;
@@ -7,13 +7,11 @@ namespace org.nxbre.test.ie {
 	
 	using net.ideaity.util.events;
 	
-	using org.nxbre.ie;
-	using org.nxbre.ie.adapters;
-	using org.nxbre.ie.predicates;
-	using org.nxbre.ie.core;
-	using org.nxbre.ie.rule;
+	using NxBRE.InferenceEngine;
+	using NxBRE.InferenceEngine.IO;
+	using NxBRE.InferenceEngine.Rules;
 	
-	using org.nxbre.util;
+	using NxBRE.Util;
 	
 	[TestFixture]
 	public class TestTypedFacts:AbstractTestEngine {

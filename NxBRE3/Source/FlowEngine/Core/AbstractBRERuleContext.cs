@@ -1,4 +1,4 @@
-namespace org.nxbre.rule
+namespace NxBRE.FlowEngine.Core
 {
 	using System;
 	using System.Collections;
@@ -9,7 +9,7 @@ namespace org.nxbre.rule
 	/// client, so an abstract object is provided to assist this.
 	/// Use this if you wish to do inheritance.
 	/// </summary>
-	/// <seealso cref="org.nxbre.ri.rule.BRERuleContextImpl"/>
+	/// <seealso cref="NxBRE.FlowEngine.rule.BRERuleContextImpl"/>
 	/// <author>  Sloan Seaman </author>
 	/// <author>  David Dossot </author>
 	/// <version>  1.8.2

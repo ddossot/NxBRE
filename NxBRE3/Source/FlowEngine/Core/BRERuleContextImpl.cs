@@ -1,9 +1,9 @@
-namespace org.nxbre.ri.rule
+namespace NxBRE.FlowEngine.Core
 {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.rule;
+	using NxBRE.FlowEngine;
 	/// <summary> Strict implementation of BRERuleContext.
 	/// <P>
 	/// This class is sealed so that no one tries to extend it. 
@@ -15,7 +15,7 @@ namespace org.nxbre.ri.rule
 	/// </P>
 	/// *
 	/// </summary>
-	/// <seealso cref="org.nxbre.rule.AbstractBRERuleContext">
+	/// <seealso cref="NxBRE.FlowEngine.AbstractBRERuleContext">
 	/// </seealso>
 	/// <P>
 	/// <PRE>

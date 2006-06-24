@@ -1,11 +1,10 @@
-namespace org.nxbre.ie.core {
+namespace NxBRE.InferenceEngine.Core {
 	using System;
 	using System.Collections;
 	using System.Data;
 	
-	using org.nxbre.ie.predicates;
-	using org.nxbre.ie.rule;
-	using org.nxbre.util;
+	using NxBRE.InferenceEngine.Rules;
+	using NxBRE.Util;
 	
 	/// <summary>
 	/// A fact storage class that uses a DataTable for storing facts.

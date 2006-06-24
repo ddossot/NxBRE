@@ -1,10 +1,10 @@
-namespace org.nxbre.ie.predicates {
+namespace NxBRE.InferenceEngine.Rules {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.ie.adapters;
-	using org.nxbre.ie.core;
-	using org.nxbre.util;
+	using NxBRE.InferenceEngine.IO;
+	using NxBRE.InferenceEngine.Core;
+	using NxBRE.Util;
 	
 	/// <summary>
 	/// An Function is a special predicate that represents an evaluation of a function

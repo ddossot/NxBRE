@@ -1,18 +1,19 @@
-namespace org.nxbre.ie.core {
+namespace NxBRE.InferenceEngine.Core {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.ie.rule;
+	using NxBRE.InferenceEngine;
+	using NxBRE.InferenceEngine.Rules;
 	
 	/// <summary>
-	/// QueryResultSet is a read-only collection of Atom arrays.
+	/// QueryResultSet is a read-only collection of Fact arrays.
 	/// </summary>
 	/// <description>
 	/// Each entry corresponds to a result, and each result is an Atom array,
 	/// which size depends on the number of atoms in the query.
 	/// </description>
 	/// <author>David Dossot</author>
-	internal class QueryResultSet:ReadOnlyCollectionBase {
+	internal class QueryResultSet:ReadOnlyCollectionBase, IQueryResultSet {
 		/// <summary>
 		/// Instantiates a new QueryResultSet on the basis of an existing ArrayList of atoms.
 		/// </summary>
@@ -23,6 +24,7 @@ namespace org.nxbre.ie.core {
 		/// <summary>
 		/// The Index of the QueryResultSet is an Array of facts that represents one QueryResultSet row.
 		/// </summary>
+		//FIXME: return IFact
 		public Fact[] this[int index]  {
 		  get  {
 		    return((Fact[])InnerList[index]);

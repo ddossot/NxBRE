@@ -1,12 +1,11 @@
-namespace org.nxbre.ri.factories
+namespace NxBRE.FlowEngine.Factories
 {
 	using System;
 	
 	using net.ideaity.util.events;
 	
-	using org.nxbre;
-	using org.nxbre.rule;
-	using org.nxbre.ri.drivers;
+	using NxBRE.FlowEngine;
+	using NxBRE.FlowEngine.IO;
 	
 	/// <summary>This factory allows an easy creation of a BRE object</summary>
 	/// <author>David Dossot</author>

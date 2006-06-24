@@ -1,4 +1,4 @@
-namespace org.nxbre.ri.drivers {
+namespace NxBRE.FlowEngine.IO {
 	using System.Xml;
 	using net.ideaity.util.events;
 	

@@ -1,7 +1,6 @@
-namespace org.nxbre.rule
+namespace NxBRE.FlowEngine
 {
 	using System;
-	using org.nxbre;
 	
 	/// <summary> This error is thrown when an error is generated from
 	/// the Busines Rule (BRF), usually from the executeRule().

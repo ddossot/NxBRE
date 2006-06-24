@@ -1,10 +1,10 @@
-namespace org.nxbre.ri.helpers.rule
+namespace NxBRE.FlowEngine.Rules
 {
 	using System;
 	using System.Collections;
 
-	using org.nxbre.rule;
-	using org.nxbre.util;
+	using NxBRE.FlowEngine;
+	using NxBRE.Util;
 
 	/// <summary> This class is designed to be used anytime you wish to set
 	/// a value in the XML itself. 
@@ -21,11 +21,11 @@ namespace org.nxbre.ri.helpers.rule
 	/// <P>
 	/// Example:
 	/// <PRE>
-	/// <Rule id="VALUE1" factory="org.nxbre.ri.rule.helpers.Value">
+	/// <Rule id="VALUE1" factory="NxBRE.FlowEngine.rule.helpers.Value">
 	/// <Parameter name="Value" value="5"/>
 	/// <Parameter name="Type" value="System.Int32"/>
 	/// </Rule>
-	/// <Rule id="VALUE2" factory="org.nxbre.ri.rule.helpers.Value">
+	/// <Rule id="VALUE2" factory="NxBRE.FlowEngine.rule.helpers.Value">
 	/// <Parameter name="Type" value="test.MyClass,MyAssembly"/>
 	/// <Parameter name="Argument0" value="a_string"/>
 	/// <Parameter name="Argument1" ruleValue="an_object"/>
