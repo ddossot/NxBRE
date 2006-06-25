@@ -15,4 +15,5 @@ using System.Runtime.CompilerServices;
 [assembly:AssemblyKeyFile("")]
 [assembly:CLSCompliant(true)]
 
-//TODO: all ToArray() must be replaced with generic collections
+//TODO: all ToArray() and non generic collections must be replaced with generic collections
+//TODO: remove all <version> tags (useless)

@@ -17,12 +17,11 @@ namespace NxBRE.Util
 		private static AppSettingsReader appSettingsReader = null;
 		
 		///<summary>Gets the string value of the config file entry.</summary>
-		/// <param name="settingKey">The NXBRE setting key, which is automatically prefixed by "nxbre."</param>
+		/// <param name="settingKey">The NxBRE setting key, which is automatically prefixed by "nxbre."</param>
 		/// <param name="defaultValue">The default value to use in case the configuration entry is not found.</param>
 		/// <returns>The config entry string value, unless it is not found then it returns the default value.</returns>
 		public static string GetString(string settingKey, string defaultValue) {
-			if (null == appSettingsReader)
-				appSettingsReader = new AppSettingsReader();
+			if (null == appSettingsReader) appSettingsReader = new AppSettingsReader();
 
 			string settingValue;
 			
@@ -34,6 +33,20 @@ namespace NxBRE.Util
 			}
 			
 			return settingValue;
+		}
+		
+		/// <summary>
+		/// Gets the enum value of the config file entry.
+		/// </summary>
+		/// <param name="settingKey">The NxBRE setting key, which is automatically prefixed by "nxbre."</param>
+		/// <param name="enumType">The type of Enum.</param>
+		/// <param name="defaultValue">The default value to use in case the configuration entry is not found.</param>
+		/// <returns>The config entry enum value, unless it is not found then it returns the default value.</returns>
+		public static object GetEnum(string settingKey, Type enumType, object defaultValue) {
+			// I wish I could have used a constrained generic for this method but Enums can not be used as contraints...
+			string settingValue = GetString(settingKey, null);
+			if (settingValue == null) return defaultValue;
+			else return Enum.Parse(enumType, settingValue, false);
 		}
 		
 		///<summary>Gets the string value of the config file entry.</summary>

@@ -34,7 +34,6 @@ namespace NxBRE.Util
 	
 	/// <summary>NxBRE utilities for on-the-fly compiling C# code</summary>
 	/// <author>David Dossot</author>
-	/// <version>2.4</version>
 	public abstract class Compilation {
 		private static CodeDomProvider csCodeProvider = new CSharpCodeProvider();
 		private static CodeDomProvider vbCodeProvider = new VBCodeProvider();
@@ -42,7 +41,7 @@ namespace NxBRE.Util
 		private static string nxbreAssemblyLocation = String.Empty;
 		private const string NXBRE_DLL = "NxBRE.dll";
 		
-		private static ReferenceLinkModes referenceLinkMode = ReferenceLinkModes.Full;
+		private static ReferenceLinkModes referenceLinkMode = (ReferenceLinkModes) Parameter.GetEnum("referenceLinkModes", typeof(ReferenceLinkModes), ReferenceLinkModes.Full);
 		
 		private Compilation() {}
 		
@@ -88,7 +87,7 @@ namespace NxBRE.Util
 		/// <param name="expression">The C# expression to evaluate.</param>
 		/// <returns>An object produced by the expression.</returns>
 		public static object Evaluate(string expression) {
-			string code = "class Evaluator:org.nxbre.util.IEvaluator { public object Run() {return ("
+			string code = "class Evaluator:NxBRE.Util.IEvaluator { public object Run() {return ("
 										+ PrepareExpression(expression)
 										+ ");}}";
 			
@@ -120,7 +119,7 @@ namespace NxBRE.Util
 		/// <param name="values">The list of values.</param>
 		/// <returns>The compiled evaluator.</returns>
 		public static IListEvaluator NewEvaluator(string expression, string placeHolderRegexpPattern, IList variableNames, IList values) {
-			string code = "class Evaluator:org.nxbre.util.IListEvaluator { public object Run(System.Collections.IList values) {return ("
+			string code = "class Evaluator:NxBRE.Util.IListEvaluator { public object Run(System.Collections.IList values) {return ("
 										+ Regex.Replace(PrepareExpression(expression), placeHolderRegexpPattern, new MatchEvaluator(new ListVariableReplacer(variableNames, values).ReplaceListVariable))
 										+ ");}}";
 			
@@ -176,7 +175,7 @@ namespace NxBRE.Util
 		/// <param name="arguments">The key/value pairs of arguments.</param>
 		/// <returns>The compiled evaluator.</returns>
 		public static IDictionaryEvaluator NewEvaluator(string expression, string placeHolderRegexpPattern, string numericArgumentPattern, IDictionary arguments) {
-			string code = "class Evaluator:org.nxbre.util.IDictionaryEvaluator { public object Run(System.Collections.IDictionary values) {return ("
+			string code = "class Evaluator:NxBRE.Util.IDictionaryEvaluator { public object Run(System.Collections.IDictionary values) {return ("
 				+ Regex.Replace(PrepareExpression(expression), placeHolderRegexpPattern, new MatchEvaluator(new DictionaryVariableReplacer(arguments, numericArgumentPattern).ReplaceDictionaryVariable))
 										+ ");}}";
 			
