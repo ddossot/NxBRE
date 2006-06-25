@@ -13,6 +13,7 @@ namespace NxBRE.Util
 		/// When casting values, NxBRE uses this format: en-US.
 		/// </summary>
 		public static CultureInfo US_FORMAT = new CultureInfo( "en-US", false );
+		//TODO: use a parameter
 
 		private Reflection() {}
 		
