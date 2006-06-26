@@ -10,8 +10,6 @@ namespace NxBRE.FlowEngine
 	/// </summary>
 	/// <author>  Sloan Seaman
 	/// </author>
-	/// <version>  1.0
-	/// </version>
 	public class BRERuleFatalException:BRERuleException
 	{
 		/// <summary> Defines a new BRERuleFatalException with a specific msg

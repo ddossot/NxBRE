@@ -10,7 +10,6 @@ namespace NxBRE.Util
 
 	/// <summary>Misc NxBRE utilities.</summary>
 	/// <author>David Dossot</author>
-	/// <version>2.0</version>
 	public abstract class Misc {
 		private Misc() {}
 		

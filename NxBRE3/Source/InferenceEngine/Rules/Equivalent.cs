@@ -6,7 +6,6 @@ namespace NxBRE.InferenceEngine.Rules {
 	/// An Equivalent is a pair of Atoms that are equivalent together, meaning that they can indiferently be used in Queries
 	/// search expressions.
 	/// </summary>
-	/// <version>2.5</version>
 	public sealed class Equivalent {
 		private readonly string label;
 		private readonly Atom firstAtom;

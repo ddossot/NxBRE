@@ -10,8 +10,6 @@ namespace NxBRE.FlowEngine
 	/// </summary>
 	/// <author>  Sloan Seaman
 	/// </author>
-	/// <version>  1.0
-	/// </version>
 	public class BRERuleException:BREException
 	{
 		/// <summary> Returns a RuleResult that may have been created when the

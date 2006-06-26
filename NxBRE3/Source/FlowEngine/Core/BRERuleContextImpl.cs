@@ -27,7 +27,6 @@ namespace NxBRE.FlowEngine.Core
 	/// </P>
 	/// <author>  Sloan Seaman </author>
 	/// <author>  David Dossot </author>
-	/// <version>  1.8.1 </version>
 	internal sealed class BRERuleContextImpl:AbstractBRERuleContext
 	{
 		/// <summary> Creates a new instance of the object

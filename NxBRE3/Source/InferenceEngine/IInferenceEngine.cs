@@ -14,7 +14,6 @@ namespace NxBRE.InferenceEngine
 	/// This interface defines the Inference Engine (IE) of NxBRE.
 	/// </summary>
 	/// <author>David Dossot</author>
-	/// <version>2.5</version>
 	public interface IInferenceEngine:ILogDispatcher {
 		/// <summary>
 		/// The event to subscribe in order to be notified of assertion of facts.

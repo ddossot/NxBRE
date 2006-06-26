@@ -18,7 +18,6 @@ namespace NxBRE.InferenceEngine.Core {
 	/// <remarks>Core classes are not supposed to be used directly.</remarks>
 	/// <author>David Dossot</author>
 	/// <see cref="NxBRE.InferenceEngine.IEImpl"/>
-	/// <version>2.4</version>
 	internal sealed class ThreadSafeWorkingMemory:AbstractWorkingMemory {
 		private ILockStrategy lockStrategy;
 		

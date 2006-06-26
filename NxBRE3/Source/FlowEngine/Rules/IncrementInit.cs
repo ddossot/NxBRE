@@ -26,8 +26,6 @@ namespace NxBRE.FlowEngine.Rules
 	/// </summary>
 	/// <author>  David Dossot
 	/// </author>
-	/// <version>  1.8.2
-	/// </version>
 	public sealed class IncrementInit : IBRERuleFactory
 	{
 		public const string INIT = "Init";

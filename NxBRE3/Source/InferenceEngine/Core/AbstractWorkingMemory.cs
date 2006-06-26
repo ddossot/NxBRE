@@ -8,7 +8,6 @@ namespace NxBRE.InferenceEngine.Core
 	/// </summary>	
 	/// <remarks>Core classes are not supposed to be used directly.</remarks>
 	/// <author>David Dossot</author>
-	/// <version>2.4</version>
 	internal abstract class AbstractWorkingMemory:IWorkingMemory
 	{
 		protected FactBase globalFactBase;

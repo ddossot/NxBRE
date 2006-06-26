@@ -16,4 +16,3 @@ using System.Runtime.CompilerServices;
 [assembly:CLSCompliant(true)]
 
 //TODO: all ToArray() and non generic collections must be replaced with generic collections
-//TODO: remove all <version> tags (useless)

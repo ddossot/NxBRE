@@ -19,8 +19,6 @@ namespace NxBRE.FlowEngine
 	/// </P>
 	/// <author>  Sloan Seaman
 	/// </author>
-	/// <version>  1.01
-	/// </version>
 	public interface IBRERuleFactory
 		{
 			/// <summary> The executeRule() method is invoked by the Business Rule Engine (BRE)

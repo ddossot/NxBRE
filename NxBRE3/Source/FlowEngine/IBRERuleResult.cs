@@ -10,8 +10,6 @@ namespace NxBRE.FlowEngine
 	/// </summary>
 	/// <author>  Sloan Seaman
 	/// </author>
-	/// <version>  1.0
-	/// </version>
 	public interface IBRERuleResult
 		{
 			/// <summary> Returns the MetaData specific to this BusinessRuleResult

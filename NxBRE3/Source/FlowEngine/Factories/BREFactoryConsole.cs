@@ -9,7 +9,6 @@ namespace NxBRE.FlowEngine.Factories
 	/// <summary>This factory allows an easy creation of a BRE object,
 	/// that redirects its log and error messages on Console Out and Error</summary>
 	/// <author>David Dossot</author>
-	/// <version>1.8.2</version>
 	public sealed class BREFactoryConsole:BREFactory {
 		private int errorLevel;
 		private int logLevel;

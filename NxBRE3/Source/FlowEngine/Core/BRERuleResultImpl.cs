@@ -18,8 +18,6 @@ namespace NxBRE.FlowEngine.Core
 	/// </seealso>
 	/// <author>  Sloan Seaman
 	/// </author>
-	/// <version>  1.0
-	/// </version>
 	internal sealed class BRERuleResultImpl:AbstractBRERuleResult
 	{
 		
