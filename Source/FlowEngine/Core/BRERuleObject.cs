@@ -9,8 +9,6 @@ namespace NxBRE.FlowEngine.Core
 	/// </seealso>
 	/// <author>  David Dossot
 	/// </author>
-	/// <version>  1.0
-	/// </version>
 	internal sealed class BRERuleObject:AbstractBRERuleResult
 	{
 		

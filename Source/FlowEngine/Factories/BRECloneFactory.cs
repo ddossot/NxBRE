@@ -11,7 +11,6 @@ namespace NxBRE.FlowEngine.Factories
 	/// which is very convenient for a multi-threaded environment where each thread will
 	/// use a different clone.</summary>
 	/// <author>David Dossot</author>
-	/// <version>1.8.2</version>
 	public sealed class BRECloneFactory {
 		private IRulesDriver rulesDriver = null;
 		private BREFactory bref = null;

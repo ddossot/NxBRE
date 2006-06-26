@@ -25,8 +25,6 @@ namespace NxBRE.FlowEngine.Core
 	/// v1.6	- Now stores parameters that were passed in
 	/// *
 	/// </PRE>
-	/// <version>  1.6
-	/// </version>
 	internal sealed class BRERuleMetaDataImpl:AbstractBRERuleMetaData
 	{
 		/// <summary> Creates a new instance of the object

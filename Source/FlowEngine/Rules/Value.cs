@@ -47,8 +47,6 @@ namespace NxBRE.FlowEngine.Rules
 	/// *
 	/// <author>  Sloan Seaman
 	/// </author>
-	/// <version>  1.7
-	/// </version>
 	public sealed class Value : IBRERuleFactory
 	{
 		

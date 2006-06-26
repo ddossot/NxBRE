@@ -15,7 +15,6 @@ namespace NxBRE.FlowEngine
 	/// *
 	/// <author>  Sloan Seaman </author>
 	/// <author>  David Dossot </author>
-	/// <version>  1.8.2 </version>
 	public interface IBRERuleContext : ICloneable
 		{
 			/// <summary> Returns an Stack of BRERuleFactory UID's that represents

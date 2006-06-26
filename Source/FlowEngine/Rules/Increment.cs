@@ -32,8 +32,6 @@ namespace NxBRE.FlowEngine.Rules
 	/// </PRE>
 	/// <author>  Sloan Seaman
 	/// </author>
-	/// <version>  1.6
-	/// </version>
 	public sealed class Increment : IBRERuleFactory, IInitializable
 	{
 //		public const string INIT = "Init";

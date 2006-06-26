@@ -12,8 +12,6 @@ namespace NxBRE.FlowEngine.Core
 	/// <seealso cref="NxBRE.FlowEngine.rule.BRERuleContextImpl"/>
 	/// <author>  Sloan Seaman </author>
 	/// <author>  David Dossot </author>
-	/// <version>  1.8.2
-	/// </version>
 	internal abstract class AbstractBRERuleContext : IBRERuleContext
 	{
 		protected Stack internalCallStack;

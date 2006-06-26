@@ -10,7 +10,6 @@ namespace NxBRE.FlowEngine.Core
 	/// <seealso cref="NxBRE.FlowEngine.IBRERuleResult"/>
 	/// <author>Sloan Seaman</author>
 	/// <author>David Dossot</author>
-	/// <version>2.5.2</version>
 	internal abstract class AbstractBRERuleResult : IBRERuleResult
 	{
 		/// <summary> Returns the MetaData specific to this BusinessRuleResult

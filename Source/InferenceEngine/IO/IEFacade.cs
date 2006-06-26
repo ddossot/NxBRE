@@ -12,7 +12,6 @@ namespace NxBRE.InferenceEngine.IO {
 	/// <remarks>
 	/// The facade provide some helper methods and hides forbidden methods, like Process(bo).
 	/// </remarks>
-	/// <version>2.5</version>
 	public sealed class IEFacade {
 		private IInferenceEngine ie;
 		

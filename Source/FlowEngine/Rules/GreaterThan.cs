@@ -17,8 +17,6 @@ namespace NxBRE.FlowEngine.Rules
 	/// *
 	/// <author>  Sloan Seaman
 	/// </author>
-	/// <version>  1.5
-	/// </version>
 	public sealed class GreaterThan : IBREOperator, IInitializable
 	{
 		/// <summary>Defines whether an operator is ablt to deal with empty operands</summary>

@@ -14,8 +14,6 @@ namespace NxBRE.FlowEngine
 	/// </P>
 	/// <author>  Sloan Seaman
 	/// </author>
-	/// <version>  1.6.1
-	/// </version>
 	public interface IBREOperator
 		{
 			/// <summary> Method to compare one object against another

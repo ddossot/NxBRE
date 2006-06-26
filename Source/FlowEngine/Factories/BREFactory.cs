@@ -9,7 +9,6 @@ namespace NxBRE.FlowEngine.Factories
 	
 	/// <summary>This factory allows an easy creation of a BRE object</summary>
 	/// <author>David Dossot</author>
-	/// <version>1.8.1</version>
 	public class BREFactory {
 		private DispatchException exceptionHandler;
 		private DispatchLog logHandler;

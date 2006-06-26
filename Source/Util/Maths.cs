@@ -9,7 +9,6 @@ namespace NxBRE.Util
 	/// The user is invited to create his/her own maths utilities.
 	/// </remarks>
 	/// <author>David Dossot</author>
-	/// <version>2.0</version>
 	public abstract class Maths {
 		private Maths() {}
 		

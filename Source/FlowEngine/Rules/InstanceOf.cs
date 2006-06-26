@@ -16,7 +16,6 @@ namespace NxBRE.FlowEngine.Rules
 	/// </P>
 	/// <author>  Sloan Seaman </author>
 	/// <author>  David Dossot </author>
-	/// <version>  1.8.3 </version>
 	public sealed class InstanceOf : IBREOperator
 	{
 		/// <summary>Defines whether an operator is ablt to deal with empty operands</summary>

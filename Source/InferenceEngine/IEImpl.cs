@@ -71,7 +71,6 @@ namespace NxBRE.InferenceEngine {
 	/// customization should take place for feeding the engine with rules from other sources than
 	/// RuleML files.
 	/// </remarks>
-	/// <version>2.4</version>
 	public sealed class IEImpl:AbstractLogDispatcher, IInferenceEngine {
 		
 		/// <summary>

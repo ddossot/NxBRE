@@ -7,7 +7,6 @@ namespace NxBRE.Util
 	
 	/// <summary>NxBRE utilities for manipulations on objects: reflection, type casting...</summary>
 	/// <author>David Dossot</author>
-	/// <version>2.0</version>
 	public abstract class Reflection {
 		/// <summary>
 		/// When casting values, NxBRE uses this format: en-US.

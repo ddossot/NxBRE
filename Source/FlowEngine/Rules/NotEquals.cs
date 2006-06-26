@@ -16,8 +16,6 @@ namespace NxBRE.FlowEngine.Rules
 	/// </P>
 	/// <author>  Sloan Seaman
 	/// </author>
-	/// <version>  1.5
-	/// </version>
 	public sealed class NotEquals : IBREOperator
 	{
 		/// <summary>Defines whether an operator is ablt to deal with empty operands</summary>

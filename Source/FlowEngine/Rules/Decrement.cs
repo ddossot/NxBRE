@@ -32,8 +32,6 @@ namespace NxBRE.FlowEngine.Rules
 	/// </PRE>
 	/// <author>  Sloan Seaman
 	/// </author>
-	/// <version>  1.5
-	/// </version>
 	public class Decrement : IBRERuleFactory, IInitializable
 	{
 		public const string DECREMENT = "Decrement";

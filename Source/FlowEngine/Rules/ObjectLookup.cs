@@ -35,8 +35,6 @@ namespace NxBRE.FlowEngine.Rules
 	/// </P>
 	/// </summary>
 	/// <author>David Dossot</author>
-	/// <version>2.0</version>
-	/// 
 	public sealed class ObjectLookup : IBRERuleFactory
 	{
 		public const string OBJECTID = "ObjectId";

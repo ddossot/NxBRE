@@ -16,7 +16,6 @@ namespace NxBRE.Util
 	/// to encapsulate them both.
 	/// </summary>
 	/// <author>David Dossot</author>
-	/// <version>1.8.3</version>
 	public class PseudoCodeRenderer {
 		
 		private string ruleFileURI;

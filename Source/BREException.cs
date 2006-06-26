@@ -9,8 +9,6 @@ namespace NxBRE
 	/// </author>
 	/// <author>  David Dossot
 	/// </author>
-	/// <version>  2.3
-	/// </version>
 	public class BREException:Exception
 	{
 		/// <summary> Defines a new BREException

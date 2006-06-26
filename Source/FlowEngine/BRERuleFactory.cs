@@ -13,8 +13,6 @@ namespace NxBRE.FlowEngine
 	/// </summary>
 	/// <author>  David Dossot
 	/// </author>
-	/// <version>  1.8
-	/// </version>
 	public class BRERuleFactory : IBRERuleFactory
 	{
 		private ExecuteRuleDelegate executeRuleDelegate = null;

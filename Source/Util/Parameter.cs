@@ -7,7 +7,6 @@ namespace NxBRE.Util
 	/// <summary>An helper class for easily accessing NxBRE's application settings and manipulating parameters.
 	/// </summary>
 	/// <author>David Dossot</author>
-	/// <version>2.0</version>
 	public abstract class Parameter {
 		public readonly static char[] PARENTHESIS = new char[] {'(', ')'};
 		public const char COLUMN = ':';

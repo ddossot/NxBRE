@@ -104,7 +104,6 @@ namespace NxBRE.FlowEngine
 	/// </remarks>
 	/// <author>  Sloan Seaman </author>
 	/// <author>  David Dossot </author>
-	/// <version> 2.3  </version>
 	/// <P>
 	/// <PRE>
 	/// CHANGELOG:

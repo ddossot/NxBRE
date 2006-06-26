@@ -7,8 +7,6 @@ namespace NxBRE.FlowEngine
 	/// </summary>
 	/// <author>  Sloan Seaman
 	/// </author>
-	/// <version>  1.6
-	/// </version>
 	public interface IBRERuleMetaData
 		{
 			/// <summary> Returns the BRERuleFactory that created the Business Rule
