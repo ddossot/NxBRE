@@ -18,6 +18,8 @@ namespace NxBRE.Test
 		private string testFile;
 		private string outputFolder;
 		
+		private const double DELTA = .000001;
+		
 		[TestFixtureSetUp]
 		public void InitTest()
 		{
@@ -94,33 +96,33 @@ namespace NxBRE.Test
 			Assert.AreEqual(10, Maths.Multiply(2, 5), "2 * 5 = 10");
 			Assert.AreEqual(-210, Maths.Multiply(2, 5, -3, 7), "2 * 5 * -3 * 7 = -210");
 			
-			Assert.AreEqual(2.5, Maths.Multiply(2.5), "2.5 * = 2.5");
-			Assert.AreEqual(-8.75, Maths.Multiply(2.5, -3.5), "2.5 * (-3.5) = -8.75");
-			Assert.AreEqual(37.625, Maths.Multiply(2.5, 3.5, 4.3), "2.5 * 3.5 * 4.3 = 37.625");
+			Assert.AreEqual(2.5, Maths.Multiply(2.5d),DELTA , "2.5 * = 2.5");
+			Assert.AreEqual(-8.75d, Maths.Multiply(2.5d, -3.5d),DELTA , "2.5 * (-3.5) = -8.75");
+			Assert.AreEqual(37.625d, Maths.Multiply(2.5d, 3.5d, 4.3d),DELTA , "2.5 * 3.5 * 4.3 = 37.625");
 			
 			Assert.AreEqual(3, Maths.Add(3), "3 + = 3");
 			Assert.AreEqual(7, Maths.Add(2, 5), "2 + 5 = 7");
 			Assert.AreEqual(-3, Maths.Add(2, 5, -3, -7), "2 + 5 + (-3) + (-7) = -3");
 			
-			Assert.AreEqual(2.5, Maths.Add(2.5), "2.5 + = 2.5");
-			Assert.AreEqual(-1.0, Maths.Add(2.5, -3.5), "2.5 + (-3.5) = -1.0");
-			Assert.AreEqual(1.7, Maths.Add(2.5, 3.5, -4.3), "2.5 + 3.5 + (-4.3) = 1.7");
+			Assert.AreEqual(2.5, Maths.Add(2.5d),DELTA , "2.5 + = 2.5");
+			Assert.AreEqual(-1.0d, Maths.Add(2.5d, -3.5d),DELTA , "2.5 + (-3.5) = -1.0");
+			Assert.AreEqual(1.7d, Maths.Add(2.5d, 3.5d, -4.3d), DELTA, "2.5 + 3.5 + (-4.3) = 1.7");
 			
 			Assert.AreEqual(3, Maths.Subtract(3), "3 - = 3");
 			Assert.AreEqual(-3, Maths.Subtract(2, 5), "2 - 5 = -3");
 			Assert.AreEqual(7, Maths.Subtract(2, 5, -3, -7), "2 - 5 - (-3) - (-7) = 7");
 			
-			Assert.AreEqual(2.5, Maths.Subtract(2.5), "2.5 - = 2.5");
-			Assert.AreEqual(6.0, Maths.Subtract(2.5, -3.5), "2.5 - (-3.5) = 6.0");
-			Assert.AreEqual(3.3, Maths.Subtract(2.5, 3.5, -4.3), "2.5 - 3.5 - (-4.3) = 3.3");
+			Assert.AreEqual(2.5d, Maths.Subtract(2.5d),DELTA , "2.5 - = 2.5");
+			Assert.AreEqual(6.0d, Maths.Subtract(2.5d, -3.5d),DELTA , "2.5 - (-3.5) = 6.0");
+			Assert.AreEqual(3.3d, Maths.Subtract(2.5d, 3.5d, -4.3d),DELTA , "2.5 - 3.5 - (-4.3) = 3.3");
 			
 			Assert.AreEqual(3, Maths.Divide(3), "3 / = 3");
 			Assert.AreEqual(4, Maths.Divide(20, 5), "20 / 5 = 4");
 			Assert.AreEqual(1, Maths.Divide(100, 5, -4, -5), "100 / 5 / (-4) / (-5) = 1");
 			
-			Assert.AreEqual(2.5d, Maths.Divide(2.5d), "2.5 / = 2.5");
-			Assert.AreEqual(.4d, Maths.Divide(2d, 5d), "2 / 5 = .4");
-			Assert.AreEqual(.1d, Maths.Divide(2d, 5d, -.4d, -10d), "2 / 5 / (-.4) / (-10) = .1");
+			Assert.AreEqual(2.5d, Maths.Divide(2.5d),DELTA , "2.5 / = 2.5");
+			Assert.AreEqual(.4d, Maths.Divide(2d, 5d),DELTA , "2 / 5 = .4");
+			Assert.AreEqual(.1d, Maths.Divide(2d, 5d, -.4d, -10d),DELTA , "2 / 5 / (-.4) / (-10) = .1");
 		}
 		
 		[Test]
