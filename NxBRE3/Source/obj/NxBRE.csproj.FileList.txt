@@ -3,3 +3,15 @@ bin\Debug\NxBRE.dll
 bin\Debug\NxBRE.pdb
 obj\Debug\NxBRE.dll
 obj\Debug\NxBRE.pdb
+obj\Debug\NxBRE.Resources.businessRules.xsd
+obj\Debug\NxBRE.Resources.pseudocode_body.xsl
+obj\Debug\NxBRE.Resources.pseudocode_frames.xsl
+obj\Debug\NxBRE.Resources.pseudocode_index.xsl
+obj\Debug\NxBRE.Resources.ruleml-0_9-nafdatalog.xsd
+obj\Debug\NxBRE.Resources.ruleml-0_86-datalog.xsd
+obj\Debug\NxBRE.Resources.ruleml-0_86-nafdatalog.xsd
+obj\Debug\NxBRE.Resources.xBusinessRules.xsd
+obj\Debug\NxBRE.Resources.ruleml-nafdatalog-0_86-2hrf.xsl
+obj\Debug\NxBRE.Resources.strict-vdx2nxbre-ie.xsl
+obj\Debug\NxBRE.Resources.transformXRules.xsl
+obj\Debug\NxBRE.Resources.vdx2nxbre-ie.xsl
