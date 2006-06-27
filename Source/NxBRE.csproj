@@ -183,21 +183,21 @@
     <Compile Include="Test\TestDataSet.cs" />
     <Compile Include="Test\TestObject.cs" />
     <Compile Include="Test\TestSchema.cs" />
+    <EmbeddedResource Include="Resources\businessRules.xsd" />
+    <EmbeddedResource Include="Resources\pseudocode_body.xsl" />
+    <EmbeddedResource Include="Resources\pseudocode_frames.xsl" />
+    <EmbeddedResource Include="Resources\pseudocode_index.xsl" />
+    <EmbeddedResource Include="Resources\ruleml-0_9-nafdatalog.xsd" />
+    <EmbeddedResource Include="Resources\ruleml-0_86-datalog.xsd" />
+    <EmbeddedResource Include="Resources\ruleml-0_86-nafdatalog.xsd" />
+    <EmbeddedResource Include="Resources\ruleml-nafdatalog-0_86-2hrf.xsl" />
+    <EmbeddedResource Include="Resources\strict-vdx2nxbre-ie.xsl" />
+    <EmbeddedResource Include="Resources\transformXRules.xsl" />
+    <EmbeddedResource Include="Resources\vdx2nxbre-ie.xsl" />
+    <EmbeddedResource Include="Resources\xBusinessRules.xsd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />
-    <Content Include="Resources\businessRules.xsd" />
-    <Content Include="Resources\pseudocode_body.xsl" />
-    <Content Include="Resources\pseudocode_frames.xsl" />
-    <Content Include="Resources\pseudocode_index.xsl" />
-    <Content Include="Resources\ruleml-0_9-nafdatalog.xsd" />
-    <Content Include="Resources\ruleml-0_86-datalog.xsd" />
-    <Content Include="Resources\ruleml-0_86-nafdatalog.xsd" />
-    <Content Include="Resources\ruleml-nafdatalog-0_86-2hrf.xsl" />
-    <Content Include="Resources\strict-vdx2nxbre-ie.xsl" />
-    <Content Include="Resources\transformXRules.xsl" />
-    <Content Include="Resources\vdx2nxbre-ie.xsl" />
-    <Content Include="Resources\xBusinessRules.xsd" />
     <Folder Include="FlowEngine" />
     <Folder Include="FlowEngine\Core" />
     <Folder Include="FlowEngine\Factories" />
