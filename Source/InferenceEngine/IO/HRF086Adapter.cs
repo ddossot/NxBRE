@@ -1,7 +1,6 @@
 namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.IO;
-	using System.Reflection;
 	using System.Xml;
 	using System.Xml.Schema;
 	using System.Xml.XPath;
@@ -34,11 +33,7 @@ namespace NxBRE.InferenceEngine.IO {
 			
 			if (tempfileName != null) {
 				XslTransform xslt = new XslTransform();
-				xslt.Load(new XmlTextReader(Assembly
-				                            .GetExecutingAssembly()
-				                            .GetManifestResourceStream(Parameter.GetString("ndl2hrf086.xsl", "ruleml-nafdatalog-0_86-2hrf.xsl"))),
-	                null,
-	                null);
+				xslt.Load(new XmlTextReader(Parameter.GetEmbeddedResourceStream("ruleml-nafdatalog-0_86-2hrf.xsl")), null, null);
 				
 				XmlTextReader reader = new XmlTextReader(tempfileName);
 				xslt.Transform(new XPathDocument(reader), new XsltArgumentList(), resultStream, null);

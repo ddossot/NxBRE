@@ -2,7 +2,6 @@ namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
 	using System.IO;
-	using System.Reflection;
 	using System.Xml;
 	using System.Xml.Xsl;
 	using System.Xml.XPath;
@@ -199,9 +198,7 @@ namespace NxBRE.InferenceEngine.IO {
 			// select the appropriate XSL
 			string xslName = strict?"strict-vdx2nxbre-ie.xsl":"vdx2nxbre-ie.xsl";
 			
-			xslt.Load(new XPathDocument(Assembly.GetExecutingAssembly().GetManifestResourceStream(Parameter.GetString(xslName, xslName))),
-			          null,
-			          null);
+			xslt.Load(new XPathDocument(Parameter.GetEmbeddedResourceStream(xslName)), null, null);
 			
 			MemoryStream stream = new MemoryStream();
 			xslt.Transform(xpDoc, xslArgs, stream, null);
