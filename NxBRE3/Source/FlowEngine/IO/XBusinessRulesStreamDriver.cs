@@ -29,14 +29,11 @@ namespace NxBRE.FlowEngine.IO {
 			//Loading the XSL file in a XSLTransform object
 			XslTransform transform=new XslTransform();
 			
-			transform.Load(new XmlTextReader(Assembly
-																			.GetExecutingAssembly()
-																			.GetManifestResourceStream(Parameter.GetString("transformxrules.xsl", "transformXRules.xsl"))),null,null);
+			transform.Load(new XmlTextReader(Parameter.GetEmbeddedResourceStream("transformXRules.xsl")),null,null);
 			
 		 	//We have the xmlSource in hand, transform it to the native NXBRE XSD Format
 			MemoryStream xsltResult = new MemoryStream();
-			XmlValidatingReader xmlSourceReader = (XmlValidatingReader) GetXmlInputReader(xmlStream,
-			                         			                                                Parameter.GetString("xbusinessrules.xsd", "xBusinessRules.xsd"));
+			XmlValidatingReader xmlSourceReader = (XmlValidatingReader) GetXmlInputReader(xmlStream, "xBusinessRules.xsd");
 			transform.Transform(new XPathDocument(xmlSourceReader),
 			                    null,
 			                    xsltResult,
@@ -45,7 +42,7 @@ namespace NxBRE.FlowEngine.IO {
 			
 			xsltResult.Seek(0, SeekOrigin.Begin);
 			
-			return (XmlValidatingReader) GetXmlInputReader(xsltResult, Parameter.GetString("businessrules.xsd", "businessRules.xsd"));
+			return (XmlValidatingReader) GetXmlInputReader(xsltResult, "businessRules.xsd");
 		}
 	}
 }

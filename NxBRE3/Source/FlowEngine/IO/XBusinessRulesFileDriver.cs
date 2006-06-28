@@ -1,5 +1,4 @@
 namespace NxBRE.FlowEngine.IO {
-	using System.Reflection;
 	using System.Xml;
 	using System.Xml.Xsl;
 
@@ -25,9 +24,7 @@ namespace NxBRE.FlowEngine.IO {
 			inputXMLSchema = Parameter.GetString("xbusinessrules.xsd", "xBusinessRules.xsd");
 			
 			xslt = new XslTransform();
-			xslt.Load(new XmlTextReader(Assembly
-			                            .GetExecutingAssembly()
-			                            .GetManifestResourceStream(Parameter.GetString("transformxrules.xsl", "transformXRules.xsl"))), null, null);
+			xslt.Load(new XmlTextReader(Parameter.GetEmbeddedResourceStream("transformXRules.xsl")), null, null);
 		}
 	}
 }

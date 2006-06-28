@@ -1,8 +1,10 @@
 namespace NxBRE.Util
 {
 	using System;
+	using System.IO;
 	using System.Collections;
 	using System.Configuration;
+	using System.Reflection;
 
 	/// <summary>An helper class for easily accessing NxBRE's application settings and manipulating parameters.
 	/// </summary>
@@ -14,6 +16,17 @@ namespace NxBRE.Util
 		private Parameter() {}
 		
 		private static AppSettingsReader appSettingsReader = null;
+		
+		private static string embeddedResourcePrefix = Parameter.GetString("embeddedResourcePrefix", "NxBRE.Resources.");
+		
+		/// <summary>
+		/// Gets a Stream for a resource embedded in the assembly.
+		/// </summary>
+		/// <param name="resourceName">The name of the resource to get.</param>
+		/// <returns>The Stream that matches the passed resource name, or an exception if it can not be read.</returns>
+		public static Stream GetEmbeddedResourceStream(string resourceName) {
+			return Assembly.GetExecutingAssembly().GetManifestResourceStream(embeddedResourcePrefix + resourceName);
+		}
 		
 		///<summary>Gets the string value of the config file entry.</summary>
 		/// <param name="settingKey">The NxBRE setting key, which is automatically prefixed by "nxbre."</param>

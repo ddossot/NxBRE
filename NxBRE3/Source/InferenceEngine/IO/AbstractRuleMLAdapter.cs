@@ -2,7 +2,6 @@ namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
 	using System.IO;
-	using System.Reflection;
 	using System.Text;
 	using System.Xml;
 	using System.Xml.XPath;
@@ -322,10 +321,7 @@ namespace NxBRE.InferenceEngine.IO {
 		protected virtual XmlValidatingReader GetXmlValidatingReaderForStream(string schemaName) {
 			XmlValidatingReader validReader = new XmlValidatingReader(Reader);
 			validReader.ValidationType = ValidationType.Schema;
-			validReader.Schemas.Add(XmlSchema.Read(Assembly
-									                            .GetExecutingAssembly()
-									                            .GetManifestResourceStream(Parameter.GetString(schemaName, schemaName)),
-									               							null));
+			validReader.Schemas.Add(XmlSchema.Read(Parameter.GetEmbeddedResourceStream(schemaName),	null));
 			return validReader;
 		}
 

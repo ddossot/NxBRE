@@ -2,12 +2,13 @@ namespace NxBRE.FlowEngine.IO {
 	using System;
 	using System.IO;
 	using System.Net;
-	using System.Reflection;
 	using System.Xml;
 	using System.Xml.Schema;
 	
 	using net.ideaity.util.events;
+
 	using NxBRE.FlowEngine;
+	using NxBRE.Util;
 	
 	/// <summary>
 	/// Driver for loading NxBRE rules from different sources.
@@ -53,10 +54,7 @@ namespace NxBRE.FlowEngine.IO {
 				// we validate against a well defined schema
 				sourceReader = new XmlValidatingReader(xmlReader);
 				((XmlValidatingReader) sourceReader).ValidationType = ValidationType.Schema;
-				((XmlValidatingReader) sourceReader).Schemas.Add(XmlSchema.Read(Assembly
-										                            .GetExecutingAssembly()
-										                            .GetManifestResourceStream(xsdResourceName),
-										               							null));
+				((XmlValidatingReader) sourceReader).Schemas.Add(XmlSchema.Read(Parameter.GetEmbeddedResourceStream(xsdResourceName),	null));
 			}
 			else {
 				// it is easier to by default be lax if no internal XSD resource has been given

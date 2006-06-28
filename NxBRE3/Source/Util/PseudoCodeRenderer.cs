@@ -2,7 +2,6 @@ namespace NxBRE.Util
 {
 	using System;
 	using System.IO;
-	using System.Reflection;
 	using System.Xml;
 	using System.Xml.Schema;
 	using System.Xml.XPath;
@@ -27,20 +26,13 @@ namespace NxBRE.Util
 			this.ruleFileURI = ruleFileURI;
 		}
 		
-		private void Render(Stream stream, string xslResourceId, string xslResourceDefault, XsltArgumentList args) {
+		private void Render(Stream stream, string xslResourceName, XsltArgumentList args) {
 			XslTransform xslt = new XslTransform();
-			xslt.Load(new XmlTextReader(Assembly
-			                            .GetExecutingAssembly()
-			                            .GetManifestResourceStream(Parameter.GetString(xslResourceId, xslResourceDefault))),
-                null,
-                null);
+			xslt.Load(new XmlTextReader(Parameter.GetEmbeddedResourceStream(xslResourceName)), null, null);
 			
 			XmlValidatingReader reader = new XmlValidatingReader(new XmlTextReader(ruleFileURI));
 			reader.ValidationType = ValidationType.Schema;
-			reader.Schemas.Add(XmlSchema.Read(Assembly
-						                            .GetExecutingAssembly()
-						                            .GetManifestResourceStream(Parameter.GetString("xbusinessrules.xsd", "xBusinessRules.xsd")),
-						               							null));
+			reader.Schemas.Add(XmlSchema.Read(Parameter.GetEmbeddedResourceStream("xBusinessRules.xsd"),	null));
 			xslt.Transform(new XPathDocument(reader), args, stream, null);
 			reader.Close();
 		}
@@ -63,7 +55,7 @@ namespace NxBRE.Util
 		public void RenderBody(Stream stream, string title) {
 			XsltArgumentList args = new XsltArgumentList();
 			if (title != null) args.AddParam("title", "", title);
-			Render(stream, "pseudocode.body", "pseudocode_body.xsl", args);
+			Render(stream, "pseudocode_body.xsl", args);
 		}
 		
 		/// <summary>Renders the body of the rule file in pseudo-code HTML.</summary>
@@ -105,7 +97,7 @@ namespace NxBRE.Util
 			XsltArgumentList args = new XsltArgumentList();
 			if (title != null) args.AddParam("title", null, title);
 			if (bodyURI != null) args.AddParam("bodyfile", "", bodyURI);
-			Render(stream, "pseudocode.index", "pseudocode_index.xsl", args);
+			Render(stream, "pseudocode_index.xsl", args);
 		}
 		
 		/// <summary>Renders the index of the rule file in pseudo-code HTML.</summary>
@@ -146,7 +138,7 @@ namespace NxBRE.Util
 			if (title != null) args.AddParam("title", "", title);
 			if (indexURI != null) args.AddParam("indexfile", "", indexURI);
 			if (bodyURI != null) args.AddParam("bodyfile", "", bodyURI);
-			Render(stream, "pseudocode.frames", "pseudocode_frames.xsl", args);
+			Render(stream, "pseudocode_frames.xsl", args);
 		}
 		
 		/// <summary>Renders a frameset for encapsulating pseudo-code HTML rule body and index.</summary>
