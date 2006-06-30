@@ -16,3 +16,4 @@ using System.Runtime.CompilerServices;
 [assembly:CLSCompliant(true)]
 
 //TODO: all ToArray() and non generic collections must be replaced with generic collections
+//TODO: ensure no internal class or method in non-core package - split classes like Fact in Fact & Core/FactUtils
