@@ -21,7 +21,7 @@
 			<Argument valueId="secondOperandName"/>
 		</ObjectLookup>
 		
-		<ObjectLookup id="IE-RESULT" type="org.nxbre.util.Maths" member="Subtract">
+		<ObjectLookup id="IE-RESULT" type="NxBRE.Util.Maths" member="Subtract">
 			<Argument valueId="firstOperand"/>
 			<Argument valueId="secondOperand"/>
 		</ObjectLookup>

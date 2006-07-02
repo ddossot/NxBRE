@@ -285,7 +285,7 @@ namespace NxBRE.Test.InferenceEngine {
 			// use this binder load method to overcome loading problems because 
 			// the ccb file is not in the same folder as NxBRE.dll
 			using (StreamReader sr = File.OpenText(ruleFilesFolder + "exams.ruleml.ccb"))
-	      InitIE(CSharpBinderFactory.LoadFromString("org.nxbre.examples.ExamsBinder", sr.ReadToEnd()));
+	      InitIE(CSharpBinderFactory.LoadFromString("NxBRE.Examples.ExamsBinder", sr.ReadToEnd()));
 			
       PerformCountingImpFunctionRelSupport(new RuleML086NafDatalogAdapter(ruleFilesFolder + "exams.ruleml",
 			                                               											FileAccess.Read),
