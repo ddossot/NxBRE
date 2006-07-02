@@ -469,7 +469,7 @@ namespace NxBRE.FlowEngine
 							}
 							else
 							{
-								throw new System.InvalidCastException("Specified Rule Factory " + factory + " with id " + id + " not of type BRERuleFactory");
+								throw new BREException("Specified Rule Factory " + factory + " with id " + id + " not of type IBRERuleFactory");
 							}
 						}
 					}

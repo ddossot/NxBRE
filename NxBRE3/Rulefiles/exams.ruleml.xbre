@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xBusinessRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://nxbre.org/xBusinessRules.xsd">
 	<Set id="Relate_WithinTolerance_Arg0_Arg1_Arg2">
-		<ObjectLookup id="ActualScore" type="org.nxbre.util.Reflection" member="CastValue">
+		<ObjectLookup id="ActualScore" type="NxBRE.Util.Reflection" member="CastValue">
 			<Argument valueId="Arg0"/>
 			<Argument value="System.Double"/>
 		</ObjectLookup>
-		<ObjectLookup id="ScoreThreshold" type="org.nxbre.util.Reflection" member="CastValue">
+		<ObjectLookup id="ScoreThreshold" type="NxBRE.Util.Reflection" member="CastValue">
 			<Argument valueId="Arg1"/>
 			<Argument value="System.Double"/>
 		</ObjectLookup>
-		<ObjectLookup id="PercentThreshold" type="org.nxbre.util.Reflection" member="CastValue">
+		<ObjectLookup id="PercentThreshold" type="NxBRE.Util.Reflection" member="CastValue">
 			<Argument valueId="Arg2"/>
 			<Argument value="System.Double"/>
 		</ObjectLookup>
-		<ObjectLookup id="HundredMinusPercentThreshold" type="org.nxbre.util.Maths" member="Subtract">
+		<ObjectLookup id="HundredMinusPercentThreshold" type="NxBRE.Util.Maths" member="Subtract">
 			<Argument value="100" type="Double"/>
 			<Argument valueId="PercentThreshold"/>
 		</ObjectLookup>
-		<ObjectLookup id="ScoreThresholdWithTolerance" type="org.nxbre.util.Maths" member="Multiply">
+		<ObjectLookup id="ScoreThresholdWithTolerance" type="NxBRE.Util.Maths" member="Multiply">
 			<Argument valueId="ScoreThreshold"/>
 			<Argument valueId="HundredMinusPercentThreshold"/>
 			<Argument value=".01" type="Double"/>

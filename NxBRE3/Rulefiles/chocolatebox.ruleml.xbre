@@ -4,7 +4,7 @@
 		<ObjectLookup id="TotalWeight" objectId="IE-ARGUMENTS" member="Item">
 			<Argument value="1" type="Integer"/>
 		</ObjectLookup>
-		<ObjectLookup id="TotalWeight" type="org.nxbre.util.Reflection" member="CastValue">
+		<ObjectLookup id="TotalWeight" type="NxBRE.Util.Reflection" member="CastValue">
 			<Argument valueId="TotalWeight"/>
 			<Argument value="System.Double"/>
 		</ObjectLookup>
@@ -12,7 +12,7 @@
 		<ObjectLookup id="Quantity" objectId="IE-ARGUMENTS" member="Item">
 			<Argument value="Quantity" type="String"/>
 		</ObjectLookup>
-		<ObjectLookup id="Quantity" type="org.nxbre.util.Reflection" member="CastValue">
+		<ObjectLookup id="Quantity" type="NxBRE.Util.Reflection" member="CastValue">
 			<Argument valueId="Quantity"/>
 			<Argument value="System.Double"/>
 		</ObjectLookup>
@@ -20,18 +20,18 @@
 		<ObjectLookup id="Weight" objectId="IE-ARGUMENTS" member="Item">
 			<Argument value="Weight" type="String"/>
 		</ObjectLookup>
-		<ObjectLookup id="Weight" type="org.nxbre.util.Reflection" member="CastValue">
+		<ObjectLookup id="Weight" type="NxBRE.Util.Reflection" member="CastValue">
 			<Argument valueId="Weight"/>
 			<Argument value="System.Double"/>
 		</ObjectLookup>
 		
 		
-		<ObjectLookup id="BagWeight" type="org.nxbre.util.Maths" member="Multiply">
+		<ObjectLookup id="BagWeight" type="NxBRE.Util.Maths" member="Multiply">
 			<Argument valueId="Quantity"/>
 			<Argument valueId="Weight"/>
 		</ObjectLookup>
 		
-		<ObjectLookup id="IE-RESULT" type="org.nxbre.util.Maths" member="Add">
+		<ObjectLookup id="IE-RESULT" type="NxBRE.Util.Maths" member="Add">
 			<Argument valueId="TotalWeight"/>
 			<Argument valueId="BagWeight"/>
 		</ObjectLookup>

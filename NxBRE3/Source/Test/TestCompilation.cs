@@ -1,5 +1,5 @@
 //
-// NUnit v2.1 Test Class for org.nxbre.util.Compilation
+// NUnit v2.1 Test Class for Compilation
 //
 namespace NxBRE.Test
 {

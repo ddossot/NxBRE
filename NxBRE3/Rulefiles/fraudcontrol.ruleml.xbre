@@ -65,7 +65,7 @@
 							<Argument valueId="IE-PREDICATE"/>
 							<Argument valueId="Arg1"/>
 						</ObjectLookup>
-						<ObjectLookup id="LimitAmount" type="org.nxbre.util.Reflection" member="CastValue">
+						<ObjectLookup id="LimitAmount" type="NxBRE.Util.Reflection" member="CastValue">
 							<Argument valueId="Arg0"/>
 							<Argument value="System.Double"/>
 						</ObjectLookup>

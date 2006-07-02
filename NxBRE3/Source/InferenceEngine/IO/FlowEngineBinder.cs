@@ -26,8 +26,6 @@ namespace NxBRE.InferenceEngine.IO {
 	/// <remarks>
 	/// The business object keys should not contain the reserved keys.
 	/// </remarks>
-	/// <see cref="NxBRE.InferenceEngine.IO.AbstractBinder"/>
-	/// <seealso cref="org.nxbre.IBRE"/>
 	public sealed class FlowEngineBinder:AbstractBinder {
 		private const string EVALUATE_PREFIX = "Evaluate_";
 		private const string RELATE_PREFIX = "Relate_";

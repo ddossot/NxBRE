@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-		NxBRE v.2.2 Unit Test File
+		NxBRE Flow Engine Unit Test File
 
 -->
 <xBusinessRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://nxbre.org/xBusinessRules.xsd">
@@ -673,7 +673,7 @@
 			<If>
 				<And>
 					<IsTrue valueId="Null_Check">
-						<ObjectLookup id="Null_Check" type="org.nxbre.util.Reflection" member="IsNull">
+						<ObjectLookup id="Null_Check" type="NxBRE.Util.Reflection" member="IsNull">
 							<Argument valueId="TestObject_Null" />
 						</ObjectLookup>
 					</IsTrue>
@@ -696,7 +696,7 @@
 			<If>
 				<And>
 					<IsTrue valueId="Void_Check">
-						<ObjectLookup id="Void_Check" type="org.nxbre.util.Reflection" member="IsNull">
+						<ObjectLookup id="Void_Check" type="NxBRE.Util.Reflection" member="IsNull">
 							<Argument valueId="TestObject_Void" />
 						</ObjectLookup>
 					</IsTrue>
@@ -729,11 +729,11 @@
 			Result	: Context object TestRowSet_Col1 should contain TestRowSet["col1"]
 					  Context object TestRowSet should be updated like this TestRowSet["col2"]=1969
 		-->
-		<ObjectLookup id="TestRowSet_Col1" type="org.nxbre.util.DataAccess" member="GetDataRowColumnValue">
+		<ObjectLookup id="TestRowSet_Col1" type="NxBRE.Util.DataAccess" member="GetDataRowColumnValue">
 			<Argument valueId="TestRowSet" />
 			<Argument value="col1" type="String" />
 		</ObjectLookup>
-		<ObjectLookup type="org.nxbre.util.DataAccess" member="SetDataRowColumnValue">
+		<ObjectLookup type="NxBRE.Util.DataAccess" member="SetDataRowColumnValue">
 			<Argument valueId="TestRowSet" />
 			<Argument value="col2" type="String" />
 			<Argument value="1969" type="Integer" />
@@ -745,12 +745,12 @@
 			Result	: Context object TestMultiply should contain 2 * 5 * 9 = 90
 								Context object TestOperate1 should contain 0.5 * 4 * 7 = 14d
 		-->
-		<ObjectLookup id="TestMultiply" type="org.nxbre.util.Maths" member="Multiply">
+		<ObjectLookup id="TestMultiply" type="NxBRE.Util.Maths" member="Multiply">
 			<Argument value="2" type="Integer" />
 			<Argument value="5" type="Integer" />
 			<Argument value="9" type="Integer" />
 		</ObjectLookup>
-		<ObjectLookup id="TestOperate1" type="org.nxbre.test.TestObject" member="Operate1">
+		<ObjectLookup id="TestOperate1" type="NxBRE.Test.TestObject" member="Operate1">
 			<Argument value="0.5" type="Double" />
 			<Argument value="4" type="Integer" />
 			<Argument value="7" type="Integer" />
@@ -760,7 +760,7 @@
 			Notes	: For methods with a parameter followed by a param array of same type, the params must be wrapped in an array
 			Result	: Context object TestOperate2 should contain -3 + (4 * 7) = 25
 		-->
-		<ObjectLookup id="TestOperate2" type="org.nxbre.test.TestObject" member="Operate2">
+		<ObjectLookup id="TestOperate2" type="NxBRE.Test.TestObject" member="Operate2">
 			<Argument value="-3" type="Integer" />
 			<Argument value="4" type="Integer" />
 			<Argument value="7" type="Integer" />
@@ -786,7 +786,7 @@
 						Remember that using the "value" attribute gives a String type, unless you specify a type argument.
 						If you use "ruleValue", then the type will be of the asserted's object type.
 					     The Assembly name can be given after the coma.  -->
-					<ObjectLookup id="TestObject_NewProperty" type="org.nxbre.test.TestObject" member="Add">
+					<ObjectLookup id="TestObject_NewProperty" type="NxBRE.Test.TestObject" member="Add">
 						<Argument valueId="10i"/>
 						<Argument valueId="TestObject_MyProperty"/>
 					</ObjectLookup>
@@ -800,7 +800,7 @@
 					</ObjectLookup>
 					<!-- Instantiates a new TestObject in the context
 						As for methods calls, the constructor used is selected using the arguments' types. -->
-					<Assert id="TestObject2" type="org.nxbre.test.TestObject">
+					<Assert id="TestObject2" type="NxBRE.Test.TestObject">
 						<Argument valueId="STORED_TRUE"/>
 						<Argument value="99" type="Integer"/>
 						<Argument value="world"/>
