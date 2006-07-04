@@ -16,7 +16,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <remarks>
 		/// One data table is created per fact "signature" (type and number of predicates)
 		/// </remarks>
-		public static int DATA_TABLE_MINIMUM_CAPACITY = 1000;
+		public static int DATA_TABLE_MINIMUM_CAPACITY = 1000; //TODO: make this a global parameter
 
 		private readonly Atom template;
 		private readonly DataTable table;
