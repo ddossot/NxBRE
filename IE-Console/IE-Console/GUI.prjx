@@ -16,7 +16,7 @@
     <File name=".\org.nxbre.gui.PageListForm.resources" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
   </Contents>
   <References>
-    <Reference type="Assembly" refto="..\bin\Debug\NxBRE.dll" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\NxBRE2\bin\Debug\NxBRE.dll" localcopy="True" />
   </References>
   <DeploymentInformation target="" script="" strategy="File" />
   <Configuration runwithwarnings="True" name="Debug">

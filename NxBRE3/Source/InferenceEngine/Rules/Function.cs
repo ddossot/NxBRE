@@ -74,7 +74,11 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// </summary>
 		/// <returns>The long hashcode of the predicate.</returns>
 		public override long GetLongHashCode() {
-			long longHashCode = (long)(GetType().GetHashCode() ^ name.GetHashCode());
+			long longHashCode;
+			
+			if (name != String.Empty) longHashCode = (long)(GetType().GetHashCode() ^ name.GetHashCode());
+			else longHashCode = (long)(GetType().GetHashCode() ^ Value.GetHashCode());
+			
 			foreach(string argument in arguments) {
 				longHashCode <<= 1;
 				longHashCode ^= argument.GetHashCode();
