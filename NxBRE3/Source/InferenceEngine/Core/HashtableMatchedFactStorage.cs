@@ -150,6 +150,10 @@ namespace NxBRE.InferenceEngine.Core {
 			return BuildFactList(selectResults, listOfResults, excludedHashcodes);
 		}
 		
+		public override string ToString() {
+			return Misc.IDictionaryToString(factTable);
+		}
+		
 		// ------------------------- Private Members -------------------------
 		
 		private class TypeAwareHashtable {
