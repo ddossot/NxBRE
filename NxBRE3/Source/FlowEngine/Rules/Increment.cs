@@ -7,29 +7,7 @@ namespace NxBRE.FlowEngine.Rules
 	using NxBRE.FlowEngine;
 
 	/// <summary> This class is designed to be used to increment everytime the executeRule is called.
-	/// <P>
-	/// This class takes the following parameter:</P><P>
-	/// StartIdx - The initial starting index (defaults to 0)</P><P>
-	/// </P>
-	/// Example:<P>
-	/// <PRE>
-	/// <Rule id="VALUE1" factory="NxBRE.FlowEngine.rule.helpers.Increment">
-	/// <Parameter name="Increment" value="1"/>
-	/// </Rule>
-	/// </PRE>
-	/// </P>
-	/// <P>
-	/// <B>NOTE:</B>
-	/// This will only increment if you pass an Increment parameter.
-	/// Otherwise it returns the current value
-	/// </P>
-	/// *
 	/// </summary>
-	/// <PRE>
-	/// CHANGELOG:
-	/// v1.5	- Created
-	/// V1.6	- Made FINAL
-	/// </PRE>
 	/// <author>  Sloan Seaman
 	/// </author>
 	public sealed class Increment : IBRERuleFactory, IInitializable

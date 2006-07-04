@@ -20,11 +20,6 @@ namespace NxBRE.FlowEngine.Core
 	/// </seealso>
 	/// <author>  Sloan Seaman
 	/// </author>
-	/// <PRE>
-	/// CHANGELOG:
-	/// v1.6	- Now stores parameters that were passed in
-	/// *
-	/// </PRE>
 	internal sealed class BRERuleMetaDataImpl:AbstractBRERuleMetaData
 	{
 		/// <summary> Creates a new instance of the object

@@ -6,19 +6,7 @@ namespace NxBRE.FlowEngine.Rules
 	using NxBRE.FlowEngine;
 
 	/// <summary> This rule will always throw a fatal exception
-	/// *
 	/// </summary>
-	/// <P>
-	/// <PRE>
-	/// CHANGELOG:
-	/// v1.0	- Created
-	/// v1.01	- Removed setRuleParams and instead added a Map param to
-	/// executeRule as required in the new BRERuleFactory
-	/// Removed BRERuleException throw from executeRule
-	/// v1.5	- Renamed and moved to different package
-	/// v1.6	- Made final
-	/// </PRE>
-	/// </P>
 	/// <author>  Sloan Seaman
 	/// </author>
 	public sealed class FatalException : IBRERuleFactory

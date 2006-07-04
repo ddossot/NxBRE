@@ -8,13 +8,6 @@ namespace NxBRE.FlowEngine.Rules
 
 	/// <summary> Compares two objects to see if they are greater than or equal to each other.
 	/// </summary>
-	/// <P>
-	/// <PRE>
-	/// CHANGELOG:
-	/// v1.5	- Created
-	/// </PRE>
-	/// </P>
-	/// *
 	/// <author>  Sloan Seaman
 	/// </author>
 	public sealed class GreaterThanEqualTo : IBREOperator, IInitializable

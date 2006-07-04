@@ -8,15 +8,6 @@ namespace NxBRE.FlowEngine
 	/// specific business rule code based on the information provided by the
 	/// BRERuleContext object.
 	/// </summary>
-	/// <P>
-	/// <PRE>
-	/// CHANGELOG:
-	/// v1.0	- Added setRuleParams(Map)
-	/// v1.01	- Changed executeRule to throw Exception
-	/// Removes setRuleParams and instead added a Map param to
-	/// executeRule
-	/// </PRE>
-	/// </P>
 	/// <author>  Sloan Seaman
 	/// </author>
 	public interface IBRERuleFactory
