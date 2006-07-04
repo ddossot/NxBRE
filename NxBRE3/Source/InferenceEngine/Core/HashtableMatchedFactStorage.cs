@@ -27,6 +27,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// This can not be changed if the storage already contains data. It must be set before any usage of the engine else
 		/// unpredictible results may occur.
 		/// </remarks>
+		//TODO: make this a global parameter
 		public static bool StrictTyping {
 			get {
 				return strictTyping;
