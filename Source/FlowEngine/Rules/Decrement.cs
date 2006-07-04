@@ -7,29 +7,7 @@ namespace NxBRE.FlowEngine.Rules
 	using NxBRE.FlowEngine;
 
 	/// <summary> This class is designed to be used to decrement everytime the executeRule is called
-	/// <P>
-	/// This class takes the following parameter:</P><P>
-	/// StartIdx - The initial starting index (defaults to 0).
-	/// </P>
-	/// <P>
-	/// Example:
-	/// </P>
-	/// <PRE>
-	/// <Rule id="VALUE1" factory="NxBRE.FlowEngine.rule.helpers.Decrement">
-	/// <Parameter name="StartIdx" value="1"/>
-	/// </Rule>
-	/// </PRE>
-	/// <P>
-	/// <B>NOTE:</B>
-	/// This will only decrement if you pass a Decrement parameter.
-	/// Otherwise it returns the current value
-	/// </P>
-	/// *
 	/// </summary>
-	/// <PRE>
-	/// CHANGELOG:
-	/// v1.5	- Created
-	/// </PRE>
 	/// <author>  Sloan Seaman
 	/// </author>
 	public class Decrement : IBRERuleFactory, IInitializable

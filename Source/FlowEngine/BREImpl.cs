@@ -104,13 +104,6 @@ namespace NxBRE.FlowEngine
 	/// </remarks>
 	/// <author>  Sloan Seaman </author>
 	/// <author>  David Dossot </author>
-	/// <P>
-	/// <PRE>
-	/// CHANGELOG:
-	/// Moved to README
-	/// *
-	/// </PRE>
-	/// </P>
 	public sealed class BREImpl : AbstractLogExceptionDispatcher, IFlowEngine
 	{
 		// XML Related info

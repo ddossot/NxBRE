@@ -13,18 +13,9 @@ namespace NxBRE.FlowEngine.Core
 	/// If a developer wishes to extend this in some way they should use
 	/// AbstractBRERuleContext instead since it is designed to be added on to.
 	/// </P>
-	/// *
 	/// </summary>
 	/// <seealso cref="NxBRE.FlowEngine.AbstractBRERuleContext">
 	/// </seealso>
-	/// <P>
-	/// <PRE>
-	/// CHANGELOG:
-	/// v1.6	- Removed param methods.  Changed Iterator
-	/// methods to return Maps
-	/// *
-	/// </PRE>
-	/// </P>
 	/// <author>  Sloan Seaman </author>
 	/// <author>  David Dossot </author>
 	internal sealed class BRERuleContextImpl:AbstractBRERuleContext

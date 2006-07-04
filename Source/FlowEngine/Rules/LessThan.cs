@@ -7,14 +7,7 @@ namespace NxBRE.FlowEngine.Rules
 	using NxBRE.FlowEngine;
 
 	/// <summary> Compares two objects to see if one is less than the other
-	/// *
 	/// </summary>
-	/// <P>
-	/// <PRE>
-	/// CHANGELOG:
-	/// v1.5	- Created
-	/// </PRE>
-	/// </P>
 	/// <author>  Sloan Seaman
 	/// </author>
 	public sealed class LessThan : IBREOperator, IInitializable

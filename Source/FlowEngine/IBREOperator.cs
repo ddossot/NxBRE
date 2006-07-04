@@ -5,19 +5,11 @@ namespace NxBRE.FlowEngine
 	/// <summary> This interface defines the comparison methods used by operators from
 	/// within the Compare tag
 	/// </summary>
-	/// <P>
-	/// <PRE>
-	/// CHANGELOG:
-	/// v1.6.1	- Now can throw exceptions
-	/// v1.5	- Created
-	/// </PRE>
-	/// </P>
 	/// <author>  Sloan Seaman
 	/// </author>
 	public interface IBREOperator
 		{
 			/// <summary> Method to compare one object against another
-			/// *
 			/// </summary>
 			/// <param name="aBRC">The BRERuleContext object containing all the state
 			/// information for use by this method.

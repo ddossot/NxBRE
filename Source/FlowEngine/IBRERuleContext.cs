@@ -9,10 +9,6 @@ namespace NxBRE.FlowEngine
 	/// access to specific information they may require for their business
 	/// decisions.
 	/// </summary>
-	/// CHANGELOG:
-	/// v1.6	- Removed param methods.  Changed Iterator methods to return Maps
-	/// *
-	/// *
 	/// <author>  Sloan Seaman </author>
 	/// <author>  David Dossot </author>
 	public interface IBRERuleContext : ICloneable

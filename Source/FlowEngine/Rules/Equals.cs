@@ -7,13 +7,6 @@ namespace NxBRE.FlowEngine.Rules
 
 	/// <summary> Compares two objects to see if they are equal.
 	/// </summary>
-	/// <P>
-	/// <PRE>
-	/// CHANGELOG:
-	/// v1.5	- Created
-	/// </PRE>
-	/// </P>
-	/// *
 	/// <author>  Sloan Seaman
 	/// </author>
 	public sealed class Equals : IBREOperator

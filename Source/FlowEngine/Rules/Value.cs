@@ -11,40 +11,7 @@ namespace NxBRE.FlowEngine.Rules
 	/// <P>
 	/// The value can be of any type and of any value.
 	/// </P>
-	/// <P>
-	/// This class takes the following parameters:</P><P>
-	/// Type - The type of the set (i.e java.lang.* or your own, optionally suffixed with the assembly name)
-	/// Value - The value to be set for basic primitives</P><P>
-	/// - or -
-	/// ArgumentX - The argument(s) to be passed to the constructor
-	/// </P>
-	/// <P>
-	/// Example:
-	/// <PRE>
-	/// <Rule id="VALUE1" factory="NxBRE.FlowEngine.rule.helpers.Value">
-	/// <Parameter name="Value" value="5"/>
-	/// <Parameter name="Type" value="System.Int32"/>
-	/// </Rule>
-	/// <Rule id="VALUE2" factory="NxBRE.FlowEngine.rule.helpers.Value">
-	/// <Parameter name="Type" value="test.MyClass,MyAssembly"/>
-	/// <Parameter name="Argument0" value="a_string"/>
-	/// <Parameter name="Argument1" ruleValue="an_object"/>
-	/// <Parameter name="Argument2" value="5.25" type="System.Double"/>
-	/// </Rule>
-	/// </PRE>
-	/// </P>
-	/// *
 	/// </summary>
-	/// <P>
-	/// <PRE>
-	/// CHANGELOG:
-	/// v1.5	- Created
-	/// v1.6	- Made final
-	/// v1.7	- Changed aMap.get(VALUE) to aMap.get(VALUE).toString()
-	/// v2.2  - Corrected bug 1044404 (Assert doesnt support empty constructor)
-	/// </PRE>
-	/// </P>
-	/// *
 	/// <author>  Sloan Seaman
 	/// </author>
 	public sealed class Value : IBRERuleFactory

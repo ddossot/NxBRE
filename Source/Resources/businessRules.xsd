@@ -1,22 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- VERSION HISTORY 
-1.0		- All Messed up. Don't even worry about it
-1.0.1	- Fixed most issues. Added <Logic> Tag
-1.0.2	- Now allows nested If/Else If/Else blocks within <Do> Tags....
-		  	Removed DoType xs:complexType
-1.5		- Changed Compare tag to support used defined operators
-		  	Added Log tag
-1.6		- While loop added
-1.7		- Moved Log tag to one ComplexType
-		  	Added Set tag
-1.8		- Added type to ParameterAttributes and InvokeSet
-		 		Added NOT in ConditionTypeList
-1.8.2	- Renamed JxBREType to NxBREType
-			- Added BusinessRulesType and Removed Set from NxBREType (Set can only be under the root)
-			- Added attribute ruleValue on InvokeSet
-			- Added attribute msgId on Log
-1.8.3	- Added ForEach and Retract
--->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	<!-- MAIN ELEMENT -->
 	<xs:element name="BusinessRules" type="BusinessRulesType"/>

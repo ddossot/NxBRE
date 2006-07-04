@@ -6,14 +6,7 @@ namespace NxBRE.FlowEngine.Rules
 	using NxBRE.FlowEngine;
 
 	/// <summary> Checks if one object is the instance of another
-	/// *
 	/// </summary>
-	/// <P>
-	/// <PRE>
-	/// CHANGELOG:
-	/// v1.5	- Created
-	/// </PRE>
-	/// </P>
 	/// <author>  Sloan Seaman </author>
 	/// <author>  David Dossot </author>
 	public sealed class InstanceOf : IBREOperator
