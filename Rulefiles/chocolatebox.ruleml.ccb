@@ -1,11 +1,11 @@
-namespace org.nxbre.test.ie
+namespace NxBRE.Test.InferenceEngine
 {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.ie.adapters;
-	using org.nxbre.ie.core;
-	using org.nxbre.ie.rule;
+	using NxBRE.InferenceEngine;
+	using NxBRE.InferenceEngine.IO;
+	using NxBRE.InferenceEngine.Rules;
 	
 	public class ChocolateBoxBinder:AbstractBinder {
 		public ChocolateBoxBinder():base(BindingTypes.BeforeAfter) {}

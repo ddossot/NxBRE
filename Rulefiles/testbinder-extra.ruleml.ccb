@@ -1,12 +1,13 @@
-namespace org.nxbre.test.ie
+namespace NxBRE.Test.InferenceEngine
 {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.ie.adapters;
-	using org.nxbre.ie.core;
-	using org.nxbre.ie.rule;
-	using org.nxbre.util;
+	using NxBRE.InferenceEngine;
+	using NxBRE.InferenceEngine.IO;
+	using NxBRE.InferenceEngine.Rules;
+
+	using NxBRE.Util;
 	
 	public class ExtraTestBinder:AbstractBinder {
 		public ExtraTestBinder():base(BindingTypes.BeforeAfter) {}

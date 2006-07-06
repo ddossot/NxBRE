@@ -1,11 +1,11 @@
-namespace org.nxbre.examples
+namespace NxBRE.Examples
 {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.ie.adapters;
-	using org.nxbre.ie.core;
-	using org.nxbre.ie.rule;
+	using NxBRE.InferenceEngine;
+	using NxBRE.InferenceEngine.IO;
+	using NxBRE.InferenceEngine.Rules;
 	
 	public class CompiledCustomBinder:AbstractBinder {
 		public CompiledCustomBinder():base(BindingTypes.BeforeAfter) {}

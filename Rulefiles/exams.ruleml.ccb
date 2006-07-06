@@ -1,9 +1,9 @@
-namespace org.nxbre.examples
+namespace NxBRE.Examples
 {
 	using System;
 	
-	using org.nxbre.ie.adapters;
-	using org.nxbre.ie.core;
+	using NxBRE.InferenceEngine;
+	using NxBRE.InferenceEngine.IO;
 	
 	public class ExamsBinder:AbstractBinder {
 		public ExamsBinder():base(BindingTypes.BeforeAfter) {}
