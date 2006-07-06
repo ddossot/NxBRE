@@ -63,7 +63,7 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.LoadRuleBase(new RuleML09NafDatalogAdapter(inFile, FileAccess.Read));
 			ie.SaveRuleBase(new RuleML09NafDatalogAdapter(outFile, FileAccess.Write, sfa));
 
-			Assert.IsTrue(TestAdapter.AreXmlOfSameLength(inFile, outFile), "Same XML file lengths");
+			Assert.IsTrue(TestAdapter.AreSameXml(inFile, outFile), "Same XML file lengths");
 		}
 	
 		[Test]

@@ -22,13 +22,22 @@ namespace NxBRE.Test.InferenceEngine {
 			ruleFilesFolder = Parameter.GetString("unittest.ruleml.inputfolder") + "/";
 		}
 		
-		public static bool AreXmlOfSameLength(string fileName1, string fileName2) {
+		private static void CleanAndNormalize(XmlDocument document) {
+			XmlNodeList comments = document.SelectNodes("//comment()");
+			foreach(XmlNode comment in comments) comment.ParentNode.RemoveChild(comment);
+			document.Normalize();
+		}
+		
+		public static bool AreSameXml(string fileName1, string fileName2) {
 			XmlDocument doc1 = new XmlDocument();
 			doc1.Load(fileName1);
+			CleanAndNormalize(doc1);
 			
 			XmlDocument doc2 = new XmlDocument();
 			doc2.Load(fileName2);
+			CleanAndNormalize(doc2);
 			
+			// for now we compare only the size, which is pretty accurate
 			return (doc1.OuterXml.Length == doc2.OuterXml.Length);
 		}
 		
@@ -96,7 +105,7 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.SaveRuleBase(new RuleML086DatalogAdapter(outFile, FileAccess.Write));
 
 			// for now, compare only the size
-			Assert.IsTrue(AreXmlOfSameLength(ruleFilesFolder + "endlessloop.ruleml", outFile), "Same XML size");
+			Assert.IsTrue(AreSameXml(ruleFilesFolder + "endlessloop.ruleml", outFile), "Same XML");
 		}
 	
 		[Test]
@@ -108,7 +117,7 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.SaveRuleBase(new RuleML086NafDatalogAdapter(outFile, FileAccess.Write));
 
 			// for now, compare only the size
-			Assert.IsTrue(AreXmlOfSameLength(inFile, outFile), "Same XML size");
+			Assert.IsTrue(AreSameXml(inFile, outFile), "Same XML");
 		}
 	
 		[Test]
@@ -120,7 +129,7 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.SaveRuleBase(new RuleML09NafDatalogAdapter(outFile, FileAccess.Write));
 
 			// for now, compare only the size
-			Assert.IsTrue(AreXmlOfSameLength(inFile, outFile), "Same XML size");
+			Assert.IsTrue(AreSameXml(inFile, outFile), "Same XML: " + inFile + " and " + outFile);
 		}
 		
 		[Test][ExpectedException(typeof(BREException))]

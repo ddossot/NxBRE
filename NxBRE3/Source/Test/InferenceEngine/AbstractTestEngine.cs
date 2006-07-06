@@ -131,7 +131,7 @@ namespace NxBRE.Test.InferenceEngine {
 			
 			int i = 0;
 			if (logThreshold == LogEventImpl.DEBUG) Console.WriteLine("-(Query Results) -");
-			foreach(Fact[] facts in qrs) {
+			foreach(IList<Fact> facts in qrs) {
 				i++;
 				if (logThreshold == LogEventImpl.DEBUG) Console.WriteLine(" (Result #{0})", i);
 				foreach(Fact fact in facts) {

@@ -315,10 +315,7 @@ namespace NxBRE.Test.InferenceEngine {
 			qrs = ie.RunQuery(new Query(new AtomGroup(AtomGroup.LogicalOperator.And,
 			                                          new Atom("isValid", new Variable("account")))));
 			Assert.AreEqual(1, qrs.Count, "Query Size");
-			if (qrs.Count > 0)
-				Assert.AreEqual(a9876,
-				                ((Individual)((Fact[])qrs[0])[0].Members[0]).Value,
-				                "Correct Result");
+			if (qrs.Count > 0) Assert.AreEqual(a9876, qrs[0][0].Members[0].Value, "Correct Result");
 		}
 		
 		[Test]
@@ -343,16 +340,12 @@ namespace NxBRE.Test.InferenceEngine {
 			qrs = ie.RunQuery("Operator e");
 			Assert.AreEqual(1, qrs.Count, "Operator e: Query Size");
 			if (qrs.Count > 0)
-				Assert.AreEqual(a100,
-				                ((Individual)((Fact[])qrs[0])[0].Members[0]).Value,
-				                "Operator e: Correct Result");
+				Assert.AreEqual(a100, qrs[0][0].Members[0].Value, "Operator e: Correct Result");
 
 			qrs = ie.RunQuery("Operator gt");
 			Assert.AreEqual(1, qrs.Count, "Operator gt: Query Size");
 			if (qrs.Count > 0)
-				Assert.AreEqual(a200,
-				                ((Individual)((Fact[])qrs[0])[0].Members[0]).Value,
-				                "Operator gt: Correct Result");
+				Assert.AreEqual(a200, qrs[0][0].Members[0].Value, "Operator gt: Correct Result");
 			
 			qrs = ie.RunQuery("Operator gte");
 			Assert.AreEqual(2, qrs.Count, "Operator gte: Query Size");
@@ -360,9 +353,7 @@ namespace NxBRE.Test.InferenceEngine {
 			qrs = ie.RunQuery("Operator lt");
 			Assert.AreEqual(1, qrs.Count, "Operator lt: Query Size");
 			if (qrs.Count > 0)
-				Assert.AreEqual(a50,
-				                ((Individual)((Fact[])qrs[0])[0].Members[0]).Value,
-				                "Operator lt: Correct Result");
+				Assert.AreEqual(a50, qrs[0][0].Members[0].Value, "Operator lt: Correct Result");
 			
 			qrs = ie.RunQuery("Operator lte");
 			Assert.AreEqual(2, qrs.Count, "Operator lte: Query Size");
@@ -789,11 +780,7 @@ namespace NxBRE.Test.InferenceEngine {
 			qrs = ie.RunQuery(new Query(new AtomGroup(AtomGroup.LogicalOperator.And,
 			                                          new Atom("expressionAssertionResults", new Variable("result"), new Individual("done")))));
 			Assert.AreEqual(1, qrs.Count, "Query Size");
-			if (qrs.Count > 0)
-				Assert.AreEqual(result,
-				                ((Individual)((Fact[])qrs[0])[0].Members[0]).Value,
-				                "Correct Typed Result");
-			
+			if (qrs.Count > 0) Assert.AreEqual(result, qrs[0][0].Members[0].Value, "Correct Typed Result");
 		}
 
 		[Test]
@@ -839,17 +826,13 @@ namespace NxBRE.Test.InferenceEngine {
 			                                          new Atom("Contract Details", new Individual(referenceA), new Variable("Next Renewal Date"), new Variable("Period Months")))));
 			Assert.AreEqual(1, qrs.Count, "Query 'A' Size");
 			if (qrs.Count > 0)
-				Assert.AreEqual(nextRenewalDateA,
-				                ((Individual)((Fact[])qrs[0])[0].Members[1]).Value,
-				                "Correct Typed 'A' Result");
+				Assert.AreEqual(nextRenewalDateA, qrs[0][0].Members[1].Value, "Correct Typed 'A' Result");
 			
 			qrs = ie.RunQuery(new Query(new AtomGroup(AtomGroup.LogicalOperator.And,
 			                                          new Atom("Contract Details", new Individual(referenceA), new Variable("Next Renewal Date"), new Variable("Period Months")))));
 			Assert.AreEqual(1, qrs.Count, "Query 'B' Size");
 			if (qrs.Count > 0)
-				Assert.AreEqual(nextRenewalDateA,
-				                ((Individual)((Fact[])qrs[0])[0].Members[1]).Value,
-				                "Correct Typed 'B' Result");
+				Assert.AreEqual(nextRenewalDateA, qrs[0][0].Members[1].Value, "Correct Typed 'B' Result");
 			
 		}
 
@@ -990,7 +973,7 @@ namespace NxBRE.Test.InferenceEngine {
 			                                          new Atom("may look at", new Variable("who"), new Variable("where")))));
 			Assert.AreEqual(1, qrs.Count, "Query 'B' Size");
 			
-			Fact result = ((Fact[])qrs[0])[0];
+			Fact result = qrs[0][0];
 			
 			Assert.AreEqual("fred", result.GetPredicateValue(0));
 			
