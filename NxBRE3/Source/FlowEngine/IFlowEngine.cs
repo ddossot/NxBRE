@@ -12,6 +12,7 @@ namespace NxBRE.FlowEngine
 	/// </summary>
 	/// <author>David Dossot</author>
 	public interface IFlowEngine : IInitializable, IBREDispatcher, ICloneable
+		//TODO: remove the inheritance of IInitializable and IBREDispatcher
 		{
 			/// <summary> Returns or Sets the RuleContext in it's current state.
 			/// If the developer wishes to have a private copy, make sure
@@ -50,12 +51,13 @@ namespace NxBRE.FlowEngine
 			/// </returns>
 			bool Process();
 			
+			
 			/// <summary> Execute the BRE but only do all the globals and a certain set.
 			/// </summary>
+			/// <param name="setId">The ID of the set to execute</param>
 			/// <returns> True if successful, False otherwise
 			/// </returns>
-			//FIXME: do not use object but a typed data!
-			bool Process(object aId);
+			bool Process(string setId);
 			
 			/// <summary> Violently stop the BRE 
 			/// </summary>

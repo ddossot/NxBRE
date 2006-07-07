@@ -382,7 +382,7 @@ namespace NxBRE.FlowEngine
 		/// <returns> True if successful, False otherwise
 		/// 
 		/// </returns>
-		public bool Process(object aId)
+		public bool Process(string setId)
 		{
 			if (!initialized)
 				throw new BREException("Process in not available if BRE is not initialized.");
@@ -390,10 +390,10 @@ namespace NxBRE.FlowEngine
 			bool wasRunning = running;
 			
 			// an empty string is of no interest
-			if ((aId != null) && ((string)aId == String.Empty)) aId = null;
+			if (setId == String.Empty) setId = null;
 			
 			DispatchLog("BRE Processing"
-			            + ((aId == null)?String.Empty:" Set: " + aId.ToString())
+			            + ((setId == null)?String.Empty:" Set: " + setId)
 			            + ((wasRunning)?" (Re-entrant)":String.Empty),
 			            LogEventImpl.INFO);
 			
@@ -404,9 +404,9 @@ namespace NxBRE.FlowEngine
 			
 			if (!running) running = true;
 
-			ProcessXML(GetXmlDocumentRules(), aId, null);
+			ProcessXML(GetXmlDocumentRules(), setId, null);
 			DispatchLog("BRE Finished"
-			            + ((aId == null)?String.Empty:" Set: " + aId.ToString())
+			            + ((setId == null)?String.Empty:" Set: " + setId)
 			            + ((wasRunning)?" (Re-entrant)":String.Empty),
 			            LogEventImpl.INFO);
 			
@@ -489,7 +489,7 @@ namespace NxBRE.FlowEngine
 		/// <returns> True if successful, False otherwise
 		/// 
 		/// </returns>
-		private object ProcessXML(XPathNavigator aNode, object aSetId, object aObj)
+		private object ProcessXML(XPathNavigator aNode, string aSetId, object aObj)
 		{
 			if ((aNode == null) || (!running)) return null;
 			
@@ -636,7 +636,7 @@ namespace NxBRE.FlowEngine
 		/// <returns>s The object returned by processXML
 		/// 
 		/// </returns>
-		private object DoRecursion(XPathNavigator aNode, object aSetId, object aObj)
+		private object DoRecursion(XPathNavigator aNode, string aSetId, object aObj)
 		{
 			object o = null;
 
@@ -695,7 +695,7 @@ namespace NxBRE.FlowEngine
 		/// <returns> True if the If stmt passes, False otherwise
 		/// 
 		/// </returns>
-		private System.Boolean ProcessConditionNode(XPathNavigator aNode, object aSetId, object aObj)
+		private System.Boolean ProcessConditionNode(XPathNavigator aNode, string aSetId, object aObj)
 		{
 			bool returnBool = true;
 			bool childrenBool = true;
