@@ -1,0 +1,34 @@
+﻿Microsoft Visual Studio Solution File, Format Version 9.00
+# SharpDevelop 2.0.0.1462
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Discount", "Discount\Discount.csproj", "{2DFD86E8-74E1-4E2E-A692-0FEEA13FD0DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fraudcontrol", "Fraudcontrol\Fraudcontrol.csproj", "{FB24E7EF-CA48-4B4A-936D-AC1FA711968D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Login", "Login\Login.csproj", "{FFD946CF-3E78-415C-98E7-9A7B5B4E017F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telco", "Telco\Telco.csproj", "{C7AA9F9E-0663-497F-8099-C62DF7A0EBD8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2DFD86E8-74E1-4E2E-A692-0FEEA13FD0DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DFD86E8-74E1-4E2E-A692-0FEEA13FD0DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DFD86E8-74E1-4E2E-A692-0FEEA13FD0DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DFD86E8-74E1-4E2E-A692-0FEEA13FD0DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB24E7EF-CA48-4B4A-936D-AC1FA711968D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB24E7EF-CA48-4B4A-936D-AC1FA711968D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB24E7EF-CA48-4B4A-936D-AC1FA711968D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB24E7EF-CA48-4B4A-936D-AC1FA711968D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFD946CF-3E78-415C-98E7-9A7B5B4E017F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFD946CF-3E78-415C-98E7-9A7B5B4E017F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFD946CF-3E78-415C-98E7-9A7B5B4E017F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFD946CF-3E78-415C-98E7-9A7B5B4E017F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7AA9F9E-0663-497F-8099-C62DF7A0EBD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7AA9F9E-0663-497F-8099-C62DF7A0EBD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7AA9F9E-0663-497F-8099-C62DF7A0EBD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7AA9F9E-0663-497F-8099-C62DF7A0EBD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+EndGlobal
