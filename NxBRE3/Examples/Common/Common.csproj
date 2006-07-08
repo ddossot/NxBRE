@@ -1,11 +1,11 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>Discount</RootNamespace>
-    <AssemblyName>Discount</AssemblyName>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Common</RootNamespace>
+    <AssemblyName>Common</AssemblyName>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2DFD86E8-74E1-4E2E-A692-0FEEA13FD0DF}</ProjectGuid>
+    <ProjectGuid>{EA3874A3-E6C9-45DD-B037-6882C1076920}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -27,22 +27,9 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="NxBRE">
-      <HintPath>..\..\Source\bin\Debug\NxBRE.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Order.cs" />
-    <Compile Include="CalculateTotal.cs" />
-    <Compile Include="Discount.cs" />
-    <Compile Include="MainClass.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{EA3874A3-E6C9-45DD-B037-6882C1076920}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
+    <Compile Include="Arguments.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>
