@@ -3,8 +3,7 @@ namespace NxBRE.InferenceEngine {
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
-
-	using net.ideaity.util.events;
+	using System.Diagnostics;
 
 	using NxBRE.InferenceEngine.Core;
 	using NxBRE.InferenceEngine.IO;
@@ -71,7 +70,7 @@ namespace NxBRE.InferenceEngine {
 	/// customization should take place for feeding the engine with rules from other sources than
 	/// RuleML files.
 	/// </remarks>
-	public sealed class IEImpl:AbstractLogDispatcher, IInferenceEngine {
+	public sealed class IEImpl:IInferenceEngine {
 		
 		/// <summary>
 		/// The event to subscribe in order to be notified of assertion of facts.
@@ -153,7 +152,7 @@ namespace NxBRE.InferenceEngine {
 					DeleteFactHandler += bob.OnDeleteFact;
 					ModifyFactHandler += bob.OnModifyFact;
 					
-					if (HasLogListener) ForceDispatchLog("NxBRE Flow Engine Binder Initialized", LogEventImpl.INFO);
+					if (Misc.TRACE_SWITCH.TraceInfo) Trace.TraceInformation("NxBRE Flow Engine Binder Initialized");
 				}
 				else if (value == null)
 					bob = null;
@@ -317,8 +316,7 @@ namespace NxBRE.InferenceEngine {
 		/// </remarks>
 		/// <see cref="NxBRE.InferenceEngine.IO.IRuleBaseAdapter"/>
 		public void LoadRuleBase(IRuleBaseAdapter adapter, IBinder businessObjectsBinder) {
-			if (HasLogListener) ForceDispatchLog("NxBRE Inference Engine Rule Base Loading Started, using adapter " + adapter.GetType().FullName,
-			            													LogEventImpl.INFO);
+			if (Misc.TRACE_SWITCH.TraceInfo) Trace.TraceInformation("NxBRE Inference Engine Rule Base Loading Started, using adapter " + adapter.GetType().FullName);
 			
 			using(adapter) {
 				// reset the WM
@@ -332,14 +330,18 @@ namespace NxBRE.InferenceEngine {
 
 				// currently only forward chaining is supported
 				direction = adapter.Direction;
-				if (direction == "backward")
+				if (direction == "backward") {
 					throw new BREException("NxBRE does not support backward chaining");
-				else if (direction == String.Empty)
-					if (HasLogListener) ForceDispatchLog("NxBRE interprets no-direction directive as forward chaining.", LogEventImpl.WARN);
-				else if (direction == "bidirectional")
-					if (HasLogListener) ForceDispatchLog("NxBRE interprets bidirectional as forward chaining.", LogEventImpl.WARN);
-				else if (direction != "forward")
+				}
+				else if (direction == String.Empty) {
+					if (Misc.TRACE_SWITCH.TraceWarning) Trace.TraceWarning("NxBRE interprets no-direction directive as forward chaining.");
+				}
+				else if (direction == "bidirectional") {
+					if (Misc.TRACE_SWITCH.TraceWarning) Trace.TraceWarning("NxBRE interprets bidirectional as forward chaining.");
+				}
+				else if (direction != "forward") {
 					throw new BREException("NxBRE does not support direction: "+direction);
+				}
 				
 				// sets the label
 				label = adapter.Label;
@@ -347,12 +349,12 @@ namespace NxBRE.InferenceEngine {
 				// load the Equivalents and IntegrityQueries if the adapter supports it
 				if (adapter is IExtendedRuleBaseAdapter) {
 					equivalents = ((IExtendedRuleBaseAdapter)adapter).Equivalents;
-					if (HasLogListener) ForceDispatchLog("Loaded " + equivalents.Count + " Equivalents", LogEventImpl.DEBUG);
+					if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("Loaded " + equivalents.Count + " Equivalents");
 					
 					integrityQueries = ((IExtendedRuleBaseAdapter)adapter).IntegrityQueries;
 					foreach(Query integrityQuery in integrityQueries) WM.FB.RegisterAtoms(integrityQuery.AtomGroup.AllAtoms);
 				
-					if (HasLogListener) ForceDispatchLog("Loaded " + integrityQueries.Count + " IntegrityQueries", LogEventImpl.DEBUG);
+					if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("Loaded " + integrityQueries.Count + " IntegrityQueries");
 				}
 				else {
 					equivalents = new ArrayList();
@@ -373,39 +375,40 @@ namespace NxBRE.InferenceEngine {
 					QB.Add(query);
 					WM.FB.RegisterAtoms(query.AtomGroup.AllAtoms);
 				}
-				if (HasLogListener) ForceDispatchLog("Loaded " + QB.Count + " Queries", LogEventImpl.DEBUG);
+				if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("Loaded " + QB.Count + " Queries");
 				
 				// load implications
 				foreach(Implication implication in adapter.Implications) {
 					IB.Add(implication);
 					int nbRA = WM.FB.RegisterAtoms(implication.AtomGroup.AllAtoms);
-					if (HasLogListener) ForceDispatchLog("Registered: " + nbRA + " body atoms", LogEventImpl.DEBUG);
+					if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("Registered: " + nbRA + " body atoms");
 					
 					// modifying implication must run searches based on their deduction, so must register the atom
 					if (implication.Action == ImplicationAction.Modify) {
 						nbRA = WM.FB.RegisterAtoms(implication.Deduction);
-						if (HasLogListener) ForceDispatchLog("Registered: " + nbRA + " head atoms", LogEventImpl.DEBUG);
+						if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("Registered: " + nbRA + " head atoms");
 					}
 				}
-				if (HasLogListener) ForceDispatchLog("Loaded " + IB.Count + " Implications\n", LogEventImpl.DEBUG);
+				if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("Loaded " + IB.Count + " Implications\n");
 				
 				// load mutexes
 				mm.AnalyzeImplications();
-				if (HasLogListener) ForceDispatchLog("Loaded Mutexes\n" + mm.ToString(), LogEventImpl.DEBUG);
+				if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("Loaded Mutexes\n" + mm.ToString());
 				
 				// load preconditions
 				pm.AnalyzeImplications();
-				if (HasLogListener) ForceDispatchLog("Loaded Preconditions\n" + pm.ToString(), LogEventImpl.DEBUG);
+				if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("Loaded Preconditions\n" + pm.ToString());
 				
 				// load facts
 				foreach(Fact fact in adapter.Facts) Assert(fact);
-				if (HasLogListener) ForceDispatchLog("Loaded " + WM.FB.Count + " Facts", LogEventImpl.DEBUG);
+				if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("Loaded " + WM.FB.Count + " Facts");
 				
 				// finish the WM init
 				WM.FinishInitialization();
 				
 			} //end: using adapter
-			if (HasLogListener) ForceDispatchLog("NxBRE Inference Engine Rule Base Loading Finished", LogEventImpl.INFO);
+			
+			if (Misc.TRACE_SWITCH.TraceInfo) Trace.TraceInformation("NxBRE Inference Engine Rule Base Loading Finished");
 		}
 		
 		/// <summary>
@@ -418,8 +421,8 @@ namespace NxBRE.InferenceEngine {
 		/// <see cref="NxBRE.InferenceEngine.IO.IRuleBaseAdapter"/>
 		public void SaveRuleBase(IRuleBaseAdapter adapter) {
 			CheckInitialized();
-			if (HasLogListener) ForceDispatchLog("NxBRE Inference Engine Rule Base Saving Started, using adapter " + adapter.GetType().FullName,
-			            													LogEventImpl.INFO);
+			
+			if (Misc.TRACE_SWITCH.TraceInfo) Trace.TraceInformation("NxBRE Inference Engine Rule Base Saving Started, using adapter " + adapter.GetType().FullName);
 			
 			using(adapter) {
 				// header
@@ -448,7 +451,7 @@ namespace NxBRE.InferenceEngine {
 				adapter.Facts = facts;
 			}
 			
-			if (HasLogListener) ForceDispatchLog("NxBRE Inference Engine Rule Base Saving Finished", LogEventImpl.INFO);
+			if (Misc.TRACE_SWITCH.TraceInfo) Trace.TraceInformation("NxBRE Inference Engine Rule Base Saving Finished");
 		}
 		
 		/// <summary>
@@ -461,8 +464,8 @@ namespace NxBRE.InferenceEngine {
 		/// <param name="adapter">The Adapter used to read the fact base.</param>
 		public void LoadFacts(IFactBaseAdapter adapter) {
 			CheckInitialized();
-			if (HasLogListener) ForceDispatchLog("NxBRE Inference Engine Facts Loading Started, using adapter " + adapter.GetType().FullName,
-			            													LogEventImpl.INFO);
+			
+			if (Misc.TRACE_SWITCH.TraceInfo) Trace.TraceInformation("NxBRE Inference Engine Facts Loading Started, using adapter " + adapter.GetType().FullName);
 			
 			using(adapter) {
 				// sets the eventual Binder
@@ -471,10 +474,11 @@ namespace NxBRE.InferenceEngine {
 				// load facts
 				int initialFactsCount = WM.FB.Count;
 				foreach(Fact fact in adapter.Facts) Assert(fact);
-				if (HasLogListener) ForceDispatchLog("Added " + (WM.FB.Count - initialFactsCount) + " new Facts", LogEventImpl.DEBUG);
+				if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("Added " + (WM.FB.Count - initialFactsCount) + " new Facts");
 				
 			} //end: using adapter
-			if (HasLogListener) ForceDispatchLog("NxBRE Inference Engine Facts Loading Finished", LogEventImpl.INFO);
+
+			if (Misc.TRACE_SWITCH.TraceInfo) Trace.TraceInformation("NxBRE Inference Engine Facts Loading Finished");
 		}
 
 		/// <summary>
@@ -487,8 +491,9 @@ namespace NxBRE.InferenceEngine {
 		/// <param name="adapter">The Adapter used to save the fact base.</param>
 		public void SaveFacts(IFactBaseAdapter adapter) {
 			CheckInitialized();
-			if (HasLogListener) ForceDispatchLog("NxBRE Inference Engine Facts Saving Started, using adapter " + adapter.GetType().FullName,
-			            													LogEventImpl.INFO);
+
+			if (Misc.TRACE_SWITCH.TraceInfo) Trace.TraceInformation("NxBRE Inference Engine Facts Saving Started, using adapter " + adapter.GetType().FullName);
+			
 			using(adapter) {
 				// header
 				adapter.Direction = Direction;
@@ -500,7 +505,7 @@ namespace NxBRE.InferenceEngine {
 				adapter.Facts = facts;
 			} //end: using adapter
 			
-			if (HasLogListener) ForceDispatchLog("NxBRE Inference Engine Facts Saving Finished", LogEventImpl.INFO);
+			if (Misc.TRACE_SWITCH.TraceInfo) Trace.TraceInformation("NxBRE Inference Engine Facts Saving Finished");
 		}
 
 		/// <summary>
@@ -552,7 +557,7 @@ namespace NxBRE.InferenceEngine {
 			
 			iteration = 0;
 
-			if (HasLogListener) ForceDispatchLog("NxBRE Inference Engine Processing Started", LogEventImpl.INFO);
+			if (Misc.TRACE_SWITCH.TraceInfo) Trace.TraceInformation("NxBRE Inference Engine Processing Started");
 			
 			if (businessObjects == null)
 				InferUntilNoNewFact(new ArrayList());
@@ -564,10 +569,11 @@ namespace NxBRE.InferenceEngine {
 				long iniTime = DateTime.Now.Ticks;
 				Binder.BusinessObjects = businessObjects;
 				Binder.BeforeProcess();
-				if (HasLogListener) ForceDispatchLog("NxBRE Binder 'BeforeProcess' Done in " +
-																            (long)(DateTime.Now.Ticks - iniTime)/10000 +
-															            	" milliseconds", LogEventImpl.INFO);
 				
+				if (Misc.TRACE_SWITCH.TraceInfo) Trace.TraceInformation("NxBRE Binder 'BeforeProcess' Done in " +
+																										            (long)(DateTime.Now.Ticks - iniTime)/10000 +
+																									            	" milliseconds");
+
 				bool binderIterate = true;
 				ArrayList positiveImplications = new ArrayList();
 				
@@ -581,12 +587,12 @@ namespace NxBRE.InferenceEngine {
 					Binder.AfterProcess();
 					binderIterate = WM.FB.ModifiedFlag;			
 
-					if (HasLogListener) ForceDispatchLog("NxBRE Binder 'AfterProcess' Done in " +
-																	            (long)(DateTime.Now.Ticks - iniTime)/10000 +
-																            	" milliseconds with " +
-																            	(binderIterate?"":"no ") +
-																            	"new fact(s) detected",
-																            	LogEventImpl.INFO);
+					if (Misc.TRACE_SWITCH.TraceInfo) Trace.TraceInformation("NxBRE Binder 'AfterProcess' Done in " +
+																											            (long)(DateTime.Now.Ticks - iniTime)/10000 +
+																										            	" milliseconds with " +
+																										            	(binderIterate?"":"no ") +
+																										            	"new fact(s) detected");
+
 				
 				} // while binderIterate			
 			}
@@ -595,9 +601,10 @@ namespace NxBRE.InferenceEngine {
 				long iniTime = DateTime.Now.Ticks;
 				Binder.BusinessObjects = businessObjects;
 				Binder.ControlProcess();
-				if (HasLogListener) ForceDispatchLog("NxBRE Binder 'ControlProcess' Done in " +
-																            (long)(DateTime.Now.Ticks - iniTime)/10000 +
-															            	" milliseconds", LogEventImpl.INFO);
+
+				if (Misc.TRACE_SWITCH.TraceInfo) Trace.TraceInformation("NxBRE Binder 'ControlProcess' Done in " +
+																										            (long)(DateTime.Now.Ticks - iniTime)/10000 +
+																									            	" milliseconds");
 			}
 			
 			else
@@ -606,7 +613,7 @@ namespace NxBRE.InferenceEngine {
 				                       " ; Binder=" +
 				                       Binder);
 
-			if (HasLogListener) ForceDispatchLog("NxBRE Inference Engine Processing Finished", LogEventImpl.INFO);			
+			if (Misc.TRACE_SWITCH.TraceInfo) Trace.TraceInformation("NxBRE Inference Engine Processing Finished");
 		}
 		
 		/// <summary>
@@ -794,13 +801,12 @@ namespace NxBRE.InferenceEngine {
 		private void InferUntilNoNewFact(ArrayList positiveImplications) {
 			long iniTime;
 			
-			if (HasLogListener) ForceDispatchLog("(Starting) " +
+			if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("(Starting) " +
 															            ((WM.Type == WorkingMemoryTypes.Global)?"Global":"Isolated") +
 															            "Working Memory contains: " +
 															            WM.FB.Count + " facts, " +
 															            IB.Count + " implications, " +
-															            QB.Count + " queries.",
-															            LogEventImpl.DEBUG);
+															            QB.Count + " queries.");
 			
 			iniTime = DateTime.Now.Ticks;
 			ArrayList iterationPositiveImplications = null;
@@ -819,12 +825,11 @@ namespace NxBRE.InferenceEngine {
 				agenda.Schedule(iterationPositiveImplications, IB);
 				agenda.PrepareExecution();
 				
-				if (HasLogListener) ForceDispatchLog("Iteration #" +
+				if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("Iteration #" +
 																	            iteration +
 																	            ": " +
 																	            agenda.Count + " implications in agenda, with " +
-																	            positiveImplications.Count + " positive.",
-																	            LogEventImpl.DEBUG);
+																	            positiveImplications.Count + " positive.");
 				
 				iterationPositiveImplications = new ArrayList();
 					
@@ -836,7 +841,7 @@ namespace NxBRE.InferenceEngine {
 					if ((firedImplication.MutexChain != null) &&
 					    (!positiveImplications.Contains(firedImplication)) &&
 							(Misc.AreIntersecting(firedImplication.MutexChain, positiveImplications))) {
-						if (HasLogListener) ForceDispatchLog("Mutexed: "+firedImplication.Label, LogEventImpl.DEBUG);
+						if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("Mutexed: "+firedImplication.Label);
 						firedImplication = null;
 					}
 					
@@ -844,7 +849,7 @@ namespace NxBRE.InferenceEngine {
 					if ((firedImplication != null) &&
 					    (firedImplication.PreconditionImplication != null) &&
 					    (!positiveImplications.Contains(firedImplication.PreconditionImplication))) {
-						if (HasLogListener) ForceDispatchLog("Negative Precondition: "+firedImplication.Label, LogEventImpl.DEBUG);
+						if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("Negative Precondition: "+firedImplication.Label);
 						firedImplication = null;
 					}
 					
@@ -853,11 +858,10 @@ namespace NxBRE.InferenceEngine {
 
 						int resultsCount = RunImplication(firedImplication);
 						
-						if (HasLogListener) ForceDispatchLog("Fired Implication: " +
+						if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("Fired Implication: " +
 																			            firedImplication.ToString() +
 																			            " returned: " + 
-																			            resultsCount,
-																			            LogEventImpl.DEBUG);
+																			            resultsCount);
 						
 						// if processor has been positive, i.e an implication deducted at least one fact
 						if (resultsCount > 0) positiveImplications.Add(firedImplication);
@@ -880,17 +884,16 @@ namespace NxBRE.InferenceEngine {
 				if (qrs.Count == 0) throw new IntegrityException("Rulebase integrity violated: " + integrityQuery.Label);
 			}
 			
-			if (HasLogListener) ForceDispatchLog("NxBRE Inference Engine Execution Time: " +
-															            (long)(DateTime.Now.Ticks - iniTime)/10000 +
-															            " milliseconds", LogEventImpl.INFO);
+			if (Misc.TRACE_SWITCH.TraceInfo) Trace.TraceInformation("NxBRE Inference Engine Execution Time: " +
+																									            (long)(DateTime.Now.Ticks - iniTime)/10000 +
+																									            " milliseconds");
 			
-			if (HasLogListener) ForceDispatchLog("(Finishing) " +
+			if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("(Finishing) " +
 																            ((WM.Type == WorkingMemoryTypes.Global)?"Global":"Isolated") +
 																            "Working Memory contains: " +
 																            WM.FB.Count + " facts, " +
 																            IB.Count + " implications, " +
-																            QB.Count + " queries.",
-																            LogEventImpl.DEBUG);
+																            QB.Count + " queries.");
 		}
 		
 		private IList<IList<Fact>> RunQuery(Query query, bool newQuery) {
@@ -907,7 +910,7 @@ namespace NxBRE.InferenceEngine {
 
 			if (implication.Action == ImplicationAction.Count)
 			{
-				if (HasLogListener) ForceDispatchLog("Counting Implication '" + implication.Label + "' counted: " + processResults.Count, LogEventImpl.DEBUG);
+				if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("Counting Implication '" + implication.Label + "' counted: " + processResults.Count);
 
 				bool variableFound = false;
 				IPredicate[] members = (IPredicate[])implication.Deduction.Members.Clone();
@@ -928,7 +931,7 @@ namespace NxBRE.InferenceEngine {
 				// counting implication factbase action
 				bool result = WM.FB.Assert(deductedFact);
 				if ((result) && (NewFactHandler != null)) NewFactHandler(new NewFactEventArgs(deductedFact));
-				if (HasLogListener) ForceDispatchLog((result?"Asserted":"Ignored Assertion of ") + " Fact: " + deductedFact.ToString(), LogEventImpl.DEBUG);
+				if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation((result?"Asserted":"Ignored Assertion of ") + " Fact: " + deductedFact.ToString());
 			}
 			else if ((implication.Action == ImplicationAction.Assert)
 	      		|| (implication.Action == ImplicationAction.Retract))
@@ -944,13 +947,13 @@ namespace NxBRE.InferenceEngine {
 							// retracting implication factbase action
 							bool result = WM.FB.Retract(deductedFact);
 							if ((result) && (DeleteFactHandler != null)) DeleteFactHandler(new NewFactEventArgs(deductedFact));
-							if (HasLogListener) ForceDispatchLog((result?"Retracted":"Ignored Retraction of ") + " Fact: " + deductedFact.ToString(), LogEventImpl.DEBUG);
+							if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation((result?"Retracted":"Ignored Retraction of ") + " Fact: " + deductedFact.ToString());
 						}
 						else {
 							// asserting implication factbase action
 							bool result = WM.FB.Assert(deductedFact);
 							if ((result) && (NewFactHandler != null)) NewFactHandler(new NewFactEventArgs(deductedFact));
-							if (HasLogListener) ForceDispatchLog((result?"Asserted":"Ignored Assertion of ") + " Fact: " + deductedFact.ToString(), LogEventImpl.DEBUG);
+							if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation((result?"Asserted":"Ignored Assertion of ") + " Fact: " + deductedFact.ToString());
 						}
 					}
 				}
@@ -964,22 +967,22 @@ namespace NxBRE.InferenceEngine {
 				  // and performing a search in the fact base
 				  Atom modificationTargetLookup = FactBase.BuildQueryFromDeduction(implication.Deduction, processResult);
 
-				  if (HasLogListener) ForceDispatchLog("Modifying Implication '" + implication.Label + "' will target matches of: " + modificationTargetLookup, LogEventImpl.DEBUG);
+				  if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("Modifying Implication '" + implication.Label + "' will target matches of: " + modificationTargetLookup);
 				  	
 				 	foreach(Fact factToModify in FactBase.ExtractFacts(WM.FB.ProcessAtomGroup(new AtomGroup(AtomGroup.LogicalOperator.And, modificationTargetLookup)))) {
-					  if (HasLogListener) ForceDispatchLog("-> found target: " + factToModify, LogEventImpl.DEBUG);
+					  if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("-> found target: " + factToModify);
 
 					  // for each fact, perform the modification
 				  	Fact deductedFact = BuildFact(implication.Deduction,
 				  	                              FactBase.EnrichResults(processResult, modificationTargetLookup, factToModify));
 
-					  if (HasLogListener) ForceDispatchLog("-> modified target: " + deductedFact, LogEventImpl.DEBUG);
+					  if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("-> modified target: " + deductedFact);
 
 					  if ((deductedFact != null) && (!factToModify.Equals(deductedFact))) {
 							implicationResultsCount++;
 							bool result = WM.FB.Modify(factToModify, deductedFact);
 							if ((result) && (ModifyFactHandler != null))ModifyFactHandler(new NewFactEventArgs(factToModify, deductedFact));
-							if (HasLogListener) ForceDispatchLog((result?"Modified":"Ignored Modification of ") + " Fact: " + factToModify.ToString(), LogEventImpl.DEBUG);
+							if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation((result?"Modified":"Ignored Modification of ") + " Fact: " + factToModify.ToString());
 						}
 				  }
 				}

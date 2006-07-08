@@ -1,6 +1,7 @@
 namespace NxBRE.Util
 {
 	using System;
+	using System.Diagnostics;
 	using System.Collections;
 	using System.IO;
 	using System.Xml;
@@ -12,6 +13,11 @@ namespace NxBRE.Util
 	/// <author>David Dossot</author>
 	public abstract class Misc {
 		private Misc() {}
+		
+		/// <summary>
+		/// The Trace Switch used by NxBRE
+		/// </summary>
+		internal static readonly TraceSwitch TRACE_SWITCH = new TraceSwitch("NxBRE", "NxBRE Global Trace Switch");
 		
 		/// <summary>
 		/// The identity XSL.
