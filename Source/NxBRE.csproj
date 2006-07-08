@@ -169,7 +169,6 @@
     <Compile Include="_tokill\AbstractLogDispatcher.cs" />
     <Compile Include="_tokill\AbstractLogEvent.cs" />
     <Compile Include="_tokill\AbstractLogExceptionDispatcher.cs" />
-    <Compile Include="_tokill\Arguments.cs" />
     <Compile Include="_tokill\ExceptionEventImpl.cs" />
     <Compile Include="_tokill\IExceptionDispatcher.cs" />
     <Compile Include="_tokill\IExceptionEvent.cs" />
