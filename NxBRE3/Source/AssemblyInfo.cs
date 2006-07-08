@@ -15,5 +15,7 @@ using System.Runtime.CompilerServices;
 [assembly:AssemblyKeyFile("")]
 [assembly:CLSCompliant(true)]
 
-//TODO: all ToArray() and non generic collections must be replaced with generic collections
+//TODO: tackle all obsolete warnings
 //TODO: ensure no internal class or method in non-core package - split classes like Fact in Fact & Core/FactUtils
+//TODO: Replace current custom logging mechanism with a standard one
+//TODO: Improve configuration

@@ -3,10 +3,9 @@ namespace NxBRE.Test.InferenceEngine {
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.IO;
+	using System.Diagnostics;
 	
 	using NUnit.Framework;
-	
-	using net.ideaity.util.events;
 	
 	using NxBRE.InferenceEngine;
 	using NxBRE.InferenceEngine.IO;
@@ -23,7 +22,6 @@ namespace NxBRE.Test.InferenceEngine {
 		protected string[] deductionsToCheck;
 		protected bool wrongDeduction;
 		protected IList<IList<Fact>> qrs;
-		protected int logThreshold;
 		
 		protected readonly string ruleFilesFolder;
 		protected readonly string outFilesFolder;
@@ -33,27 +31,21 @@ namespace NxBRE.Test.InferenceEngine {
 			outFilesFolder = Parameter.GetString("unittest.outputfolder") + "/";
 		}
 
-		protected void HandleLogEvent(object obj, ILogEvent aLog)
-		{
-			if (aLog.Priority >= logThreshold)
-				Console.WriteLine("NxBRE LOG " + aLog.Priority + " MSG  : " + aLog.Message);
-		}
-
 		protected void HandleNewFactEvent(NewFactEventArgs nfea) 
 	  {
-			if (logThreshold == LogEventImpl.DEBUG) Console.WriteLine("+ Deducted: {0}", nfea.Fact);
+			if (Misc.TRACE_SWITCH.TraceVerbose) Console.WriteLine("+ Deducted: {0}", nfea.Fact);
 	  	deducted++;	
 	  }
 	  
 		protected void HandleDeletedFactEvent(NewFactEventArgs nfea) 
 	  {
-			if (logThreshold == LogEventImpl.DEBUG) Console.WriteLine("- Deleted : {0}", nfea.Fact);
+			if (Misc.TRACE_SWITCH.TraceVerbose) Console.WriteLine("- Deleted : {0}", nfea.Fact);
 	  	deleted++;	
 	  }
 	  
 		protected void HandleModifiedFactEvent(NewFactEventArgs nfea) 
 	  {
-			if (logThreshold == LogEventImpl.DEBUG) Console.WriteLine("* Modified : {0}->{1}", nfea.Fact, nfea.OtherFact);
+			if (Misc.TRACE_SWITCH.TraceVerbose) Console.WriteLine("* Modified : {0}->{1}", nfea.Fact, nfea.OtherFact);
 	  	modified++;	
 	  }
 	  
@@ -84,16 +76,14 @@ namespace NxBRE.Test.InferenceEngine {
 		
 	  protected void InitIE(IBinder bob) {
 			IEImpl.StrictImplication = false;
-			logThreshold = LogEventImpl.INFO;
 			
 			NewIEImpl(bob);
 			
-			ie.LogHandlers += new DispatchLog(HandleLogEvent);
 	  	ie.NewFactHandler += new NewFactEvent(HandleNewFactEvent);
 	  	ie.DeleteFactHandler += new NewFactEvent(HandleDeletedFactEvent);
 	  	ie.ModifyFactHandler += new NewFactEvent(HandleModifiedFactEvent);
 	  	
-			Console.WriteLine("InitIE()");  	
+	  	if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("InitIE()");  	
 	  }
 	  
 	  [SetUp]
@@ -104,7 +94,7 @@ namespace NxBRE.Test.InferenceEngine {
 	  [TearDown]
 	  public void DestroyIE() {
 			ie = null;
-			Console.WriteLine("DestroyIE()");
+	  	if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("DestroyIE()");  	
 	  }
 	  
 	  private void PreProcess() {
@@ -130,16 +120,16 @@ namespace NxBRE.Test.InferenceEngine {
 			deductionChecker = 0;
 			
 			int i = 0;
-			if (logThreshold == LogEventImpl.DEBUG) Console.WriteLine("-(Query Results) -");
+			if (Misc.TRACE_SWITCH.TraceVerbose) Console.WriteLine("-(Query Results) -");
 			foreach(IList<Fact> facts in qrs) {
 				i++;
-				if (logThreshold == LogEventImpl.DEBUG) Console.WriteLine(" (Result #{0})", i);
+				if (Misc.TRACE_SWITCH.TraceVerbose) Console.WriteLine(" (Result #{0})", i);
 				foreach(Fact fact in facts) {
 					HandleExpectedNewFact(new NewFactEventArgs(fact));
-					if (logThreshold == LogEventImpl.DEBUG) Console.WriteLine("  {0}", fact);
+					if (Misc.TRACE_SWITCH.TraceVerbose) Console.WriteLine("  {0}", fact);
 				}
 			}
-			if (logThreshold == LogEventImpl.DEBUG) Console.WriteLine("-(End Results)-\n");
+			if (Misc.TRACE_SWITCH.TraceVerbose) Console.WriteLine("-(End Results)-\n");
 			
 			deductionsToCheck = null;
 		}

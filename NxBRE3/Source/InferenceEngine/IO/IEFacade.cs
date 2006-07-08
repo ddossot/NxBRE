@@ -2,9 +2,12 @@ namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	
 	using NxBRE.InferenceEngine;
 	using NxBRE.InferenceEngine.Rules;
+	
+	using NxBRE.Util;
 	
 	/// <summary>
 	/// A facade of the Inference Engine of NxBRE for usage from the object binder.
@@ -37,7 +40,7 @@ namespace NxBRE.InferenceEngine.IO {
 				return IE.Label;
 			}
 		}
-		
+
 		/// <summary>
 		/// Sets the WorkingMemory of the engine, either by forking the existing Global memory
 		/// to a new Isolated one, or by simply using the Global one.
@@ -258,11 +261,12 @@ namespace NxBRE.InferenceEngine.IO {
 		
 		///<summary>Method for logging messages</summary>
 		/// <param name="message">The message to log</param>
-		/// <param name="priority">Priority parameter</param>
-		/// <see cref="net.ideaity.util.events.AbstractLogDispatcher"/>
-		public void DispatchLog(string message, int priority) {
-			//TODO: use new logger
-			if (IE.HasLogListener) IE.ForceDispatchLog(message, priority);
+		/// <param name="traceLevel">Trace level of the message</param>
+		/// <see cref="System.Diagnostics.TraceLevel"/>
+		/// <remarks></remarks>
+		[Obsolete("Binders should better use standard Trace methods, this method has been kept for compatibility purpose only")]
+		public void DispatchLog(string message, int traceLevel) {
+			if (((int)Misc.TRACE_SWITCH.Level) >= traceLevel) Trace.TraceInformation(message);
 		}
 		
 	}
