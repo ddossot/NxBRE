@@ -166,7 +166,6 @@
     <Compile Include="Test\InferenceEngine\TestEngineCoreFeaturesRuleML09.cs" />
     <Compile Include="_tokill\LogEventImpl.cs" />
     <Compile Include="_tokill\AbstractExceptionEvent.cs" />
-    <Compile Include="_tokill\AbstractInitializable.cs" />
     <Compile Include="_tokill\AbstractLogDispatcher.cs" />
     <Compile Include="_tokill\AbstractLogEvent.cs" />
     <Compile Include="_tokill\AbstractLogExceptionDispatcher.cs" />
@@ -174,10 +173,8 @@
     <Compile Include="_tokill\ExceptionEventImpl.cs" />
     <Compile Include="_tokill\IExceptionDispatcher.cs" />
     <Compile Include="_tokill\IExceptionEvent.cs" />
-    <Compile Include="_tokill\IInitializable.cs" />
     <Compile Include="_tokill\ILogDispatcher.cs" />
     <Compile Include="_tokill\ILogEvent.cs" />
-    <Compile Include="_tokill\InitializationException.cs" />
     <Compile Include="Test\TestUtil.cs" />
     <Compile Include="Test\TestCompilation.cs" />
     <Compile Include="Test\TestDataSet.cs" />
@@ -195,6 +192,7 @@
     <EmbeddedResource Include="Resources\transformXRules.xsl" />
     <EmbeddedResource Include="Resources\vdx2nxbre-ie.xsl" />
     <EmbeddedResource Include="Resources\xBusinessRules.xsd" />
+    <Compile Include="FlowEngine\Rules\IInitializable.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />

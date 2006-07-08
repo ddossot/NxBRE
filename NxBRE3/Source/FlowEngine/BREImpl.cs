@@ -274,18 +274,25 @@ namespace NxBRE.FlowEngine
 			return newBRE;
 		}
 
-		/// <summary> Initializes the object.<P>
-		/// The default constructor exists so that objects may register
-		/// as listeners before any action takes place.
-		/// </P>
+		/// <summary>
+		/// Initialize the engine with a specific rule base.
 		/// </summary>
-		/// <param name="aObj">The XML configuration document
-		/// 									(either System.Xml.XPath.XPathDocument or string poiting to a XML file
-		/// </param>
-		/// <returns> True if successful, False otherwise
-		/// 
-		/// </returns>
-		public bool Init(object aObj)
+		/// <param name="rulebase"></param>
+		/// <returns></returns>
+		public bool Init(XPathDocument rulebase) {
+			return DoInit(rulebase);
+		}
+		
+		/// <summary>
+		/// Initialize the engine by loading rules from a rules driver.
+		/// </summary>
+		/// <param name="rulesDriver"></param>
+		/// <returns></returns>
+		public bool Init(IRulesDriver rulesDriver) {
+			return DoInit(rulesDriver);
+		}
+		
+		private bool DoInit(object aObj)
 		{
 			if (running) {
 				DispatchException("BRE already running: a violent Stop will be tried!", LogEventImpl.ERROR);
@@ -304,12 +311,14 @@ namespace NxBRE.FlowEngine
 				rulesDriver.LogDispatcher = this;
 				xmlDocument = null;
 			}
-			else if (aObj is XPathDocument) xmlDocument = (XPathDocument) aObj;
-			else
-			{
+			else if (aObj is XPathDocument) {
+				xmlDocument = (XPathDocument) aObj;
+			}
+			else {
 				DispatchException("Business Rules provided by external entity\nObject passed to init() must be of type System.Xml.XPath.XPathDocument or NxBRE.FlowEngine.IO.IRulesDriver and not "+aObj.GetType(), LogEventImpl.FATAL);
 				return false;
 			}
+			
 			DispatchLog("BRE Initializing...", LogEventImpl.INFO);
 			
 			if (ruleContext == null)
