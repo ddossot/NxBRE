@@ -1,16 +1,13 @@
-namespace net.ideaity.util
+namespace NxBRE.FlowEngine.Rules
 {
 	using System;
 	
 	/// <summary> Define a generic interface that allows developers to ensure
-	/// that an object, upon newInstance() or creation, has a callable
+	/// that an Flow Engine Rules, upon newInstance() or creation, has a callable
 	/// method to initialize the object.
-	/// *
 	/// </summary>
 	/// <author>  Sloan Seaman
 	/// </author>
-	/// <version>  .90
-	/// </version>
 	public interface IInitializable
 		{
 			/// <summary> Initialized the object

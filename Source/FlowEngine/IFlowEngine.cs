@@ -3,15 +3,14 @@ namespace NxBRE.FlowEngine
 	using System;
 	using System.Xml.XPath;
 	
-	using net.ideaity.util;
-
 	using NxBRE.FlowEngine;
+	using NxBRE.FlowEngine.IO;
 	
 	/// <summary>
 	/// This interface defines the Flow Engine (FE) of NxBRE.
 	/// </summary>
 	/// <author>David Dossot</author>
-	public interface IFlowEngine : IInitializable, IBREDispatcher, ICloneable
+	public interface IFlowEngine : IBREDispatcher, ICloneable
 		//TODO: remove the inheritance of IInitializable and IBREDispatcher
 		{
 			/// <summary> Returns or Sets the RuleContext in it's current state.
@@ -44,6 +43,20 @@ namespace NxBRE.FlowEngine
 			{
 				get;
 			}
+			
+			/// <summary>
+			/// Initialize the engine with a specific rule base.
+			/// </summary>
+			/// <param name="rulebase"></param>
+			/// <returns></returns>
+			bool Init(XPathDocument rulebase);
+			
+			/// <summary>
+			/// Initialize the engine by loading rules from a rules driver.
+			/// </summary>
+			/// <param name="rulesDriver"></param>
+			/// <returns></returns>
+			bool Init(IRulesDriver rulesDriver);
 			
 			/// <summary> Execute the BRE.
 			/// </summary>
