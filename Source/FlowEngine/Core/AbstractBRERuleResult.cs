@@ -67,8 +67,10 @@ namespace NxBRE.FlowEngine.Core
 			StringBuilder sb = new StringBuilder();
 
 			if (metaData != null) sb.Append("MetaData   :\n").Append(metaData.ToString()).Append("\n");
-			if (result != null) sb.Append("Result Type: ").Append(result.GetType().FullName).Append("\nResult Str : ").Append(result.ToString()).Append("\n");
 			
+			if (result != null) sb.Append("Result Type: ").Append(result.GetType().FullName).Append("\nResult Str : ").Append(result.ToString()).Append("\n");
+			else sb.Append("Result: Null");
+				
 			return sb.ToString();
 		}
 	}

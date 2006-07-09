@@ -23,7 +23,7 @@ namespace NxBRE.FlowEngine.IO {
 			
 			inputXMLSchema = Parameter.GetString("xbusinessrules.xsd", "xBusinessRules.xsd");
 			
-			xslt = new XslTransform();
+			xslt = new XslCompiledTransform();
 			xslt.Load(new XmlTextReader(Parameter.GetEmbeddedResourceStream("transformXRules.xsl")), null, null);
 		}
 	}

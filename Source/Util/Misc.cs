@@ -20,11 +20,6 @@ namespace NxBRE.Util
 		internal static readonly TraceSwitch TRACE_SWITCH = new TraceSwitch("NxBRE", "NxBRE Global Trace Switch");
 		
 		/// <summary>
-		/// The identity XSL.
-		/// </summary>
-		public const string IDENTITY_XSL = "<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"><xsl:template match=\"@*|node()\"><xsl:copy><xsl:apply-templates select=\"@*|node()\"/></xsl:copy></xsl:template></xsl:stylesheet>";
-		
-		/// <summary>
 		/// An empty read-only IDictionary.
 		/// </summary>
 		public static readonly IDictionary EMPTY_DICTIONARY = new ReadOnlyHashtable();
@@ -46,11 +41,38 @@ namespace NxBRE.Util
 		/// Ready made identity XSLT, usefull for XML persistence
 		/// </summary>
 		/// <returns>An XslTransform ready to performe an identity transform</returns>
-		public static XslTransform IdentityXSLT {
+		public static XslCompiledTransform IdentityXSLT {
 			get {
-			XslTransform xslt = new XslTransform();
-			xslt.Load(new XmlTextReader(new StringReader(IDENTITY_XSL)), null, null);
-			return xslt;
+				return GetCachedCompiledTransform("identity.xsl");
+			}
+		}
+		
+		/// <summary>
+		/// Cache of compiled XSL templates.
+		/// </summary>
+		/// <remarks>Inspired by patch 1516398 submitted by Koen Muilwijk</remarks>
+		private static IDictionary compiledTransformCache = new Hashtable();
+		
+		/// <summary>
+		/// Access the internal cache of XslCompiledTransform object built from embedded resources.
+		/// </summary>
+		/// <param name="xslResourceName">Embedded Xsl resource name</param>
+		/// <returns>The XslCompiledTransform built from this resource</returns>
+		internal static XslCompiledTransform GetCachedCompiledTransform(string xslResourceName) {
+			lock(compiledTransformCache) {
+				XslCompiledTransform result = (XslCompiledTransform) compiledTransformCache[xslResourceName];
+				
+				if (result == null) {
+					if (TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("XslCompiledTransform cache miss for: " + xslResourceName);
+					result = new XslCompiledTransform();
+					result.Load(new XmlTextReader(Parameter.GetEmbeddedResourceStream(xslResourceName)), null, null);
+					compiledTransformCache.Add(xslResourceName, result);
+				}
+				else {
+					if (TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("XslCompiledTransform cache hit for: " + xslResourceName);
+				}
+
+				return result;
 			}
 		}
 		
@@ -82,6 +104,7 @@ namespace NxBRE.Util
 		/// </summary>
 		/// <param name="objects">The ArrayList to output.</param>
 		/// <returns>The content of the ArrayList in a string.</returns>
+		[Obsolete("This method has been deprecated. Please use Misc.IListToString instead.")]
 		public static string ArrayListToString(ArrayList objects) {
 			return ArrayListToString(objects, String.Empty);	
 		}
@@ -92,6 +115,7 @@ namespace NxBRE.Util
 		/// <param name="objects">The ArrayList to output.</param>
 		/// <param name="margin">A left margin string to place before each value.</param>
 		/// <returns>The content of the ArrayList in a string.</returns>
+		[Obsolete("This method has been deprecated. Please use Misc.IListToString instead.")]
 		public static string ArrayListToString(ArrayList objects, string margin) {
 			return IListToString(objects, margin);
 		}

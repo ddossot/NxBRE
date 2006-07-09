@@ -32,7 +32,7 @@ namespace NxBRE.Test.FlowEngine
 			Assert.AreEqual("Result Type: System.String\nResult Str : result2\n", rr.ToString());
 			
 			rr = new BRERuleResultImpl(rmd, null);
-			Assert.AreEqual("MetaData   :\nID Type : System.String\nID Str  : md-id\nFactory : NxBRE.Test.FlowEngine.TestRule+MockBRERuleFactory\nStack Loc: 0\n", rr.ToString());
+			Assert.AreEqual("MetaData   :\nID Type : System.String\nID Str  : md-id\nFactory : NxBRE.Test.FlowEngine.TestRule+MockBRERuleFactory\nStack Loc: 0\nResult: Null", rr.ToString());
 		}
 		
 	}

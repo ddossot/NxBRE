@@ -23,12 +23,12 @@ namespace NxBRE.FlowEngine.IO {
 	public class XSLTRulesFileDriver:AbstractRulesDriver {
 
 		private string xslFileURI = null;
-		protected XslTransform xslt = null;
+		protected XslCompiledTransform xslt = null;
 		protected string inputXMLSchema = null;
 		
 		protected XSLTRulesFileDriver(string xmlFileURI):base(xmlFileURI) {}
 		
-		public XSLTRulesFileDriver(string xmlFileURI, XslTransform xslt):base(xmlFileURI) {
+		public XSLTRulesFileDriver(string xmlFileURI, XslCompiledTransform xslt):base(xmlFileURI) {
 			if (xslt == null)
 				throw new BRERuleFatalException("Null is not a valid XslTransform");
 
@@ -42,12 +42,12 @@ namespace NxBRE.FlowEngine.IO {
 			this.xslFileURI = xslFileURI;
 		}
 		
-		private XslTransform GetXSLT() {
+		private XslCompiledTransform GetXSLT() {
 			if (xslt == null) {
 				if (LogDispatcher != null)
 					LogDispatcher.DispatchLog("XSLTRulesFileDriver loading "+xslFileURI, LogEventImpl.INFO);
 				
-				xslt = new XslTransform();
+				xslt = new XslCompiledTransform();
 				xslt.Load(xslFileURI);
 			}
 			
@@ -61,7 +61,7 @@ namespace NxBRE.FlowEngine.IO {
 			XmlReader fileReader = GetXmlInputReader(xmlSource, inputXMLSchema);
 
 	  	MemoryStream stream = new MemoryStream();
-	  	GetXSLT().Transform(new XPathDocument(fileReader), null, stream, null);
+	  	GetXSLT().Transform(new XPathDocument(fileReader), null, stream);
 			fileReader.Close();
 	  	stream.Seek(0, SeekOrigin.Begin);
 			XmlSchemaCollection schemas = new XmlSchemaCollection();

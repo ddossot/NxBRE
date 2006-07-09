@@ -96,7 +96,7 @@ namespace NxBRE.Test.FlowEngine
 			return bre.RuleContext.GetObject(aId);
 		}
 		
-		public void handleExceptionEvent(object obj, IExceptionEvent aException)
+		public void HandleExceptionEvent(object obj, IExceptionEvent aException)
 		{
 			exceptionCount++;
 			Console.Error.WriteLine("NxBRE ERROR " + aException.Priority + ": " + aException.Exception.ToString());
@@ -111,7 +111,7 @@ namespace NxBRE.Test.FlowEngine
 				bre.Stop();
 		}
 		
-		public void handleLogEvent(object obj, ILogEvent aLog)
+		public void HandleLogEvent(object obj, ILogEvent aLog)
 		{
 			logCount++;
 			
@@ -122,7 +122,7 @@ namespace NxBRE.Test.FlowEngine
 				Console.Out.WriteLine("NxBRE LOG " + aLog.Priority + " MSG  : " + aLog.Message);
 		}
 
-		public virtual void handleBRERuleResult(object sender, IBRERuleResult aBRR)
+		public virtual void HandleBRERuleResult(object sender, IBRERuleResult aBRR)
 		{
 			resultCount++;
 		}
@@ -132,85 +132,80 @@ namespace NxBRE.Test.FlowEngine
 		{
 			testFile = Parameter.GetString("unittest.inputfile");
 			
-			try {
-				// I could have used BREFactory or BREFactoryConsole but I just wanted
-				// to show what's behind the scenes and how it is possible to register
-				// many handler for each event.
-				bre = new BREImpl();
+			// I could have used BREFactory or BREFactoryConsole but I just wanted
+			// to show what's behind the scenes and how it is possible to register
+			// many handler for each event.
+			bre = new BREImpl();
 
-				// Lets register the handlers...
-				logCount = 0;
-				foundDynamicLog = false;
-				bre.LogHandlers += new DispatchLog(handleLogEvent);
-				foundDynamicException = false;
-				exceptionCount = 0;
-				bre.ExceptionHandlers += new DispatchException(handleExceptionEvent);
-				resultCount = 0;
-				bre.ResultHandlers += new DispatchRuleResult(handleBRERuleResult);
+			// Lets register the handlers...
+			logCount = 0;
+			foundDynamicLog = false;
+			bre.LogHandlers += new DispatchLog(HandleLogEvent);
+			foundDynamicException = false;
+			exceptionCount = 0;
+			bre.ExceptionHandlers += new DispatchException(HandleExceptionEvent);
+			resultCount = 0;
+			bre.ResultHandlers += new DispatchRuleResult(HandleBRERuleResult);
+			
+			// Reset the other counters
+			globalCount = 0;
+	
+			if (bre.Init(new XBusinessRulesFileDriver(testFile)))
+			{
+				// This loads-up rules in the rule context that will be evaluated 
+				bre.RuleContext.SetFactory("50i",
+				    						           new BRERuleFactory(new ExecuteRuleDelegate(ContextlessDelegate)));
 				
-				// Reset the other counters
-				globalCount = 0;
-		
-				if (bre.Init(new XBusinessRulesFileDriver(testFile)))
-				{
-					// This loads-up rules in the rule context that will be evaluated 
-					bre.RuleContext.SetFactory("50i",
-					    						           new BRERuleFactory(new ExecuteRuleDelegate(ContextlessDelegate)));
-					
-					bre.RuleContext.SetFactory("WhileCounter",
-					    						           new BRERuleFactory(new ExecuteRuleDelegate(WhileCounter)));
-					
-					bre.RuleContext.SetFactory("GlobalCounter",
-					    						           new BRERuleFactory(new ExecuteRuleDelegate(GlobalCounter)));
+				bre.RuleContext.SetFactory("WhileCounter",
+				    						           new BRERuleFactory(new ExecuteRuleDelegate(WhileCounter)));
+				
+				bre.RuleContext.SetFactory("GlobalCounter",
+				    						           new BRERuleFactory(new ExecuteRuleDelegate(GlobalCounter)));
 
-					bre.RuleContext.SetFactory("GetEnumerable",
-					    						           new BRERuleFactory(new ExecuteRuleDelegate(GetEnumerable)));
+				bre.RuleContext.SetFactory("GetEnumerable",
+				    						           new BRERuleFactory(new ExecuteRuleDelegate(GetEnumerable)));
 
-					bre.RuleContext.SetFactory("ForEachTester",
-					    						           new BRERuleFactory(new ExecuteRuleDelegate(ForEachTester)));
+				bre.RuleContext.SetFactory("ForEachTester",
+				    						           new BRERuleFactory(new ExecuteRuleDelegate(ForEachTester)));
 
-					
-					// This alternate syntax is based on reflection thus carries performance issues
-					// and prevents compile time checking.
-					// It can be usefull to establish bindings on the fly.
-					bre.RuleContext.SetFactory("mulBy5i",
-									                 	 new BRERuleFactory(this, "ContextfullDelegate"));
-					
-					// This first process should only load-up some values, that we quickly reset.
-					// The objective is to test that processing with no parameter works.
-					bre.Process();
-					bre.Reset();
-					
-					// We also want to ensure that cloning is harmless!
-					bre = (IFlowEngine) bre.Clone();
+				
+				// This alternate syntax is based on reflection thus carries performance issues
+				// and prevents compile time checking.
+				// It can be usefull to establish bindings on the fly.
+				bre.RuleContext.SetFactory("mulBy5i",
+								                 	 new BRERuleFactory(this, "ContextfullDelegate"));
+				
+				// This first process should only load-up some values, that we quickly reset.
+				// The objective is to test that processing with no parameter works.
+				bre.Process();
+				bre.Reset();
+				
+				// We also want to ensure that cloning is harmless!
+				bre = (IFlowEngine) bre.Clone();
 
-					// Let's add test objects
-					to = new TestObject(true, 10, "hello");
-					bre.RuleContext.SetObject("TestObject", to);
+				// Let's add test objects
+				to = new TestObject(true, 10, "hello");
+				bre.RuleContext.SetObject("TestObject", to);
 
-					ht = new Hashtable();
-					ht.Add("one", "first");
-					ht.Add("two", "second");
-					ht.Add("three", "third");
-					bre.RuleContext.SetObject("TestHashtable", ht);
+				ht = new Hashtable();
+				ht.Add("one", "first");
+				ht.Add("two", "second");
+				ht.Add("three", "third");
+				bre.RuleContext.SetObject("TestHashtable", ht);
 
-					TestDataSet.Table1DataTable dt = new TestDataSet.Table1DataTable();
-					row = dt.NewTable1Row();
-					row.col1="foo";
-					row.col2=2004;
-					bre.RuleContext.SetObject("TestRowSet", row);
-					
-					bre.RuleContext.SetObject("ReferenceAssertVersion", new Version());
-					
-					// this processes all global rules and the rules in the set named "Workingset"
-					whileCount = 0;
-					forEachProbe = 0;
-					forEachError = "";
-					bre.Process("WORKINGSET");
-				}
-			} catch (System.Exception e) {
-				Console.Error.Write(e);
-				Assert.Fail(e.Message);
+				TestDataSet.Table1DataTable dt = new TestDataSet.Table1DataTable();
+				row = dt.NewTable1Row();
+				row.col1="foo";
+				row.col2=2004;
+				bre.RuleContext.SetObject("TestRowSet", row);
+				
+				bre.RuleContext.SetObject("ReferenceAssertVersion", new Version());
+				
+				// this processes all global rules and the rules in the set named "Workingset"
+				whileCount = 0;
+				forEachProbe = 0;
+				forEachError = "";
+				bre.Process("WORKINGSET");
 			}
 		}
 			
@@ -264,10 +259,8 @@ namespace NxBRE.Test.FlowEngine
 		[Test]
 		public void Exceptions() {
 			Assert.AreEqual(EXPECTED_EXCEPTION, exceptionCount, "Thrown Exceptions");
-			Assert.IsTrue(GetObject("EXCP").GetType().FullName == "NxBRE.FlowEngine.BRERuleException",
-			              "Stored Exception Type");
-			Assert.IsTrue(((System.Exception)GetObject("EXCP")).Message == "This is another exception!",
-			              "Stored Exception Message");
+			Assert.IsTrue(GetObject("EXCP").GetType().FullName == "NxBRE.FlowEngine.BRERuleException", "Stored Exception Type");
+			Assert.IsTrue(((System.Exception)GetObject("EXCP")).Message == "This is another exception!", "Stored Exception Message");
 			Assert.IsTrue(foundDynamicException, "Dynamic Exception");
 			Assert.IsNull(GetObject("FATEX"), "Fatal Exception Did Not Stop!");
 		}
