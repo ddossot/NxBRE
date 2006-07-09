@@ -14,14 +14,6 @@ namespace NxBRE.Examples
 		private string ruleBaseFile;
 		private int nbDecaCustomers;
 		
-		public static int LOG_LEVEL = LogEventImpl.INFO;
-		
-		private void HandleLogEvent(object obj, ILogEvent aLog)
-		{
-			if (aLog.Priority >= LOG_LEVEL)
-				Console.WriteLine("[" + aLog.Priority + "] " + aLog.Message);
-		}	
-
 		public void PerformProcess(IBinder binder)	{
 			// generate dummy business objects
 			IDictionary businessObjects = DummyData.GetInstance().GetBusinessObjects(nbDecaCustomers);
@@ -29,7 +21,6 @@ namespace NxBRE.Examples
 
 			// instantiate an inference engine, bind my data and process the rules
 			IInferenceEngine ie = new IEImpl(binder);
-			ie.LogHandlers += new DispatchLog(HandleLogEvent);
 			ie.LoadRuleBase(new RuleML08DatalogAdapter(ruleBaseFile, System.IO.FileAccess.Read));		
 			ie.Process(businessObjects);
 			
@@ -71,7 +62,8 @@ namespace NxBRE.Examples
 		public static void Main(string[] args) {
 			FraudControl fc = new FraudControl(Int32.Parse(args[0]), args[1]);
 			
-			if (args.Length == 3) LOG_LEVEL = Int32.Parse(args[2]);
+			//FIXME: use trace
+			//if (args.Length == 3) LOG_LEVEL = Int32.Parse(args[2]);
 
 			/// Demonstrates how to use a Custom Binder Class
 			Console.WriteLine("\n\n************ Using Custom Binder Class ************\n");
