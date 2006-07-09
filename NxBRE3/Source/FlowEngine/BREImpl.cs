@@ -925,6 +925,7 @@ namespace NxBRE.FlowEngine
 				IBRERuleResult result = ruleContext.GetResult(ruleValueNode);
 				if (result != null)	finalValue = result.Result;
 			}
+			
 			aMap.Add(aNode.GetAttribute(PARAMETER_ATTRS.NAME, String.Empty), finalValue);
 		}
 		
@@ -1019,7 +1020,7 @@ namespace NxBRE.FlowEngine
 				else if (e is BRERuleException)
 					DispatchException((BRERuleException) e, ExceptionEventImpl.ERROR);
 				else
-					DispatchException(new BREException("RuleFactory encountered an error. " + e.ToString()), ExceptionEventImpl.ERROR);
+					DispatchException(new BREException("Error when processing RuleFactory id: " + id, e), ExceptionEventImpl.ERROR);
 				
 				/*
 				Set the RuleResult to an exception so I can test for it in the If

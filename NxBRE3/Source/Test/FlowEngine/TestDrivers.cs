@@ -66,15 +66,6 @@ namespace NxBRE.Test.FlowEngine
 			Assert.IsNotNull(breTest, "XBRE File System");
 		}
 
-// This test has been disabled because it basically proves that .NET can read from a URL which is not
-// so interesting...
-//		[Test]
-//		public void XBusinessRulesFileDriver_HTTPGET()
-//		{
-//			breTest = new BREFactoryConsole(0,0).NewBRE(new XBusinessRulesFileDriver(testHTTP));
-//			Assert.IsNotNull(breTest, "HTTP Get");
-//		}
-
 		[Test]
 		public void XBusinessRulesStreamDriver()
 		{

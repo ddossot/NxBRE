@@ -121,9 +121,9 @@ namespace NxBRE.InferenceEngine.Rules {
 			this.logicalOperator = logicalOperator;
 			this.members = members;
 			
-			orderedMembers = (object[])runningMembers.Clone();
-			Array.Sort(orderedMembers, new AtomComparer());
-			this.orderedMembers = orderedMembers;
+			object[] membersToOrder = (object[])runningMembers.Clone();
+			Array.Sort(membersToOrder, new AtomComparer());
+			this.orderedMembers = membersToOrder;
 			
 			resolvedMembers = new object[orderedMembers.Length];
 			

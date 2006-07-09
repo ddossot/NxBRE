@@ -19,3 +19,4 @@ using System.Runtime.CompilerServices;
 //TODO: ensure no internal class or method in non-core package - split classes like Fact in Fact & Core/FactUtils
 //TODO: Replace current custom logging mechanism with a standard one
 //TODO: Improve configuration
+//TODO: try to add config in the project and have the file outputed in the bin folder
