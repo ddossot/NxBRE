@@ -18,19 +18,14 @@ namespace NxBRE.Examples {
 			Console.WriteLine("* Deducted: {0}", nfea.Fact);
 	  }
 	  
-		private void HandleLogEvent(object obj, ILogEvent aLog)
-		{
-			if (aLog.Priority >= LogEventImpl.DEBUG)
-				Console.WriteLine("[" + aLog.Priority + "] " + aLog.Message);
-		}	
-
 		public RatingEngine(int verbosityLevel, int nbDodecaCalls, string ruleBaseFile) {
 			this.nbDodecaCalls = nbDodecaCalls;
 
 			ie = new IEImpl(CSharpBinderFactory.LoadFromFile("NxBRE.Examples.TelcoRatingBinder",
 			                       																	ruleBaseFile + ".ccb"));
 
-			if (verbosityLevel >= 2) ie.LogHandlers += new DispatchLog(HandleLogEvent);
+			//FIXME: use trace
+			// if (verbosityLevel >= 2) ie.LogHandlers += new DispatchLog(HandleLogEvent);
 			if (verbosityLevel >= 1) ie.NewFactHandler += new NewFactEvent(HandleNewFactEvent);
 			
 			ie.LoadRuleBase(new RuleML086DatalogAdapter(ruleBaseFile, System.IO.FileAccess.Read));
