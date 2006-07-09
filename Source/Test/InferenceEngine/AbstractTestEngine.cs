@@ -27,25 +27,27 @@ namespace NxBRE.Test.InferenceEngine {
 		protected readonly string outFilesFolder;
 
 		protected AbstractTestEngine() {
+			Trace.Listeners.Add(new ConsoleTraceListener());
+
 			ruleFilesFolder = Parameter.GetString("unittest.ruleml.inputfolder") + "/";
 			outFilesFolder = Parameter.GetString("unittest.outputfolder") + "/";
 		}
 
 		protected void HandleNewFactEvent(NewFactEventArgs nfea) 
 	  {
-			if (Misc.TRACE_SWITCH.TraceVerbose) Console.WriteLine("+ Deducted: {0}", nfea.Fact);
+			if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("+ Deducted: " + nfea.Fact);
 	  	deducted++;	
 	  }
 	  
 		protected void HandleDeletedFactEvent(NewFactEventArgs nfea) 
 	  {
-			if (Misc.TRACE_SWITCH.TraceVerbose) Console.WriteLine("- Deleted : {0}", nfea.Fact);
+			if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("- Deleted: " + nfea.Fact);
 	  	deleted++;	
 	  }
 	  
 		protected void HandleModifiedFactEvent(NewFactEventArgs nfea) 
 	  {
-			if (Misc.TRACE_SWITCH.TraceVerbose) Console.WriteLine("* Modified : {0}->{1}", nfea.Fact, nfea.OtherFact);
+			if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("* Modified: " + nfea.Fact + " -> " + nfea.OtherFact);
 	  	modified++;	
 	  }
 	  
@@ -54,7 +56,7 @@ namespace NxBRE.Test.InferenceEngine {
 	  	if ((deductionsToCheck != null)
 	  		&& (Array.IndexOf(deductionsToCheck, nfea.Fact.ToString())<0)) {
 	  			wrongDeduction = true;
-					Console.WriteLine("* Wrongly Deducted: {0} @ {1} !!! !!!", nfea.Fact, deductionChecker);
+					Console.Error.WriteLine("* Wrongly Deducted: {0} @ {1} !!! !!!", nfea.Fact, deductionChecker);
 	  		}
 	  	deductionChecker++;
 	  }
@@ -64,7 +66,7 @@ namespace NxBRE.Test.InferenceEngine {
 	  	if ((deductionsToCheck != null)
 	  		&& (deductionsToCheck[deductionChecker] != nfea.Fact.ToString())) {
 	  			wrongDeduction = true;
-					Console.WriteLine("* Wrongly Deducted: {0} @ {1}, Expected: {2}", nfea.Fact, deductionChecker, deductionsToCheck[deductionChecker]);
+					Console.Error.WriteLine("* Wrongly Deducted: {0} @ {1}, Expected: {2}", nfea.Fact, deductionChecker, deductionsToCheck[deductionChecker]);
 	  		}
 	  	deductionChecker++;
 	  }
