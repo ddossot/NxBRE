@@ -35,19 +35,19 @@ namespace NxBRE.Test.InferenceEngine {
 
 		protected void HandleNewFactEvent(NewFactEventArgs nfea) 
 	  {
-			if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("+ Deducted: " + nfea.Fact);
+			if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("+ Deducted: " + nfea.Fact);
 	  	deducted++;	
 	  }
 	  
 		protected void HandleDeletedFactEvent(NewFactEventArgs nfea) 
 	  {
-			if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("- Deleted: " + nfea.Fact);
+			if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("- Deleted: " + nfea.Fact);
 	  	deleted++;	
 	  }
 	  
 		protected void HandleModifiedFactEvent(NewFactEventArgs nfea) 
 	  {
-			if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("* Modified: " + nfea.Fact + " -> " + nfea.OtherFact);
+			if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("* Modified: " + nfea.Fact + " -> " + nfea.OtherFact);
 	  	modified++;	
 	  }
 	  
@@ -85,7 +85,7 @@ namespace NxBRE.Test.InferenceEngine {
 	  	ie.DeleteFactHandler += new NewFactEvent(HandleDeletedFactEvent);
 	  	ie.ModifyFactHandler += new NewFactEvent(HandleModifiedFactEvent);
 	  	
-	  	if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("InitIE()");  	
+	  	if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("InitIE()");  	
 	  }
 	  
 	  [SetUp]
@@ -96,7 +96,7 @@ namespace NxBRE.Test.InferenceEngine {
 	  [TearDown]
 	  public void DestroyIE() {
 			ie = null;
-	  	if (Misc.TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("DestroyIE()");  	
+	  	if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("DestroyIE()");  	
 	  }
 	  
 	  private void PreProcess() {
@@ -122,16 +122,16 @@ namespace NxBRE.Test.InferenceEngine {
 			deductionChecker = 0;
 			
 			int i = 0;
-			if (Misc.TRACE_SWITCH.TraceVerbose) Console.WriteLine("-(Query Results) -");
+			if (Misc.IE_TS.TraceVerbose) Console.WriteLine("-(Query Results) -");
 			foreach(IList<Fact> facts in qrs) {
 				i++;
-				if (Misc.TRACE_SWITCH.TraceVerbose) Console.WriteLine(" (Result #{0})", i);
+				if (Misc.IE_TS.TraceVerbose) Console.WriteLine(" (Result #{0})", i);
 				foreach(Fact fact in facts) {
 					HandleExpectedNewFact(new NewFactEventArgs(fact));
-					if (Misc.TRACE_SWITCH.TraceVerbose) Console.WriteLine("  {0}", fact);
+					if (Misc.IE_TS.TraceVerbose) Console.WriteLine("  {0}", fact);
 				}
 			}
-			if (Misc.TRACE_SWITCH.TraceVerbose) Console.WriteLine("-(End Results)-\n");
+			if (Misc.IE_TS.TraceVerbose) Console.WriteLine("-(End Results)-\n");
 			
 			deductionsToCheck = null;
 		}

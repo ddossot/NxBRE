@@ -15,9 +15,19 @@ namespace NxBRE.Util
 		private Misc() {}
 		
 		/// <summary>
-		/// The Trace Switch used by NxBRE
+		/// The Trace Switch used by NxBRE.FlowEngine
 		/// </summary>
-		internal static readonly TraceSwitch TRACE_SWITCH = new TraceSwitch("NxBRE", "NxBRE Global Trace Switch");
+		internal static readonly TraceSwitch FE_TS = new TraceSwitch("NxBRE.FlowEngine", "NxBRE FlowEngine Trace Switch", "Warning");
+		
+		/// <summary>
+		/// The Trace Switch used by NxBRE.InferenceEngine
+		/// </summary>
+		internal static readonly TraceSwitch IE_TS = new TraceSwitch("NxBRE.InferenceEngine", "NxBRE InferenceEngine Trace Switch", "Warning");
+		
+		/// <summary>
+		/// The Trace Switch used by NxBRE.Util
+		/// </summary>
+		internal static readonly TraceSwitch UTIL_TS = new TraceSwitch("NxBRE.Util", "NxBRE Util Trace Switch", "Warning");
 		
 		/// <summary>
 		/// An empty read-only IDictionary.
@@ -63,13 +73,13 @@ namespace NxBRE.Util
 				XslCompiledTransform result = (XslCompiledTransform) compiledTransformCache[xslResourceName];
 				
 				if (result == null) {
-					if (TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("XslCompiledTransform cache miss for: " + xslResourceName);
+					if (UTIL_TS.TraceVerbose) Trace.TraceInformation("XslCompiledTransform cache miss for: " + xslResourceName);
 					result = new XslCompiledTransform();
 					result.Load(new XmlTextReader(Parameter.GetEmbeddedResourceStream(xslResourceName)), null, null);
 					compiledTransformCache.Add(xslResourceName, result);
 				}
 				else {
-					if (TRACE_SWITCH.TraceVerbose) Trace.TraceInformation("XslCompiledTransform cache hit for: " + xslResourceName);
+					if (UTIL_TS.TraceVerbose) Trace.TraceInformation("XslCompiledTransform cache hit for: " + xslResourceName);
 				}
 
 				return result;
