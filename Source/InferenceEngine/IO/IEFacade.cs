@@ -266,7 +266,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// <remarks></remarks>
 		[Obsolete("Binders should better use standard Trace methods, this method has been kept for compatibility purpose only")]
 		public void DispatchLog(string message, int traceLevel) {
-			if (((int)Misc.TRACE_SWITCH.Level) >= traceLevel) Trace.TraceInformation(message);
+			if (((int)Misc.IE_TS.Level) >= traceLevel) Trace.TraceInformation(message);
 		}
 		
 	}
