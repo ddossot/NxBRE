@@ -178,14 +178,10 @@ namespace NxBRE.InferenceEngine.IO {
 				throw new BREException("A disposed adapter can not accept new operations");
 			else if (AdapterState == State.NonInitialized) {
 				if (mode == FileAccess.Read) {
-					if (streamRuleML != null) {
-						reader = new XmlTextReader(streamRuleML);
-						navigator = new XPathDocument(GetXmlValidatingReaderForStream(DatalogSchema)).CreateNavigator();
-					}
-					else {
-						reader = new XmlTextReader(uriRuleML);
-						navigator = new XPathDocument(Xml.NewValidatingReader(reader)).CreateNavigator();
-					}
+					if (streamRuleML != null) reader = new XmlTextReader(streamRuleML);
+					else reader = new XmlTextReader(uriRuleML);
+					
+					navigator = new XPathDocument(GetXmlValidatingReader(DatalogSchema)).CreateNavigator();
 					
 					nsmgr = new XmlNamespaceManager(navigator.NameTable);
 					nsmgr.AddNamespace("dl", DatalogNamespaceURL);
@@ -318,7 +314,7 @@ namespace NxBRE.InferenceEngine.IO {
 			}
 		}
 
-		protected virtual XmlReader GetXmlValidatingReaderForStream(string schemaName) {
+		protected virtual XmlReader GetXmlValidatingReader(string schemaName) {
 			return Xml.NewValidatingReader(Reader, ValidationType.Schema, schemaName);
 		}
 

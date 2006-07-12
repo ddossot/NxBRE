@@ -43,7 +43,7 @@ namespace NxBRE.InferenceEngine.IO {
 			Document.LoadXml("<rulebase/>");
 		}
 				
-		protected override XmlReader GetXmlValidatingReaderForStream(string ignored) {
+		protected override XmlReader GetXmlValidatingReader(string ignored) {
 			return Xml.NewValidatingReader(Reader, ValidationType.DTD);
 		}
 

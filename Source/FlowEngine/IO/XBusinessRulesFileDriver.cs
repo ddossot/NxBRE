@@ -17,7 +17,7 @@ namespace NxBRE.FlowEngine.IO {
 	public class XBusinessRulesFileDriver:XSLTRulesFileDriver {
 		
 		public XBusinessRulesFileDriver(string xmlFileURI):base(xmlFileURI) {
-			inputXMLSchema = "xbusinessrules.xsd";
+			inputXMLSchema = "xBusinessRules.xsd";
 			xslt = Xml.GetCachedCompiledTransform("transformXRules.xsl");
 		}
 	}

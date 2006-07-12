@@ -64,7 +64,7 @@ namespace NxBRE.FlowEngine.IO {
 			fileReader.Close();
 	  	stream.Seek(0, SeekOrigin.Begin);
 			
-			return GetXmlInputReader(stream, "businessrules.xsd");
+			return GetXmlInputReader(stream, "businessRules.xsd");
 		}
 	}
 }

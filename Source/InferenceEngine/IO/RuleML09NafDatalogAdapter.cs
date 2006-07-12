@@ -228,7 +228,7 @@ namespace NxBRE.InferenceEngine.IO {
 				
 				while(directionAttributes.MoveNext()) {
 					string direction = directionAttributes.Current.Value;
-					if (direction != String.Empty) {
+					if ((direction != String.Empty) && (direction != "bidirectional")) {
 						if (globalDirection == String.Empty) {
 							globalDirection = direction;
 						}

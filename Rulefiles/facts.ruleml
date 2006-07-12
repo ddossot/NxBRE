@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE rulebase SYSTEM "ruleml-0_8-datalog.dtd">
-<rulebase>
+<rulebase xmlns="http://www.ruleml.org/0.86/xsd" xsi:schemaLocation="http://www.ruleml.org/0.86/xsd ruleml-0_86-nafdatalog.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" direction="forward">
 	<_rbaselab>
 		<ind>Extra Facts</ind>
 	</_rbaselab>
