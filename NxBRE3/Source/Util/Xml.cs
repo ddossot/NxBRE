@@ -1,18 +1,110 @@
 namespace NxBRE.Util
 {
 	using System;
+	using System.Collections;
+	using System.Diagnostics;
 	using System.Runtime.Remoting.Metadata.W3cXsd2001;
 	using System.Xml;
+	using System.Xml.Xsl;
+	using System.Xml.Schema;
 	
-	using NxBRE.FlowEngine;
-
 	/// <summary>Schema utilities.</summary>
 	/// <author>David Dossot</author>
-	public abstract class Schema {
+	public abstract class Xml {
 		public const string NS_URI = "http://www.w3.org/2001/XMLSchema-instance";
 		
-		private Schema() {}
+		private Xml() {}
 		
+				/// <summary>
+		/// Ready made identity XSLT, usefull for XML persistence
+		/// </summary>
+		/// <returns>An XslTransform ready to performe an identity transform</returns>
+		public static XslCompiledTransform IdentityXSLT {
+			get {
+				return GetCachedCompiledTransform("identity.xsl");
+			}
+		}
+		
+		/// <summary>
+		/// Cache of compiled XSL templates.
+		/// </summary>
+		/// <remarks>Inspired by patch 1516398 submitted by Koen Muilwijk</remarks>
+		private static IDictionary compiledTransformCache = new Hashtable();
+		
+		/// <summary>
+		/// Access the internal cache of XslCompiledTransform object built from embedded resources.
+		/// </summary>
+		/// <param name="xslResourceName">Embedded Xsl resource name</param>
+		/// <returns>The XslCompiledTransform built from this resource</returns>
+		internal static XslCompiledTransform GetCachedCompiledTransform(string xslResourceName) {
+			lock(compiledTransformCache) {
+				XslCompiledTransform result = (XslCompiledTransform) compiledTransformCache[xslResourceName];
+				
+				if (result == null) {
+					if (Misc.UTIL_TS.TraceVerbose) Trace.TraceInformation("XslCompiledTransform cache miss for: " + xslResourceName);
+					result = new XslCompiledTransform();
+					result.Load(new XmlTextReader(Parameter.GetEmbeddedResourceStream(xslResourceName)), null, null);
+					compiledTransformCache.Add(xslResourceName, result);
+				}
+				else {
+					if (Misc.UTIL_TS.TraceVerbose) Trace.TraceInformation("XslCompiledTransform cache hit for: " + xslResourceName);
+				}
+
+				return result;
+			}
+		}
+		
+		/// <summary>
+		/// Instantiates a new validating XML reader, with validation type being None.
+		/// </summary>
+		/// <param name="xmlReader"></param>
+		/// <returns></returns>
+		public static XmlReader NewValidatingReader(XmlReader xmlReader) {
+			return NewValidatingReader(xmlReader, ValidationType.None);
+		}
+		
+		/// <summary>
+		/// Instantiates a new validating XML reader.
+		/// </summary>
+		/// <param name="xmlReader"></param>
+		/// <param name="validationType"></param>
+		/// <returns></returns>
+		public static XmlReader NewValidatingReader(XmlReader xmlReader, ValidationType validationType) {
+			return NewValidatingReader(xmlReader, validationType);
+		}
+
+		/// <summary>
+		/// Instantiates a new validating XML reader.
+		/// </summary>
+		/// <param name="xmlReader"></param>
+		/// <param name="validationType"></param>
+		/// <param name="xsdResourceName"></param>
+		/// <returns></returns>
+		public static XmlReader NewValidatingReader(XmlReader xmlReader, ValidationType validationType, params string[] xsdResourceName) {
+			XmlReaderSettings xmlReaderSettings = new XmlReaderSettings();
+			
+			if (validationType == ValidationType.DTD) {
+				xmlReaderSettings.ProhibitDtd = false;
+			}
+			else if ((validationType == ValidationType.Schema) && (xsdResourceName != null)) {
+				XmlSchemaSet sc = new XmlSchemaSet();
+				sc.Add(XmlSchema.Read(Parameter.GetEmbeddedResourceStream(xsdResourceName[0]),	null));
+				xmlReaderSettings.Schemas.Add(sc);
+			}
+			else if (validationType != ValidationType.None) {
+				throw new BREException("Validation type should be DTD, Schema or None. If Schema, a schema resource name must be passed.");
+			}
+
+			xmlReaderSettings.ValidationType = validationType;
+					
+			return XmlReader.Create(xmlReader, xmlReaderSettings);
+		}
+		
+		/// <summary>
+		/// Gets the best matching Xml schema type for an object.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		public static string GetSchemaTypeFromClr(object value) {
 			switch(value.GetType().FullName) {
 				case "System.Uri":
@@ -73,11 +165,22 @@ namespace NxBRE.Util
 					throw new ArgumentException("No default behavior for object of type" + value.GetType().FullName);
 			}		                                       	
 		}
-		
+
+		/// <summary>
+		/// Gets an XML string out of an object, using the most appropriate XML schema type.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		public static string FromClr(object value) {
 			return FromClr(value, GetSchemaTypeFromClr(value));
 		}
 
+		/// <summary>
+		/// Gets an XML string out of an object following a specific XML schema type.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="schemaType"></param>
+		/// <returns></returns>
 		public static string FromClr(object value, string schemaType) 
 		{
 			switch(schemaType.ToLower()) {
@@ -185,6 +288,12 @@ namespace NxBRE.Util
 			}
 		}
 		
+		/// <summary>
+		/// Gets an object instance out of an XML string and an XML schema type.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="schemaType"></param>
+		/// <returns></returns>
 		public static object ToClr(string value, string schemaType) {
 			switch(schemaType.ToLower()) {
        	case "anyuri":
@@ -207,7 +316,7 @@ namespace NxBRE.Util
 				case "gyear":
 				case "gyearmonth":
 				case "time":
-					return XmlConvert.ToDateTime(value);
+					return XmlConvert.ToDateTime(value, XmlDateTimeSerializationMode.Utc);
 				
 				case "decimal":
 				case "integer":

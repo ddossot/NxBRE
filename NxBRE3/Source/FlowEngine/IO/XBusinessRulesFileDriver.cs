@@ -17,14 +17,8 @@ namespace NxBRE.FlowEngine.IO {
 	public class XBusinessRulesFileDriver:XSLTRulesFileDriver {
 		
 		public XBusinessRulesFileDriver(string xmlFileURI):base(xmlFileURI) {
-			if (LogDispatcher != null)
-				LogDispatcher.DispatchLog("XBusinessRulesFileDriver accessing "+Parameter.GetString("transformxrules.xsl", "transformXRules.xsl")+" in assembly",
-				                          LogEventImpl.INFO);
-			
-			inputXMLSchema = Parameter.GetString("xbusinessrules.xsd", "xBusinessRules.xsd");
-			
-			xslt = new XslCompiledTransform();
-			xslt.Load(new XmlTextReader(Parameter.GetEmbeddedResourceStream("transformXRules.xsl")), null, null);
+			inputXMLSchema = "xbusinessrules.xsd";
+			xslt = Xml.GetCachedCompiledTransform("transformXRules.xsl");
 		}
 	}
 }

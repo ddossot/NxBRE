@@ -35,9 +35,6 @@ namespace NxBRE.Util
 	/// <summary>NxBRE utilities for on-the-fly compiling C# code</summary>
 	/// <author>David Dossot</author>
 	public abstract class Compilation {
-		private static CodeDomProvider csCodeProvider = new CSharpCodeProvider();
-		private static CodeDomProvider vbCodeProvider = new VBCodeProvider();
-
 		private static string nxbreAssemblyLocation = String.Empty;
 		private const string NXBRE_DLL = "NxBRE.dll";
 		
@@ -185,11 +182,11 @@ namespace NxBRE.Util
 		// ----- INTERNAL MEMBERS -----------------------------------------------
 		
 		internal static object LoadCSClass(string targetClassName, string source, bool sourceIsString) {
-			return LoadClass(csCodeProvider, targetClassName, source, sourceIsString);
+			return LoadClass(new CSharpCodeProvider(), targetClassName, source, sourceIsString);
 		}
 
 		internal static object LoadVBClass(string targetClassName, string source, bool sourceIsString) {
-			return LoadClass(vbCodeProvider, targetClassName, source, sourceIsString);
+			return LoadClass(new VBCodeProvider(), targetClassName, source, sourceIsString);
 		}
 	
 		// ----- PRIVATE MEMBERS -----------------------------------------------
@@ -269,13 +266,12 @@ namespace NxBRE.Util
 					if (!(assembly is AssemblyBuilder))
 						AddReferencedAssembly(compilerParameters, assembly.Location);
 			
-			ICodeCompiler compiler = codeProvider.CreateCompiler();
 			CompilerResults cr;
 			
 			if (sourceIsString)
-				cr = compiler.CompileAssemblyFromSource(compilerParameters, source);
+				cr = codeProvider.CompileAssemblyFromSource(compilerParameters, source);
 			else
-				cr = compiler.CompileAssemblyFromFile(compilerParameters, source);
+				cr = codeProvider.CompileAssemblyFromFile(compilerParameters, source);
 			
 			if (cr.Errors.Count == 0)
 				return cr.CompiledAssembly.CreateInstance(targetClassName);

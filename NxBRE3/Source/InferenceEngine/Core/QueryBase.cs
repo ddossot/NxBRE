@@ -56,7 +56,7 @@ namespace NxBRE.InferenceEngine.Core {
 		}
 		
 		public override string ToString() {
-			return Misc.ArrayListToString(queryDefs);
+			return Misc.IListToString(queryDefs);
 		}
 		
 	}

@@ -20,10 +20,10 @@ namespace NxBRE.FlowEngine.IO {
 		private ILogDispatcher logDispatcher = null;
 
 		///<summary>Builder pattern where the actual implementation is delegated to a descendant concrete class</summary>
-		protected abstract XmlValidatingReader GetReader();
+		protected abstract XmlReader GetReader();
 		
 		
-		public XmlValidatingReader GetXmlReader() {
+		public XmlReader GetXmlReader() {
 			return GetReader();			
 		}
 		
@@ -52,9 +52,7 @@ namespace NxBRE.FlowEngine.IO {
 			
 			if (xsdResourceName != null) {
 				// we validate against a well defined schema
-				sourceReader = new XmlValidatingReader(xmlReader);
-				((XmlValidatingReader) sourceReader).ValidationType = ValidationType.Schema;
-				((XmlValidatingReader) sourceReader).Schemas.Add(XmlSchema.Read(Parameter.GetEmbeddedResourceStream(xsdResourceName),	null));
+				sourceReader = Xml.NewValidatingReader(xmlReader, ValidationType.Schema, xsdResourceName);
 			}
 			else {
 				// it is easier to by default be lax if no internal XSD resource has been given

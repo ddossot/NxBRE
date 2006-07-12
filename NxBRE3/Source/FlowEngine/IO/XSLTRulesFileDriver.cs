@@ -54,9 +54,8 @@ namespace NxBRE.FlowEngine.IO {
 			return xslt;
 		}
 		
-		protected override XmlValidatingReader GetReader() {
-			if (LogDispatcher != null)
-				LogDispatcher.DispatchLog("XSLTRulesFileDriver loading "+xmlSource, LogEventImpl.INFO);
+		protected override XmlReader GetReader() {
+			if (LogDispatcher != null) LogDispatcher.DispatchLog("XSLTRulesFileDriver loading " + xmlSource, LogEventImpl.INFO);
 			
 			XmlReader fileReader = GetXmlInputReader(xmlSource, inputXMLSchema);
 
@@ -64,11 +63,8 @@ namespace NxBRE.FlowEngine.IO {
 	  	GetXSLT().Transform(new XPathDocument(fileReader), null, stream);
 			fileReader.Close();
 	  	stream.Seek(0, SeekOrigin.Begin);
-			XmlSchemaCollection schemas = new XmlSchemaCollection();
 			
-	    XmlValidatingReader streamReader = (XmlValidatingReader) GetXmlInputReader(stream,
-	                                                                               Parameter.GetString("businessrules.xsd", "businessRules.xsd"));
-			return streamReader;
+			return GetXmlInputReader(stream, "businessrules.xsd");
 		}
 	}
 }

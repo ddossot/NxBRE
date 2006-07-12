@@ -172,7 +172,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		public override string ToString() {
 			return Operator +
 						 "(\n" +
-						 Misc.ArrayListToString(new ArrayList(members), "  ") +
+						 Misc.IListToString(new ArrayList(members), "  ") +
 						 ")";
 		}
 		
@@ -183,7 +183,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		internal string ToStringWithRunningMembers() {
 			return Operator +
 						 "(\n" +
-						 Misc.ArrayListToString(new ArrayList(orderedMembers), "  ") +
+						 Misc.IListToString(new ArrayList(orderedMembers), "  ") +
 						 ")";
 		}
 		

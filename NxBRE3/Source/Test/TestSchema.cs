@@ -63,7 +63,7 @@ namespace NxBRE.Test
 																									Encoding.UTF8.GetBytes("hello world") , "aGVsbG8gd29ybGQ=",
 																									true, "true",
 																									(sbyte)123, "123",
-																									XmlConvert.ToDateTime("1999-12-31T23:59:59+01:00"), "1999-12-31T22:59:59Z",
+																									XmlConvert.ToDateTime("1999-12-31T23:59:59+01:00", XmlDateTimeSerializationMode.Utc), "1999-12-31T22:59:59Z",
 																									new Decimal(987654), "987654",
 																									123.456D, "123.456",
 																									new TimeSpan(23, 12, 35, 13), "P23DT12H35M13S",
@@ -85,7 +85,7 @@ namespace NxBRE.Test
 			  object clrValue = testObjects[i];
 			  string stringValue = (string)testObjects[i+1];
 			  
-			  Assert.AreEqual(stringValue, Schema.FromClr(clrValue), "Testing object=" + clrValue + " value=" + stringValue);
+			  Assert.AreEqual(stringValue, Xml.FromClr(clrValue), "Testing object=" + clrValue + " value=" + stringValue);
 			}
 		}
 
@@ -96,7 +96,7 @@ namespace NxBRE.Test
 			  string schemaType = testData[i];
 				string value = testData[i+1];
 			  
-			  Assert.AreEqual(value, Schema.FromClr(Schema.ToClr(value, schemaType), schemaType), "Testing type=" + schemaType + " value=" + value);
+			  Assert.AreEqual(value, Xml.FromClr(Xml.ToClr(value, schemaType), schemaType), "Testing type=" + schemaType + " value=" + value);
 			}
 		}
 	}

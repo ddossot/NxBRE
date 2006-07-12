@@ -4,6 +4,8 @@ namespace NxBRE.InferenceEngine.IO {
 	using System.Xml;
 	using System.Xml.XPath;
 	
+	using NxBRE.Util;
+	
 	///<summary>Adapter supporting RuleML 0.8 Datalog Sublanguage.</summary>
 	///<remarks>UTF-8 is the default encoding.</remarks>
 	/// <author>David Dossot</author>
@@ -41,10 +43,8 @@ namespace NxBRE.InferenceEngine.IO {
 			Document.LoadXml("<rulebase/>");
 		}
 				
-		protected override XmlValidatingReader GetXmlValidatingReaderForStream(string ignored) {
-			XmlValidatingReader validReader = new XmlValidatingReader(Reader);
-			validReader.ValidationType = ValidationType.DTD;
-			return validReader;
+		protected override XmlReader GetXmlValidatingReaderForStream(string ignored) {
+			return Xml.NewValidatingReader(Reader, ValidationType.DTD);
 		}
 
 	}

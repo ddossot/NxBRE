@@ -4,6 +4,7 @@ namespace NxBRE.Util
 	using System.IO;
 	using System.Collections;
 	using System.Configuration;
+	using System.Diagnostics;
 	using System.Reflection;
 
 	/// <summary>An helper class for easily accessing NxBRE's application settings and manipulating parameters.
@@ -25,7 +26,11 @@ namespace NxBRE.Util
 		/// <param name="resourceName">The name of the resource to get.</param>
 		/// <returns>The Stream that matches the passed resource name, or an exception if it can not be read.</returns>
 		public static Stream GetEmbeddedResourceStream(string resourceName) {
-			return Assembly.GetExecutingAssembly().GetManifestResourceStream(embeddedResourcePrefix + resourceName);
+			string fullResourceName = embeddedResourcePrefix + resourceName;
+			
+			Trace.WriteLineIf(Misc.UTIL_TS.TraceVerbose, "Fetching resource '" + fullResourceName + "' from assembly manifest");
+			
+			return Assembly.GetExecutingAssembly().GetManifestResourceStream(fullResourceName);
 		}
 		
 		///<summary>Gets the string value of the config file entry.</summary>

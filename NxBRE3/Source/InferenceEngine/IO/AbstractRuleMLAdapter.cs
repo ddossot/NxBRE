@@ -184,7 +184,7 @@ namespace NxBRE.InferenceEngine.IO {
 					}
 					else {
 						reader = new XmlTextReader(uriRuleML);
-						navigator = new XPathDocument(new XmlValidatingReader(reader)).CreateNavigator();
+						navigator = new XPathDocument(Xml.NewValidatingReader(reader)).CreateNavigator();
 					}
 					
 					nsmgr = new XmlNamespaceManager(navigator.NameTable);
@@ -318,11 +318,8 @@ namespace NxBRE.InferenceEngine.IO {
 			}
 		}
 
-		protected virtual XmlValidatingReader GetXmlValidatingReaderForStream(string schemaName) {
-			XmlValidatingReader validReader = new XmlValidatingReader(Reader);
-			validReader.ValidationType = ValidationType.Schema;
-			validReader.Schemas.Add(XmlSchema.Read(Parameter.GetEmbeddedResourceStream(schemaName),	null));
-			return validReader;
+		protected virtual XmlReader GetXmlValidatingReaderForStream(string schemaName) {
+			return Xml.NewValidatingReader(Reader, ValidationType.Schema, schemaName);
 		}
 
 		protected XPathExpression BuildXPathExpression(string xPath) {

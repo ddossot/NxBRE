@@ -48,7 +48,7 @@ namespace NxBRE.Test.FlowEngine
 		[Test]
 		public void XSLTRulesFileDriver_XSLTObject()
 		{
-			breTest = new BREFactoryConsole(0,0).NewBRE(new XSLTRulesFileDriver(testNative, Misc.IdentityXSLT));
+			breTest = new BREFactoryConsole(0,0).NewBRE(new XSLTRulesFileDriver(testNative, Xml.IdentityXSLT));
 			Assert.IsNotNull(breTest, "XslTransform Object");
 		}
 		

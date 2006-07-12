@@ -193,15 +193,11 @@ namespace NxBRE.InferenceEngine.IO {
 			}
 			    
 			
-			XslTransform xslt = new XslTransform();
-			
-			// select the appropriate XSL
-			string xslName = strict?"strict-vdx2nxbre-ie.xsl":"vdx2nxbre-ie.xsl";
-			
-			xslt.Load(new XPathDocument(Parameter.GetEmbeddedResourceStream(xslName)), null, null);
+			// load the appropriate XSL
+			XslCompiledTransform xslt = Xml.GetCachedCompiledTransform(strict?"strict-vdx2nxbre-ie.xsl":"vdx2nxbre-ie.xsl");
 			
 			MemoryStream stream = new MemoryStream();
-			xslt.Transform(xpDoc, xslArgs, stream, null);
+			xslt.Transform(xpDoc, xslArgs, stream);
 			stream.Seek(0, SeekOrigin.Begin);
 			rml086da = new RuleML086NafDatalogAdapter(stream, FileAccess.Read);
 		}
