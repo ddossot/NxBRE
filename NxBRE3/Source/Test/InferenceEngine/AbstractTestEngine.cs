@@ -27,7 +27,8 @@ namespace NxBRE.Test.InferenceEngine {
 		protected readonly string outFilesFolder;
 
 		protected AbstractTestEngine() {
-			Trace.Listeners.Add(new ConsoleTraceListener());
+			//FIXME: probably remove and use the config
+			//Trace.Listeners.Add(new ConsoleTraceListener());
 
 			ruleFilesFolder = Parameter.GetString("unittest.ruleml.inputfolder") + "/";
 			outFilesFolder = Parameter.GetString("unittest.outputfolder") + "/";

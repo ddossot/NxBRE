@@ -35,7 +35,7 @@ namespace NxBRE.InferenceEngine.IO {
 				XslCompiledTransform xslt = Xml.GetCachedCompiledTransform("ruleml-nafdatalog-0_86-2hrf.xsl");
 				
 				XmlTextReader reader = new XmlTextReader(tempfileName);
-				xslt.Transform(new XPathDocument(reader), new XsltArgumentList(), resultStream);
+				xslt.Transform(reader, new XsltArgumentList(), resultStream);
 				reader.Close();
 				
 				resultStream.Flush();

@@ -21,7 +21,7 @@ namespace NxBRE.FlowEngine.IO {
 			if (LogDispatcher != null)
 				LogDispatcher.DispatchLog("BusinessRulesFileDriver loading " + xmlSource, LogEventImpl.INFO);
 			
-			return GetXmlInputReader(xmlSource, "businessrules.xsd");
+			return GetXmlInputReader(xmlSource, "businessRules.xsd");
 		}
 	}
 }

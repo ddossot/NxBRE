@@ -147,7 +147,7 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.Process();
 			Assert.AreEqual(6, ie.FactsCount, "Initial process");
 
-			ie.LoadFacts(new RuleML08DatalogAdapter(ruleFilesFolder + "facts.ruleml", FileAccess.Read));
+			ie.LoadFacts(new RuleML086DatalogAdapter(ruleFilesFolder + "facts.ruleml", FileAccess.Read));
 			Assert.AreEqual(8, ie.FactsCount, "Loaded facts");
 
 			ie.Process();

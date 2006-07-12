@@ -41,13 +41,13 @@ namespace NxBRE.Util
 				XslCompiledTransform result = (XslCompiledTransform) compiledTransformCache[xslResourceName];
 				
 				if (result == null) {
-					if (Misc.UTIL_TS.TraceVerbose) Trace.TraceInformation("XslCompiledTransform cache miss for: " + xslResourceName);
+					Trace.WriteLineIf(Misc.UTIL_TS.TraceVerbose, "XslCompiledTransform cache miss for: " + xslResourceName);
 					result = new XslCompiledTransform();
 					result.Load(new XmlTextReader(Parameter.GetEmbeddedResourceStream(xslResourceName)), null, null);
 					compiledTransformCache.Add(xslResourceName, result);
 				}
 				else {
-					if (Misc.UTIL_TS.TraceVerbose) Trace.TraceInformation("XslCompiledTransform cache hit for: " + xslResourceName);
+					Trace.WriteLineIf(Misc.UTIL_TS.TraceVerbose, "XslCompiledTransform cache hit for: " + xslResourceName);
 				}
 
 				return result;
@@ -70,7 +70,7 @@ namespace NxBRE.Util
 		/// <param name="validationType"></param>
 		/// <returns></returns>
 		public static XmlReader NewValidatingReader(XmlReader xmlReader, ValidationType validationType) {
-			return NewValidatingReader(xmlReader, validationType);
+			return NewValidatingReader(xmlReader, validationType, null);
 		}
 
 		/// <summary>
@@ -81,6 +81,8 @@ namespace NxBRE.Util
 		/// <param name="xsdResourceName"></param>
 		/// <returns></returns>
 		public static XmlReader NewValidatingReader(XmlReader xmlReader, ValidationType validationType, params string[] xsdResourceName) {
+			Trace.WriteLineIf(Misc.UTIL_TS.TraceVerbose, "Instantiating new validating reader with validation: " + validationType + " and XSDs " + Misc.IListToString(xsdResourceName));
+			
 			XmlReaderSettings xmlReaderSettings = new XmlReaderSettings();
 			
 			if (validationType == ValidationType.DTD) {
