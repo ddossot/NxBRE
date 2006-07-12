@@ -17,12 +17,11 @@ namespace NxBRE.FlowEngine.IO {
 	public sealed class BusinessRulesFileDriver:AbstractRulesDriver {
 		public BusinessRulesFileDriver(string xmlFileURI):base(xmlFileURI) {}
 		
-		protected override XmlValidatingReader GetReader() {
+		protected override XmlReader GetReader() {
 			if (LogDispatcher != null)
-				LogDispatcher.DispatchLog("BusinessRulesFileDriver loading "+xmlSource, LogEventImpl.INFO);
+				LogDispatcher.DispatchLog("BusinessRulesFileDriver loading " + xmlSource, LogEventImpl.INFO);
 			
-			return (XmlValidatingReader) GetXmlInputReader(xmlSource,
-			                                               Parameter.GetString("businessrules.xsd", "businessRules.xsd"));
+			return GetXmlInputReader(xmlSource, "businessrules.xsd");
 		}
 	}
 }

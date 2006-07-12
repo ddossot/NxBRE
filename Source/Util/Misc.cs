@@ -3,12 +3,7 @@ namespace NxBRE.Util
 	using System;
 	using System.Diagnostics;
 	using System.Collections;
-	using System.IO;
-	using System.Xml;
-	using System.Xml.Xsl;
 	
-	using NxBRE.FlowEngine;
-
 	/// <summary>Misc NxBRE utilities.</summary>
 	/// <author>David Dossot</author>
 	public abstract class Misc {
@@ -47,45 +42,6 @@ namespace NxBRE.Util
 			public override bool IsReadOnly {get {return true;} }
 		}
 
-		/// <summary>
-		/// Ready made identity XSLT, usefull for XML persistence
-		/// </summary>
-		/// <returns>An XslTransform ready to performe an identity transform</returns>
-		public static XslCompiledTransform IdentityXSLT {
-			get {
-				return GetCachedCompiledTransform("identity.xsl");
-			}
-		}
-		
-		/// <summary>
-		/// Cache of compiled XSL templates.
-		/// </summary>
-		/// <remarks>Inspired by patch 1516398 submitted by Koen Muilwijk</remarks>
-		private static IDictionary compiledTransformCache = new Hashtable();
-		
-		/// <summary>
-		/// Access the internal cache of XslCompiledTransform object built from embedded resources.
-		/// </summary>
-		/// <param name="xslResourceName">Embedded Xsl resource name</param>
-		/// <returns>The XslCompiledTransform built from this resource</returns>
-		internal static XslCompiledTransform GetCachedCompiledTransform(string xslResourceName) {
-			lock(compiledTransformCache) {
-				XslCompiledTransform result = (XslCompiledTransform) compiledTransformCache[xslResourceName];
-				
-				if (result == null) {
-					if (UTIL_TS.TraceVerbose) Trace.TraceInformation("XslCompiledTransform cache miss for: " + xslResourceName);
-					result = new XslCompiledTransform();
-					result.Load(new XmlTextReader(Parameter.GetEmbeddedResourceStream(xslResourceName)), null, null);
-					compiledTransformCache.Add(xslResourceName, result);
-				}
-				else {
-					if (UTIL_TS.TraceVerbose) Trace.TraceInformation("XslCompiledTransform cache hit for: " + xslResourceName);
-				}
-
-				return result;
-			}
-		}
-		
 		///<summary>
 		/// Determines if two ArrayList are intersecting, i.e. have an object in common.
 		///</summary>

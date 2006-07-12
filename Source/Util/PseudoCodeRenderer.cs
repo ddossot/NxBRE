@@ -27,13 +27,9 @@ namespace NxBRE.Util
 		}
 		
 		private void Render(Stream stream, string xslResourceName, XsltArgumentList args) {
-			XslTransform xslt = new XslTransform();
-			xslt.Load(new XmlTextReader(Parameter.GetEmbeddedResourceStream(xslResourceName)), null, null);
-			
-			XmlValidatingReader reader = new XmlValidatingReader(new XmlTextReader(ruleFileURI));
-			reader.ValidationType = ValidationType.Schema;
-			reader.Schemas.Add(XmlSchema.Read(Parameter.GetEmbeddedResourceStream("xBusinessRules.xsd"),	null));
-			xslt.Transform(new XPathDocument(reader), args, stream, null);
+			XslCompiledTransform xslt = Xml.GetCachedCompiledTransform(xslResourceName);
+			XmlReader reader = Xml.NewValidatingReader(new XmlTextReader(ruleFileURI), ValidationType.Schema, "xBusinessRules.xsd");
+			xslt.Transform(reader, args, stream);
 			reader.Close();
 		}
 		

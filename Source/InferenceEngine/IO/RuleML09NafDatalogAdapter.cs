@@ -363,7 +363,7 @@ namespace NxBRE.InferenceEngine.IO {
 					if (schemaType.IndexOf(':')>=0) schemaType = schemaType.Split(':')[1];
 					
 					// this is a strongly typed individual
-					predicate = new Individual(Schema.ToClr(predicateValue, schemaType), schemaType);
+					predicate = new Individual(Xml.ToClr(predicateValue, schemaType), schemaType);
 				}
 				else {
 					// this is just a string based predicate, using Data was not so wise...
@@ -492,13 +492,13 @@ namespace NxBRE.InferenceEngine.IO {
 					}
 					else {
 						string sourceType = ((Individual)pre).SourceType;
-						if ((forceDataTyping) && (!(pre.Value is string)) && ((sourceType == null) || (sourceType == String.Empty))) sourceType = Schema.GetSchemaTypeFromClr(pre.Value);
+						if ((forceDataTyping) && (!(pre.Value is string)) && ((sourceType == null) || (sourceType == String.Empty))) sourceType = Xml.GetSchemaTypeFromClr(pre.Value);
 		
 						if ((sourceType != null) && (sourceType != String.Empty)) {
 							// we persist as a typed data
 							predicate = Document.CreateElement("Data", DatalogNamespaceURL);
-							predicate.SetAttribute("type", Schema.NS_URI, "xs:" + sourceType);
-							predicate.InnerText = Schema.FromClr(pre.Value, sourceType);
+							predicate.SetAttribute("type", Xml.NS_URI, "xs:" + sourceType);
+							predicate.InnerText = Xml.FromClr(pre.Value, sourceType);
 						}
 						else {
 							// we persist as a String based individual

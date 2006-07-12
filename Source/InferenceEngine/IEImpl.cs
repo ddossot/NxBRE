@@ -349,12 +349,12 @@ namespace NxBRE.InferenceEngine {
 				// load the Equivalents and IntegrityQueries if the adapter supports it
 				if (adapter is IExtendedRuleBaseAdapter) {
 					equivalents = ((IExtendedRuleBaseAdapter)adapter).Equivalents;
-					if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("Loaded " + equivalents.Count + " Equivalents");
+					Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "Loaded " + equivalents.Count + " Equivalents");
 					
 					integrityQueries = ((IExtendedRuleBaseAdapter)adapter).IntegrityQueries;
 					foreach(Query integrityQuery in integrityQueries) WM.FB.RegisterAtoms(integrityQuery.AtomGroup.AllAtoms);
 				
-					if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("Loaded " + integrityQueries.Count + " IntegrityQueries");
+					Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "Loaded " + integrityQueries.Count + " IntegrityQueries");
 				}
 				else {
 					equivalents = new ArrayList();
@@ -375,33 +375,33 @@ namespace NxBRE.InferenceEngine {
 					QB.Add(query);
 					WM.FB.RegisterAtoms(query.AtomGroup.AllAtoms);
 				}
-				if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("Loaded " + QB.Count + " Queries");
+				Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "Loaded " + QB.Count + " Queries");
 				
 				// load implications
 				foreach(Implication implication in adapter.Implications) {
 					IB.Add(implication);
 					int nbRA = WM.FB.RegisterAtoms(implication.AtomGroup.AllAtoms);
-					if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("Registered: " + nbRA + " body atoms");
+					Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "Registered: " + nbRA + " body atoms");
 					
 					// modifying implication must run searches based on their deduction, so must register the atom
 					if (implication.Action == ImplicationAction.Modify) {
 						nbRA = WM.FB.RegisterAtoms(implication.Deduction);
-						if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("Registered: " + nbRA + " head atoms");
+						Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "Registered: " + nbRA + " head atoms");
 					}
 				}
-				if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("Loaded " + IB.Count + " Implications\n");
+				Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "Loaded " + IB.Count + " Implications\n");
 				
 				// load mutexes
 				mm.AnalyzeImplications();
-				if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("Loaded Mutexes\n" + mm.ToString());
+				Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "Loaded Mutexes\n" + mm.ToString());
 				
 				// load preconditions
 				pm.AnalyzeImplications();
-				if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("Loaded Preconditions\n" + pm.ToString());
+				Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "Loaded Preconditions\n" + pm.ToString());
 				
 				// load facts
 				foreach(Fact fact in adapter.Facts) Assert(fact);
-				if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("Loaded " + WM.FB.Count + " Facts");
+				Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "Loaded " + WM.FB.Count + " Facts");
 				
 				// finish the WM init
 				WM.FinishInitialization();
@@ -474,7 +474,7 @@ namespace NxBRE.InferenceEngine {
 				// load facts
 				int initialFactsCount = WM.FB.Count;
 				foreach(Fact fact in adapter.Facts) Assert(fact);
-				if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("Added " + (WM.FB.Count - initialFactsCount) + " new Facts");
+				Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "Added " + (WM.FB.Count - initialFactsCount) + " new Facts");
 				
 			} //end: using adapter
 
@@ -801,7 +801,7 @@ namespace NxBRE.InferenceEngine {
 		private void InferUntilNoNewFact(ArrayList positiveImplications) {
 			long iniTime;
 			
-			if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("(Starting) " +
+			Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "(Starting) " +
 															            ((WM.Type == WorkingMemoryTypes.Global)?"Global":"Isolated") +
 															            "Working Memory contains: " +
 															            WM.FB.Count + " facts, " +
@@ -825,7 +825,7 @@ namespace NxBRE.InferenceEngine {
 				agenda.Schedule(iterationPositiveImplications, IB);
 				agenda.PrepareExecution();
 				
-				if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("Iteration #" +
+				Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "Iteration #" +
 																	            iteration +
 																	            ": " +
 																	            agenda.Count + " implications in agenda, with " +
@@ -841,7 +841,7 @@ namespace NxBRE.InferenceEngine {
 					if ((firedImplication.MutexChain != null) &&
 					    (!positiveImplications.Contains(firedImplication)) &&
 							(Misc.AreIntersecting(firedImplication.MutexChain, positiveImplications))) {
-						if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("Mutexed: "+firedImplication.Label);
+						Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "Mutexed: "+firedImplication.Label);
 						firedImplication = null;
 					}
 					
@@ -849,7 +849,7 @@ namespace NxBRE.InferenceEngine {
 					if ((firedImplication != null) &&
 					    (firedImplication.PreconditionImplication != null) &&
 					    (!positiveImplications.Contains(firedImplication.PreconditionImplication))) {
-						if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("Negative Precondition: "+firedImplication.Label);
+						Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "Negative Precondition: "+firedImplication.Label);
 						firedImplication = null;
 					}
 					
@@ -858,7 +858,7 @@ namespace NxBRE.InferenceEngine {
 
 						int resultsCount = RunImplication(firedImplication);
 						
-						if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("Fired Implication: " +
+						Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "Fired Implication: " +
 																			            firedImplication.ToString() +
 																			            " returned: " + 
 																			            resultsCount);
@@ -888,7 +888,7 @@ namespace NxBRE.InferenceEngine {
 																									            (long)(DateTime.Now.Ticks - iniTime)/10000 +
 																									            " milliseconds");
 			
-			if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("(Finishing) " +
+			Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "(Finishing) " +
 																            ((WM.Type == WorkingMemoryTypes.Global)?"Global":"Isolated") +
 																            "Working Memory contains: " +
 																            WM.FB.Count + " facts, " +
@@ -910,7 +910,7 @@ namespace NxBRE.InferenceEngine {
 
 			if (implication.Action == ImplicationAction.Count)
 			{
-				if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("Counting Implication '" + implication.Label + "' counted: " + processResults.Count);
+				Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "Counting Implication '" + implication.Label + "' counted: " + processResults.Count);
 
 				bool variableFound = false;
 				IPredicate[] members = (IPredicate[])implication.Deduction.Members.Clone();
@@ -931,7 +931,7 @@ namespace NxBRE.InferenceEngine {
 				// counting implication factbase action
 				bool result = WM.FB.Assert(deductedFact);
 				if ((result) && (NewFactHandler != null)) NewFactHandler(new NewFactEventArgs(deductedFact));
-				if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation((result?"Asserted":"Ignored Assertion of ") + " Fact: " + deductedFact.ToString());
+				Trace.WriteLineIf(Misc.IE_TS.TraceVerbose,(result?"Asserted":"Ignored Assertion of ") + " Fact: " + deductedFact.ToString());
 			}
 			else if ((implication.Action == ImplicationAction.Assert)
 	      		|| (implication.Action == ImplicationAction.Retract))
@@ -947,13 +947,13 @@ namespace NxBRE.InferenceEngine {
 							// retracting implication factbase action
 							bool result = WM.FB.Retract(deductedFact);
 							if ((result) && (DeleteFactHandler != null)) DeleteFactHandler(new NewFactEventArgs(deductedFact));
-							if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation((result?"Retracted":"Ignored Retraction of ") + " Fact: " + deductedFact.ToString());
+							Trace.WriteLineIf(Misc.IE_TS.TraceVerbose,(result?"Retracted":"Ignored Retraction of ") + " Fact: " + deductedFact.ToString());
 						}
 						else {
 							// asserting implication factbase action
 							bool result = WM.FB.Assert(deductedFact);
 							if ((result) && (NewFactHandler != null)) NewFactHandler(new NewFactEventArgs(deductedFact));
-							if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation((result?"Asserted":"Ignored Assertion of ") + " Fact: " + deductedFact.ToString());
+							Trace.WriteLineIf(Misc.IE_TS.TraceVerbose,(result?"Asserted":"Ignored Assertion of ") + " Fact: " + deductedFact.ToString());
 						}
 					}
 				}
@@ -967,22 +967,22 @@ namespace NxBRE.InferenceEngine {
 				  // and performing a search in the fact base
 				  Atom modificationTargetLookup = FactBase.BuildQueryFromDeduction(implication.Deduction, processResult);
 
-				  if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("Modifying Implication '" + implication.Label + "' will target matches of: " + modificationTargetLookup);
+				  Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "Modifying Implication '" + implication.Label + "' will target matches of: " + modificationTargetLookup);
 				  	
 				 	foreach(Fact factToModify in FactBase.ExtractFacts(WM.FB.ProcessAtomGroup(new AtomGroup(AtomGroup.LogicalOperator.And, modificationTargetLookup)))) {
-					  if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("-> found target: " + factToModify);
+					  Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "-> found target: " + factToModify);
 
 					  // for each fact, perform the modification
 				  	Fact deductedFact = BuildFact(implication.Deduction,
 				  	                              FactBase.EnrichResults(processResult, modificationTargetLookup, factToModify));
 
-					  if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation("-> modified target: " + deductedFact);
+					  Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "-> modified target: " + deductedFact);
 
 					  if ((deductedFact != null) && (!factToModify.Equals(deductedFact))) {
 							implicationResultsCount++;
 							bool result = WM.FB.Modify(factToModify, deductedFact);
 							if ((result) && (ModifyFactHandler != null))ModifyFactHandler(new NewFactEventArgs(factToModify, deductedFact));
-							if (Misc.IE_TS.TraceVerbose) Trace.TraceInformation((result?"Modified":"Ignored Modification of ") + " Fact: " + factToModify.ToString());
+							Trace.WriteLineIf(Misc.IE_TS.TraceVerbose,(result?"Modified":"Ignored Modification of ") + " Fact: " + factToModify.ToString());
 						}
 				  }
 				}

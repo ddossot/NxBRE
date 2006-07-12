@@ -359,7 +359,7 @@ namespace NxBRE.FlowEngine
 		/// </summary>
 		private XPathNavigator GetXmlDocumentRules() {
 			if ((rulesDriver != null) && (xmlDocument == null)) {
-				XmlValidatingReader reader = rulesDriver.GetXmlReader();
+				XmlReader reader = rulesDriver.GetXmlReader();
 				xmlDocument = new XPathDocument(reader);
 				
 				// this close is very important for freeing the underlying resource, which can be a file

@@ -144,7 +144,7 @@
     <Compile Include="Util\Parameter.cs" />
     <Compile Include="Util\PseudoCodeRenderer.cs" />
     <Compile Include="Util\Reflection.cs" />
-    <Compile Include="Util\Schema.cs" />
+    <Compile Include="Util\Xml.cs" />
     <Compile Include="Util\Compilation.cs" />
     <Compile Include="Util\DataAccess.cs" />
     <Compile Include="Test\FlowEngine\TestDrivers.cs" />
