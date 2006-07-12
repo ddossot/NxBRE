@@ -15,3 +15,8 @@ NxBRE3
 IE-Console
 ----------
   Based on the mainstream NxBRE version
+
+
+Misc
+----
+  Random stuff to be integrated in NxBRE
