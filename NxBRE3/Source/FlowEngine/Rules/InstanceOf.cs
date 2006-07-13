@@ -2,8 +2,10 @@ namespace NxBRE.FlowEngine.Rules
 {
 	using System;
 	using System.Collections;
+	using System.Diagnostics;
 
 	using NxBRE.FlowEngine;
+	using NxBRE.Util;
 
 	/// <summary> Checks if one object is the instance of another
 	/// </summary>
@@ -20,7 +22,6 @@ namespace NxBRE.FlowEngine.Rules
 		}
 		
 		/// <summary> Checks if one object is the instance of another
-		/// *
 		/// </summary>
 		/// <param name="aBRC">The BRERuleContext object containing all the state
 		/// information for use by this method.
@@ -43,8 +44,12 @@ namespace NxBRE.FlowEngine.Rules
 				else
 						return false;
 			}
-			catch(System.Exception) {
-				//TODO: log
+			catch(System.Exception e) {
+				if (Misc.FE_TS.TraceWarning) Trace.TraceWarning("InstanceOf can not execute comparison with context: " + aBRC +
+				                                                "\n parameters: " + Misc.IDictionaryToString(aMap) +
+				                                                "\n first object: " + aObj +
+				                                                "\n second object: " + aCompareTo +
+				                                                "\n stacktrace: " + e.StackTrace);
 			}
 			
 			return false;

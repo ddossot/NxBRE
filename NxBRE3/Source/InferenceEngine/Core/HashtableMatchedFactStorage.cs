@@ -69,7 +69,7 @@ namespace NxBRE.InferenceEngine.Core {
 		public void Add(Fact fact, Atom matchingAtom) {
 			if (!factTable.ContainsKey(fact.GetLongHashCode())) factTable.Add(fact.GetLongHashCode(), fact);
 			
-			Fact resolved = Fact.Resolve(false, fact, matchingAtom);
+			Fact resolved = RulesUtil.Resolve(false, fact, matchingAtom);
 
 			for (int i=0; i<resolved.Members.Length; i++) {
 				object predicateValue = resolved.GetPredicateValue(i);

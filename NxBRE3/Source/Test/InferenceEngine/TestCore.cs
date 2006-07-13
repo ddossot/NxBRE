@@ -256,7 +256,7 @@ namespace NxBRE.Test.InferenceEngine {
 			Atom source = new Atom("own", new Variable("person"), new Variable("stuff"));
 			Atom target = new Atom("belongs", new Variable("person"), new Variable("stuff"));
 			Atom expected = new Atom("belongs", new Variable("person"), new Variable("object"));
-			Assert.AreEqual(expected.GetLongHashCode(), Atom.TranslateVariables(template, source, target).GetLongHashCode());
+			Assert.AreEqual(expected.GetLongHashCode(), RulesUtil.TranslateVariables(template, source, target).GetLongHashCode());
 		}
 		
 		[Test]
@@ -535,9 +535,9 @@ namespace NxBRE.Test.InferenceEngine {
 		
 		[Test]
 		public void AtomResolveFunctions() {
-			Assert.AreEqual(atom3, Atom.ResolveFunctions(atom3), "Atom without functions");
+			Assert.AreEqual(atom3, RulesUtil.ResolveFunctions(atom3), "Atom without functions");
 			Assert.IsTrue(atomF.HasFunction, "atom Hasfunction");
-			Atom atomNoF = Atom.ResolveFunctions(atomF);                  
+			Atom atomNoF = RulesUtil.ResolveFunctions(atomF);                  
 			Assert.IsFalse(atomF.Equals(atomNoF), "Atom with functions");
 			Assert.IsFalse(atomNoF.HasFunction, "atomNoF Hasfunction");
 			Assert.IsTrue(fact3.Matches(atomNoF), "Fact and Atom match");
@@ -546,7 +546,7 @@ namespace NxBRE.Test.InferenceEngine {
 		[Test]
 		public void FactResolve() {
 			Fact fact2bis = new Fact("spending", new Individual("Peter Miller"), new Individual(35000));
-			Fact fact2ter = Fact.Resolve(fact2bis, atomF);
+			Fact fact2ter = RulesUtil.Resolve(fact2bis, atomF);
 			Assert.IsFalse(fact2.Equals(fact2bis));
 			Assert.IsTrue(fact2.Equals(fact2ter));
 		}
