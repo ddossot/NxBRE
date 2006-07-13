@@ -1,6 +1,7 @@
 namespace NxBRE.InferenceEngine.Rules {
 	using System;
 	using System.Collections;
+	using System.Text;
 	
 	using NxBRE.InferenceEngine.Core;
 	using NxBRE.InferenceEngine.Rules;
@@ -330,17 +331,25 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// </summary>
 		/// <returns>The String representation of the Atom.</returns>
 		public override string ToString() {
-			string result	= (negative?"!":"") + type + "{";
+			StringBuilder result = new StringBuilder(negative?"!":"");
+			result.Append(type).Append("{");
 			bool first = true;
+			
 			for(int i=0; i<predicates.Length; i++) {
 				IPredicate member = predicates[i];
-				if (!first) result += ",";
-				if (slotNames[i] != String.Empty) result += (slotNames[i] + "=");
-				result += member.ToString();
-				if (first) first = !first;
+				if (!first) result.Append(",");
+				if (slotNames[i] != String.Empty) result.Append(slotNames[i]).Append("=");
+				result.Append(member.ToString());
+				
+				// Type is displayed for non-string predicates, as suggested by Chuck Cross
+				//FIXME: this makes many tests fail, check how to improve, for ex. do it only if trace is verbose
+				//if (member.Value.GetType() != typeof(System.String)) result.Append(" [").Append(member.Value.GetType().ToString()).Append("]");
+				
+				if (first) first = false;
 			}
-			result += "}";
-			return result;
+			
+			result.Append("}");
+			return result.ToString();
 		}
 		
 		/// <summary>
