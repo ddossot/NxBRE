@@ -211,6 +211,9 @@
     <Folder Include="Test\FlowEngine" />
     <Folder Include="Test\InferenceEngine" />
     <Folder Include="_tokill" />
+    <Content Include="NxBRE.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>
