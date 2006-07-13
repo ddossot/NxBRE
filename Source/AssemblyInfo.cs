@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 [assembly:AssemblyCopyright("Copyright (C) 2003-2006 David Dossot et al.")]
 [assembly:AssemblyTrademark("NxBRE is distributed under the GNU LESSER GENERAL PUBLIC LICENSE.")]
 [assembly:AssemblyCulture("")]
-[assembly:AssemblyVersion("2.5.2.*")]
+[assembly:AssemblyVersion("2.5.3.*")]
 [assembly:AssemblyDelaySign(false)]
 [assembly:AssemblyKeyFile("")]
 [assembly:CLSCompliant(true)]
