@@ -2,6 +2,8 @@ namespace NxBRE.InferenceEngine.Rules {
 	using System;
 	using System.Collections;
 	
+	using NxBRE.InferenceEngine.Core;
+	
 	using NxBRE.Util;
 	
 	/// <summary>
@@ -128,7 +130,7 @@ namespace NxBRE.InferenceEngine.Rules {
 			resolvedMembers = new object[orderedMembers.Length];
 			
 			for(int i=0; i<orderedMembers.Length; i++) {
-				if (orderedMembers[i] is Atom) resolvedMembers[i] = Atom.ResolveFunctions((Atom)orderedMembers[i]);
+				if (orderedMembers[i] is Atom) resolvedMembers[i] = RulesUtil.ResolveFunctions((Atom)orderedMembers[i]);
 				else resolvedMembers[i] = orderedMembers[i];
 			}
 		}

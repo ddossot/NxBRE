@@ -193,6 +193,7 @@
     <EmbeddedResource Include="Resources\xBusinessRules.xsd" />
     <Compile Include="FlowEngine\Rules\IInitializable.cs" />
     <EmbeddedResource Include="Resources\identity.xsl" />
+    <Compile Include="InferenceEngine\Core\RulesUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />

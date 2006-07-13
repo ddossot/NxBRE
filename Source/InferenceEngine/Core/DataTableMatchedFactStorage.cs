@@ -3,6 +3,7 @@ namespace NxBRE.InferenceEngine.Core {
 	using System.Collections;
 	using System.Data;
 	
+	using NxBRE.InferenceEngine.Core;
 	using NxBRE.InferenceEngine.Rules;
 	using NxBRE.Util;
 	
@@ -43,7 +44,7 @@ namespace NxBRE.InferenceEngine.Core {
 				row["hashcode"] = fact.StringLongHashCode;
 				row["fact"] = fact;
 	     	
-     		Fact resolved = Fact.Resolve(fact, matchingAtom);
+     		Fact resolved = RulesUtil.Resolve(fact, matchingAtom);
 
      		for(int i=0; i<resolved.Members.Length; i++) {
      			object predicateValue = resolved.GetPredicateValue(i);

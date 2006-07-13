@@ -6,6 +6,7 @@ namespace NxBRE.InferenceEngine.IO {
 	using System.Xml.Schema;
 	using System.Xml.XPath;
 	
+	using NxBRE.InferenceEngine.Core;
 	using NxBRE.InferenceEngine.Rules;
 	using NxBRE.Util;
 
@@ -404,7 +405,7 @@ namespace NxBRE.InferenceEngine.IO {
 			foreach(object atomOrAtomGroup in content) {
 				if (atomOrAtomGroup is Atom) {
 					Atom atom = (Atom)atomOrAtomGroup;
-					ArrayList atomEquivalents = Equivalent.GetAll(equivalents, atom, new ArrayList());
+					ArrayList atomEquivalents = RulesUtil.GetAll(equivalents, atom, new ArrayList());
 						
 					if (atomEquivalents.Count > 1) {
 						if (logicalOperator == AtomGroup.LogicalOperator.Or) {

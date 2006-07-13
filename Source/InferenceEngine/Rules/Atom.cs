@@ -427,53 +427,6 @@ namespace NxBRE.InferenceEngine.Rules {
 			}
 		}
 		
-		// ----------------- Static methods ----------------
-		
-		/// <summary>
-		/// Resolves all Function predicates by replacing them by their String representations.
-		/// </summary>
-		/// <param name="atom">The Atom to resolve.</param>
-		/// <returns>A new Atom where all Function predicates have been resolved. If no
-		/// Function predicate exists, it returns a clone of the current Atom.</returns>
-		public static Atom ResolveFunctions(Atom atom) {
-			if (atom.HasFunction) {
-				IPredicate[] predicates = new IPredicate[atom.predicates.Length];
-				
-				for(int i=0; i<atom.predicates.Length; i++)
-					if (atom.predicates[i] is Function) predicates[i] = new Individual(atom.predicates[i].ToString());
-					else predicates[i] = atom.predicates[i];
-				return new Atom(atom.Negative, atom.Type, predicates);
-			}
-			else
-				return (Atom)atom.Clone();
-		}
-		
-		/// <summary>
-		/// Translates variable names of a target atom with names from a template atom matching the position of a
-		/// source atom.
-		/// </summary>
-		/// <remarks>Template and source atoms must match together else unpredictible result may occur.</remarks>
-		/// <param name="template"></param>
-		/// <param name="target"></param>
-		/// <returns></returns>
-		public static Atom TranslateVariables(Atom template, Atom source, Atom target) {
-			IPredicate[] resultMembers = new IPredicate[target.Members.Length];
-			
-			for(int i=0; i<target.Members.Length; i++) {
-				IPredicate targetMember = target.Members[i];
-				
-				if (targetMember is Variable) {
-					int indexOfSourceMember = Array.IndexOf(source.Members, targetMember);
-					if (indexOfSourceMember >= 0) resultMembers[i] = template.Members[indexOfSourceMember];
-					else resultMembers[i] = targetMember;
-				}
-				else
-					resultMembers[i] = targetMember;
-			}
-			
-			return new Atom(template.Negative, target.Type, resultMembers);
-		}
-		
 	}
 
 }

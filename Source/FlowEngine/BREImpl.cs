@@ -241,12 +241,10 @@ namespace NxBRE.FlowEngine
 			}
 		}
 		
-		//FIXME: improve this construct
 		private void DispatchRuleResult(IBRERuleResult ruleResult) {
 			if (ResultHandlers != null) ResultHandlers(this, ruleResult);
 		}
 		
-		//FIXME: improve this construct
 		private DispatchRuleResult GetResultHandlers() {
 			return ResultHandlers;
 		}

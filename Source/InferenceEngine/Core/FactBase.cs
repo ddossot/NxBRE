@@ -307,7 +307,7 @@ namespace NxBRE.InferenceEngine.Core {
 	  	// from the query part of the implication
 	  	foreach(ResultPocket rp in resultStack)
 	  		if (!(rp.fact is FactBase.NegativeFact))
-	  			Fact.Populate(rp.fact, rp.source, members);
+	  			RulesUtil.Populate(rp.fact, rp.source, members);
 	  	
 	  	// if there are formulas in the atom, resolve these expressions, passing
 	  	// the variable values as arguments
@@ -379,7 +379,7 @@ namespace NxBRE.InferenceEngine.Core {
 	  	
 	  	// populate the variable elements with predicate values coming
 	  	// from the query part of the implication
-	  	foreach(ResultPocket rp in resultStack) Fact.Populate(rp.fact, rp.source, members);
+	  	foreach(ResultPocket rp in resultStack) RulesUtil.Populate(rp.fact, rp.source, members);
 	  	
 	  	if ((targetAtom.HasFormula) || (targetAtom.HasIndividual)) {
   			// formulas and individuals must be replaced by variables
