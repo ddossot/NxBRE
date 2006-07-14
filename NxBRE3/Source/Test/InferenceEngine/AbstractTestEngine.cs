@@ -51,21 +51,21 @@ namespace NxBRE.Test.InferenceEngine {
 	  
 		protected void HandleExpectedNewFact(NewFactEventArgs nfea) 
 	  {
-	  	if ((deductionsToCheck != null)
-	  		&& (Array.IndexOf(deductionsToCheck, nfea.Fact.ToString())<0)) {
-	  			wrongDeduction = true;
-					Console.Error.WriteLine("* Wrongly Deducted: {0} @ {1} !!! !!!", nfea.Fact, deductionChecker);
-	  		}
+	  	if ((deductionsToCheck != null) && (Array.IndexOf(deductionsToCheck, nfea.Fact.ToString(false))<0)) {
+  			wrongDeduction = true;
+				Console.Error.WriteLine("* Wrongly Deducted: {0} @ {1} !!! !!!", nfea.Fact, deductionChecker);
+	  	}
+			
 	  	deductionChecker++;
 	  }
 	  
 		protected void HandleOrderedNewFact(NewFactEventArgs nfea) 
 	  {
-	  	if ((deductionsToCheck != null)
-	  		&& (deductionsToCheck[deductionChecker] != nfea.Fact.ToString())) {
-	  			wrongDeduction = true;
-					Console.Error.WriteLine("* Wrongly Deducted: {0} @ {1}, Expected: {2}", nfea.Fact, deductionChecker, deductionsToCheck[deductionChecker]);
-	  		}
+	  	if ((deductionsToCheck != null) && (deductionsToCheck[deductionChecker] != nfea.Fact.ToString(false))) {
+  			wrongDeduction = true;
+				Console.Error.WriteLine("* Wrongly Deducted: {0} @ {1}, Expected: {2}", nfea.Fact, deductionChecker, deductionsToCheck[deductionChecker]);
+  		}
+			
 	  	deductionChecker++;
 	  }
 	  
