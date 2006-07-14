@@ -329,8 +329,21 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <summary>
 		/// Returns the String representation of the Atom for display purpose only.
 		/// </summary>
+		/// <remarks>
+		/// If the Inference Engine trace switch is Verbose, the type of non String predicates will be shown.
+		/// </remarks>
 		/// <returns>The String representation of the Atom.</returns>
+		/// <see cref="ToString(bool outputType)"/>
 		public override string ToString() {
+			return ToString(Misc.IE_TS.TraceVerbose);
+		}
+		
+		/// <summary>
+		/// Returns the String representation of the Atom for display purpose only.
+		/// </summary>
+		/// <param name="outputType">If True, the type of non String predicates will be displayed</param>
+		/// <returns>The String representation of the Atom.</returns>
+		public string ToString(bool outputType) {
 			StringBuilder result = new StringBuilder(negative?"!":"");
 			result.Append(type).Append("{");
 			bool first = true;
@@ -342,8 +355,8 @@ namespace NxBRE.InferenceEngine.Rules {
 				result.Append(member.ToString());
 				
 				// Type is displayed for non-string predicates, as suggested by Chuck Cross
-				//FIXME: this makes many tests fail, check how to improve, for ex. do it only if trace is verbose
-				//if (member.Value.GetType() != typeof(System.String)) result.Append(" [").Append(member.Value.GetType().ToString()).Append("]");
+				if ((outputType) && (member.Value.GetType() != typeof(System.String)))
+					result.Append(" [").Append(member.Value.GetType().ToString()).Append("]");
 				
 				if (first) first = false;
 			}
