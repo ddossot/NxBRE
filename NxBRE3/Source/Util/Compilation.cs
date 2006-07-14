@@ -255,17 +255,24 @@ namespace NxBRE.Util
 			compilerParameters.IncludeDebugInformation = true;
 			compilerParameters.TreatWarningsAsErrors = false;
 			
-			// Add the reference to the NxBRE.dll assembly.
-			if ((ReferenceLinkMode == ReferenceLinkModes.NxBRE) || (ReferenceLinkMode == ReferenceLinkModes.Full))
+			// Chuck Cross has vastly improved the loading of NxBRE ddl reference mechanism
+			bool NxBREAssemblyLoaded = false;
+			
+			// Add all implicitly referenced assemblies
+			if ((ReferenceLinkMode == ReferenceLinkModes.CurrentDomain) || (ReferenceLinkMode == ReferenceLinkModes.Full)) {
+				foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) {
+					// do not add AssemblyBuilders (bug 1482753), thanks to Bob Brumfield
+					if (!(assembly is AssemblyBuilder)) {
+						AddReferencedAssembly(compilerParameters, assembly.Location);
+						if(assembly.ManifestModule.ScopeName.Equals(NXBRE_DLL)) NxBREAssemblyLoaded = true;
+					}
+				}
+			}
+			
+			// Add NxBRE dll reference only if not already added through implicit references.
+			if (!NxBREAssemblyLoaded && ((ReferenceLinkMode == ReferenceLinkModes.NxBRE) || (ReferenceLinkMode == ReferenceLinkModes.Full)))
 				AddReferencedAssembly(compilerParameters, NxbreAssemblyLocation);
 		
-			// Add all implicitly referenced assemblies
-			if ((ReferenceLinkMode == ReferenceLinkModes.CurrentDomain) || (ReferenceLinkMode == ReferenceLinkModes.Full))
-				foreach(Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-					// do not add AssemblyBuilders (bug 1482753), thanks to Bob Brumfield
-					if (!(assembly is AssemblyBuilder))
-						AddReferencedAssembly(compilerParameters, assembly.Location);
-			
 			CompilerResults cr;
 			
 			if (sourceIsString)
