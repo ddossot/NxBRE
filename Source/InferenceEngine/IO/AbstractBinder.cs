@@ -28,7 +28,7 @@ namespace NxBRE.InferenceEngine.IO {
 		protected Regex RegexFunction {
 			get {
 				if (regexFunction == null)
-					regexFunction = new Regex(Parameter.GetString("abstractbinder.function.regex", @"^(?<1>\w+)\x28((?<2>[^,\x28\x29]+),?)*\x29$"));
+					regexFunction = new Regex(Parameter.Get<string>("abstractbinder.function.regex", @"^(?<1>\w+)\x28((?<2>[^,\x28\x29]+),?)*\x29$"));
 				return regexFunction;
 			}
 		}

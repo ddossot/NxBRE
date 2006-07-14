@@ -12,35 +12,17 @@ namespace NxBRE.InferenceEngine.Core {
 		private static readonly IComparer LIST_COMPARER = new ListSizeComparer();
 		private static readonly IList EMPTY_RESULT = ArrayList.ReadOnly(new ArrayList());
 		
-		private static bool strictTyping = false;
-		private static bool typingLocked = false;
+		/// <summary>
+		/// Defines whether the fact storage should consider typed objects as equivalent to their String representation.
+		/// If StrictTyping is set to true, they are will not be considered equivalent. The default is false.
+		/// </summary>
+		private bool strictTyping = Parameter.Get<bool>("factBaseStorageType.hashtable.strictTyping", false);
 		
 		private readonly Atom template;
 		private readonly Hashtable factTable;
 		private readonly TypeAwareHashtable[] predicateTables;
 		
-		/// <summary>
-		/// Defines whether the fact storage should consider typed objects as equivalent to their String representation.
-		/// If StrictTyping is set to true, they are will not be considered equivalent. The default is false.
-		/// </summary>
-		/// <remarks>
-		/// This can not be changed if the storage already contains data. It must be set before any usage of the engine else
-		/// unpredictible results may occur.
-		/// </remarks>
-		//TODO: make this a global parameter
-		public static bool StrictTyping {
-			get {
-				return strictTyping;
-			}
-			set {
-				if (typingLocked) throw new InvalidOperationException("Can not change storage typing if it contains data.");
-				strictTyping = value;
-			}
-		}
-		
 		public HashtableMatchedFactStorage(Atom template) {
-			if (!typingLocked) typingLocked=true;
-
 			this.template = template;
 			
 			factTable = new Hashtable();
@@ -76,7 +58,7 @@ namespace NxBRE.InferenceEngine.Core {
 				AddFactForPredicateValue(fact, i, predicateValue);
 				
 				// if we are not strictly enforcing typing and if the predicate value is not a string, then also store it as a string
-				if ((!StrictTyping) && (!(predicateValue is string))) AddFactForPredicateValue(fact, i, predicateValue.ToString());
+				if ((!strictTyping) && (!(predicateValue is string))) AddFactForPredicateValue(fact, i, predicateValue.ToString());
 			}
 		}
 		

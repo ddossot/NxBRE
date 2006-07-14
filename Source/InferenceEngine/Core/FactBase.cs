@@ -8,6 +8,8 @@ namespace NxBRE.InferenceEngine.Core {
 	
 	using NxBRE.InferenceEngine.Rules;
 	
+	using NxBRE.Util;
+	
 	/// <summary>
 	/// The FactBase is the repository of facts for the inference engine.
 	/// This implementation does not allow duplicated facts.
@@ -16,6 +18,11 @@ namespace NxBRE.InferenceEngine.Core {
 	/// <author>David Dossot</author>
 	internal sealed class FactBase:ICloneable, IEnumerable {
 		private static readonly NegativeFact NAF = new NegativeFact();
+		
+		/// <summary>
+		/// The type of storage configured for this FactBase
+		/// </summary>
+		private FactBaseStorageTypes factBaseStorageType = (FactBaseStorageTypes) Parameter.GetEnum("factBaseStorageTypes", typeof(FactBaseStorageTypes), FactBaseStorageTypes.Hashtable);
 		
 		/// <summary>
 		/// The central repository of facts
@@ -468,8 +475,10 @@ namespace NxBRE.InferenceEngine.Core {
 			IMatchedFactStorage mfs = (IMatchedFactStorage)matchedFactStorageTable[atom.Signature];
 			
 			if (mfs == null) {
-				if (IEImpl.FactBaseStorageType == FactBaseStorageTypes.DataTable) mfs = new DataTableMatchedFactStorage(atom);
-				else mfs = new HashtableMatchedFactStorage(atom);
+				if (factBaseStorageType == FactBaseStorageTypes.DataTable)
+					mfs = new DataTableMatchedFactStorage(atom);
+				else
+					mfs = new HashtableMatchedFactStorage(atom);
 				
 				matchedFactStorageTable.Add(atom.Signature, mfs);
 			}

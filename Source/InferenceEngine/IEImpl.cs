@@ -101,10 +101,10 @@ namespace NxBRE.InferenceEngine {
 		private string direction;
 		private string label;
 
+		//TODO: make all this config params, keep static only if needed
 		private static int iterationLimit = 1000;
 		private static bool strictImplication = false;
 		private static int lockTimeOut = 15000;
-		private static FactBaseStorageTypes factBaseStorageType = FactBaseStorageTypes.Hashtable;
 		
 		private ArrayList Equivalents {
 			get {
@@ -229,20 +229,6 @@ namespace NxBRE.InferenceEngine {
 				strictImplication = value;
 			}
 		}
-		
-		/// <summary>
-		/// Defines the fact base storage type used by the engine.
-		/// </summary>
-		/// <remarks>Default value is Hashtable</remarks>
-		public static FactBaseStorageTypes FactBaseStorageType {
-			get {
-				return factBaseStorageType;
-			}
-			set {
-				factBaseStorageType = value;
-			}
-		}
-		
 		
 		/// <summary>
 		/// The current type of working memory.

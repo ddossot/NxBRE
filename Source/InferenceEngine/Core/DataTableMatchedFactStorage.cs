@@ -11,20 +11,12 @@ namespace NxBRE.InferenceEngine.Core {
 	/// A fact storage class that uses a DataTable for storing facts.
 	/// </summary>
 	internal class DataTableMatchedFactStorage : IMatchedFactStorage {
-		/// <summary>
-		/// The initial size of the data tables
-		/// </summary>
-		/// <remarks>
-		/// One data table is created per fact "signature" (type and number of predicates)
-		/// </remarks>
-		public static int DATA_TABLE_MINIMUM_CAPACITY = 1000; //TODO: make this a global parameter
-
 		private readonly Atom template;
 		private readonly DataTable table;
 		
 		public DataTableMatchedFactStorage(Atom template) {
 			this.template = template;
-			this.table = BuildDataTable(template);
+			this.table = BuildDataTable(template, Parameter.Get<int>("factBaseStorageType.dataTable.minimumCapacity", 1000));
 		}
 		
 		private DataTableMatchedFactStorage(Atom template, DataTable table) {
@@ -75,10 +67,10 @@ namespace NxBRE.InferenceEngine.Core {
 		
 		// Private members ---------------------------------------------------------		
 
-		private static DataTable BuildDataTable(Atom atom) {
+		private static DataTable BuildDataTable(Atom atom, int minimumCapacity) {
 		  DataTable table = new DataTable(atom.Signature);
 		  table.CaseSensitive = true;
-		  table.MinimumCapacity = DATA_TABLE_MINIMUM_CAPACITY;
+		  table.MinimumCapacity = minimumCapacity;
 		  
 		  // prepare the PK array
 		  DataColumn[] keys = new DataColumn[1 + atom.Members.Length];

@@ -38,7 +38,7 @@ namespace NxBRE.Util
 		private static string nxbreAssemblyLocation = String.Empty;
 		private const string NXBRE_DLL = "NxBRE.dll";
 		
-		private static ReferenceLinkModes referenceLinkMode = (ReferenceLinkModes) Parameter.GetEnum("referenceLinkModes", typeof(ReferenceLinkModes), ReferenceLinkModes.Full);
+		private static ReferenceLinkModes referenceLinkMode = (ReferenceLinkModes) Parameter.GetEnum("referenceLinkMode", typeof(ReferenceLinkModes), ReferenceLinkModes.Full);
 		
 		private Compilation() {}
 		
