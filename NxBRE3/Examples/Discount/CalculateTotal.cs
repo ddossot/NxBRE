@@ -33,7 +33,7 @@ namespace NxBRE.Examples
 			
 			// example on how to export native rules file
 			FileStream fs = new FileStream("discount.bre", FileMode.Create);
-			Misc.IdentityXSLT.Transform(bre.XmlDocumentRules, null, fs, null);
+			Xml.IdentityXSLT.Transform(bre.XmlDocumentRules, null, fs);
 			fs.Flush();
 			fs.Close();
 		}
