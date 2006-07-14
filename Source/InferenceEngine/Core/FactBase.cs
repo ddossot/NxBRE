@@ -4,6 +4,7 @@ namespace NxBRE.InferenceEngine.Core {
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
 	using System.Data;
+	using System.Text;
 	
 	using NxBRE.InferenceEngine.Rules;
 	
@@ -335,9 +336,38 @@ namespace NxBRE.InferenceEngine.Core {
 	  				}
 		  		}
 		  	
-		  		for(int i=0; i<members.Length; i++)
-		  			if (members[i] is Formula)
-		  				members[i] = new Individual(((Formula) members[i]).Evaluate(arguments));
+		  		for(int i=0; i<members.Length; i++) {
+		  			if (members[i] is Formula) {
+     					try {
+					      members[i] = new Individual(((Formula)members[i]).Evaluate(arguments));
+     					}
+     					catch (Exception ex) {
+		  					// Chuck Cross added try/catch block with addtional info in new thrown exception
+		  					StringBuilder sb = new StringBuilder("Error evaluating formula ")
+		  																				.Append(members[i])
+		  																				.Append(" in atom ")
+		  																				.Append(targetAtom.Type)
+		  																				.Append(".\r\n  Arguments:");
+      					
+		  					foreach(DictionaryEntry entry in arguments) {
+      						sb.Append("   ")
+      							.Append(entry.Key.ToString());
+      						
+      						if (entry.Value != null) {
+      							sb.Append("[")
+      								.Append(entry.Value.GetType().ToString())
+      								.Append("] = ")
+      								.Append(entry.Value.ToString());
+      						}
+      						else sb.Append("[Null]");
+      						
+      						sb.Append("\r\n");
+		  					}
+      					
+      					throw new BREException(sb.ToString(), ex);
+							}
+		  			}
+		  		}
 	  		}
 	  		else {
 	  			// formulas must be replaced by variables named after the position of the predicate
