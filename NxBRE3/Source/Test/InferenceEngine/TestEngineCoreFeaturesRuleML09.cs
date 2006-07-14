@@ -514,7 +514,7 @@ namespace NxBRE.Test.InferenceEngine {
 		[Test]
 		public void CheckNonStrictImplicationBehavior() {
 			ie.LoadRuleBase(NewTestAdapter());
-			Assert.IsFalse(IEImpl.StrictImplication, "Ensure IE is not strict");
+			Assert.IsFalse(((IEImpl)ie).strictImplication, "Ensure IE is not strict");
 			
 			Assert.IsTrue(ie.Assert(new Fact("flagStrictA", new Individual("something"))), "Asserted fact A");
 			Process();
@@ -533,8 +533,8 @@ namespace NxBRE.Test.InferenceEngine {
 		[Test][ExpectedException(typeof(BREException))]
 		public void CheckStrictImplicationBehavior() {
 			ie.LoadRuleBase(NewTestAdapter());
-			IEImpl.StrictImplication = true;
-			Assert.IsTrue(IEImpl.StrictImplication, "Ensure IE is strict");
+			((IEImpl)ie).strictImplication = true;
+			Assert.IsTrue(((IEImpl)ie).strictImplication, "Ensure IE is strict");
 			
 			Assert.IsTrue(ie.Assert(new Fact("flagStrictA", new Individual("something"))), "Asserted fact A");
 			Process();

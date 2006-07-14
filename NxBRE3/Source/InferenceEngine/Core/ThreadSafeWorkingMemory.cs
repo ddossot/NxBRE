@@ -20,14 +20,17 @@ namespace NxBRE.InferenceEngine.Core {
 	/// <see cref="NxBRE.InferenceEngine.IEImpl"/>
 	internal sealed class ThreadSafeWorkingMemory:AbstractWorkingMemory {
 		private ILockStrategy lockStrategy;
+		private int lockTimeOut;
 		
-		public ThreadSafeWorkingMemory(bool supportHotSwap) {
+		public ThreadSafeWorkingMemory(bool supportHotSwap, int lockTimeOut) {
+			this.lockTimeOut = lockTimeOut;
+			
 			if (supportHotSwap) lockStrategy = new ReaderWriterLockStrategy();
 			else lockStrategy = new NoLockStrategy();
 		}
 		
 		public override void PrepareInitialization() {
-			lockStrategy.AcquireUniqueLock();
+			lockStrategy.AcquireUniqueLock(lockTimeOut);
 			
 			WorkingType = WorkingMemoryTypes.Global;
 			globalFactBase = new FactBase();
@@ -47,13 +50,13 @@ namespace NxBRE.InferenceEngine.Core {
 				
 				// Depending on the working memory isolation type
 				if (value == WorkingMemoryTypes.Isolated) {
-					lockStrategy.AcquireSharedLock();
+					lockStrategy.AcquireSharedLock(lockTimeOut);
 
 					// Clone the global base as the working base
 					WorkingFactBase = (FactBase) globalFactBase.Clone();
 				}
 				else if (value == WorkingMemoryTypes.IsolatedEmpty) {
-					lockStrategy.AcquireSharedLock();
+					lockStrategy.AcquireSharedLock(lockTimeOut);
 
 					// Create an empty base as the working base
 					WorkingFactBase = new FactBase();
@@ -71,7 +74,7 @@ namespace NxBRE.InferenceEngine.Core {
 			if (Type == WorkingMemoryTypes.Global)
 				throw new BREException("Current Working Memory is not Isolated and can not be committed.");
 			
-			lockStrategy.AcquireUniqueLock();
+			lockStrategy.AcquireUniqueLock(lockTimeOut);
 			
 			foreach(Fact f in FB) globalFactBase.Assert(f);
 			WorkingType = WorkingMemoryTypes.Global;
@@ -80,32 +83,32 @@ namespace NxBRE.InferenceEngine.Core {
 		}
 		
 		private interface ILockStrategy {
-			void AcquireSharedLock();
+			void AcquireSharedLock(int lockTimeOut);
 			void ReleaseSharedLock();
-			void AcquireUniqueLock();
+			void AcquireUniqueLock(int lockTimeOut);
 			void ReleaseUniqueLock();
 		}
 		
 		private class NoLockStrategy:ILockStrategy{
-			public void AcquireSharedLock() {}
+			public void AcquireSharedLock(int lockTimeOut) {}
 			public void ReleaseSharedLock() {}
-			public void AcquireUniqueLock() {}
+			public void AcquireUniqueLock(int lockTimeOut) {}
 			public void ReleaseUniqueLock() {}
 		}
 		
 		private class ReaderWriterLockStrategy:ILockStrategy{
 			private ReaderWriterLock rwl = new ReaderWriterLock();
 			
-			public void AcquireSharedLock() {
-				rwl.AcquireReaderLock(IEImpl.LockTimeOut);
+			public void AcquireSharedLock(int lockTimeOut) {
+				rwl.AcquireReaderLock(lockTimeOut);
 			}
 			
 			public void ReleaseSharedLock() {
 				if (rwl.IsReaderLockHeld) rwl.ReleaseReaderLock();
 			}
 			
-			public void AcquireUniqueLock() {
-				rwl.AcquireWriterLock(IEImpl.LockTimeOut);
+			public void AcquireUniqueLock(int lockTimeOut) {
+				rwl.AcquireWriterLock(lockTimeOut);
 			}
 			
 			public void ReleaseUniqueLock() {
