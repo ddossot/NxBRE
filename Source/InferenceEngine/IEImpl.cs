@@ -101,10 +101,26 @@ namespace NxBRE.InferenceEngine {
 		private string direction;
 		private string label;
 
-		//TODO: make all this config params, keep static only if needed
-		private static int iterationLimit = 1000;
-		private static bool strictImplication = false;
-		private static int lockTimeOut = 15000;
+		/// <summary>
+		/// The maximum number of iteration to perform in one process cycle. If this limit is reached, the engine will throw an exception.
+		/// </summary>
+		/// <remarks>The default is 1000.</remarks>
+		internal int iterationLimit = Parameter.Get<int>("iterationLimit", 1000);
+		
+		/// <summary>
+		/// Defines whether the engine should throw an exception in case an implication
+		/// tries to assert a fact whose variable predicates have not all be resolved
+		/// by the data returned by the atoms of the body.
+		/// </summary>
+		/// <remarks>The default is false.</remarks>
+		internal bool strictImplication = Parameter.Get<bool>("strictImplication", false);
+		
+		/// <summary>
+		/// The time-out in millisecond for acquiring a lock when hot swapping a rule base
+		/// in multi-threaded environments.
+		/// </summary>
+		/// <remarks>The default is 15000.</remarks>
+		internal int lockTimeOut = Parameter.Get<int>("lockTimeOut", 15000);
 		
 		private ArrayList Equivalents {
 			get {
@@ -188,49 +204,6 @@ namespace NxBRE.InferenceEngine {
 		}
 		
 		/// <summary>
-		/// The maximum number of iteration to perform in one process cycle.
-		/// If this limit is reached, the engine will throw an exception.
-		/// </summary>
-		/// <remarks>Default value is 1000.</remarks>
-		public static int IterationLimit {
-			get {
-				return iterationLimit;
-			}
-			set {
-				iterationLimit = value;
-			}
-		}
-		
-		/// <summary>
-		/// The time-out in millisecond for acquiring a lock when hot swapping a rule base
-		/// in multi-threaded environments.
-		/// </summary>
-		/// <remarks>Default value is 15000.</remarks>
-		public static int LockTimeOut {
-			get {
-				return lockTimeOut;
-			}
-			set {
-				lockTimeOut = value;
-			}
-		}
-		
-		/// <summary>
-		/// Defines whether the engine should throw an exception in case an implication
-		/// tries to assert a fact whose variable predicates have not all be resolved
-		/// by the data returned by the atoms of the body.
-		/// </summary>
-		/// <remarks>Default value is false.</remarks>
-		public static bool StrictImplication {
-			get {
-				return strictImplication;
-			}
-			set {
-				strictImplication = value;
-			}
-		}
-		
-		/// <summary>
 		/// The current type of working memory.
 		/// </summary>
 		public WorkingMemoryTypes WorkingMemoryType {
@@ -274,7 +247,7 @@ namespace NxBRE.InferenceEngine {
 			initialized = false;
 			
 			// instantiate a new working memory
-			wm = WorkingMemoryFactory.NewWorkingMemory(threadingModelType);
+			wm = WorkingMemoryFactory.NewWorkingMemory(threadingModelType, lockTimeOut);
 			
 			// set the binder
 			Binder = businessObjectsBinder;
@@ -801,8 +774,8 @@ namespace NxBRE.InferenceEngine {
 
 			// Loop as long as there are new deduction made
 			while(iterate) {
-				if (iteration >= IterationLimit)
-					throw new BREException("Maximum limit of iterations reached: " + IterationLimit);
+				if (iteration >= iterationLimit)
+					throw new BREException("Maximum limit of iterations reached: " + iterationLimit);
 				
 				iterate = false;
 				iteration++;
@@ -908,7 +881,7 @@ namespace NxBRE.InferenceEngine {
 					}
 				}
 				
-				if ((IEImpl.StrictImplication) && (!variableFound))
+				if ((strictImplication) && (!variableFound))
 					throw new BREException("Strict counting implication rejected the assertion due to lack of variable predicate: " + implication.Deduction);
 					
 				Fact deductedFact = new Fact(implication.Deduction.Type, members);
@@ -983,7 +956,7 @@ namespace NxBRE.InferenceEngine {
 			Atom factBuilder = FactBase.Populate(targetAtom, processResult, true);
 			
 			if (!factBuilder.IsFact) {
-				if (IEImpl.StrictImplication)
+				if (strictImplication)
 					throw new BREException("Strict implication rejected the assertion of incompletely resolved fact: " + factBuilder);
 			}
 			else {

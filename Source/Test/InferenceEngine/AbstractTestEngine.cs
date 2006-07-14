@@ -75,10 +75,9 @@ namespace NxBRE.Test.InferenceEngine {
 		}
 		
 	  protected void InitIE(IBinder bob) {
-			IEImpl.StrictImplication = false;
-			
 			NewIEImpl(bob);
 			
+			((IEImpl)ie).strictImplication = false;
 	  	ie.NewFactHandler += new NewFactEvent(HandleNewFactEvent);
 	  	ie.DeleteFactHandler += new NewFactEvent(HandleDeletedFactEvent);
 	  	ie.ModifyFactHandler += new NewFactEvent(HandleModifiedFactEvent);
