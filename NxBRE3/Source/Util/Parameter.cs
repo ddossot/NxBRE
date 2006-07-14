@@ -16,9 +16,9 @@ namespace NxBRE.Util
 		
 		private Parameter() {}
 		
-		private static AppSettingsReader appSettingsReader = null;
+		private static AppSettingsReader appSettingsReader = new AppSettingsReader();
 		
-		private static string embeddedResourcePrefix = Parameter.GetString("embeddedResourcePrefix", "NxBRE.Resources.");
+		private static string embeddedResourcePrefix = Parameter.Get<string>("embeddedResourcePrefix", "NxBRE.Resources.");
 		
 		/// <summary>
 		/// Gets a Stream for a resource embedded in the assembly.
@@ -37,16 +37,16 @@ namespace NxBRE.Util
 		/// <param name="settingKey">The NxBRE setting key, which is automatically prefixed by "nxbre."</param>
 		/// <param name="defaultValue">The default value to use in case the configuration entry is not found.</param>
 		/// <returns>The config entry string value, unless it is not found then it returns the default value.</returns>
-		public static string GetString(string settingKey, string defaultValue) {
-			if (null == appSettingsReader) appSettingsReader = new AppSettingsReader();
-
-			string settingValue;
+		public static T Get<T>(string settingKey, T defaultValue) {
+			T settingValue;
 			
 			try {
-				settingValue = (string)appSettingsReader.GetValue("nxbre." + settingKey, typeof(string));
-			} catch(InvalidOperationException) {
+				settingValue = (T)appSettingsReader.GetValue("nxbre." + settingKey, typeof(T));
+			} catch(Exception e) {
 				//something went wrong --> use the default value
 				settingValue = defaultValue;
+				
+				if (Misc.UTIL_TS.TraceWarning) Trace.TraceWarning("Can not find setting key: '" + settingKey + "', using default value: '" + defaultValue + "' (Exception message: " + e.Message + ")");
 			}
 			
 			return settingValue;
@@ -60,17 +60,28 @@ namespace NxBRE.Util
 		/// <param name="defaultValue">The default value to use in case the configuration entry is not found.</param>
 		/// <returns>The config entry enum value, unless it is not found then it returns the default value.</returns>
 		public static object GetEnum(string settingKey, Type enumType, object defaultValue) {
-			// I wish I could have used a constrained generic for this method but Enums can not be used as contraints...
-			string settingValue = GetString(settingKey, null);
-			if (settingValue == null) return defaultValue;
-			else return Enum.Parse(enumType, settingValue, false);
+			try {
+				// I wish I could have used a constrained generic for this method but Enums can not be used as contraints...
+				string settingValue = Get<string>(settingKey, null);
+				if (settingValue == null) return defaultValue;
+				else return Enum.Parse(enumType, settingValue, false);
+			}
+			catch (Exception e) {
+				// exceptions at this stage might be confusing, let's throw a more detailed one
+				throw new BREException("Configuration exception when parsing enum value of type: '"
+				                       + enumType.ToString()
+				                       + "' for setting key: '"
+				                       + settingKey
+				                       + "'",
+				                      e);
+			}
 		}
 		
 		///<summary>Gets the string value of the config file entry.</summary>
 		/// <param name="settingKey">The NXBRE setting key, which is automatically prefixed by "nxbre."</param>
 		/// <returns>The config entry string value, unless it is not found then it returns null.</returns>
 		public static string GetString(string settingKey) {
-			return GetString(settingKey, null);
+			return Get<string>(settingKey, null);
 		}
 		
 		///<summary>
