@@ -33,19 +33,19 @@ namespace NxBRE.Test.InferenceEngine {
 
 		protected void HandleNewFactEvent(NewFactEventArgs nfea) 
 	  {
-			Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "+ Deducted: " + nfea.Fact);
+			if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "+ Deducted: " + nfea.Fact);
 	  	deducted++;	
 	  }
 	  
 		protected void HandleDeletedFactEvent(NewFactEventArgs nfea) 
 	  {
-			Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "- Deleted: " + nfea.Fact);
+			if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "- Deleted: " + nfea.Fact);
 	  	deleted++;	
 	  }
 	  
 		protected void HandleModifiedFactEvent(NewFactEventArgs nfea) 
 	  {
-			Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "* Modified: " + nfea.Fact + " -> " + nfea.OtherFact);
+			if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "* Modified: " + nfea.Fact + " -> " + nfea.OtherFact);
 	  	modified++;	
 	  }
 	  
@@ -82,7 +82,7 @@ namespace NxBRE.Test.InferenceEngine {
 	  	ie.DeleteFactHandler += new NewFactEvent(HandleDeletedFactEvent);
 	  	ie.ModifyFactHandler += new NewFactEvent(HandleModifiedFactEvent);
 	  	
-	  	Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "InitIE()");  	
+	  	if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "InitIE()");  	
 	  }
 	  
 	  [SetUp]
@@ -93,7 +93,7 @@ namespace NxBRE.Test.InferenceEngine {
 	  [TearDown]
 	  public void DestroyIE() {
 			ie = null;
-	  	Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "DestroyIE()");  	
+	  	if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "DestroyIE()");  	
 	  }
 	  
 	  private void PreProcess() {
@@ -119,17 +119,17 @@ namespace NxBRE.Test.InferenceEngine {
 			deductionChecker = 0;
 			
 			int i = 0;
-			Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "-(Query Results) -");
+			if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "-(Query Results) -");
 			
 			foreach(IList<Fact> facts in qrs) {
 				i++;
-				Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, " (Result #{" + i + "})");
+				if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, " (Result #{" + i + "})");
 				foreach(Fact fact in facts) {
 					HandleExpectedNewFact(new NewFactEventArgs(fact));
-					Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "  " + fact);
+					if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "  " + fact);
 				}
 			}
-			Trace.WriteLineIf(Misc.IE_TS.TraceVerbose, "-(End Results)-\n");
+			if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "-(End Results)-\n");
 			
 			deductionsToCheck = null;
 		}

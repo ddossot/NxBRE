@@ -45,11 +45,14 @@ namespace NxBRE.FlowEngine.Rules
 						return false;
 			}
 			catch(System.Exception e) {
-				if (Misc.FE_TS.TraceWarning) Trace.TraceWarning("InstanceOf can not execute comparison with context: " + aBRC +
-				                                                "\n parameters: " + Misc.IDictionaryToString(aMap) +
-				                                                "\n first object: " + aObj +
-				                                                "\n second object: " + aCompareTo +
-				                                                "\n stacktrace: " + e.StackTrace);
+				if (Logger.IsFlowEngineWarning)
+					Logger.FlowEngineSource.TraceEvent(TraceEventType.Warning,
+																							0,
+																							"InstanceOf can not execute comparison with context: " + aBRC +
+                                              "\n parameters: " + Misc.IDictionaryToString(aMap) +
+                                              "\n first object: " + aObj +
+                                              "\n second object: " + aCompareTo +
+                                              "\n stacktrace: " + e.StackTrace);
 			}
 			
 			return false;
