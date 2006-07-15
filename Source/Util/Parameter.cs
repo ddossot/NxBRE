@@ -28,7 +28,7 @@ namespace NxBRE.Util
 		public static Stream GetEmbeddedResourceStream(string resourceName) {
 			string fullResourceName = embeddedResourcePrefix + resourceName;
 			
-			Trace.WriteLineIf(Misc.UTIL_TS.TraceVerbose, "Fetching resource '" + fullResourceName + "' from assembly manifest");
+			if (Logger.IsUtilVerbose) Logger.UtilSource.TraceEvent(TraceEventType.Verbose, 0, "Fetching resource '" + fullResourceName + "' from assembly manifest");
 			
 			return Assembly.GetExecutingAssembly().GetManifestResourceStream(fullResourceName);
 		}
@@ -46,7 +46,7 @@ namespace NxBRE.Util
 				//something went wrong --> use the default value
 				settingValue = defaultValue;
 				
-				if (Misc.UTIL_TS.TraceWarning) Trace.TraceWarning("Can not find setting key: '" + settingKey + "', using default value: '" + defaultValue + "' (Exception message: " + e.Message + ")");
+				if (Logger.IsUtilWarning) Logger.UtilSource.TraceEvent(TraceEventType.Warning, 0, "Can not find setting key: '" + settingKey + "', using default value: '" + defaultValue + "' (Exception message: " + e.Message + ")");
 			}
 			
 			return settingValue;

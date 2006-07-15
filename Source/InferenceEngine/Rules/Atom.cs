@@ -335,7 +335,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <returns>The String representation of the Atom.</returns>
 		/// <see cref="ToString(bool outputType)"/>
 		public override string ToString() {
-			return ToString(Misc.IE_TS.TraceVerbose);
+			return ToString(Logger.IsInferenceEngineVerbose);
 		}
 		
 		/// <summary>

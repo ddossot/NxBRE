@@ -1,28 +1,12 @@
 namespace NxBRE.Util
 {
 	using System;
-	using System.Diagnostics;
 	using System.Collections;
 	
 	/// <summary>Misc NxBRE utilities.</summary>
 	/// <author>David Dossot</author>
 	public abstract class Misc {
 		private Misc() {}
-		
-		/// <summary>
-		/// The Trace Switch used by NxBRE.FlowEngine
-		/// </summary>
-		internal static readonly TraceSwitch FE_TS = new TraceSwitch("NxBRE.FlowEngine", "NxBRE FlowEngine Trace Switch", "Warning");
-		
-		/// <summary>
-		/// The Trace Switch used by NxBRE.InferenceEngine
-		/// </summary>
-		internal static readonly TraceSwitch IE_TS = new TraceSwitch("NxBRE.InferenceEngine", "NxBRE InferenceEngine Trace Switch", "Warning");
-		
-		/// <summary>
-		/// The Trace Switch used by NxBRE.Util
-		/// </summary>
-		internal static readonly TraceSwitch UTIL_TS = new TraceSwitch("NxBRE.Util", "NxBRE Util Trace Switch", "Warning");
 		
 		/// <summary>
 		/// An empty read-only IDictionary.

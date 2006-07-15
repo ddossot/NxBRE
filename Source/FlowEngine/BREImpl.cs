@@ -905,7 +905,7 @@ namespace NxBRE.FlowEngine
 		/// <param name="aMap">The Parameters map
 		/// 
 		/// </param>
-		private void  ProcessParameterNode(XPathNavigator aNode, Hashtable aMap)
+		private void ProcessParameterNode(XPathNavigator aNode, Hashtable aMap)
 		{
 			string valueNode = aNode.GetAttribute(PARAMETER_ATTRS.VALUE, String.Empty);
 			string typeNode = aNode.GetAttribute(PARAMETER_ATTRS.TYPE, String.Empty);
