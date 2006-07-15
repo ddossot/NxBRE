@@ -251,8 +251,6 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="query">The Query to run.</param>
 		/// <returns>An ICollection<IList<Fact>> containing references to facts matching the pattern of the Query.</returns>
 		public IList<IList<Fact>> RunQuery(Query query) {
-			//TODO: performance tests show that the engine is 60% slower: is this because of using generics inside of it, like here?
-			// if yes: abandon generics and fall back to QueryResultSet object in IInferenceEngine
 			return FilterDistinct(ProcessAtomGroup(query.AtomGroup));
 		}
 

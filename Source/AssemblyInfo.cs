@@ -16,4 +16,3 @@ using System.Runtime.CompilerServices;
 [assembly:CLSCompliant(true)]
 
 //TODO: Replace current custom logging mechanism with a standard one
-//TODO: Improve configuration
