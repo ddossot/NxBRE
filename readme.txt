@@ -19,4 +19,4 @@ IE-Console
 
 Misc
 ----
-  Random stuff to be integrated in NxBRE
+  Documentation source and other random stuff

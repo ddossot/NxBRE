@@ -702,7 +702,7 @@ namespace NxBRE.FlowEngine
 		/// <returns> True if the If stmt passes, False otherwise
 		/// 
 		/// </returns>
-		private System.Boolean ProcessConditionNode(XPathNavigator aNode, string aSetId, object aObj)
+		private bool ProcessConditionNode(XPathNavigator aNode, string aSetId, object aObj)
 		{
 			bool returnBool = true;
 			bool childrenBool = true;
@@ -784,7 +784,7 @@ namespace NxBRE.FlowEngine
 		/// <returns> True if the If stmt passes, False otherwise
 		/// 
 		/// </returns>
-		private Boolean ProcessCompareNode(XPathNavigator aNode, Hashtable aMap)
+		private bool ProcessCompareNode(XPathNavigator aNode, Hashtable aMap)
 		{
 			bool resultBool = false;
 				
