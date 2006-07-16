@@ -2,8 +2,6 @@ namespace NxBRE.FlowEngine.IO {
 	using System.Xml;
 	using System.Xml.Xsl;
 
-	using net.ideaity.util.events;
-	
 	using NxBRE.Util;
 	
 	/// <summary>

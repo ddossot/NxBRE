@@ -7,9 +7,6 @@ namespace NxBRE.Test.FlowEngine
 	using System.Collections;
 	using System.Xml.Schema;
 
-	using net.ideaity.util;
-	using net.ideaity.util.events;
-	
 	using NxBRE.Util;
 
 	using NxBRE.FlowEngine;
@@ -96,30 +93,32 @@ namespace NxBRE.Test.FlowEngine
 			return bre.RuleContext.GetObject(aId);
 		}
 		
-		public void HandleExceptionEvent(object obj, IExceptionEvent aException)
+		public void HandleExceptionEvent(object obj)
 		{
+			//FIXME: handle exceptions
 			exceptionCount++;
-			Console.Error.WriteLine("NxBRE ERROR " + aException.Priority + ": " + aException.Exception.ToString());
-			
-			// Try to catch a dynamically generated exception
-			if ((aException.Priority == ExceptionEventImpl.ERROR)
-					&& (aException.Exception.Message == ASSERTED_HELLO_VALUE))
-				foundDynamicException = true;
-		
-			// Stop rule processing on fatal exceptions
-			if (aException.Priority == ExceptionEventImpl.FATAL)
-				bre.Stop();
+//			Console.Error.WriteLine("NxBRE ERROR " + aException.Priority + ": " + aException.Exception.ToString());
+//			
+//			// Try to catch a dynamically generated exception
+//			if ((aException.Priority == ExceptionEventImpl.ERROR)
+//					&& (aException.Exception.Message == ASSERTED_HELLO_VALUE))
+//				foundDynamicException = true;
+//		
+//			// Stop rule processing on fatal exceptions
+//			if (aException.Priority == ExceptionEventImpl.FATAL)
+//				bre.Stop();
 		}
 		
-		public void HandleLogEvent(object obj, ILogEvent aLog)
+		public void HandleLogEvent(object obj)
 		{
+			//FIXME: handle logs
 			logCount++;
 			
-			if ((aLog.Priority == 3) && (aLog.Message == ASSERTED_HELLO_VALUE))
-				foundDynamicLog = true;
-			
-			if (aLog.Priority >= 5)
-				Console.Out.WriteLine("NxBRE LOG " + aLog.Priority + " MSG  : " + aLog.Message);
+//			if ((aLog.Priority == 3) && (aLog.Message == ASSERTED_HELLO_VALUE))
+//				foundDynamicLog = true;
+//			
+//			if (aLog.Priority >= 5)
+//				Console.Out.WriteLine("NxBRE LOG " + aLog.Priority + " MSG  : " + aLog.Message);
 		}
 
 		public virtual void HandleBRERuleResult(object sender, IBRERuleResult aBRR)
@@ -140,10 +139,10 @@ namespace NxBRE.Test.FlowEngine
 			// Lets register the handlers...
 			logCount = 0;
 			foundDynamicLog = false;
-			bre.LogHandlers += new DispatchLog(HandleLogEvent);
+			//FIXME: bre.LogHandlers += new DispatchLog(HandleLogEvent);
 			foundDynamicException = false;
 			exceptionCount = 0;
-			bre.ExceptionHandlers += new DispatchException(HandleExceptionEvent);
+			// FIXME: bre.ExceptionHandlers += new DispatchException(HandleExceptionEvent);
 			resultCount = 0;
 			bre.ResultHandlers += new DispatchRuleResult(HandleBRERuleResult);
 			

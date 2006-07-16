@@ -2,8 +2,6 @@ namespace NxBRE.FlowEngine.Factories
 {
 	using System;
 	
-	using net.ideaity.util.events;
-
 	using NxBRE.FlowEngine.IO;
 	
 	/// <summary>This factory allows an easy creation of a BRE object,
@@ -16,27 +14,14 @@ namespace NxBRE.FlowEngine.Factories
 		
 		public BREFactoryConsole(int errorLevel, int logLevel)
 		{
+			//FIXME: make FlowEngine output to console out and error if possible to separate
 			this.errorLevel = errorLevel;
 			this.logLevel = logLevel;
 		}
 				
-		private void HandleExceptionEvent(object obj, IExceptionEvent aException)
-		{
-			if (aException.Priority >= errorLevel)
-				Console.Error.WriteLine("NxBRE ERROR " + aException.Priority + ": " + aException.Exception.ToString());
-		}
-		
-		private void HandleLogEvent(object obj, ILogEvent aLog)
-		{
-			if (aLog.Priority >= logLevel)
-				Console.Out.WriteLine("NxBRE LOG " + aLog.Priority + " MSG  : " + aLog.Message);
-		}
-
 		public override IFlowEngine NewBRE(IRulesDriver rulesDriver) {
-			if (bref == null)
-				bref = new BREFactory(new DispatchException(HandleExceptionEvent),
-			               					new DispatchLog(HandleLogEvent));
-
+			if (bref == null)	bref = new BREFactory();
+			
 			return bref.NewBRE(rulesDriver);
 		}
 

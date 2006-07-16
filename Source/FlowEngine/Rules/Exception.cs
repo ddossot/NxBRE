@@ -2,8 +2,10 @@ namespace NxBRE.FlowEngine.Rules
 {
 	using System;
 	using System.Collections;
+	using System.Diagnostics;
 	
 	using NxBRE.FlowEngine;
+	using NxBRE.Util;
 
 	/// <summary> This rule will always throw an exception.
 	/// </summary>
@@ -22,14 +24,18 @@ namespace NxBRE.FlowEngine.Rules
 		/// </param>
 		/// <param name="aStep">- The step that it is on
 		/// </param>
-		/// <returns> Nothing. It throws an exception each time
-		/// 
-		/// </returns>
+		/// <returns>The Exception</returns>
 		public virtual object ExecuteRule(IBRERuleContext aBrc, IDictionary aMap, object aStep)
 		{
-			string message = (string) aMap[MESSAGE];
-			if (message == null) throw new BRERuleException("Test Exception");
-			else throw new BRERuleException(message);
+			string message = (string)aMap[MESSAGE];
+
+			BRERuleException breRuleException;
+			if (message == null) breRuleException = new BRERuleException();
+			else breRuleException = new BRERuleException(message);			
+			
+			if (Logger.IsFlowEngineRuleBaseError) Logger.FlowEngineRuleBaseSource.TraceData(TraceEventType.Error, 0, breRuleException);
+			
+			return breRuleException;
 		}
 	}
 }

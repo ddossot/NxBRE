@@ -2,8 +2,6 @@ namespace NxBRE.FlowEngine.Factories
 {
 	using System;
 	
-	using net.ideaity.util.events;
-
 	using NxBRE.FlowEngine;
 	using NxBRE.FlowEngine.IO;
 	
@@ -16,27 +14,15 @@ namespace NxBRE.FlowEngine.Factories
 		private BREFactory bref = null;
 		private IFlowEngine bre = null;
 		
-		public BRECloneFactory(IRulesDriver rulesDriver):this(rulesDriver, null, null, null) {}
+		public BRECloneFactory(IRulesDriver rulesDriver):this(rulesDriver, null) {}
 		
-		public BRECloneFactory(IRulesDriver rulesDriver,
-		                       DispatchException exceptionHandler):this(rulesDriver, exceptionHandler, null, null) {}
-		
-		public BRECloneFactory(IRulesDriver rulesDriver,
-	                         DispatchException exceptionHandler,
-	                  			 DispatchLog logHandler):this(rulesDriver, exceptionHandler, logHandler, null) {}
-		
-		public BRECloneFactory(IRulesDriver rulesDriver,
-	                         DispatchException exceptionHandler,
-	                         DispatchLog logHandler,
-	                         DispatchRuleResult resultHandler)
-		{
+		public BRECloneFactory(IRulesDriver rulesDriver, DispatchRuleResult resultHandler) {
 			if (rulesDriver == null)
 				throw new BREException("A non-null IRulesDriver must be passed to BRECloneFactory");
 
 			this.rulesDriver = rulesDriver;
 			
-			if (bref == null)
-				bref = new BREFactory(exceptionHandler, logHandler, resultHandler);
+			if (bref == null)	bref = new BREFactory(resultHandler);
 		}
 				
 		public IFlowEngine NewBRE() {
