@@ -22,8 +22,6 @@ namespace NxBRE.Examples {
 			ie = new IEImpl(CSharpBinderFactory.LoadFromFile("NxBRE.Examples.TelcoRatingBinder",
 			                       																	ruleBaseFile + ".ccb"));
 
-			//FIXME: use trace
-			// if (verbosityLevel >= 2) ie.LogHandlers += new DispatchLog(HandleLogEvent);
 			if (verbosityLevel >= 1) ie.NewFactHandler += new NewFactEvent(HandleNewFactEvent);
 			
 			ie.LoadRuleBase(new RuleML086DatalogAdapter(ruleBaseFile, System.IO.FileAccess.Read));

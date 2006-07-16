@@ -8,7 +8,7 @@ namespace NxBRE.Util
 		private Logger() {}
 		
 		static Logger() {
-			InitializeSwitches();
+			RefreshBooleanSwitches();
 		}
 		
 		/// <summary>
@@ -76,7 +76,7 @@ namespace NxBRE.Util
 		/// Set the different switches used by NxBRE to the levels defined in the different souces
 		/// (usually set up in the configuration file).
 		/// </summary>
-		public static void InitializeSwitches() {
+		public static void RefreshBooleanSwitches() {
 			isFlowEngineVerbose = FlowEngineSource.Switch.ShouldTrace(TraceEventType.Verbose);
 			isFlowEngineInformation = FlowEngineSource.Switch.ShouldTrace(TraceEventType.Information);
 			isFlowEngineWarning = FlowEngineSource.Switch.ShouldTrace(TraceEventType.Warning);

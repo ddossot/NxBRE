@@ -188,7 +188,7 @@ namespace NxBRE.Test.FlowEngine
 			// Force all Flow Engine traces to be active
 			Logger.FlowEngineSource.Switch.Level = SourceLevels.All;
 			Logger.FlowEngineRuleBaseSource.Switch.Level = SourceLevels.All;
-			Logger.InitializeSwitches();
+			Logger.RefreshBooleanSwitches();
 
 			// Lets register the handlers...
 			ptl = new ProbeTraceListener();

@@ -24,12 +24,6 @@ namespace NxBRE.Examples
 			
 			ArrayList customers = GetCustomers();
 
-//FIXME: use trace
-//			if (FraudControl.LOG_LEVEL <= net.ideaity.util.events.LogEventImpl.INFO)
-//				Console.WriteLine("\nGenerated {0} customers and {1} transactions.\n",
-//				                  generatedCustomers,
-//				                  generatedTransactions);
-			
 			Hashtable businessObjects = new Hashtable();
 			businessObjects.Add("CUSTOMERS", customers);
 			businessObjects.Add("MNYCNV", new MoneyConverter());
