@@ -4,8 +4,6 @@ namespace NxBRE.InferenceEngine.IO {
 	using System.IO;
 	using System.Xml.XPath;
 	
-	using net.ideaity.util.events;
-	
 	using NxBRE.Util;
 
 	using NxBRE.InferenceEngine.Core;
@@ -308,7 +306,7 @@ namespace NxBRE.InferenceEngine.IO {
 		}
 		
 		private void Init(IRulesDriver driver) {
-			bre = new BREFactory(new DispatchException(HandleExceptionEvent)).NewBRE(driver);
+			bre = new BREFactory().NewBRE(driver);
 			prepared_bre = null;
 			
 			if (bre == null)
@@ -323,11 +321,12 @@ namespace NxBRE.InferenceEngine.IO {
 			working_bre.Process(setId);
 		}
 	
-		private void HandleExceptionEvent(object obj, IExceptionEvent aException) {
+		private void HandleExceptionEvent(object obj) {
 			// whatever is the exception hit, the process is stoped and an exception is thrown
 			// because the inference engine does not tolerate exceptions.
 			working_bre.Stop();
-			throw aException.Exception;
+			//FIXME: handle exceptions
+			//throw aException.Exception;
 		}
 		
 		private void NewFactHandler(NewFactEventArgs nfea) {

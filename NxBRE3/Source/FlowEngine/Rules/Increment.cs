@@ -3,7 +3,6 @@ namespace NxBRE.FlowEngine.Rules
 	using System;
 	using System.Collections;
 	
-	using net.ideaity.util;
 	using NxBRE.FlowEngine;
 
 	/// <summary> This class is designed to be used to increment everytime the executeRule is called.
@@ -12,14 +11,11 @@ namespace NxBRE.FlowEngine.Rules
 	/// </author>
 	public sealed class Increment : IBRERuleFactory, IInitializable
 	{
-//		public const string INIT = "Init";
-
 		public const string INCREMENT = "Increment";
 		
 		private int sIdx = 0;
 		
 		/// <summary> Takes an Integer with a value equal to the starting index point
-		/// *
 		/// </summary>
 		/// <param name="aObj">An Integer representing the starting index point
 		/// 

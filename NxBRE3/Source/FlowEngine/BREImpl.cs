@@ -3,14 +3,12 @@ namespace NxBRE.FlowEngine
 	using System;
 	using System.IO;
 	using System.Collections;
+	using System.Diagnostics;
 	using System.Reflection;
 	using System.Xml;
 	using System.Xml.Schema;
 	using System.Xml.XPath;
 	using System.Xml.Xsl;
-	
-	using net.ideaity.util;
-	using net.ideaity.util.events;
 	
 	using NxBRE.Util;
 	using NxBRE.FlowEngine;
@@ -18,7 +16,7 @@ namespace NxBRE.FlowEngine
 	using NxBRE.FlowEngine.IO;
 	
 	/// <summary>The Rule Interpretor implementation of IBRE, the Flow Engine of NxBRE.</summary>
-	/// <remarks> Take a deep breath.... Inhale... Exhale... Lets begin:
+	/// <remarks>[Author: Sloan Seaman] Take a deep breath.... Inhale... Exhale... Lets begin:
 	/// <P>
 	/// BREImpl is a reference implementation of a Business Rule Engine(BRE).
 	/// </P>
@@ -104,7 +102,7 @@ namespace NxBRE.FlowEngine
 	/// </remarks>
 	/// <author>  Sloan Seaman </author>
 	/// <author>  David Dossot </author>
-	public sealed class BREImpl : AbstractLogExceptionDispatcher, IFlowEngine
+	public sealed class BREImpl : IFlowEngine
 	{
 		// XML Related info
 		private const string BUSINESS_RULES = "BusinessRules";
@@ -213,7 +211,7 @@ namespace NxBRE.FlowEngine
 			
 			set
 			{
-				DispatchLog("RuleContext provided by external entity", LogEventImpl.DEBUG);
+				if (Logger.IsFlowEngineVerbose) Logger.FlowEngineSource.TraceEvent(TraceEventType.Verbose, 0, "RuleContext provided by external entity");
 				ruleContext = value;
 			}
 			
@@ -258,9 +256,7 @@ namespace NxBRE.FlowEngine
 
 			BREImpl newBRE = new BREImpl();
 			
-			// pass the handlers
-			newBRE.LogHandlers += GetLogHandlers();
-			newBRE.ExceptionHandlers += GetExceptionHandlers();
+			// pass the result handler
 			newBRE.ResultHandlers += GetResultHandlers();
 			
 			// pass a cloned context
@@ -293,31 +289,32 @@ namespace NxBRE.FlowEngine
 		private bool DoInit(object aObj)
 		{
 			if (running) {
-				DispatchException("BRE already running: a violent Stop will be tried!", LogEventImpl.ERROR);
+				if (Logger.IsFlowEngineError) Logger.FlowEngineSource.TraceEvent(TraceEventType.Error, 0, "BRE already running: a violent Stop will be tried!");
 				Stop();
 			}
-			else DispatchLog("BRE Starting...", LogEventImpl.INFO);
+			else {
+				if (Logger.IsInferenceEngineInformation) Logger.FlowEngineSource.TraceEvent(TraceEventType.Information, 0, "BRE Starting...");
+			}
 			
 			if (aObj == null)
 			{
-				DispatchException("Business Rules provided by external entity\nObject passed to init() must not be Null", LogEventImpl.FATAL);
+				if (Logger.IsFlowEngineCritical) Logger.FlowEngineSource.TraceEvent(TraceEventType.Critical, 0, "Business Rules provided by external entity\nObject passed to init() must not be Null");
 				return false;
 			}
 
 			if (aObj is IRulesDriver)	{
 				rulesDriver = (IRulesDriver) aObj;
-				rulesDriver.LogDispatcher = this;
 				xmlDocument = null;
 			}
 			else if (aObj is XPathDocument) {
 				xmlDocument = (XPathDocument) aObj;
 			}
 			else {
-				DispatchException("Business Rules provided by external entity\nObject passed to init() must be of type System.Xml.XPath.XPathDocument or NxBRE.FlowEngine.IO.IRulesDriver and not "+aObj.GetType(), LogEventImpl.FATAL);
+				if (Logger.IsFlowEngineCritical) Logger.FlowEngineSource.TraceEvent(TraceEventType.Critical, 0, "Business Rules provided by external entity\nObject passed to init() must be of type System.Xml.XPath.XPathDocument or NxBRE.FlowEngine.IO.IRulesDriver and not " + aObj.GetType());
 				return false;
 			}
 			
-			DispatchLog("BRE Initializing...", LogEventImpl.INFO);
+			if (Logger.IsInferenceEngineInformation) Logger.FlowEngineSource.TraceEvent(TraceEventType.Information, 0, "BRE Initializing...");
 			
 			if (ruleContext == null)
 				ruleContext = new BRERuleContextImpl(new Stack(),
@@ -340,7 +337,7 @@ namespace NxBRE.FlowEngine
 		/// </summary>
 		public void Reset() {
 			if (running) {
-				DispatchException("BRE already running: a violent Stop will be tried!", LogEventImpl.ERROR);
+				if (Logger.IsFlowEngineError) Logger.FlowEngineSource.TraceEvent(TraceEventType.Error, 0, "BRE already running: a violent Stop will be tried!");
 				Stop();
 			}
 			
@@ -349,7 +346,7 @@ namespace NxBRE.FlowEngine
 				ruleContext.CallStack.Clear();
 			}
 			
-			DispatchLog("BRE has been reset.", LogEventImpl.INFO);
+			if (Logger.IsInferenceEngineInformation) Logger.FlowEngineSource.TraceEvent(TraceEventType.Information, 0, "BRE has been reset.");
 		}
 		
 		/// <summary> Returns either an XPathNavigator containing the rules that was passed to Init(),
@@ -399,23 +396,26 @@ namespace NxBRE.FlowEngine
 			// an empty string is of no interest
 			if (setId == String.Empty) setId = null;
 			
-			DispatchLog("BRE Processing"
-			            + ((setId == null)?String.Empty:" Set: " + setId)
-			            + ((wasRunning)?" (Re-entrant)":String.Empty),
-			            LogEventImpl.INFO);
+			if (Logger.IsInferenceEngineInformation)
+				Logger.FlowEngineSource.TraceEvent(TraceEventType.Information,
+				                                   0,
+				                                   "BRE Processing" + ((setId == null)?String.Empty:" Set: " + setId)
+																								            + ((wasRunning)?" (Re-entrant)":String.Empty));
 			
 			if (ruleContext == null) {
-				DispatchException("RuleContext is null", ExceptionEventImpl.FATAL);
+				if (Logger.IsFlowEngineCritical) Logger.FlowEngineSource.TraceEvent(TraceEventType.Critical, 0, "RuleContext is null");
 				return false;
 			}
 			
 			if (!running) running = true;
 
 			ProcessXML(GetXmlDocumentRules(), setId, null);
-			DispatchLog("BRE Finished"
-			            + ((setId == null)?String.Empty:" Set: " + setId)
-			            + ((wasRunning)?" (Re-entrant)":String.Empty),
-			            LogEventImpl.INFO);
+			
+			if (Logger.IsInferenceEngineInformation)
+				Logger.FlowEngineSource.TraceEvent(TraceEventType.Information,
+				                                   0,
+				                                   "BRE Finished" + ((setId == null)?String.Empty:" Set: " + setId)
+			            																				+ ((wasRunning)?" (Re-entrant)":String.Empty));
 			
 			if (!wasRunning) running=false;
 			return true;
@@ -442,7 +442,7 @@ namespace NxBRE.FlowEngine
 		/// </returns>
 		private bool LoadFactories(XPathNodeIterator aNodeList)
 		{
-			DispatchLog("BRE Loading RuleFactories...", LogEventImpl.INFO);
+			if (Logger.IsInferenceEngineInformation) Logger.FlowEngineSource.TraceEvent(TraceEventType.Information, 0, "BRE Loading RuleFactories...");
 			
 			if (aNodeList != null)
 			{
@@ -456,8 +456,8 @@ namespace NxBRE.FlowEngine
 						{
 							string id = aNodeList.Current.GetAttribute(RULE_ATTRS.ID, String.Empty);
 							
-							DispatchLog("Found Factory: " + factory + " Id: " + id, LogEventImpl.DEBUG);
-							DispatchLog("Loading Factory: " + id, LogEventImpl.DEBUG);
+							if (Logger.IsFlowEngineVerbose) Logger.FlowEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Found Factory: " + factory + " Id: " + id);
+							if (Logger.IsFlowEngineVerbose) Logger.FlowEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Loading Factory: " + id);
 							
 							object tmpClass = Assembly.GetExecutingAssembly().CreateInstance(factory);
 							
@@ -465,7 +465,7 @@ namespace NxBRE.FlowEngine
 							{
 								IBRERuleFactory brf = (IBRERuleFactory) tmpClass;
 								ruleContext.SetFactory(id, brf);
-								DispatchLog("BRE RuleFactory " + id + " loaded and added to RuleContext.", LogEventImpl.DEBUG);
+								if (Logger.IsFlowEngineVerbose) Logger.FlowEngineSource.TraceEvent(TraceEventType.Verbose, 0, "BRE RuleFactory " + id + " loaded and added to RuleContext");
 							}
 							else
 							{
@@ -477,7 +477,7 @@ namespace NxBRE.FlowEngine
 				}
 				catch (System.Exception e)
 				{
-					DispatchException(e, ExceptionEventImpl.FATAL);
+					if (Logger.IsFlowEngineCritical) Logger.FlowEngineSource.TraceData(TraceEventType.Critical, 0, e);
 				}
 			}
 			return false;
@@ -501,7 +501,7 @@ namespace NxBRE.FlowEngine
 			if ((aNode == null) || (!running)) return null;
 			
 			string nodeName = aNode.LocalName;
-			DispatchLog("Element Node: " + nodeName, LogEventImpl.DEBUG);
+			if (Logger.IsFlowEngineVerbose) Logger.FlowEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Element Node: " + nodeName);
 
 			/*
 			A lot of this code is the same but it is broken up for
@@ -758,7 +758,7 @@ namespace NxBRE.FlowEngine
 			IBREOperator ruleOperator = null;
 			
 			if (!ruleContext.OperatorMap.Contains(operatorId)) {
-				DispatchLog("Loading Operator: " + operatorId, LogEventImpl.DEBUG);
+				if (Logger.IsFlowEngineVerbose) Logger.FlowEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Loading Operator: " + operatorId);
 				ruleOperator = (IBREOperator) Assembly.GetExecutingAssembly().CreateInstance(operatorId);
 				ruleContext.SetOperator(operatorId, ruleOperator);
 			}
@@ -802,47 +802,61 @@ namespace NxBRE.FlowEngine
 				IBRERuleResult rightResult = (IBRERuleResult) ruleContext.GetResult(rightId);
 	
 				// If it does not, consider a null in left or right members as exceptions!
-				if ((!ruleOperator.AcceptsNulls) && (leftResult == null))
-					DispatchException(new BREException("RuleResult " + leftId + " not found in RuleContext"), ExceptionEventImpl.ERROR);
-				else if ((!ruleOperator.AcceptsNulls) && (rightResult == null))
-					DispatchException(new BREException("RuleResult " + rightId + " not found in RuleContext"), ExceptionEventImpl.ERROR);
+				if ((!ruleOperator.AcceptsNulls) && (leftResult == null)) {
+					if (Logger.IsFlowEngineError) Logger.FlowEngineSource.TraceEvent(TraceEventType.Error, 0, "RuleResult " + leftId + " not found in RuleContext");
+				}
+				else if ((!ruleOperator.AcceptsNulls) && (rightResult == null)) {
+					if (Logger.IsFlowEngineError) Logger.FlowEngineSource.TraceEvent(TraceEventType.Error, 0, "RuleResult " + rightId + " not found in RuleContext");
+				}
 				else
 				{
-					DispatchLog("Retrieved results for comparison", LogEventImpl.DEBUG);
+					if (Logger.IsFlowEngineVerbose) Logger.FlowEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Retrieved results for comparison");
 					
 					object left = (leftResult==null)?null:leftResult.Result;
 					object right = (rightResult==null)?null:rightResult.Result;
 					
 					try
 					{
-						DispatchLog("BREOperator " + operatorId + " executing.", LogEventImpl.DEBUG);
+						if (Logger.IsFlowEngineVerbose) Logger.FlowEngineSource.TraceEvent(TraceEventType.Verbose, 0, "BREOperator " + operatorId + " executing");
 						resultBool = ruleOperator.ExecuteComparison(ruleContext, aMap, left, right);
 					}
-					catch (System.InvalidCastException)
+					catch (InvalidCastException ice)
 					{
-						DispatchException(new BREException("Specified BREOperator "
-						                                   + operatorId
-						                                   + " not of type BREOperator or objects being compared are not"
-						                                   + " of the same type.\n"
-						                                   + "Left Object Name:" + leftId
-						                                   + "\nLeft Object Type:" + left.GetType().FullName
-						                                   + "\nRight Object Name:" + rightId
-						                                   + "\nRight Object Type:" + right.GetType().FullName
-						                                   + "\n"),
-						                  ExceptionEventImpl.FATAL);
+						if (Logger.IsFlowEngineCritical)
+							Logger.FlowEngineSource.TraceData(TraceEventType.Critical,
+							                                  0,
+							                                  new BREException("Specified BREOperator "
+																                                   + operatorId
+																                                   + " not of type BREOperator or objects being compared are not"
+																                                   + " of the same type.\n"
+																                                   + "Left Object Name:" + leftId
+																                                   + "\nLeft Object Type:" + left.GetType().FullName
+																                                   + "\nRight Object Name:" + rightId
+																                                   + "\nRight Object Type:" + right.GetType().FullName
+																                                   + "\n", ice));
 					}
-					catch (System.Exception e)
+					catch (Exception e)
 					{
-						DispatchException(new BREException(e.ToString()), ExceptionEventImpl.FATAL);
+						if (Logger.IsFlowEngineCritical)
+							Logger.FlowEngineSource.TraceData(TraceEventType.Critical,
+							                                  0,
+							                                  new BREException("Error when processing BREOperator "
+																                                   + operatorId
+																                                   + ".\n"
+																                                   + "Left Object Name:" + leftId
+																                                   + "\nLeft Object:" + left
+																                                   + "\nRight Object Name:" + rightId
+																                                   + "\nRight Object:" + right
+																                                   + "\n", e));
 					}
 				}
 			}
 			else
 			{
-				DispatchException(new BREException("Operator could not be loaded from BRERuleContext"), ExceptionEventImpl.FATAL);
+				if (Logger.IsFlowEngineCritical) Logger.FlowEngineSource.TraceData(TraceEventType.Critical, 0, new BREException("Operator could not be loaded from BRERuleContext"));
 			}
 			
-			DispatchLog("Compare result: " + resultBool, LogEventImpl.DEBUG);
+			if (Logger.IsFlowEngineVerbose) Logger.FlowEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Compare result: " + resultBool);
 			return resultBool;
 		}
 		
@@ -868,24 +882,21 @@ namespace NxBRE.FlowEngine
 		}
 
 		/// <summary> Handles the InvokeSet Node
-		/// *
 		/// </summary>
 		/// <param name="aNode">The InvokeSet node to process</param>
 		private void ProcessInvokeSetNode(XPathNavigator aNode)
 		{
 			string id = ProcessIdValueAttributes(aNode, INVOKESET_ATTRS.ID, INVOKESET_ATTRS.RULE_VALUE);
 			
-			if (id == null)
-				DispatchException(new BREException("Can not invoke a set with no Id"),
-				                  ExceptionEventImpl.FATAL);
-			else
-				if (!Process(id))
-					DispatchException(new BREException("Error when invoking set "+id),
-				 		                ExceptionEventImpl.FATAL);
+			if (id == null) {
+				if (Logger.IsFlowEngineCritical) Logger.FlowEngineSource.TraceData(TraceEventType.Critical, 0, new BREException("Can not invoke a set with no Id: " + aNode.OuterXml));
+			}
+			else if (!Process(id)) {
+				if (Logger.IsFlowEngineCritical) Logger.FlowEngineSource.TraceData(TraceEventType.Critical, 0, new BREException("Error when invoking set Id: " + id));
+			}
 		}
 		
 		/// <summary> Handles the Log Node
-		/// *
 		/// </summary>
 		/// <param name="aNode">The Node to process
 		/// 
@@ -894,11 +905,10 @@ namespace NxBRE.FlowEngine
 		{
 			string msg = ProcessIdValueAttributes(aNode, LOG_ATTRS.MESSAGE, LOG_ATTRS.MESSAGE_ID);
 			int level = Int32.Parse(aNode.GetAttribute(LOG_ATTRS.LEVEL, String.Empty));
-			DispatchLog(msg, level);
+			Logger.FlowEngineRuleBaseSource.TraceEvent(Logger.ConvertFromObsoleteIntLevel(level), 0, msg);
 		}
 		
 		/// <summary> Handles the Parameter node
-		/// *
 		/// </summary>
 		/// <param name="aNode">The Node to process
 		/// </param>
@@ -929,7 +939,6 @@ namespace NxBRE.FlowEngine
 		
 		
 		/// <summary> Handles the Rule Node and calls doRule()
-		/// *
 		/// </summary>
 		/// <param name="aNode">The Node to process
 		/// </param>
@@ -958,7 +967,6 @@ namespace NxBRE.FlowEngine
 		/// <LI>Adds the RuleResult to the RuleContext</LI>
 		/// </OL>
 		/// </P>
-		/// *
 		/// </summary>
 		/// <param name="id">The ID of the Rule
 		/// </param>
@@ -1002,23 +1010,18 @@ namespace NxBRE.FlowEngine
 					it to late and can cause issues 
 					*/
 					
-					DispatchException(new BREException("Factory Id " + id + " defined, but not found in RuleContext"), ExceptionEventImpl.ERROR);
+					if (Logger.IsFlowEngineError) Logger.FlowEngineSource.TraceData(TraceEventType.Error, 0, new BREException("Factory Id " + id + " defined, but not found in RuleContext"));
 				}
 			}
 			// This can occur internally in the RuleContext
 			catch (System.InvalidCastException cce)
 			{
-				DispatchException(new BREException("Object in RuleContext not of correct type. " + cce.ToString()), ExceptionEventImpl.FATAL);
+				if (Logger.IsFlowEngineCritical) Logger.FlowEngineSource.TraceData(TraceEventType.Critical, 0, new BREException("Object in RuleContext not of correct type. " + cce.ToString()));
 			}
 			// Catch unknown exceptions in the factory itself
 			catch (System.Exception e)
 			{
-				if (e is BRERuleFatalException)
-					DispatchException((BRERuleFatalException) e, ExceptionEventImpl.FATAL);
-				else if (e is BRERuleException)
-					DispatchException((BRERuleException) e, ExceptionEventImpl.ERROR);
-				else
-					DispatchException(new BREException("Error when processing RuleFactory id: " + id, e), ExceptionEventImpl.ERROR);
+				if (Logger.IsFlowEngineError) Logger.FlowEngineSource.TraceData(TraceEventType.Error, 0, new BREException("Error when processing RuleFactory id: " + id, e));
 				
 				/*
 				Set the RuleResult to an exception so I can test for it in the If

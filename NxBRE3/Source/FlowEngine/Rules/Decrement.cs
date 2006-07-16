@@ -3,7 +3,6 @@ namespace NxBRE.FlowEngine.Rules
 	using System;
 	using System.Collections;
 	
-	using net.ideaity.util;
 	using NxBRE.FlowEngine;
 
 	/// <summary> This class is designed to be used to decrement everytime the executeRule is called

@@ -1,5 +1,4 @@
 namespace NxBRE.FlowEngine {
-	using net.ideaity.util.events;
 	
 	/// <summary>
 	/// This interface must be implemented by any class that wants to handle BRE events
@@ -8,7 +7,7 @@ namespace NxBRE.FlowEngine {
 	/// <remarks>
 	///  The delegate of the same name allows creating custom implementation of the handler.
 	/// </remarks>
-	public interface IBREDispatcher:ILogDispatcher,IExceptionDispatcher {
+	public interface IBREDispatcher {
 		event DispatchRuleResult ResultHandlers;
 	}
 	

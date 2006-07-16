@@ -5,8 +5,6 @@ namespace NxBRE.FlowEngine.IO {
 	using System.Xml;
 	using System.Xml.Schema;
 	
-	using net.ideaity.util.events;
-
 	using NxBRE.FlowEngine;
 	using NxBRE.Util;
 	
@@ -17,7 +15,6 @@ namespace NxBRE.FlowEngine.IO {
 	/// <author>David Dossot</author>
 	public abstract class AbstractRulesDriver:IRulesDriver {
 		protected string xmlSource = null;
-		private ILogDispatcher logDispatcher = null;
 
 		///<summary>Builder pattern where the actual implementation is delegated to a descendant concrete class</summary>
 		protected abstract XmlReader GetReader();
@@ -25,15 +22,6 @@ namespace NxBRE.FlowEngine.IO {
 		
 		public XmlReader GetXmlReader() {
 			return GetReader();			
-		}
-		
-		public ILogDispatcher LogDispatcher {
-			get {
-				return logDispatcher;
-			}
-			set {
-				logDispatcher = value;
-			}
 		}
 		
 		///<summary>The XML rule source (either an URI or a string containing an XML fragment)</summary>

@@ -5,8 +5,6 @@ namespace NxBRE.Test.InferenceEngine {
 	
 	using NUnit.Framework;
 	
-	using net.ideaity.util.events;
-	
 	using NxBRE.InferenceEngine;
 	using NxBRE.InferenceEngine.IO;
 	using NxBRE.InferenceEngine.Rules;

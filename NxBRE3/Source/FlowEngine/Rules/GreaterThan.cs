@@ -3,7 +3,6 @@ namespace NxBRE.FlowEngine.Rules
 	using System;
 	using System.Collections;
 
-	using net.ideaity.util;
 	using NxBRE.FlowEngine;
 
 	/// <summary> Compares two objects to see if one is greater than the other

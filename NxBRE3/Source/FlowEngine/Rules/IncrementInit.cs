@@ -3,7 +3,6 @@ namespace NxBRE.FlowEngine.Rules
 	using System;
 	using System.Collections;
 	
-	using net.ideaity.util;
 	using NxBRE.FlowEngine;
 
 	/// <summary> This class is designed to reset increments or decrements
@@ -22,7 +21,6 @@ namespace NxBRE.FlowEngine.Rules
 	/// <Parameter name="Init" ruleValue="abc"/>
 	/// </Rule>
 	/// </PRE>
-	/// *
 	/// </summary>
 	/// <author>  David Dossot
 	/// </author>

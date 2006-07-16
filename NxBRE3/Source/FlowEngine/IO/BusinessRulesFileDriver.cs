@@ -1,8 +1,7 @@
 namespace NxBRE.FlowEngine.IO {
 	using System;
+	using System.Diagnostics;
 	using System.Xml;
-
-	using net.ideaity.util.events;
 	
 	using NxBRE.FlowEngine;
 	using NxBRE.Util;
@@ -18,8 +17,7 @@ namespace NxBRE.FlowEngine.IO {
 		public BusinessRulesFileDriver(string xmlFileURI):base(xmlFileURI) {}
 		
 		protected override XmlReader GetReader() {
-			if (LogDispatcher != null)
-				LogDispatcher.DispatchLog("BusinessRulesFileDriver loading " + xmlSource, LogEventImpl.INFO);
+			if (Logger.IsFlowEngineInformation) Logger.FlowEngineSource.TraceEvent(TraceEventType.Information, 0, "BusinessRulesFileDriver loading " + xmlSource);
 			
 			return GetXmlInputReader(xmlSource, "businessRules.xsd");
 		}

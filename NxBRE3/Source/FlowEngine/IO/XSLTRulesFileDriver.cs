@@ -1,13 +1,11 @@
 namespace NxBRE.FlowEngine.IO {
 	using System;
 	using System.IO;
-	using System.Reflection;
+	using System.Diagnostics;
 	using System.Xml;
 	using System.Xml.Schema;
 	using System.Xml.Xsl;
 	using System.Xml.XPath;
-	
-	using net.ideaity.util.events;
 	
 	using NxBRE.FlowEngine;
 	using NxBRE.Util;
@@ -44,8 +42,7 @@ namespace NxBRE.FlowEngine.IO {
 		
 		private XslCompiledTransform GetXSLT() {
 			if (xslt == null) {
-				if (LogDispatcher != null)
-					LogDispatcher.DispatchLog("XSLTRulesFileDriver loading "+xslFileURI, LogEventImpl.INFO);
+				if (Logger.IsFlowEngineInformation) Logger.FlowEngineSource.TraceEvent(TraceEventType.Information, 0, "XSLTRulesFileDriver loading " + xslFileURI);
 				
 				xslt = new XslCompiledTransform();
 				xslt.Load(xslFileURI);
@@ -55,7 +52,7 @@ namespace NxBRE.FlowEngine.IO {
 		}
 		
 		protected override XmlReader GetReader() {
-			if (LogDispatcher != null) LogDispatcher.DispatchLog("XSLTRulesFileDriver loading " + xmlSource, LogEventImpl.INFO);
+			if (Logger.IsFlowEngineInformation) Logger.FlowEngineSource.TraceEvent(TraceEventType.Information, 0, "XSLTRulesFileDriver loading " + xmlSource);
 			
 			XmlReader fileReader = GetXmlInputReader(xmlSource, inputXMLSchema);
 

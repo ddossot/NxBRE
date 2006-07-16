@@ -164,16 +164,6 @@
     <Compile Include="Test\InferenceEngine\TestEngineCoreFeaturesRule09Compact.cs" />
     <Compile Include="Test\InferenceEngine\TestEngineCoreFeaturesRule09Expanded.cs" />
     <Compile Include="Test\InferenceEngine\TestEngineCoreFeaturesRuleML09.cs" />
-    <Compile Include="_tokill\LogEventImpl.cs" />
-    <Compile Include="_tokill\AbstractExceptionEvent.cs" />
-    <Compile Include="_tokill\AbstractLogDispatcher.cs" />
-    <Compile Include="_tokill\AbstractLogEvent.cs" />
-    <Compile Include="_tokill\AbstractLogExceptionDispatcher.cs" />
-    <Compile Include="_tokill\ExceptionEventImpl.cs" />
-    <Compile Include="_tokill\IExceptionDispatcher.cs" />
-    <Compile Include="_tokill\IExceptionEvent.cs" />
-    <Compile Include="_tokill\ILogDispatcher.cs" />
-    <Compile Include="_tokill\ILogEvent.cs" />
     <Compile Include="Test\TestUtil.cs" />
     <Compile Include="Test\TestCompilation.cs" />
     <Compile Include="Test\TestDataSet.cs" />
@@ -212,7 +202,6 @@
     <Folder Include="Util" />
     <Folder Include="Test\FlowEngine" />
     <Folder Include="Test\InferenceEngine" />
-    <Folder Include="_tokill" />
     <Content Include="NxBRE.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
