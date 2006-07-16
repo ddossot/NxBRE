@@ -10,9 +10,7 @@ namespace NxBRE.FlowEngine
 	/// This interface defines the Flow Engine (FE) of NxBRE.
 	/// </summary>
 	/// <author>David Dossot</author>
-	public interface IFlowEngine : IBREDispatcher, ICloneable
-		//TODO: remove the inheritance of IInitializable and IBREDispatcher
-		{
+	public interface IFlowEngine : IBREDispatcher, ICloneable {
 			/// <summary> Returns or Sets the RuleContext in it's current state.
 			/// If the developer wishes to have a private copy, make sure
 			/// to use Clone().
