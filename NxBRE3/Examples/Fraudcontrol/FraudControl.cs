@@ -60,9 +60,6 @@ namespace NxBRE.Examples
 		public static void Main(string[] args) {
 			FraudControl fc = new FraudControl(Int32.Parse(args[0]), args[1]);
 			
-			//FIXME: use trace
-			//if (args.Length == 3) LOG_LEVEL = Int32.Parse(args[2]);
-
 			/// Demonstrates how to use a Custom Binder Class
 			Console.WriteLine("\n\n************ Using Custom Binder Class ************\n");
 			fc.PerformProcess(new CustomBinder());

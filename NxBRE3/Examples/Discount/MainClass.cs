@@ -3,31 +3,31 @@
 namespace NxBRE.Examples
 {
 	using System;
+	using System.Diagnostics;
 
 	using net.ideaity.util;
 
 	public class MainClass
 	{
 		public static bool SHOWSTACK = false;
-		public static int LOGLEVEL = 99;
-		public static int ERRORLEVEL = 99;
 		
 		public static void Main(string[] args)
 		{
 			Arguments argOpt = new Arguments();
+			
+			SourceLevels engineTraceLevel = SourceLevels.Warning;
+			SourceLevels ruleBaseTraceLevel = SourceLevels.Warning;
+			
 			argOpt.Usage = new string[]{"Usage",
-																	"\tTest (options) [xmlfile]",
+																	"\tDiscount (options) [xmlfile]",
 																	"",
 																	"\toptions:",
 																	"\t  -s | -S  Turn ON/OFF RuleContext dump",
-																	"\t  -e [num]  Set the error level to num",
-																	"\t\t  num=[" + ExceptionEventImpl.FATAL + "," + ExceptionEventImpl.ERROR + "," + ExceptionEventImpl.WARN + "]",
-																	"\t  -l [num]  Set the log level to num",
-																	"\t\t  num=[" + LogEventImpl.DEBUG + "," + LogEventImpl.FATAL + "," + LogEventImpl.ERROR + "," + LogEventImpl.WARN + "," + LogEventImpl.INFO + "]",
+																	"\t  -e [System.Diagnostics.SourceLevels]  Set the Engine Trace Source Level",
+																	"\t  -l [System.Diagnostics.SourceLevels]  Set the RuleBase Trace Source Level",
 																	"\t  -h       This message"};
 			
-			if (args.Length == 0)
-			{
+			if (args.Length == 0) {
 				argOpt.printUsage();
 				System.Environment.Exit(1);
 			}
@@ -49,11 +49,11 @@ namespace NxBRE.Examples
 						break;
 					
 					case 'e': 
-						ERRORLEVEL = Int32.Parse(argOpt.StringParameter);
+						engineTraceLevel = (SourceLevels)Enum.Parse(typeof(SourceLevels), argOpt.StringParameter);
 						break;
 					
 					case 'l': 
-						LOGLEVEL = Int32.Parse(argOpt.StringParameter);
+						ruleBaseTraceLevel = (SourceLevels)Enum.Parse(typeof(SourceLevels), argOpt.StringParameter);
 						break;
 					
 					case 'h': 
@@ -68,7 +68,7 @@ namespace NxBRE.Examples
 			}
 			
 			string xmlFile = argOpt.getListFiles();
-			CalculateTotal calculator = new CalculateTotal(xmlFile, ERRORLEVEL, LOGLEVEL);
+			CalculateTotal calculator = new CalculateTotal(xmlFile, engineTraceLevel, ruleBaseTraceLevel);
 			
 			if (calculator.IsValid) {
 				Console.Out.WriteLine("\nOrder #1: Calculated discounted total={0} (expected: {1})\n",

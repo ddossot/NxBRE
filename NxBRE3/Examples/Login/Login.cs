@@ -3,6 +3,7 @@
 namespace NxBRE.Examples
 {
 	using System;
+	using System.Diagnostics;
 
 	using net.ideaity.util;
 
@@ -17,24 +18,22 @@ namespace NxBRE.Examples
 		
 		// These var's are for setup
 		private static bool SHOWSTACK = false;
-		private static int LOGLEVEL = 99;
-		private static int ERRORLEVEL = 99;
 		
-		public Login(string aXMLFile)
+		public Login(string aXMLFile, SourceLevels engineTraceLevel, SourceLevels ruleBaseTraceLevel)
 		{
 			try
 			{
-				IFlowEngine bre = new BREFactoryConsole(ERRORLEVEL, LOGLEVEL).NewBRE(new XBusinessRulesFileDriver(aXMLFile));
+				IFlowEngine bre = new BREFactoryConsole(engineTraceLevel, ruleBaseTraceLevel).NewBRE(new XBusinessRulesFileDriver(aXMLFile));
 				if (bre != null) {
-					bre.ResultHandlers += new DispatchRuleResult(handleBRERuleResult);
+					bre.ResultHandlers += new DispatchRuleResult(HandleBRERuleResult);
 					Increment inc = new Increment();
 					inc.Init(1);
 					
 					bre.RuleContext.SetFactory("Incrementor", inc);
 					
-					Console.Out.WriteLine("Attempt #1: Login locked: {0}", checkLogin(bre));
-					Console.Out.WriteLine("Attempt #2: Login locked: {0}", checkLogin(bre));
-					Console.Out.WriteLine("Attempt #3: Login locked: {0}", checkLogin(bre));
+					Console.Out.WriteLine("Attempt #1: Login locked: {0}", CheckLogin(bre));
+					Console.Out.WriteLine("Attempt #2: Login locked: {0}", CheckLogin(bre));
+					Console.Out.WriteLine("Attempt #3: Login locked: {0}", CheckLogin(bre));
 					if (SHOWSTACK) Console.Out.WriteLine(bre.RuleContext.ToString());
 				}
 				else Console.Error.WriteLine("BRE init failed");
@@ -47,7 +46,7 @@ namespace NxBRE.Examples
 		
 		/// <summary>This is what your code would call to check the login
 		/// </summary>
-		public virtual bool checkLogin(IFlowEngine aBRE)
+		public virtual bool CheckLogin(IFlowEngine aBRE)
 		{
 			aBRE.Process();
 			return lockLogin;
@@ -56,30 +55,31 @@ namespace NxBRE.Examples
 		/// <summary>This is the method that is required by the listener interface.  It 
 		/// will get called whenever the LoginResult rule is executed
 		/// </summary>
-		public virtual void  handleBRERuleResult(object sender, IBRERuleResult aBRR)
+		public virtual void  HandleBRERuleResult(object sender, IBRERuleResult aBRR)
 		{
 			if (aBRR.MetaData.Id.Equals("LoginResult")) lockLogin = true;
 		}
 		
 		/// <summary>EVERYTHING FROM HERE DOWN IS JUST TO SET THINGS UP.....
 		/// </summary>
-		public static void  Main(string[] args)
+		public static void Main(string[] args)
 		{
 			Arguments argOpt = new Arguments();
+			
+			SourceLevels engineTraceLevel = SourceLevels.Warning;
+			SourceLevels ruleBaseTraceLevel = SourceLevels.Warning;
+
 			argOpt.Usage = new string[]{"Usage",
 																	"\tLogin (options) [xmlfile]",
 																	"",
 																	"\toptions:",
 																	"\t  -s | -S  Turn ON/OFF RuleContext dump",
-																	"\t  -e [num] Set the error level to num",
-																	"\t\t  num=[" + ExceptionEventImpl.FATAL + "," + ExceptionEventImpl.ERROR + "," + ExceptionEventImpl.WARN + "]",
-																	"\t  -l [num] Set the log level to num",
-																	"\t\t  num=[" + LogEventImpl.DEBUG + "," + LogEventImpl.FATAL + "," + LogEventImpl.ERROR + "," + LogEventImpl.WARN + "," + LogEventImpl.INFO + "]",
+																	"\t  -e [System.Diagnostics.SourceLevels]  Set the Engine Trace Source Level",
+																	"\t  -l [System.Diagnostics.SourceLevels]  Set the RuleBase Trace Source Level",
 																	"\t  -h       This message"};
 			
 			
-			if (args.Length == 0)
-			{
+			if (args.Length == 0)	{
 				argOpt.printUsage();
 				System.Environment.Exit(1);
 			}
@@ -100,11 +100,11 @@ namespace NxBRE.Examples
 						break;
 					
 					case 'e': 
-						ERRORLEVEL = Int32.Parse(argOpt.StringParameter);
+						engineTraceLevel = (SourceLevels)Enum.Parse(typeof(SourceLevels), argOpt.StringParameter);
 						break;
 					
 					case 'l': 
-						LOGLEVEL = Int32.Parse(argOpt.StringParameter);
+						ruleBaseTraceLevel = (SourceLevels)Enum.Parse(typeof(SourceLevels), argOpt.StringParameter);
 						break;
 					
 					case 'h': 
@@ -117,7 +117,7 @@ namespace NxBRE.Examples
 				}
 			}
 			
-			Login bret = new Login(argOpt.getListFiles());
+			Login bret = new Login(argOpt.getListFiles(), engineTraceLevel, ruleBaseTraceLevel);
 		}
 	}
 }

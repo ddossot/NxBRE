@@ -2,6 +2,7 @@ namespace NxBRE.Examples
 {
 	using System;
 	using System.Collections;
+	using System.Diagnostics;
 	using System.IO;
 	using System.Xml;
 	using System.Xml.Schema;
@@ -23,9 +24,9 @@ namespace NxBRE.Examples
 		private IFlowEngine bre;
 		private bool reusing = false;
 		
-		public CalculateTotal(string aXMLFile, int errorLevel, int logLevel)
+		public CalculateTotal(string aXMLFile, SourceLevels engineTraceLevel, SourceLevels ruleBaseTraceLevel)
 		{
-			bre = new BREFactoryConsole(errorLevel, logLevel).NewBRE(new XBusinessRulesFileDriver(aXMLFile));
+			bre = new BREFactoryConsole(engineTraceLevel, ruleBaseTraceLevel).NewBRE(new XBusinessRulesFileDriver(aXMLFile));
 			if (bre == null) throw new System.Exception("BRE Not Properly Initialized!");
 			
 			bre.RuleContext.SetFactory(APPLIED_DISCOUNT,
@@ -61,7 +62,7 @@ namespace NxBRE.Examples
 		/// relevant order information including an Object for the Product that
 		/// is ordered
 		/// </summary>
-		public System.Double GetTotal(Order aOrder)
+		public double GetTotal(Order aOrder)
 		{
 			if (IsValid) {
 				// Since we are re-using this engine and because we do not want the previous results

@@ -16,7 +16,7 @@ namespace NxBRE.FlowEngine.Factories
 		  this.resultHandler = resultHandler;
 		}
 		
-		public virtual IFlowEngine NewBRE(IRulesDriver rulesDriver) {
+		public IFlowEngine NewBRE(IRulesDriver rulesDriver) {
 			BREImpl bre = new BREImpl();
 			
 			// Lets register the result handler
