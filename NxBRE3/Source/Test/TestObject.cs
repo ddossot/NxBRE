@@ -16,8 +16,7 @@ namespace NxBRE.Test
 		}
 	
 		public void VoidMember() {
-			// do nothing intelligent
-			Console.Error.WriteLine("Called: NxBRE.Test.TestObject.VoidMember()");
+			// NOOP
 		}
 	
 		public static Int32 Add(int a, int b) {

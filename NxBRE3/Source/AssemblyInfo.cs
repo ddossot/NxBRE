@@ -14,5 +14,3 @@ using System.Runtime.CompilerServices;
 [assembly:AssemblyDelaySign(false)]
 [assembly:AssemblyKeyFile("")]
 [assembly:CLSCompliant(true)]
-
-//TODO: Replace current custom logging mechanism with a standard one

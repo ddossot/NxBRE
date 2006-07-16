@@ -1,6 +1,7 @@
 namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
+	using System.Diagnostics;
 	using System.IO;
 	using System.Xml.XPath;
 	
@@ -290,7 +291,41 @@ namespace NxBRE.InferenceEngine.IO {
 	  	return "FlowEngineBinder w/BindingType:" + this.BindingType;
 	  }
 	  
-		// private methods ------------------------------------------------------
+		// private members ------------------------------------------------------
+		
+		/// <summary>
+		/// This listener has the only mission to stop the flow engine on any Error or Critical event
+		/// </summary>
+		private class FEBErrorListener:TraceListener {
+			public override void TraceData(TraceEventCache eventCache, string source, TraceEventType eventType, int id, object data) {
+				HandleEvent(eventType);
+			}
+			
+			public override void TraceData(TraceEventCache eventCache, string source, TraceEventType eventType, int id, params object[] data) {
+				HandleEvent(eventType);
+			}
+			
+			public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id) {
+				HandleEvent(eventType);
+			}
+			
+			public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string format, params object[] args) {
+				HandleEvent(eventType);
+			}
+			
+			public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string message) {
+				HandleEvent(eventType);
+			}
+			
+			private void HandleEvent(TraceEventType eventType) {
+				if ((eventType == TraceEventType.Error) || (eventType == TraceEventType.Critical)) working_bre.Stop();
+			}
+			
+			public override void Write(string message){}
+			
+			public override void WriteLine(string message){}
+			
+		}
 		
 		private void PrepareBRE() {
 			prepared_bre = (IFlowEngine)bre.Clone();
@@ -306,11 +341,16 @@ namespace NxBRE.InferenceEngine.IO {
 		}
 		
 		private void Init(IRulesDriver driver) {
+			// listen to events from Flow Engine and Flow Engine Rule Base
+			TraceListener tl = new FEBErrorListener();
+			Logger.FlowEngineSource.Listeners.Add(tl);
+			Logger.FlowEngineRuleBaseSource.Listeners.Add(tl);
+			
+			// instantiate the rule engine
 			bre = new BREFactory().NewBRE(driver);
 			prepared_bre = null;
 			
-			if (bre == null)
-				throw new BREException("The initialization of the Flow Engine Binder failed.");
+			if (bre == null) throw new BREException("The initialization of the Flow Engine Binder failed.");
 		}
 		
 		private void Process(string setId) {
@@ -321,14 +361,6 @@ namespace NxBRE.InferenceEngine.IO {
 			working_bre.Process(setId);
 		}
 	
-		private void HandleExceptionEvent(object obj) {
-			// whatever is the exception hit, the process is stoped and an exception is thrown
-			// because the inference engine does not tolerate exceptions.
-			working_bre.Stop();
-			//FIXME: handle exceptions
-			//throw aException.Exception;
-		}
-		
 		private void NewFactHandler(NewFactEventArgs nfea) {
 			NewWorkingBRE();
 			working_bre.RuleContext.SetObject(NEWFACT_ID, nfea.Fact);

@@ -905,6 +905,7 @@ namespace NxBRE.FlowEngine
 		{
 			string msg = ProcessIdValueAttributes(aNode, LOG_ATTRS.MESSAGE, LOG_ATTRS.MESSAGE_ID);
 			int level = Int32.Parse(aNode.GetAttribute(LOG_ATTRS.LEVEL, String.Empty));
+			
 			Logger.FlowEngineRuleBaseSource.TraceEvent(Logger.ConvertFromObsoleteIntLevel(level), 0, msg);
 		}
 		

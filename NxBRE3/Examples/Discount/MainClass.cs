@@ -5,7 +5,6 @@ namespace NxBRE.Examples
 	using System;
 
 	using net.ideaity.util;
-	using net.ideaity.util.events;
 
 	public class MainClass
 	{

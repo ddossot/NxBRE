@@ -5,6 +5,7 @@ namespace NxBRE.Test.FlowEngine
 {
 	using System;
 	using System.Collections;
+	using System.Diagnostics;
 	using System.Xml.Schema;
 
 	using NxBRE.Util;
@@ -30,20 +31,91 @@ namespace NxBRE.Test.FlowEngine
 		
 		private string testFile;
 		
-		private IFlowEngine bre;
+		private static IFlowEngine bre;
 		
-		private bool foundDynamicLog ;
-		private bool foundDynamicException;
-		private int logCount;
-		private int exceptionCount;
 		private int resultCount;
 		private int whileCount;
 		private int globalCount;
+		
 		private TestObject to;
 		private Hashtable ht;
 		private TestDataSet.Table1Row row;
+		
+		private ProbeTraceListener ptl;
 		private int forEachProbe;
 		private string forEachError;
+		
+		/// <summary>
+		/// The goal of this listener is to analyze (count, check values) the trace events emitted by the Flow Engine
+		/// </summary>
+		private class ProbeTraceListener:TraceListener {
+			private int exceptionCount = 0;
+			private bool foundDynamicLog = false;
+			private bool foundDynamicException = false;
+			
+			public int ExceptionCount {
+				get {
+					return exceptionCount;
+				}
+			}
+			
+			public bool FoundDynamicLog {
+				get {
+					return foundDynamicLog;
+				}
+			}
+			
+			public bool FoundDynamicException {
+				get {
+					return foundDynamicException;
+				}
+			}
+			
+			public override void TraceData(TraceEventCache eventCache, string source, TraceEventType eventType, int id, object data) {
+				HandleEvent(eventType, data);
+			}
+			
+			public override void TraceData(TraceEventCache eventCache, string source, TraceEventType eventType, int id, params object[] data) {
+				HandleEvent(eventType, data);
+			}
+			
+			public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id) {
+				HandleEvent(eventType, null);
+			}
+			
+			public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string format, params object[] args) {
+				HandleEvent(eventType, args);
+			}
+			
+			public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string message) {
+				HandleEvent(eventType, message);
+			}
+			
+			private void HandleEvent(TraceEventType eventType, params object[] data) {
+				if (eventType == TraceEventType.Error) {
+					exceptionCount++;
+					
+					// Try to catch a dynamically generated exception
+					if ((data.Length == 1) && (data[0] is System.Exception) && (((System.Exception)data[0]).Message == ASSERTED_HELLO_VALUE))
+						foundDynamicException = true;
+				}
+				else if (eventType == TraceEventType.Critical) {
+					exceptionCount++;
+				
+					// Stop rule processing on fatal exceptions
+					bre.Stop();
+				}
+				else if ((eventType == TraceEventType.Information) && (data.Length == 1) && (data[0].ToString() == ASSERTED_HELLO_VALUE)) {
+					Console.Error.WriteLine(eventType);
+					foundDynamicLog = true;
+				}
+			}
+			
+			public override void Write(string message){}
+			
+			public override void WriteLine(string message){}
+			
+		}
 		
 		private class ForEachSource : IEnumerable {
 			public IEnumerator GetEnumerator() {
@@ -55,25 +127,30 @@ namespace NxBRE.Test.FlowEngine
 		public object ContextlessDelegate(IBRERuleContext aBrc, IDictionary aMap, object aStep) {
 			return 50;
 		}
+		
 		public object ContextfullDelegate(IBRERuleContext aBrc, IDictionary aMap, object aStep) {
 			object myParam = aMap["myParam"];
 			
 			return ((Int32)aBrc.GetObject("5i"))
 							* ((myParam is Int32)?(Int32)myParam:Int32.Parse((string)myParam));
 		}
+		
 		public object WhileCounter(IBRERuleContext aBrc, IDictionary aMap, object aStep) {
 			whileCount++;
 			// we do not care about the returned value in the rules
 			return null; 
 		}
+		
 		public object GlobalCounter(IBRERuleContext aBrc, IDictionary aMap, object aStep) {
 			globalCount++;
 			// we do not care about the returned value in the rules
 			return null; 
 		}
+		
 		public object GetEnumerable(IBRERuleContext aBrc, IDictionary aMap, object aStep) {
 			return new ForEachSource();
 		}
+		
 		public object ForEachTester(IBRERuleContext aBrc, IDictionary aMap, object aStep) {
 			int contextValue = (Int32)aBrc.GetObject("ForEachParser");
 			
@@ -89,60 +166,35 @@ namespace NxBRE.Test.FlowEngine
 			// we do not care about the returned value in the rules
 			return null; 
 		}
+		
 		private object GetObject(string aId) {
 			return bre.RuleContext.GetObject(aId);
 		}
 		
-		public void HandleExceptionEvent(object obj)
-		{
-			//FIXME: handle exceptions
-			exceptionCount++;
-//			Console.Error.WriteLine("NxBRE ERROR " + aException.Priority + ": " + aException.Exception.ToString());
-//			
-//			// Try to catch a dynamically generated exception
-//			if ((aException.Priority == ExceptionEventImpl.ERROR)
-//					&& (aException.Exception.Message == ASSERTED_HELLO_VALUE))
-//				foundDynamicException = true;
-//		
-//			// Stop rule processing on fatal exceptions
-//			if (aException.Priority == ExceptionEventImpl.FATAL)
-//				bre.Stop();
-		}
-		
-		public void HandleLogEvent(object obj)
-		{
-			//FIXME: handle logs
-			logCount++;
-			
-//			if ((aLog.Priority == 3) && (aLog.Message == ASSERTED_HELLO_VALUE))
-//				foundDynamicLog = true;
-//			
-//			if (aLog.Priority >= 5)
-//				Console.Out.WriteLine("NxBRE LOG " + aLog.Priority + " MSG  : " + aLog.Message);
-		}
-
 		public virtual void HandleBRERuleResult(object sender, IBRERuleResult aBRR)
 		{
 			resultCount++;
 		}
 		
 		[TestFixtureSetUp]
-		public void InitTest()
-		{
+		public void InitTest() {
 			testFile = Parameter.GetString("unittest.inputfile");
 			
 			// I could have used BREFactory or BREFactoryConsole but I just wanted
 			// to show what's behind the scenes and how it is possible to register
 			// many handler for each event.
 			bre = new BREImpl();
+			
+			// Force all Flow Engine traces to be active
+			Logger.FlowEngineSource.Switch.Level = SourceLevels.All;
+			Logger.FlowEngineRuleBaseSource.Switch.Level = SourceLevels.All;
+			Logger.InitializeSwitches();
 
 			// Lets register the handlers...
-			logCount = 0;
-			foundDynamicLog = false;
-			//FIXME: bre.LogHandlers += new DispatchLog(HandleLogEvent);
-			foundDynamicException = false;
-			exceptionCount = 0;
-			// FIXME: bre.ExceptionHandlers += new DispatchException(HandleExceptionEvent);
+			ptl = new ProbeTraceListener();
+			Logger.FlowEngineSource.Listeners.Add(ptl);
+			Logger.FlowEngineRuleBaseSource.Listeners.Add(ptl);
+			
 			resultCount = 0;
 			bre.ResultHandlers += new DispatchRuleResult(HandleBRERuleResult);
 			
@@ -215,7 +267,7 @@ namespace NxBRE.Test.FlowEngine
 		
 		[Test]
 		public void DynamicLog() {
-			Assert.IsTrue(foundDynamicLog, "Dynamic Log");
+			Assert.IsTrue(ptl.FoundDynamicLog, "Dynamic Log");
 		}
 
 		[Test]
@@ -257,10 +309,10 @@ namespace NxBRE.Test.FlowEngine
 		
 		[Test]
 		public void Exceptions() {
-			Assert.AreEqual(EXPECTED_EXCEPTION, exceptionCount, "Thrown Exceptions");
+			Assert.AreEqual(EXPECTED_EXCEPTION, ptl.ExceptionCount, "Thrown Exceptions");
 			Assert.IsTrue(GetObject("EXCP").GetType().FullName == "NxBRE.FlowEngine.BRERuleException", "Stored Exception Type");
 			Assert.IsTrue(((System.Exception)GetObject("EXCP")).Message == "This is another exception!", "Stored Exception Message");
-			Assert.IsTrue(foundDynamicException, "Dynamic Exception");
+			Assert.IsTrue(ptl.FoundDynamicException, "Dynamic Exception");
 			Assert.IsNull(GetObject("FATEX"), "Fatal Exception Did Not Stop!");
 		}
 		

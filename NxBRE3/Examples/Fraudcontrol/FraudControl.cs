@@ -4,8 +4,6 @@ namespace NxBRE.Examples
 	using System.Collections;
 	using System.Collections.Generic;
 	
-	using net.ideaity.util.events;
-	
 	using NxBRE.InferenceEngine;
 	using NxBRE.InferenceEngine.IO;
 	using NxBRE.InferenceEngine.Rules;
