@@ -38,7 +38,7 @@
         </documenter>
         <documenter name="MSDN">
             <property name="OutputDirectory" value=".\doc\" />
-            <property name="HtmlHelpName" value="NxBRE-API-2_5_1" />
+            <property name="HtmlHelpName" value="NxBRE-API-2_5_3" />
             <property name="Title" value="NxBRE API Documentation" />
             <property name="OutputTarget" value="HtmlHelp" />
             <property name="SkipNamespacesWithoutSummaries" value="True" />
