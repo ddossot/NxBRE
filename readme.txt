@@ -17,6 +17,11 @@ IE-Console
   Based on the mainstream NxBRE version
 
 
+StressTest
+----------
+  Projects used to stress NxBRE (released for v3)
+
+
 Misc
 ----
   Documentation source and other random stuff

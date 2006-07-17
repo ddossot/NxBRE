@@ -1,0 +1,25 @@
+namespace org.nxbre.examples
+{
+	using System;
+	using System.Collections;
+	
+	using org.nxbre.ie.adapters;
+	using org.nxbre.ie.core;
+	using org.nxbre.ie.rule;
+	
+	public class ADD_Binder:AbstractBinder {
+		public ADD_Binder():base(BindingTypes.BeforeAfter) {}
+		
+		public override void BeforeProcess() {
+			IEF.AssertNewFactOrFail("values", new object[]{BusinessObjects["add-a"], BusinessObjects["add-b"]});
+		}
+		
+		public override object Compute(string operationName, IDictionary arguments) {
+			if (operationName == "CalculateResult")
+				return System.Convert.ToInt32(arguments[0])+(System.Convert.ToInt32(arguments["a"])+System.Convert.ToInt32(arguments["b"]));
+			else
+				return null;
+		}
+		
+	}
+}

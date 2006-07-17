@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xBusinessRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://nxbre.org/xBusinessRules.xsd">
+	<Set id="BeforeProcess">
+		<ObjectLookup objectId="NxBRE-IE" member="AssertNewFactOrFail">
+			<Argument value="values"/>
+			<Argument valueId="add-a"/>
+			<Argument valueId="add-b"/>
+		</ObjectLookup>
+	</Set>
+	
+	<Set id="Compute_CalculateResult">
+		<ObjectLookup id="Result" objectId="IE-ARGUMENTS" member="Item">
+			<Argument value="0" type="Integer"/>
+		</ObjectLookup>
+		
+		<ObjectLookup id="Result" type="org.nxbre.util.Reflection" member="CastValue">
+			<Argument valueId="Result"/>
+			<Argument value="System.Int32"/>
+		</ObjectLookup>
+		
+		<ObjectLookup id="A" objectId="IE-ARGUMENTS" member="Item">
+			<Argument value="a" type="String"/>
+		</ObjectLookup>
+		<ObjectLookup id="A" type="org.nxbre.util.Reflection" member="CastValue">
+			<Argument valueId="A"/>
+			<Argument value="System.Int32"/>
+		</ObjectLookup>
+		
+		<ObjectLookup id="B" objectId="IE-ARGUMENTS" member="Item">
+			<Argument value="b" type="String"/>
+		</ObjectLookup>
+		<ObjectLookup id="B" type="org.nxbre.util.Reflection" member="CastValue">
+			<Argument valueId="B"/>
+			<Argument value="System.Int32"/>
+		</ObjectLookup>
+		
+		<ObjectLookup id="IE-RESULT" type="org.nxbre.util.Maths" member="Add">
+			<Argument valueId="Result"/>
+			<Argument valueId="A"/>
+			<Argument valueId="B"/>
+		</ObjectLookup>
+	</Set>
+</xBusinessRules>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<rulebase xmlns="http://www.ruleml.org/0.86/xsd" xsi:schemaLocation="http://www.ruleml.org/0.86/xsd ruleml-0_86-nafdatalog.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" direction="forward">
+	<_rbaselab>
+		<ind>add</ind>
+	</_rbaselab>
+	<fact>
+		<_rlab>
+			<ind>result</ind>
+		</_rlab>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>result</rel>
+				</_opr>
+				<ind>expr:3</ind>
+			</atom>
+		</_head>
+	</fact>
+	<imp>
+		<_rlab>
+			<ind>label:add;action:modify</ind>
+		</_rlab>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>result</rel>
+				</_opr>
+				<ind>expr:{predicate:0}+{var:a}+{var:b}</ind>
+			</atom>
+		</_head>
+		<_body>
+			<atom>
+				<_opr>
+					<rel>values</rel>
+				</_opr>
+				<var>a</var>
+				<var>b</var>
+			</atom>
+		</_body>
+	</imp>
+</rulebase>

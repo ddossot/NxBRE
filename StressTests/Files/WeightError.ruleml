@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rulebase xmlns="http://www.ruleml.org/0.86/xsd" xsi:schemaLocation="http://www.ruleml.org/0.86/xsd ruleml-0_86-nafdatalog.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" direction="forward">
+<!-- Implications "" -->
+   <imp>
+		<_rlab>
+			<ind>label:Weight Error;priority:;mutex:;precondition:;action:assert;</ind>
+		</_rlab>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>WeightError</rel>
+				</_opr>
+				<var>physical_object</var>
+				<var>valueW</var>
+				<var>valueGW</var>
+			</atom>
+		</_head>
+		<_body>
+			<and>
+				<atom>
+					<_opr>
+						<rel>Weight</rel>
+					</_opr>
+					<var>physical_object</var>
+					<var>valueW</var>
+				</atom>
+				<atom>
+					<_opr>
+						<rel>GWeight</rel>
+					</_opr>
+					<var>physical_object</var>
+					<var>valueGW</var>
+				</atom>
+				<atom>
+					<_opr>
+						<rel>NxBRE:GreaterThanEqualTo()</rel>
+					</_opr>
+					<var>valueW</var>
+					<var>valueGW</var>
+				</atom>
+			</and>
+		</_body>
+	</imp>
+		<!-- Queries -->
+	<query>
+		<_rlab>
+			<ind>Item with weight errors</ind>
+		</_rlab>
+		<_body>
+			<atom>
+				<_opr>
+					<rel>WeightError</rel>
+				</_opr>
+				<var>physical_object</var>
+				<var>valueW</var>
+				<var>valueGW</var>
+			</atom>
+		</_body>
+	</query>
+</rulebase>
