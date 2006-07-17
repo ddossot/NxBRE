@@ -5,7 +5,7 @@ namespace NxBRE.InferenceEngine.Core
 	
 	using NxBRE.InferenceEngine.Rules;
 
-	public abstract class RulesUtil
+	internal abstract class RulesUtil
 	{
 		private RulesUtil() {}
 		
