@@ -1,4 +1,4 @@
-NxBRE README v2.5.2
+NxBRE README v2.5.3
 ===================
 
 .NET Version : David Dossot (david@dossot.net)
@@ -6,7 +6,7 @@ NxBRE README v2.5.2
              : Andre Weber
              : Stephane Joyeux
 JxBRE Author : Sloan Seaman (sloan@sgi.net)
-Date         : 23-JUN-2006
+Date         : 17-JUL-2006
 URL          : http://nxbre.org
 License      : LGPL
 
@@ -108,6 +108,13 @@ Command lines for running the examples:
 
 
 ## RELEASE NOTES ##
+
+v2.5.3
+
+ Inference Engine
+
+  * Individual expressions were preventing correct atom matching (bug 1516953).
+
 
 
 v2.5.2
