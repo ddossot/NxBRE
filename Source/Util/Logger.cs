@@ -34,6 +34,7 @@ namespace NxBRE.Util
 		private static bool isInferenceEngineInformation;
 		private static bool isInferenceEngineWarning;
 		private static bool isUtilVerbose;
+		private static bool isUtilInformation;
 		private static bool isUtilWarning;
 		
 		/// <summary>
@@ -77,21 +78,27 @@ namespace NxBRE.Util
 		/// (usually set up in the configuration file).
 		/// </summary>
 		public static void RefreshBooleanSwitches() {
-			isFlowEngineVerbose = FlowEngineSource.Switch.ShouldTrace(TraceEventType.Verbose);
-			isFlowEngineInformation = FlowEngineSource.Switch.ShouldTrace(TraceEventType.Information);
-			isFlowEngineWarning = FlowEngineSource.Switch.ShouldTrace(TraceEventType.Warning);
-			isFlowEngineError = FlowEngineSource.Switch.ShouldTrace(TraceEventType.Error);
-			isFlowEngineCritical = FlowEngineSource.Switch.ShouldTrace(TraceEventType.Critical);
-			
-			isFlowEngineRuleBaseError = FlowEngineRuleBaseSource.Switch.ShouldTrace(TraceEventType.Error);
-			isFlowEngineRuleBaseCritical = FlowEngineRuleBaseSource.Switch.ShouldTrace(TraceEventType.Critical);
-			
-			isInferenceEngineVerbose = InferenceEngineSource.Switch.ShouldTrace(TraceEventType.Verbose);
-			isInferenceEngineInformation = InferenceEngineSource.Switch.ShouldTrace(TraceEventType.Information);
-			isInferenceEngineWarning = InferenceEngineSource.Switch.ShouldTrace(TraceEventType.Warning);
-			
-			isUtilVerbose = UtilSource.Switch.ShouldTrace(TraceEventType.Verbose);
-			isUtilWarning = UtilSource.Switch.ShouldTrace(TraceEventType.Warning);
+			try {
+				isFlowEngineVerbose = FlowEngineSource.Switch.ShouldTrace(TraceEventType.Verbose);
+				isFlowEngineInformation = FlowEngineSource.Switch.ShouldTrace(TraceEventType.Information);
+				isFlowEngineWarning = FlowEngineSource.Switch.ShouldTrace(TraceEventType.Warning);
+				isFlowEngineError = FlowEngineSource.Switch.ShouldTrace(TraceEventType.Error);
+				isFlowEngineCritical = FlowEngineSource.Switch.ShouldTrace(TraceEventType.Critical);
+				
+				isFlowEngineRuleBaseError = FlowEngineRuleBaseSource.Switch.ShouldTrace(TraceEventType.Error);
+				isFlowEngineRuleBaseCritical = FlowEngineRuleBaseSource.Switch.ShouldTrace(TraceEventType.Critical);
+				
+				isInferenceEngineVerbose = InferenceEngineSource.Switch.ShouldTrace(TraceEventType.Verbose);
+				isInferenceEngineInformation = InferenceEngineSource.Switch.ShouldTrace(TraceEventType.Information);
+				isInferenceEngineWarning = InferenceEngineSource.Switch.ShouldTrace(TraceEventType.Warning);
+				
+				isUtilVerbose = UtilSource.Switch.ShouldTrace(TraceEventType.Verbose);
+				isUtilInformation = UtilSource.Switch.ShouldTrace(TraceEventType.Information);
+				isUtilWarning = UtilSource.Switch.ShouldTrace(TraceEventType.Warning);
+			}
+			catch (System.Exception e) {
+				throw new BREException("Can not properly initialize engine trace switches", e);
+			}
 		}
 		
 		/// <summary>
@@ -256,6 +263,21 @@ namespace NxBRE.Util
 			}
 			set {
 				isUtilVerbose = value;
+			}
+		}
+		
+		/// <summary>
+		/// A trace switch used by NxBRE. It can be changed at runtime by the user.
+		/// </summary>
+		/// <remarks>
+		/// To revert to the value defined in the configuration file, call InitializeSwitches (<see cref="NxBRE.Util.Logger.InitializeSwitches"/>).
+		/// </remarks>
+		public static bool IsUtilInformation {
+			get {
+				return isUtilInformation;
+			}
+			set {
+				isUtilInformation = value;
 			}
 		}
 		
