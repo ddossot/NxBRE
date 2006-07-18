@@ -350,7 +350,7 @@ namespace NxBRE.InferenceEngine.Core {
 		  					// Chuck Cross added try/catch block with addtional info in new thrown exception
 		  					StringBuilder sb = new StringBuilder("Error evaluating formula ")
 		  																				.Append(members[i])
-		  																				.Append(" in atom ")
+		  																				.Append(" in atom: ")
 		  																				.Append(targetAtom.Type)
 		  																				.Append(".\r\n  Arguments:");
       					

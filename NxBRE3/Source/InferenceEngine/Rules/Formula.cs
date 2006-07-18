@@ -57,6 +57,10 @@ namespace NxBRE.InferenceEngine.Rules {
 			this.evaluator = evaluator;
 			this.formulaSignature = null;
 		}
+		
+		public override string ToString() {
+			return Value.ToString() + "[" + resolutionType + "]";
+		}
 
 		/// <summary>
 		/// Returns a clone of the Formula.

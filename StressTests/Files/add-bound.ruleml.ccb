@@ -1,11 +1,11 @@
-namespace org.nxbre.examples
+namespace NxBRE.StressTests
 {
 	using System;
 	using System.Collections;
 	
-	using org.nxbre.ie.adapters;
-	using org.nxbre.ie.core;
-	using org.nxbre.ie.rule;
+	using NxBRE.InferenceEngine;
+	using NxBRE.InferenceEngine.IO;
+	using NxBRE.InferenceEngine.Rules;
 	
 	public class ADD_Binder:AbstractBinder {
 		public ADD_Binder():base(BindingTypes.BeforeAfter) {}

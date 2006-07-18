@@ -1,3 +1,5 @@
+//FIXME: switch to Release NxBRE.DLL
+//FIXME: convert test files to RuleML 0.9
 namespace NxBRE.StressTests
 {
 	using System;
@@ -55,8 +57,7 @@ namespace NxBRE.StressTests
 				if (csharpBinder) {
 					String code;
 					using (StreamReader sr = File.OpenText(RuleBaseFile + ".ccb")) code = sr.ReadToEnd();
-					//FIXME: correct binders (namespace and using)
-					binderObject = CSharpBinderFactory.LoadFromString("org.nxbre.examples." + ActiveRule.ToUpper() + "_Binder" , code);
+					binderObject = CSharpBinderFactory.LoadFromString("NxBRE.StressTests." + ActiveRule.ToUpper() + "_Binder" , code);
 				}
 				else {
 					binderObject = new FlowEngineBinder(RuleBaseFile + ".xbre", BindingTypes.BeforeAfter);
@@ -73,7 +74,6 @@ namespace NxBRE.StressTests
 			if (args.Length > 2) csharpBinder = Boolean.Parse(args[2]);
 			
 			MAIN_IE = new IEImpl((HOT_SWAP)?ThreadingModelTypes.MultiHotSwap:ThreadingModelTypes.Multi);
-			//MAIN_IE = new IEImpl(ThreadingModelTypes.MultiHotSwap);
 			SECOND_IE = new IEImpl((HOT_SWAP)?ThreadingModelTypes.MultiHotSwap:ThreadingModelTypes.Single);
 			
 			MainClass mc = new MainClass();
