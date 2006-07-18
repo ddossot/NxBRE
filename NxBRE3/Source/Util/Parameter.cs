@@ -46,7 +46,15 @@ namespace NxBRE.Util
 				//something went wrong --> use the default value
 				settingValue = defaultValue;
 				
-				if (Logger.IsUtilWarning) Logger.UtilSource.TraceEvent(TraceEventType.Warning, 0, "Can not find setting key: '" + settingKey + "', using default value: '" + defaultValue + "' (Exception message: " + e.Message + ")");
+				if (Logger.IsUtilInformation) Logger.UtilSource.TraceEvent(TraceEventType.Information,
+				                                                           0,
+				                                                           "Can not find setting key: '"
+				                                                           	+ settingKey
+				                                                           	+ "', using default value: '"
+				                                                           	+ defaultValue
+				                                                           	+ "' (Exception message: "
+				                                                           	+ e.Message
+				                                                           	+ ")");
 			}
 			
 			return settingValue;
