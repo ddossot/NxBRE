@@ -13,7 +13,7 @@
 			<Argument value="0" type="Integer"/>
 		</ObjectLookup>
 		
-		<ObjectLookup id="Result" type="org.nxbre.util.Reflection" member="CastValue">
+		<ObjectLookup id="Result" type="NxBRE.Util.Reflection" member="CastValue">
 			<Argument valueId="Result"/>
 			<Argument value="System.Int32"/>
 		</ObjectLookup>
@@ -21,7 +21,7 @@
 		<ObjectLookup id="A" objectId="IE-ARGUMENTS" member="Item">
 			<Argument value="a" type="String"/>
 		</ObjectLookup>
-		<ObjectLookup id="A" type="org.nxbre.util.Reflection" member="CastValue">
+		<ObjectLookup id="A" type="NxBRE.Util.Reflection" member="CastValue">
 			<Argument valueId="A"/>
 			<Argument value="System.Int32"/>
 		</ObjectLookup>
@@ -29,17 +29,17 @@
 		<ObjectLookup id="B" objectId="IE-ARGUMENTS" member="Item">
 			<Argument value="b" type="String"/>
 		</ObjectLookup>
-		<ObjectLookup id="B" type="org.nxbre.util.Reflection" member="CastValue">
+		<ObjectLookup id="B" type="NxBRE.Util.Reflection" member="CastValue">
 			<Argument valueId="B"/>
 			<Argument value="System.Int32"/>
 		</ObjectLookup>
 		
-		<ObjectLookup id="Multiply-Result" type="org.nxbre.util.Maths" member="Multiply">
+		<ObjectLookup id="Multiply-Result" type="NxBRE.Util.Maths" member="Multiply">
 			<Argument valueId="A"/>
 			<Argument valueId="B"/>
 		</ObjectLookup>
 		
-		<ObjectLookup id="IE-RESULT" type="org.nxbre.util.Maths" member="Add">
+		<ObjectLookup id="IE-RESULT" type="NxBRE.Util.Maths" member="Add">
 			<Argument valueId="Result"/>
 			<Argument valueId="Multiply-Result"/>
 		</ObjectLookup>
