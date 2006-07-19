@@ -21,7 +21,7 @@ namespace NxBRE.StressTests
 			// instantiate an inference engine, bind my data and process the rules
 			IEImpl ie = new IEImpl(binder);
 			//ie.LogHandlers += new DispatchLog(HandleLogEvent);
-			ie.LoadRuleBase(new RuleML086NafDatalogAdapter(ruleBaseFile,System.IO.FileAccess.Read));
+			ie.LoadRuleBase(new RuleML09NafDatalogAdapter(ruleBaseFile,System.IO.FileAccess.Read));
 			ie.Process(businessObjects);
 			
 			// processing is done, let's analyze the results

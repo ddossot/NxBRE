@@ -28,7 +28,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="NxBRE">
-      <HintPath>..\..\NxBRE3\Source\bin\Debug\NxBRE.dll</HintPath>
+      <HintPath>..\..\NxBRE3\Source\bin\Release\NxBRE.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
   </ItemGroup>

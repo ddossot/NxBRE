@@ -1,5 +1,3 @@
-//FIXME: switch to Release NxBRE.DLL
-//FIXME: convert test files to RuleML 0.9
 namespace NxBRE.StressTests
 {
 	using System;
@@ -64,7 +62,7 @@ namespace NxBRE.StressTests
 				}
 			}
 			
-			MAIN_IE.LoadRuleBase(new RuleML086DatalogAdapter(RuleBaseFile, System.IO.FileAccess.Read), binderObject);
+			MAIN_IE.LoadRuleBase(new RuleML09NafDatalogAdapter(RuleBaseFile, System.IO.FileAccess.Read), binderObject);
 		}
 
 		public static void Main(string[] args)
@@ -80,7 +78,7 @@ namespace NxBRE.StressTests
 			
 			InitMainEngine();
 			
-			SECOND_IE.LoadRuleBase(new RuleML086DatalogAdapter(XMLFOLDER + "subtract.ruleml", System.IO.FileAccess.Read));
+			SECOND_IE.LoadRuleBase(new RuleML09NafDatalogAdapter(XMLFOLDER + "subtract.ruleml", System.IO.FileAccess.Read));
 			
 			mc.RunTests();
 		}
