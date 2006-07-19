@@ -55,7 +55,7 @@ Inference Engine now have to use these namespaces:
 	NxBRE.InferenceEngine.IO    : only if adapter/binder are used in the current class
 	NxBRE.InferenceEngine.Rules : only if facts/queries/predicates are used in the current class
 
-and replace usage of deleted QueryResultSet by IList<IList<Fact>> and it is done!
+and replace usage of deleted QueryResultSet by IList<IList<Fact>>. Do not forget to correct C# binder files (ccb)!
 
 
 Flow Engine users now have to use these namespaces:
@@ -65,6 +65,7 @@ Flow Engine users now have to use these namespaces:
 	NxBRE.FlowEngine.IO        : only if drivers are used in the current class
 	NxBRE.FlowEngine.Rules     : only if operators or statements are used in the current class
 
+All static calls on NxBRE helpers and utilities, either from FlowEngine rules or InferenceEngine binders, must be corrected.
 
 
 ## RELEASE NOTES ##
@@ -89,7 +90,9 @@ v3.0.0 (compared to NxBRE v2.5.3)
 
   * Included improvements from Chuck Cross in on-the-fly compilation module and more informative exception/toString in some places
 
+ Inference Engine
 
+  * IEFacade now supports simpler fact assertion syntax: IEF.AssertNewFactOrFail("Hour", cd, cd.Time.Hour) instead of IEF.AssertNewFactOrFail("Hour", new object[]{cd, cd.Time.Hour})
 
 
 

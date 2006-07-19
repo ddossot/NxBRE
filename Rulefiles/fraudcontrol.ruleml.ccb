@@ -12,11 +12,11 @@ namespace NxBRE.Examples
 		
 		public override void BeforeProcess() {
 			foreach(Customer customer in (ArrayList)BusinessObjects["CUSTOMERS"]) {
-				IEF.AssertNewFactOrFail("Location", new object[]{customer, customer.CountryCode});
+				IEF.AssertNewFactOrFail("Location", customer, customer.CountryCode);
 				
 				foreach(Transaction transaction in customer.Transactions) {
-					IEF.AssertNewFactOrFail("Involved In", new object[]{customer, transaction});
-					IEF.AssertNewFactOrFail("Amount", new object[]{transaction, transaction.Amount});
+					IEF.AssertNewFactOrFail("Involved In", customer, transaction);
+					IEF.AssertNewFactOrFail("Amount", transaction, transaction.Amount);
 				}
 			}
 		}

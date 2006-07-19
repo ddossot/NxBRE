@@ -14,10 +14,10 @@ namespace NxBRE.Examples
 			foreach(CallData cd in (ArrayList)BusinessObjects["CALLSDATA"]) {
 				IEF.NewWorkingMemory(WorkingMemoryTypes.Isolated);
 
-				IEF.AssertNewFactOrFail("Hour", new object[]{cd, cd.Time.Hour});
-				IEF.AssertNewFactOrFail("Type", new object[]{cd, cd.Type});
-				IEF.AssertNewFactOrFail("Destination", new object[]{cd, cd.Destination});
-				IEF.AssertNewFactOrFail("Client Scheme", new object[]{cd, cd.ClientScheme});
+				IEF.AssertNewFactOrFail("Hour", cd, cd.Time.Hour);
+				IEF.AssertNewFactOrFail("Type", cd, cd.Type);
+				IEF.AssertNewFactOrFail("Destination", cd, cd.Destination);
+				IEF.AssertNewFactOrFail("Client Scheme", cd, cd.ClientScheme);
 
 				IEF.Process();
 				
