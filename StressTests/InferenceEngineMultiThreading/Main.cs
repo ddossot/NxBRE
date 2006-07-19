@@ -171,7 +171,6 @@ namespace NxBRE.StressTests
 						}
 						
 						if (ie.FactsCount != 2) throw new Exception("Got wrong fact count: " + ie.FactsCount);
-						
 						result = (int)ie.GetFact("result").GetPredicateValue(0);
 						
 						if (((ie.Label == "multiply") && (result != (7+a*b))) ||

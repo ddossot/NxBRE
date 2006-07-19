@@ -38,7 +38,7 @@
       <op>
         <Rel>result</Rel>
       </op>
-      <Data xsi:type="xs:integer">7</Data>
+      <Data xsi:type="xs:int">7</Data>
     </Atom>
   </Assert>
 </RuleML>

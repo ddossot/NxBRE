@@ -3,6 +3,7 @@ namespace NxBRE.StressTests
 	using System;
 	using System.Collections;
 	using System.IO;
+	using System.Text;
 	using System.Threading;
 	
 	using NxBRE.FlowEngine;
@@ -12,11 +13,11 @@ namespace NxBRE.StressTests
 	
 	public class MainClass
 	{
-		//FIXME: work in memory
-		private const string XMLFILE = "c:/temp/stresstest.xml";
 		private const int LIMIT = 39;	
-		private int DURATION = 60;
-		private int NBTHREADS = 20;
+		private int DURATION = 30;
+		private int NBTHREADS = 10;
+
+		private byte[] XML_RULEBASE;
 		
 		private long hits;
 		private long errors;
@@ -30,17 +31,15 @@ namespace NxBRE.StressTests
 		{
 			MainClass mc = new MainClass();
 			
-			if (args.Length > 0)
-				mc.DURATION = Int32.Parse(args[0]);
+			if (args.Length > 0) mc.DURATION = Int32.Parse(args[0]);
 
-			if (args.Length > 1)
-				mc.NBTHREADS = Int32.Parse(args[1]);
+			if (args.Length > 1) mc.NBTHREADS = Int32.Parse(args[1]);
 				
 			mc.WriteRules();
 			mc.RunTests();
 			
 			Console.WriteLine();
-			Console.WriteLine("Enter to shutdown, or when all processes are finished");
+			Console.WriteLine("Enter to shutdown now or when all processes are finished");
 			Console.ReadLine();
 			if (mc.running) mc.StopTests(null);
 			GC.Collect();
@@ -49,11 +48,13 @@ namespace NxBRE.StressTests
 			// this is done just for test purpose
 			IDictionaryEnumerator threadEnumerator = mc.threadMap.GetEnumerator();
 			ArrayList deadThreads = new ArrayList();
+			
 			while(threadEnumerator.MoveNext()) {
 				Thread t = ((Thread)threadEnumerator.Key);
 				Console.WriteLine("#{0}.IsAlive={1}", threadEnumerator.Value, t.IsAlive);
 				if (!t.IsAlive) deadThreads.Add(t);
 			}
+			
 			foreach(Thread t in deadThreads) {
 				mc.threadMap.Remove(t);
 				Console.WriteLine("{0} has been dereferenced", t);
@@ -65,45 +66,46 @@ namespace NxBRE.StressTests
 		}
 		
 		private void WriteRules() {
-			using(StreamWriter sw = new StreamWriter(XMLFILE)) {
+			StringWriter sw = new StringWriter();
 				
-				sw.WriteLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-				sw.WriteLine("<xBusinessRules xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"http://nxbre.org/xBusinessRules.xsd\">");
-				sw.WriteLine("<Integer id=\"RESULT\" value=\"0\"/>");
-				for (int i=1;i<=LIMIT;i++)
-					sw.WriteLine("<Integer id=\""+i+"i\" value=\""+i+"\"/>");
-	
-				for (int i=1;i<=LIMIT;i++) {
-					sw.WriteLine("<Set id=\"A"+i+"\">");
-					sw.WriteLine("<Logic>");
-	
-					for (int j=1;j<=LIMIT;j++) {
-						if (j == 1) {
-							sw.WriteLine("<If><And><Equals leftId=\"B\" rightId=\""+j+"i\"/>");
-							sw.WriteLine("</And><Do>");
-							sw.WriteLine("<Modify id=\"RESULT\" value=\""+i*j+"\" type=\"Integer\"/>");
-							sw.WriteLine("</Do></If>");
-						}
-						else {
-							sw.WriteLine("<ElseIf><And><Equals leftId=\"B\" rightId=\""+j+"i\"/>");
-							sw.WriteLine("</And><Do>");
-							sw.WriteLine("<Modify id=\"RESULT\" value=\""+i*j+"\" type=\"Integer\"/>");
-							sw.WriteLine("</Do></ElseIf>");
-						}
+			sw.WriteLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			sw.WriteLine("<xBusinessRules xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"http://nxbre.org/xBusinessRules.xsd\">");
+			sw.WriteLine("<Integer id=\"RESULT\" value=\"0\"/>");
+			
+			for (int i=1;i<=LIMIT;i++) sw.WriteLine("<Integer id=\""+i+"i\" value=\""+i+"\"/>");
+
+			for (int i=1;i<=LIMIT;i++) {
+				sw.WriteLine("<Set id=\"A"+i+"\">");
+				sw.WriteLine("<Logic>");
+
+				for (int j=1;j<=LIMIT;j++) {
+					if (j == 1) {
+						sw.WriteLine("<If><And><Equals leftId=\"B\" rightId=\""+j+"i\"/>");
+						sw.WriteLine("</And><Do>");
+						sw.WriteLine("<Modify id=\"RESULT\" value=\""+i*j+"\" type=\"Integer\"/>");
+						sw.WriteLine("</Do></If>");
 					}
-					sw.WriteLine("<Else>");
-					sw.WriteLine("<Modify id=\"RESULT\" value=\"-1\" type=\"Integer\"/>");
-					sw.WriteLine("</Else>");
-					sw.WriteLine("</Logic>");
-					sw.WriteLine("</Set>");
+					else {
+						sw.WriteLine("<ElseIf><And><Equals leftId=\"B\" rightId=\""+j+"i\"/>");
+						sw.WriteLine("</And><Do>");
+						sw.WriteLine("<Modify id=\"RESULT\" value=\""+i*j+"\" type=\"Integer\"/>");
+						sw.WriteLine("</Do></ElseIf>");
+					}
 				}
-				
-				sw.WriteLine("</xBusinessRules>");
+				sw.WriteLine("<Else>");
+				sw.WriteLine("<Modify id=\"RESULT\" value=\"-1\" type=\"Integer\"/>");
+				sw.WriteLine("</Else>");
+				sw.WriteLine("</Logic>");
+				sw.WriteLine("</Set>");
 			}
+			
+			sw.WriteLine("</xBusinessRules>");
+			
+			XML_RULEBASE = UTF8Encoding.UTF8.GetBytes(sw.ToString());
 		}
 		
 		private void RunTests() {
-			BRECloneFactory brecf = new BRECloneFactory(new XBusinessRulesFileDriver(XMLFILE));
+			BRECloneFactory brecf = new BRECloneFactory(new XBusinessRulesStreamDriver(new MemoryStream(XML_RULEBASE)));
 	
 			hits = 0;
 			errors = 0;
