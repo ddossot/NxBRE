@@ -101,9 +101,9 @@ namespace NxBRE.InferenceEngine.IO {
 		/// This method is an helper of the regular Assert method that creates the Fact object directly.
 		/// </remarks>
 		/// <param name="type">The Type of the new Fact to assert.</param>
-		/// <param name="individuals">The Array of Individual predicates or the Individual predicate that the Fact will contain.</param>
+		/// <param name="individuals">The Individual predicatesthat the Fact will contain.</param>
 		/// <returns>True if the Fact was added to the Fact Base, i.e. if it was really new!</returns>
-		public bool AssertNewFact(string type, object individuals) {
+		public bool AssertNewFact(string type, params object[] individuals) {
 			return Assert(NewFact(type, individuals));
 		}
 		
@@ -115,8 +115,8 @@ namespace NxBRE.InferenceEngine.IO {
 		/// This method is an helper of the regular Assert method that creates the Fact object directly.
 		/// </remarks>
 		/// <param name="type">The Type of the new Fact to assert.</param>
-		/// <param name="individuals">The Array of Individual predicates or the Individual predicate that the Fact will contain.</param>
-		public void AssertNewFactOrFail(string type, object individuals) {
+		/// <param name="individuals">The Individual predicatesthat the Fact will contain.</param>
+		public void AssertNewFactOrFail(string type, params object[] individuals) {
 			Fact newFact = NewFact(type, individuals);
 			
 			if (!Assert(newFact))
@@ -130,23 +130,23 @@ namespace NxBRE.InferenceEngine.IO {
 		/// This method is an helper of the regular Fact instantiation.
 		/// </remarks>
 		/// <param name="type">The Type of the new Fact to assert.</param>
-		/// <param name="individuals">The Array of Individual predicates or the Individual predicate that the Fact will contain.</param>
+		/// <param name="individuals">The Individual predicatesthat the Fact will contain.</param>
 		/// <returns>A new Fact of desired Type and individuals.</returns>
-		public Fact NewFact(string type, object individuals) {
+		public Fact NewFact(string type, params object[] individuals) {
 			Fact newFact;
 			
-			if (individuals.GetType().IsArray) {
-				Array individualsArray = (Array) individuals;
-				Individual[] members = new Individual[individualsArray.Length];
-				
-				for (int i=0; i<individualsArray.Length; i++)
-					members[i] = new Individual(individualsArray.GetValue(i));
-					
+			if (individuals.Length == 0) {
+				newFact = new Fact(type);
+			}
+			else if (individuals.Length == 1) {
+				newFact = new Fact(type, new Individual(individuals[0]));
+			}
+			else {
+				Individual[] members = new Individual[individuals.Length];
+				for (int i=0; i<individuals.Length; i++) members[i] = new Individual(individuals[i]);
 				newFact = new Fact(type, members);
 			}
-			else
-				newFact = new Fact(type, new Individual(individuals));
-
+			
 			return newFact;
 		}
 		
