@@ -19,7 +19,7 @@ namespace NxBRE.Examples
 
 			// instantiate an inference engine, bind my data and process the rules
 			IInferenceEngine ie = new IEImpl(binder);
-			ie.LoadRuleBase(new RuleML08DatalogAdapter(ruleBaseFile, System.IO.FileAccess.Read));		
+			ie.LoadRuleBase(new RuleML09NafDatalogAdapter(ruleBaseFile, System.IO.FileAccess.Read));		
 			ie.Process(businessObjects);
 			
 			// processing is done, let's analyze the results
