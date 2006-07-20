@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE rulebase SYSTEM "ruleml-0_8-datalog.dtd">
 <!-- 
 
   NxBRE Inference engine Sample Rule Base
@@ -9,163 +8,113 @@
   Note: In a real fraud control system, instead of counting the risk factors as demonstrated in this rulebase, scores would be assigned to different risks and these scores would be added to a business object property via the new fact event.
 
 -->
-<rulebase direction="forward">
-	<_rbaselab>
-		<ind>Fraud Control Knowledge Base</ind>
-	</_rbaselab>
+<RuleML xmlns="http://www.ruleml.org/0.9/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.ruleml.org/0.9/xsd ruleml-0_9-nafdatalog.xsd">
+	<oid>
+		<Ind>Fraud Control Knowledge Base</Ind>
+	</oid>
+	<Assert>
 	<!--
 		Implications
 	-->
-	<imp>
-		<_rlab>
-			<ind>Tax Haven Fraud Factor Assessment</ind>
-		</_rlab>
-		<_head>
-			<atom>
-				<_opr>
-					<rel>Fraud Factor</rel>
-				</_opr>
-				<var>Customer</var>
-				<ind>Tax Haven</ind>
-			</atom>
-		</_head>
-		<_body>
-			<and>
-				<atom>
-					<_opr>
-						<rel>Location</rel>
-					</_opr>
-					<var>Customer</var>
-					<var>Country Code</var>
-				</atom>
-				<atom>
-					<_opr>
-						<rel>Tax Haven</rel>
-					</_opr>
-					<var>Country Code</var>
-				</atom>
-			</and>
-		</_body>
-	</imp>
-	<imp>
-		<_rlab>
-			<ind>Huge Transaction Assessment</ind>
-		</_rlab>
-		<_head>
-			<atom>
-				<_opr>
-					<rel>Fraud Factor</rel>
-				</_opr>
-				<var>Customer</var>
-				<ind>Huge Transaction</ind>
-			</atom>
-		</_head>
-		<_body>
-			<and>
-				<atom>
-					<_opr>
-						<rel>Involved In</rel>
-					</_opr>
-					<var>Customer</var>
-					<var>Transaction</var>
-				</atom>
-				<atom>
-					<_opr>
-						<rel>Amount</rel>
-					</_opr>
-					<var>Transaction</var>
-					<ind>min(150000,EUR)</ind>
-				</atom>
-			</and>
-		</_body>
-	</imp>
-	<imp>
-		<_rlab>
-			<ind>Fraudulent Customer Assessment</ind>
-		</_rlab>
-		<_head>
-			<atom>
-				<_opr>
-					<rel>Fraudulent Customer</rel>
-				</_opr>
-				<var>Customer</var>
-			</atom>
-		</_head>
-		<_body>
-			<and>
-				<atom>
-					<_opr>
-						<rel>Fraud Factor</rel>
-					</_opr>
-					<var>Customer</var>
-					<var>Type1</var>
-				</atom>
-				<atom>
-					<_opr>
-						<rel>Fraud Factor</rel>
-					</_opr>
-					<var>Customer</var>
-					<var>Type2</var>
-				</atom>
-			</and>
-		</_body>
-	</imp>
+		<Implies>
+			<oid>
+				<Ind>Tax Haven Fraud Factor Assessment</Ind>
+			</oid>
+			<And>
+				<Atom>
+					<Rel>Location</Rel>
+					<Var>Customer</Var>
+					<Var>Country Code</Var>
+				</Atom>
+				<Atom>
+					<Rel>Tax Haven</Rel>
+					<Var>Country Code</Var>
+				</Atom>
+			</And>
+			<Atom>
+				<Rel>Fraud Factor</Rel>
+				<Var>Customer</Var>
+				<Ind>Tax Haven</Ind>
+			</Atom>
+		</Implies>
+		<Implies>
+			<oid>
+				<Ind>Huge Transaction Assessment</Ind>
+			</oid>
+			<And>
+				<Atom>
+					<Rel>Involved In</Rel>
+					<Var>Customer</Var>
+					<Var>Transaction</Var>
+				</Atom>
+				<Atom>
+					<Rel>Amount</Rel>
+					<Var>Transaction</Var>
+					<Ind uri="nxbre://binder">min(150000,EUR)</Ind>
+				</Atom>
+			</And>
+			<Atom>
+				<Rel>Fraud Factor</Rel>
+				<Var>Customer</Var>
+				<Ind>Huge Transaction</Ind>
+			</Atom>
+		</Implies>
+		<Implies>
+			<oid>
+				<Ind>Fraudulent Customer Assessment</Ind>
+			</oid>
+			<And>
+				<Atom>
+					<Rel>Fraud Factor</Rel>
+					<Var>Customer</Var>
+					<Var>Type1</Var>
+				</Atom>
+				<Atom>
+					<Rel>Fraud Factor</Rel>
+					<Var>Customer</Var>
+					<Var>Type2</Var>
+				</Atom>
+			</And>
+			<Atom>
+				<Rel>Fraudulent Customer</Rel>
+				<Var>Customer</Var>
+			</Atom>
+		</Implies>
 	<!--
 		Facts
 	-->
-	<fact>
-		<_rlab>
-			<ind>CC01-TH</ind>
-		</_rlab>
-		<_head>
-			<atom>
-				<_opr>
-					<rel>Tax Haven</rel>
-				</_opr>
-				<ind>CC01</ind>
-			</atom>
-		</_head>
-	</fact>
-	<fact>
-		<_rlab>
-			<ind>CC02-TH</ind>
-		</_rlab>
-		<_head>
-			<atom>
-				<_opr>
-					<rel>Tax Haven</rel>
-				</_opr>
-				<ind>CC02</ind>
-			</atom>
-		</_head>
-	</fact>
-	<fact>
-		<_rlab>
-			<ind>CC99-TH</ind>
-		</_rlab>
-		<_head>
-			<atom>
-				<_opr>
-					<rel>Tax Haven</rel>
-				</_opr>
-				<ind>CC99</ind>
-			</atom>
-		</_head>
-	</fact>
+		<Atom>
+			<oid>
+				<Ind>CC01-TH</Ind>
+			</oid>
+			<Rel>Tax Haven</Rel>
+			<Ind>CC01</Ind>
+		</Atom>
+		<Atom>
+			<oid>
+				<Ind>CC02-TH</Ind>
+			</oid>
+			<Rel>Tax Haven</Rel>
+			<Ind>CC02</Ind>
+		</Atom>
+		<Atom>
+			<oid>
+				<Ind>CC99-TH</Ind>
+			</oid>
+			<Rel>Tax Haven</Rel>
+			<Ind>CC99</Ind>
+		</Atom>
+	</Assert>
 	<!--
 		Queries
 	-->
-	<query>
-		<_rlab>
-			<ind>Fraudulent Customers</ind>
-		</_rlab>
-		<_body>
-			<atom>
-				<_opr>
-					<rel>Fraudulent Customer</rel>
-				</_opr>
-				<var>Customer</var>
-			</atom>
-		</_body>
-	</query>
-</rulebase>
+	<Query>
+		<oid>
+			<Ind>Fraudulent Customers</Ind>
+		</oid>
+		<Atom>
+			<Rel>Fraudulent Customer</Rel>
+			<Var>Customer</Var>
+		</Atom>
+	</Query>
+</RuleML>

@@ -8,296 +8,201 @@
   Remark: This rule base uses mutual exclusion mechanism, forcing to isolate the facts of the different call data. A faster approach would be to write the rules differently, with no more usage of mutual exclusion, then expose all the call data in one operation.
 
 -->
-<rulebase direction="forward"
-		xmlns="http://www.ruleml.org/0.86/xsd"
-		xsi:schemaLocation="http://www.ruleml.org/0.86/xsd ruleml-0_86-datalog.xsd"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<_rbaselab>
-		<ind>Telecom Rating Rules</ind>
-	</_rbaselab>
+<RuleML xmlns="http://www.ruleml.org/0.9/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.ruleml.org/0.9/xsd ruleml-0_9-nafdatalog.xsd">
+	<oid>
+		<Ind>Telecom Rating Rules</Ind>
+	</oid>
 	<!--
 		Global LOCal and INTernational Call Rating Assertions
 	-->
-	<imp>
-		<_rlab>
-			<ind>label:LOC;priority:10;action:assert</ind>
-		</_rlab>
-		<_head>
-			<atom>
-				<_opr>
-					<rel>Rating Scheme</rel>
-				</_opr>
-				<var>Call</var>
-				<ind>PerSecond:0.001</ind>
-			</atom>
-		</_head>
-		<_body>
-			<atom>
-				<_opr>
-					<rel>Type</rel>
-				</_opr>
-				<var>Call</var>
-				<ind>LOC</ind>
-			</atom>
-		</_body>
-	</imp>
-	<imp>
-		<_rlab>
-			<ind>label:INT Zone A;priority:10;mutex:PRO INT</ind>
-		</_rlab>
-		<_head>
-			<atom>
-				<_opr>
-					<rel>Rating Scheme</rel>
-				</_opr>
-				<var>Call</var>
-				<ind>FirstMinuteFeeThenPerSecond:0.25;0.002</ind>
-			</atom>
-		</_head>
-		<_body>
-			<and>
-				<atom>
-					<_opr>
-						<rel>Type</rel>
-					</_opr>
-					<var>Call</var>
-					<ind>INT</ind>
-				</atom>
-				<atom>
-					<_opr>
-						<rel>Destination</rel>
-					</_opr>
-					<var>Call</var>
-					<var>Country</var>
-				</atom>
-				<atom>
-					<_opr>
-						<rel>Zone A</rel>
-					</_opr>
-					<var>Country</var>
-				</atom>
-			</and>
-		</_body>
-	</imp>
-	<imp>
-		<_rlab>
-			<ind>label:Day INT Zone B;priority:10;mutex:PRO INT</ind>
-		</_rlab>
-		<_head>
-			<atom>
-				<_opr>
-					<rel>Rating Scheme</rel>
-				</_opr>
-				<var>Call</var>
-				<ind>FirstMinuteFeeThenPerSecond:0.50;0.003</ind>
-			</atom>
-		</_head>
-		<_body>
-			<and>
-				<atom>
-					<_opr>
-						<rel>Type</rel>
-					</_opr>
-					<var>Call</var>
-					<ind>INT</ind>
-				</atom>
-				<atom>
-					<_opr>
-						<rel>Destination</rel>
-					</_opr>
-					<var>Call</var>
-					<var>Country</var>
-				</atom>
-				<atom>
-					<_opr>
-						<rel>Zone B</rel>
-					</_opr>
-					<var>Country</var>
-				</atom>
-			</and>
-		</_body>
-	</imp>
+	<Assert>
+		<Implies>
+			<oid>
+				<Ind>label:LOC;priority:10;action:assert</Ind>
+			</oid>
+			<Atom>
+				<Rel>Type</Rel>
+				<Var>Call</Var>
+				<Ind>LOC</Ind>
+			</Atom>
+			<Atom>
+				<Rel>Rating Scheme</Rel>
+				<Var>Call</Var>
+				<Ind>PerSecond:0.001</Ind>
+			</Atom>
+		</Implies>
+		<Implies>
+			<oid>
+				<Ind>label:INT Zone A;priority:10;mutex:PRO INT</Ind>
+			</oid>
+			<And>
+				<Atom>
+					<Rel>Type</Rel>
+					<Var>Call</Var>
+					<Ind>INT</Ind>
+				</Atom>
+				<Atom>
+					<Rel>Destination</Rel>
+					<Var>Call</Var>
+					<Var>Country</Var>
+				</Atom>
+				<Atom>
+					<Rel>Zone A</Rel>
+					<Var>Country</Var>
+				</Atom>
+			</And>
+			<Atom>
+				<Rel>Rating Scheme</Rel>
+				<Var>Call</Var>
+				<Ind>FirstMinuteFeeThenPerSecond:0.25;0.002</Ind>
+			</Atom>
+		</Implies>
+		<Implies>
+			<oid>
+				<Ind>label:Day INT Zone B;priority:10;mutex:PRO INT</Ind>
+			</oid>
+			<And>
+				<Atom>
+					<Rel>Type</Rel>
+					<Var>Call</Var>
+					<Ind>INT</Ind>
+				</Atom>
+				<Atom>
+					<Rel>Destination</Rel>
+					<Var>Call</Var>
+					<Var>Country</Var>
+				</Atom>
+				<Atom>
+					<Rel>Zone B</Rel>
+					<Var>Country</Var>
+				</Atom>
+			</And>
+			<Atom>
+				<Rel>Rating Scheme</Rel>
+				<Var>Call</Var>
+				<Ind>FirstMinuteFeeThenPerSecond:0.50;0.003</Ind>
+			</Atom>
+		</Implies>
 	<!--
 		Nightly INT Call Exceptions
 	-->
-	<imp>
-		<_rlab>
-			<ind>label:Night INT Zone A;priority:20;mutex:INT Zone A</ind>
-		</_rlab>
-		<_head>
-			<atom>
-				<_opr>
-					<rel>Rating Scheme</rel>
-				</_opr>
-				<var>Call</var>
-				<ind>PerSecond:0.002</ind>
-			</atom>
-		</_head>
-		<_body>
-			<and>
-				<atom>
-					<_opr>
-						<rel>Time Scheme</rel>
-					</_opr>
-					<var>Call</var>
-					<ind>Night</ind>
-				</atom>
-				<atom>
-					<_opr>
-						<rel>Type</rel>
-					</_opr>
-					<var>Call</var>
-					<ind>INT</ind>
-				</atom>
-				<atom>
-					<_opr>
-						<rel>Destination</rel>
-					</_opr>
-					<var>Call</var>
-					<var>Country</var>
-				</atom>
-				<atom>
-					<_opr>
-						<rel>Zone A</rel>
-					</_opr>
-					<var>Country</var>
-				</atom>
-			</and>
-		</_body>
-	</imp>
+		<Implies>
+			<oid>
+				<Ind>label:Night INT Zone A;priority:20;mutex:INT Zone A</Ind>
+			</oid>
+			<And>
+				<Atom>
+					<Rel>Time Scheme</Rel>
+					<Var>Call</Var>
+					<Ind>Night</Ind>
+				</Atom>
+				<Atom>
+					<Rel>Type</Rel>
+					<Var>Call</Var>
+					<Ind>INT</Ind>
+				</Atom>
+				<Atom>
+					<Rel>Destination</Rel>
+					<Var>Call</Var>
+					<Var>Country</Var>
+				</Atom>
+				<Atom>
+					<Rel>Zone A</Rel>
+					<Var>Country</Var>
+				</Atom>
+			</And>
+			<Atom>
+				<Rel>Rating Scheme</Rel>
+				<Var>Call</Var>
+				<Ind>PerSecond:0.002</Ind>
+			</Atom>
+		</Implies>
 	<!--
 		Professional Customers INT Call Exceptions
 	-->
-	<imp>
-		<_rlab>
-			<ind>label:PRO INT;priority:30</ind>
-		</_rlab>
-		<_head>
-			<atom>
-				<_opr>
-					<rel>Rating Scheme</rel>
-				</_opr>
-				<var>Call</var>
-				<ind>FirstMinuteFeeThenPerSecond:0.15;0.0015</ind>
-			</atom>
-		</_head>
-		<_body>
-			<and>
-				<atom>
-					<_opr>
-						<rel>Type</rel>
-					</_opr>
-					<var>Call</var>
-					<ind>INT</ind>
-				</atom>
-				<atom>
-					<_opr>
-						<rel>Client Scheme</rel>
-					</_opr>
-					<var>Call</var>
-					<ind>PRO</ind>
-				</atom>
-			</and>
-		</_body>
-	</imp>
+		<Implies>
+			<oid>
+				<Ind>label:PRO INT;priority:30</Ind>
+			</oid>
+			<And>
+				<Atom>
+					<Rel>Type</Rel>
+					<Var>Call</Var>
+					<Ind>INT</Ind>
+				</Atom>
+				<Atom>
+					<Rel>Client Scheme</Rel>
+					<Var>Call</Var>
+					<Ind>PRO</Ind>
+				</Atom>
+			</And>
+			<Atom>
+				<Rel>Rating Scheme</Rel>
+				<Var>Call</Var>
+				<Ind>FirstMinuteFeeThenPerSecond:0.15;0.0015</Ind>
+			</Atom>
+		</Implies>
 	<!--
 		Day Time / Night Time Assertions (Day is between 0700 and 2000)
 	-->
-	<imp>
-		<_rlab>
-			<ind>label:Day Time;priority:90</ind>
-		</_rlab>
-		<_head>
-			<atom>
-				<_opr>
-					<rel>Time Scheme</rel>
-				</_opr>
-				<var>Call</var>
-				<ind>Day</ind>
-			</atom>
-		</_head>
-		<_body>
-			<and>
-				<atom>
-					<_opr>
-						<rel>Hour</rel>
-					</_opr>
-					<var>Call</var>
-					<ind>NxBRE:GreaterThanEqualTo(7)</ind>
-				</atom>
-				<atom>
-					<_opr>
-						<rel>Hour</rel>
-					</_opr>
-					<var>Call</var>
-					<ind>NxBRE:LessThanEqualTo(20)</ind>
-				</atom>
-			</and>
-		</_body>
-	</imp>
-	<imp>
-		<_rlab>
-			<ind>label:Night Time;priority:90</ind>
-		</_rlab>
-		<_head>
-			<atom>
-				<_opr>
-					<rel>Time Scheme</rel>
-				</_opr>
-				<var>Call</var>
-				<ind>Night</ind>
-			</atom>
-		</_head>
-		<_body>
-			<or>
-				<atom>
-					<_opr>
-						<rel>Hour</rel>
-					</_opr>
-					<var>Call</var>
-					<ind>NxBRE:GreaterThanEqualTo(21)</ind>
-				</atom>
-				<atom>
-					<_opr>
-						<rel>Hour</rel>
-					</_opr>
-					<var>Call</var>
-					<ind>NxBRE:LessThanEqualTo(6)</ind>
-				</atom>
-			</or>
-		</_body>
-	</imp>
+		<Implies>
+			<oid>
+				<Ind>label:Day Time;priority:90</Ind>
+			</oid>
+			<And>
+				<Atom>
+					<Rel>Hour</Rel>
+					<Var>Call</Var>
+					<Ind uri="nxbre://operator">GreaterThanEqualTo(7)</Ind>
+				</Atom>
+				<Atom>
+					<Rel>Hour</Rel>
+					<Var>Call</Var>
+					<Ind uri="nxbre://operator">LessThanEqualTo(20)</Ind>
+				</Atom>
+			</And>
+			<Atom>
+				<Rel>Time Scheme</Rel>
+				<Var>Call</Var>
+				<Ind>Day</Ind>
+			</Atom>
+		</Implies>
+		<Implies>
+			<oid>
+				<Ind>label:Night Time;priority:90</Ind>
+			</oid>
+			<Or>
+				<Atom>
+					<Rel>Hour</Rel>
+					<Var>Call</Var>
+					<Ind uri="nxbre://operator">GreaterThanEqualTo(21)</Ind>
+				</Atom>
+				<Atom>
+					<Rel>Hour</Rel>
+					<Var>Call</Var>
+					<Ind uri="nxbre://operator">LessThanEqualTo(6)</Ind>
+				</Atom>
+			</Or>
+			<Atom>
+				<Rel>Time Scheme</Rel>
+				<Var>Call</Var>
+				<Ind>Night</Ind>
+			</Atom>
+		</Implies>
 	<!--
 		Country Destinations Zones Facts
 	-->
-	<fact>
-		<_head>
-			<atom>
-				<_opr>
-					<rel>Zone A</rel>
-				</_opr>
-				<ind>CC01</ind>
-			</atom>
-		</_head>
-	</fact>
-	<fact>
-		<_head>
-			<atom>
-				<_opr>
-					<rel>Zone A</rel>
-				</_opr>
-				<ind>CC02</ind>
-			</atom>
-		</_head>
-	</fact>
-	<fact>
-		<_head>
-			<atom>
-				<_opr>
-					<rel>Zone B</rel>
-				</_opr>
-				<ind>CC99</ind>
-			</atom>
-		</_head>
-	</fact>
-</rulebase>
+		<Atom>
+			<Rel>Zone A</Rel>
+			<Ind>CC01</Ind>
+		</Atom>
+		<Atom>
+			<Rel>Zone A</Rel>
+			<Ind>CC02</Ind>
+		</Atom>
+		<Atom>
+			<Rel>Zone B</Rel>
+			<Ind>CC99</Ind>
+		</Atom>
+	</Assert>
+</RuleML>

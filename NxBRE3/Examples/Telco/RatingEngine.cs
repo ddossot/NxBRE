@@ -24,7 +24,7 @@ namespace NxBRE.Examples {
 
 			if (verbosityLevel >= 1) ie.NewFactHandler += new NewFactEvent(HandleNewFactEvent);
 			
-			ie.LoadRuleBase(new RuleML086DatalogAdapter(ruleBaseFile, System.IO.FileAccess.Read));
+			ie.LoadRuleBase(new RuleML09NafDatalogAdapter(ruleBaseFile, System.IO.FileAccess.Read));
 
 		}
 
