@@ -35,5 +35,10 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="InferenceEngineMultiThreading.exe.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>
