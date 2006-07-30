@@ -185,6 +185,8 @@
     <EmbeddedResource Include="Resources\identity.xsl" />
     <Compile Include="InferenceEngine\Core\RulesUtil.cs" />
     <Compile Include="Util\Logger.cs" />
+    <Compile Include="InferenceEngine\Registry\FileRegistry.cs" />
+    <Compile Include="InferenceEngine\Registry\IRegistry.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />
@@ -205,6 +207,7 @@
     <Content Include="NxBRE.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Folder Include="InferenceEngine\Registry" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>
