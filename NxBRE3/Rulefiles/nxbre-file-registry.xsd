@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns="http://nxbre.org/registry/file" targetNamespace="http://nxbre.org/registry/file">
+	<xs:element name="Configuration">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Engine" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="folder" use="optional" type="xs:string"/>
+			<xs:attribute default="500" name="fileLockedPonderatingTime" type="xs:integer" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Engine">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Rules"/>
+				<xs:choice minOccurs="0" maxOccurs="1">
+					<xs:element ref="CSharpBinder"/>
+					<xs:element ref="FlowEngineBinder"/>
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:ID"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Rules">
+		<xs:complexType>
+			<xs:attribute name="file" use="required" type="xs:string"/>
+			<xs:attribute name="format" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="HRF086"/>
+						<xs:enumeration value="RuleML08Datalog"/>
+						<xs:enumeration value="RuleML086Datalog"/>
+						<xs:enumeration value="RuleML086NafDatalog"/>
+						<xs:enumeration value="RuleML09NafDatalog"/>
+						<xs:enumeration value="Visio2003"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CSharpBinder">
+		<xs:complexType>
+			<xs:attribute name="file" use="required" type="xs:string"/>
+			<xs:attribute name="class" use="required" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FlowEngineBinder">
+		<xs:complexType>
+			<xs:attribute name="file" use="required" type="xs:string"/>
+			<xs:attribute name="type" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="BeforeAfter"/>
+						<xs:enumeration value="Control"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

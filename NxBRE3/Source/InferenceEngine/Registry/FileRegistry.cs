@@ -40,7 +40,8 @@ namespace NxBRE.InferenceEngine.Registry {
 		/// <remarks>
 		/// The default is 500ms.
 		/// </remarks>
-		private int fileLockedPonderatingTime = Parameter.Get<int>("registryFileLockedPonderatingTime", 500);
+		//FIXME: read value from xml config file
+		private int fileLockedPonderatingTime = 500;
 		
 		/// <summary>
 		/// Get a named instance of an inference engine out of the registry.
@@ -63,11 +64,13 @@ namespace NxBRE.InferenceEngine.Registry {
 			fileIndex = new ListDictionary();
 			
 			// store the configuration folder because the rule files and binders are stored into it
+			//FIXME: read value from xml config file
 			string configurationFolder = new FileInfo(registryConfigurationFile).DirectoryName;
 			
 			// read the configuration
 			XmlTextReader reader = new XmlTextReader(registryConfigurationFile);
-			
+	
+			//FIXME: use new config structure
 			while (reader.Read()) {
 				if ((reader.NodeType == XmlNodeType.Element) && (reader.Name == "engine")) {
 					string ruleFile = reader.GetAttribute("ruleFile");
@@ -123,7 +126,6 @@ namespace NxBRE.InferenceEngine.Registry {
 				this.binderFile = binderFile;
 				this.ruleFile = ruleFile;
 				this.binderClass = binderClass;
-				//TODO: make the implementation to use a parameter (for now NxBRE.InferenceEngine.IEImpl is the only choice)
 				this.engine = new IEImpl(ThreadingModelTypes.MultiHotSwap);
 			}
 			
