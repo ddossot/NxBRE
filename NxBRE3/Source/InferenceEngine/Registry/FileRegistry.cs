@@ -1,14 +1,16 @@
 namespace NxBRE.InferenceEngine.Registry {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	using System.Collections.Specialized;
 	using System.Diagnostics;
 	using System.IO;
 	using System.Threading;
 	using System.Xml;
+	using System.Xml.Serialization;
 	
 	using NxBRE.InferenceEngine;
 	using NxBRE.InferenceEngine.IO;
+	using NxBRE.InferenceEngine.Registry.Configuration;
 	using NxBRE.Util;
 
 	/// <summary>
@@ -20,28 +22,27 @@ namespace NxBRE.InferenceEngine.Registry {
 	/// If any of the file that was used to load the engine (rule file or binder) is modified, the registry automatically reloads
 	/// it, without disrupting the users of the engines.
 	/// </summary>
+	/// <remarks>
+	/// The registry does not reload itself if its configuration file is changed.
+	/// </remarks>
 	public class FileRegistry:IRegistry {
-		//FIXME: figure a way to unit test this class!
+		//FIXME: unit test this class!
 		/// <summary>
 		/// Dictionary that stores all the engines, made immutable to prevent any modifications outside of the constructor.
 		/// </summary>
-		private readonly IDictionary registry;
+		private readonly IDictionary<string, CachedEngine> registry;
 		
 		/// <summary>
 		/// Dictionary that stores all the rule and binder files names that are involved in the registry and the ID
 		/// of the engine they are related to. This is a kind of "reverse phone book" that allows finding the engine
 		/// that depends on a certain file.
 		/// </summary>
-		private readonly IDictionary fileIndex;
+		private readonly IDictionary<string, IList<CachedEngine>> fileIndex;
 		
 		/// <summary>
-		/// The time in milliseconds to wait until re-trying to access in read mode a file referenced in the registry.
+		/// The configuration used for the current file registry instance.
 		/// </summary>
-		/// <remarks>
-		/// The default is 500ms.
-		/// </remarks>
-		//FIXME: read value from xml config file
-		private int fileLockedPonderatingTime = 500;
+		private readonly FileRegistryConfiguration configuration;
 		
 		/// <summary>
 		/// Get a named instance of an inference engine out of the registry.
@@ -49,7 +50,8 @@ namespace NxBRE.InferenceEngine.Registry {
 		/// <param name="engineID">The ID of the engine to get</param>
 		/// <returns>The desired engine instance or null if it is not available in the registry</returns>
 		public IInferenceEngine GetEngine(string engineID) {
-			CachedEngine cachedEngine = (CachedEngine)registry[engineID];
+			CachedEngine cachedEngine = registry[engineID];
+			
 			if (cachedEngine != null) return cachedEngine.Engine;
 			else return null;
 		}
@@ -60,38 +62,39 @@ namespace NxBRE.InferenceEngine.Registry {
 		/// <param name="registryConfigurationFile">The full path and file name of the registry configuration file.</param>
 		public FileRegistry(string registryConfigurationFile) {
 			// we use non-synchronized ListDictionary, switch to Hashtable if much more than 10 engines are in the registry.
-			registry = new ListDictionary();
-			fileIndex = new ListDictionary();
+			registry = new Dictionary<string, CachedEngine>();
+			fileIndex = new Dictionary<string, IList<CachedEngine>>();
+			
+			// load the configuration
+			configuration = (FileRegistryConfiguration) new XmlSerializer(typeof(FileRegistryConfiguration)).Deserialize(new FileStream(registryConfigurationFile, FileMode.Open));
 			
 			// store the configuration folder because the rule files and binders are stored into it
-			//FIXME: read value from xml config file
-			string configurationFolder = new FileInfo(registryConfigurationFile).DirectoryName;
+			string configurationFolder = ((configuration.Folder != null) && (configuration.Folder != String.Empty))?configuration.Folder:new FileInfo(registryConfigurationFile).DirectoryName;
 			
-			// read the configuration
-			XmlTextReader reader = new XmlTextReader(registryConfigurationFile);
-	
-			//FIXME: use new config structure
-			while (reader.Read()) {
-				if ((reader.NodeType == XmlNodeType.Element) && (reader.Name == "engine")) {
-					string ruleFile = reader.GetAttribute("ruleFile");
-					string binderFile = reader.GetAttribute("binderFile");
-					
-					CachedEngine cachedEngine = new CachedEngine(reader.GetAttribute("id"),
-					                                             configurationFolder,
-					                                             ruleFile,
-					                                             binderFile,
-					                                             reader.GetAttribute("binderClass"));
-					
-					// initialize the engine
-					cachedEngine.LoadRules();
-					
-					// store the engine in the registry
-					registry.Add(cachedEngine.ID, cachedEngine);
-					
-					// register the ruleFile -> CachedEngine & binderFile -> CachedEngine pairs
-					fileIndex.Add(ruleFile, cachedEngine);
-					if ((binderFile != null) && (binderFile != String.Empty))	fileIndex.Add(binderFile, cachedEngine);
-				}
+			if (Logger.IsInferenceEngineVerbose)
+				Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
+                                                0,
+                                                "Loaded configuration, Folder: "
+                                                + configurationFolder
+                                                + ", FileLockedPonderatingTime: "
+                                                + configuration.FileLockedPonderatingTime
+                                                + ", Engines: "
+                                                + configuration.Engines.Length);
+
+			
+			// parse the configuration to load up the different engines
+			foreach(Engine engineConfiguration in configuration.Engines) {
+				CachedEngine cachedEngine = new CachedEngine(configurationFolder, engineConfiguration);
+				
+				// initialize the engine
+				cachedEngine.LoadRules();
+				
+				// store the engine in the registry
+				registry.Add(cachedEngine.ID, cachedEngine);
+				
+				// register the ruleFile -> CachedEngine & binderFile -> CachedEngine pairs
+				AddEngineSpecificFileToCache(cachedEngine.RuleFile, cachedEngine);
+				AddEngineSpecificFileToCache(cachedEngine.BinderFile, cachedEngine);
 			}
 			
 			// activate the file system listener
@@ -101,46 +104,132 @@ namespace NxBRE.InferenceEngine.Registry {
 			watcher.Renamed += new RenamedEventHandler(this.OnFileRenamed);
 			watcher.EnableRaisingEvents = true;
 		}
+		
+		private void AddEngineSpecificFileToCache(string file, CachedEngine cachedEngine) {
+			if (file != null) {
+				if (!fileIndex.ContainsKey(file)) fileIndex.Add(file, new List<CachedEngine>());
+				IList<CachedEngine> cachedEngineList = fileIndex[file];
+				cachedEngineList.Add(cachedEngine);
+			}
+		}
 
 		/// <summary>
 		/// The class used to hold an engine details and performs its (re)loading.
 		/// </summary>
 		private sealed class CachedEngine {
-			private readonly string engineID;
+			private readonly Engine engineConfiguration;
 			private readonly string configurationFolder;
-			private readonly string ruleFile;
-			private readonly string binderFile;
-			private readonly string binderClass;
 			private readonly IInferenceEngine engine;
+			
+			private string binderFile;
 			
 			public string ID {
 				get {
-					return engineID;
+					return engineConfiguration.id;
 				}
 			}
 			
-			public CachedEngine(string engineID, string configurationFolder, string ruleFile, string binderFile, string binderClass)
+			public string RuleFile {
+				get {
+					return engineConfiguration.Rules.file;
+				}
+			}
+			
+			public string BinderFile {
+				get {
+					return binderFile;
+				}
+			}
+			
+			public CachedEngine(string configurationFolder, Engine engineConfiguration)
 			{
-				this.engineID = engineID;
 				this.configurationFolder = configurationFolder;
-				this.binderFile = binderFile;
-				this.ruleFile = ruleFile;
-				this.binderClass = binderClass;
-				this.engine = new IEImpl(ThreadingModelTypes.MultiHotSwap);
+				this.engineConfiguration = engineConfiguration;
+				
+				// instantiate the IInferenceEngine
+				engine = new IEImpl(ThreadingModelTypes.MultiHotSwap);
 			}
 			
 			public void LoadRules() {
-				if ((binderFile == null) || (binderFile == String.Empty)) {
-					// no binder specified
-					engine.LoadRuleBase(new RuleML09NafDatalogAdapter(configurationFolder + "/" + ruleFile, FileAccess.Read));
+				// prepare the rule base adapter for reading the rule file
+				string ruleFileFullPath = configurationFolder + Path.DirectorySeparatorChar + RuleFile;
+
+				if (Logger.IsInferenceEngineVerbose)
+					Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
+                                                   0,
+                                                   "Loading rule file: "
+                                                   + ruleFileFullPath
+                                                   + " of format: "
+                                                   + engineConfiguration.Rules.format);
+
+				IRuleBaseAdapter ruleBaseAdapter = null;
+				
+				switch(engineConfiguration.Rules.format) {
+					case RulesFormat.HRF086:
+						ruleBaseAdapter = new HRF086Adapter(ruleFileFullPath, FileAccess.Read);
+						break;
+						
+					case RulesFormat.RuleML08Datalog:
+						ruleBaseAdapter = new RuleML08DatalogAdapter(ruleFileFullPath, FileAccess.Read);
+						break;
+						
+					case RulesFormat.RuleML086Datalog:
+						ruleBaseAdapter = new RuleML086DatalogAdapter(ruleFileFullPath, FileAccess.Read);
+						break;
+						
+					case RulesFormat.RuleML086NafDatalog:
+						ruleBaseAdapter = new RuleML086NafDatalogAdapter(ruleFileFullPath, FileAccess.Read);
+						break;
+						
+					case RulesFormat.RuleML09NafDatalog:
+						ruleBaseAdapter = new RuleML09NafDatalogAdapter(ruleFileFullPath, FileAccess.Read);
+						break;
+						
+					case RulesFormat.Visio2003:
+						ruleBaseAdapter = new Visio2003Adapter(ruleFileFullPath, FileAccess.Read);
+						break;
+				}
+				       
+				// estimate if a binder is present
+				if (engineConfiguration.Binder != null) {
+					if (engineConfiguration.Binder is CSharpBinder) {
+						CSharpBinder cSharpBinderConfiguration = (CSharpBinder)engineConfiguration.Binder;
+						binderFile = cSharpBinderConfiguration.file;
+						
+						if (Logger.IsInferenceEngineVerbose)
+							Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
+		                                                   0,
+		                                                   "Using CSharp binder file: "
+		                                                   + binderFile);
+	
+						// we load the binder code in a string and then compile it: this method is more reliable than
+						// providing a file path directly
+						using (StreamReader sr = File.OpenText(configurationFolder + Path.DirectorySeparatorChar + binderFile)) {
+							engine.LoadRuleBase(ruleBaseAdapter,
+							                    CSharpBinderFactory.LoadFromString(cSharpBinderConfiguration.@class, sr.ReadToEnd()));
+						}
+					}
+					else if (engineConfiguration.Binder is NxBRE.InferenceEngine.Registry.Configuration.FlowEngineBinder) {
+						NxBRE.InferenceEngine.Registry.Configuration.FlowEngineBinder flowEngineBinderConfiguration = (NxBRE.InferenceEngine.Registry.Configuration.FlowEngineBinder)engineConfiguration.Binder;
+						binderFile = flowEngineBinderConfiguration.file;
+						
+						if (Logger.IsInferenceEngineVerbose)
+							Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
+		                                                   0,
+		                                                   "Using FlowEngine binder file: "
+		                                                   + binderFile);
+						
+						engine.LoadRuleBase(ruleBaseAdapter,
+						                    new NxBRE.InferenceEngine.IO.FlowEngineBinder(configurationFolder + Path.DirectorySeparatorChar + binderFile, flowEngineBinderConfiguration.type));
+					}
+					else {
+						throw new BREException("Unexpected type of binder object in registry configuration: " + engineConfiguration.Binder.GetType().FullName);
+					}
 				}
 				else {
-					// we load the binder code in a string and then compile it: this method is more reliable than
-					// providing a file path directly
-					using (StreamReader sr = File.OpenText(configurationFolder + "/" + binderFile)) {
-						engine.LoadRuleBase(new RuleML09NafDatalogAdapter(configurationFolder + "/" + ruleFile, FileAccess.Read),
-						                    CSharpBinderFactory.LoadFromString(binderClass, sr.ReadToEnd()));
-					}
+					// no binder specified
+					binderFile = null;
+					engine.LoadRuleBase(ruleBaseAdapter);
 				}
 			}
 			
@@ -156,10 +245,7 @@ namespace NxBRE.InferenceEngine.Registry {
 		/// </summary>
 		/// <param name="fileName">The name of the registry file that has been somehow altered</param>
 		private void OnRegistryFileEvent(String fullFileName, String fileName) {
-			CachedEngine cachedEngine = (CachedEngine) fileIndex[fileName];
-			
-			// if the modified file is involved in the registry, then we get the impacted CachedEngine
-			if (cachedEngine != null) {
+			foreach(CachedEngine cachedEngine in fileIndex[fileName]) {
 				// we check if the file is available for reading, if not we ponder until it is.
 				WaitUntilFileCanBeRead(fullFileName);
 				
@@ -184,8 +270,13 @@ namespace NxBRE.InferenceEngine.Registry {
 					}
 				} catch	(IOException) {
 					// can not read, wait half a second
-					if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Ponderating " + fileLockedPonderatingTime + "ms because the following file can not read: " + fullFileName);
-					Thread.Sleep(fileLockedPonderatingTime);
+					if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
+					                                                                             0,
+					                                                                             "Ponderating "
+					                                                                             + configuration.FileLockedPonderatingTime
+					                                                                             + "ms because the following file can not read: "
+					                                                                             + fullFileName);
+					Thread.Sleep(configuration.FileLockedPonderatingTime);
 				}
 			}
 		}
