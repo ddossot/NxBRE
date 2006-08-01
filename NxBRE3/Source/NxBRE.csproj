@@ -187,6 +187,7 @@
     <Compile Include="Util\Logger.cs" />
     <Compile Include="InferenceEngine\Registry\FileRegistry.cs" />
     <Compile Include="InferenceEngine\Registry\IRegistry.cs" />
+    <Compile Include="InferenceEngine\Registry\FileRegistryConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />
