@@ -6,7 +6,7 @@
 				<xs:element ref="Engine" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="folder" use="optional" type="xs:string"/>
-			<xs:attribute name="fileLockedPonderatingTime" type="xs:integer" use="optional" default="500"/>
+			<xs:attribute name="fileLockedPonderatingTime" type="xs:int" use="optional" default="500"/>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="Engine">

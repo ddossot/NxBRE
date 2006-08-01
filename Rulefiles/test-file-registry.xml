@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FileRegistryConfiguration xmlns="http://nxbre.org/registry/file" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nxbre.org/registry/file nxbre-file-registry.xsd">
+	<Engine id="chocolatebox-binderless">
+		<Rules file="chocolatebox-binderless.ruleml" format="RuleML09NafDatalog"/>
+	</Engine>
+	<Engine id="chocolatebox-ccb">
+		<Rules file="chocolatebox.ruleml" format="RuleML09NafDatalog"/>
+		<CSharpBinder file="chocolatebox.ruleml.ccb" class="NxBRE.Test.InferenceEngine.ChocolateBoxBinder"/>
+	</Engine>
+	<Engine id="chocolatebox-feb">
+		<Rules file="chocolatebox.ruleml" format="RuleML09NafDatalog"/>
+		<FlowEngineBinder file="chocolatebox.ruleml.xbre" type="BeforeAfter"/>
+	</Engine>
+	<Engine id="chocolatebox-binderless-visio">
+		<Rules file="chocolatebox-binderless.vdx" format="Visio2003"/>
+	</Engine>
+</FileRegistryConfiguration>
