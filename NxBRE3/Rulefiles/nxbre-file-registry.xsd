@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns="http://nxbre.org/registry/file" targetNamespace="http://nxbre.org/registry/file">
-	<xs:element name="Configuration">
+	<xs:element name="FileRegistryConfiguration">
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="Engine" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="folder" use="optional" type="xs:string"/>
-			<xs:attribute default="500" name="fileLockedPonderatingTime" type="xs:integer" use="optional"/>
+			<xs:attribute name="fileLockedPonderatingTime" type="xs:integer" use="optional" default="500"/>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="Engine">
