@@ -188,6 +188,8 @@
     <Compile Include="InferenceEngine\Registry\FileRegistry.cs" />
     <Compile Include="InferenceEngine\Registry\IRegistry.cs" />
     <Compile Include="InferenceEngine\Registry\FileRegistryConfiguration.cs" />
+    <Compile Include="InferenceEngine\IO\VisualBasicBinderFactory.cs" />
+    <Compile Include="Test\InferenceEngine\TestFileRegistry.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />

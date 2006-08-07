@@ -55,6 +55,19 @@ namespace NxBRE.InferenceEngine.Registry {
 			if (cachedEngine != null) return cachedEngine.Engine;
 			else return null;
 		}
+		
+		public int Count {
+			get {
+				return registry.Count;
+			}
+		}
+		
+		public ICollection<string> EngineIDs {
+			get {
+				return registry.Keys;
+			}
+		}
+		
 	
 		/// <summary>
 		/// Initializes a new registry of NxBRE Inference Engines.
@@ -66,7 +79,7 @@ namespace NxBRE.InferenceEngine.Registry {
 			fileIndex = new Dictionary<string, IList<CachedEngine>>();
 			
 			// load the configuration
-			configuration = (FileRegistryConfiguration) new XmlSerializer(typeof(FileRegistryConfiguration)).Deserialize(new FileStream(registryConfigurationFile, FileMode.Open));
+			configuration = (FileRegistryConfiguration) new XmlSerializer(typeof(FileRegistryConfiguration)).Deserialize(new FileStream(registryConfigurationFile, FileMode.Open, FileAccess.Read, FileShare.Read));
 			
 			// store the configuration folder because the rule files and binders are stored into it
 			string configurationFolder = ((configuration.Folder != null) && (configuration.Folder != String.Empty))?configuration.Folder:new FileInfo(registryConfigurationFile).DirectoryName;
@@ -207,6 +220,23 @@ namespace NxBRE.InferenceEngine.Registry {
 						using (StreamReader sr = File.OpenText(configurationFolder + Path.DirectorySeparatorChar + binderFile)) {
 							engine.LoadRuleBase(ruleBaseAdapter,
 							                    CSharpBinderFactory.LoadFromString(cSharpBinderConfiguration.Class, sr.ReadToEnd()));
+						}
+					}
+					else if (engineConfiguration.Binder is VisualBasicBinderConfiguration) {
+						VisualBasicBinderConfiguration visualBasicBinderConfiguration = (VisualBasicBinderConfiguration)engineConfiguration.Binder;
+						binderFile = visualBasicBinderConfiguration.File;
+						
+						if (Logger.IsInferenceEngineVerbose)
+							Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
+		                                                   0,
+		                                                   "Using Visual Basic binder file: "
+		                                                   + binderFile);
+	
+						// we load the binder code in a string and then compile it: this method is more reliable than
+						// providing a file path directly
+						using (StreamReader sr = File.OpenText(configurationFolder + Path.DirectorySeparatorChar + binderFile)) {
+							engine.LoadRuleBase(ruleBaseAdapter,
+							                    VisualBasicBinderFactory.LoadFromString(visualBasicBinderConfiguration.Class, sr.ReadToEnd()));
 						}
 					}
 					else if (engineConfiguration.Binder is NxBRE.InferenceEngine.Registry.FlowEngineBinderConfiguration) {

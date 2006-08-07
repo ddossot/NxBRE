@@ -7,6 +7,10 @@
 		<Rules file="chocolatebox.ruleml" format="RuleML09NafDatalog"/>
 		<CSharpBinder file="chocolatebox.ruleml.ccb" class="NxBRE.Test.InferenceEngine.ChocolateBoxBinder"/>
 	</Engine>
+	<Engine id="events-test-vcb">
+		<Rules file="events-test.ruleml" format="RuleML09NafDatalog"/>
+		<VisualBasicBinder file="events-test.ruleml.vcb" class="NxBRE.Test.InferenceEngine.EventTestBinder"/>
+	</Engine>
 	<Engine id="chocolatebox-feb">
 		<Rules file="chocolatebox.ruleml" format="RuleML09NafDatalog"/>
 		<FlowEngineBinder file="chocolatebox.ruleml.xbre" type="BeforeAfter"/>

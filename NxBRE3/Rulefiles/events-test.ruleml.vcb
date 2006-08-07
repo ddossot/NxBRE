@@ -1,0 +1,56 @@
+Imports System
+Imports System.Collections
+
+Imports NxBRE.InferenceEngine
+Imports NxBRE.InferenceEngine.IO
+Imports NxBRE.InferenceEngine.Rules
+
+Namespace NxBRE.Test.InferenceEngine
+	
+	Public Class EventTestBinder
+		Inherits AbstractBinder
+	
+		Public Sub New()
+			MyBase.New(BindingTypes.BeforeAfter)
+		End Sub
+		
+		Public Overloads Overrides ReadOnly Property OnNewFact() As NewFactEvent
+			Get
+				Return New NewFactEvent(AddressOf AssertFactHandler)
+			End Get
+		End Property
+		
+		Public Overloads Overrides ReadOnly Property OnDeleteFact() As NewFactEvent
+			Get
+				Return New NewFactEvent(AddressOf RetractFactHandler)
+			End Get
+		End Property
+		
+		Public Overloads Overrides ReadOnly Property OnModifyFact() As NewFactEvent
+			Get
+				Return New NewFactEvent(AddressOf ModifyFactHandler)
+			End Get
+		End Property
+		
+		Private Sub AssertFactHandler(ByVal nfea As NewFactEventArgs)
+			Dim al As ArrayList = DirectCast(BusinessObjects.Item("ASSERTED"), ArrayList)
+			al.Add(nfea.Fact)
+		End Sub
+		
+		Private Sub RetractFactHandler(ByVal nfea As NewFactEventArgs)
+			Dim al As ArrayList = DirectCast(BusinessObjects.Item("RETRACTED"), ArrayList)
+			al.Add(nfea.Fact)
+		End Sub
+		
+		Private Sub ModifyFactHandler(ByVal nfea As NewFactEventArgs)
+			Dim al As ArrayList = DirectCast(BusinessObjects.Item("MODIFIED"), ArrayList)
+			al.Add(nfea.Fact)
+			
+			al = DirectCast(BusinessObjects.Item("MODIFIED"), ArrayList)
+			al.Add(nfea.OtherFact)
+		End Sub
+		
+	End Class
+	
+End Namespace
+

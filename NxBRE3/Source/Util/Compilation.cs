@@ -256,7 +256,7 @@ namespace NxBRE.Util
 			compilerParameters.TreatWarningsAsErrors = false;
 			
 			// Chuck Cross has vastly improved the loading of NxBRE ddl reference mechanism
-			bool NxBREAssemblyLoaded = false;
+			bool nxbreAssemblyLoaded = false;
 			
 			// Add all implicitly referenced assemblies
 			if ((ReferenceLinkMode == ReferenceLinkModes.CurrentDomain) || (ReferenceLinkMode == ReferenceLinkModes.Full)) {
@@ -264,14 +264,14 @@ namespace NxBRE.Util
 					// do not add AssemblyBuilders (bug 1482753), thanks to Bob Brumfield
 					if (!(assembly is AssemblyBuilder)) {
 						AddReferencedAssembly(compilerParameters, assembly.Location);
-						if(assembly.ManifestModule.ScopeName.Equals(NXBRE_DLL)) NxBREAssemblyLoaded = true;
+						if(assembly.ManifestModule.ScopeName.Equals(NXBRE_DLL)) nxbreAssemblyLoaded = true;
 					}
 				}
 			}
 			
 			// Add NxBRE dll reference only if not already added through implicit references.
-			if (!NxBREAssemblyLoaded && ((ReferenceLinkMode == ReferenceLinkModes.NxBRE) || (ReferenceLinkMode == ReferenceLinkModes.Full)))
-				AddReferencedAssembly(compilerParameters, NxbreAssemblyLocation);
+			if (!nxbreAssemblyLoaded && ((ReferenceLinkMode == ReferenceLinkModes.NxBRE) || (ReferenceLinkMode == ReferenceLinkModes.Full)))
+				AddReferencedAssembly(compilerParameters, NxBREAssemblyLocation);
 		
 			CompilerResults cr;
 			
@@ -290,7 +290,9 @@ namespace NxBRE.Util
 		
 		private static void AddReferencedAssembly(CompilerParameters compilerParameters, string assemblyLocation) {
 			try	{
-				if (compilerParameters.ReferencedAssemblies.IndexOf(assemblyLocation) < 0)
+				if ((assemblyLocation != null)
+				    && (assemblyLocation != String.Empty)
+				    && (!compilerParameters.ReferencedAssemblies.Contains(assemblyLocation)))
 					compilerParameters.ReferencedAssemblies.Add(assemblyLocation);
 			}
 			catch {
@@ -298,7 +300,7 @@ namespace NxBRE.Util
 			}
 		}
 		
-		private static string NxbreAssemblyLocation {
+		private static string NxBREAssemblyLocation {
 			get {
 				lock(nxbreAssemblyLocation) {
 					
