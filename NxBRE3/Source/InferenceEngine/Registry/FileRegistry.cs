@@ -10,7 +10,7 @@ namespace NxBRE.InferenceEngine.Registry {
 	
 	using NxBRE.InferenceEngine;
 	using NxBRE.InferenceEngine.IO;
-	using NxBRE.InferenceEngine.Registry.Configuration;
+	using NxBRE.InferenceEngine.Registry;
 	using NxBRE.Util;
 
 	/// <summary>
@@ -71,8 +71,8 @@ namespace NxBRE.InferenceEngine.Registry {
 			// store the configuration folder because the rule files and binders are stored into it
 			string configurationFolder = ((configuration.Folder != null) && (configuration.Folder != String.Empty))?configuration.Folder:new FileInfo(registryConfigurationFile).DirectoryName;
 			
-			if (Logger.IsInferenceEngineVerbose)
-				Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
+			if (Logger.IsInferenceEngineInformation)
+				Logger.InferenceEngineSource.TraceEvent(TraceEventType.Information,
                                                 0,
                                                 "Loaded configuration, Folder: "
                                                 + configurationFolder
@@ -83,7 +83,7 @@ namespace NxBRE.InferenceEngine.Registry {
 
 			
 			// parse the configuration to load up the different engines
-			foreach(Engine engineConfiguration in configuration.Engines) {
+			foreach(EngineConfiguration engineConfiguration in configuration.Engines) {
 				CachedEngine cachedEngine = new CachedEngine(configurationFolder, engineConfiguration);
 				
 				// initialize the engine
@@ -117,7 +117,7 @@ namespace NxBRE.InferenceEngine.Registry {
 		/// The class used to hold an engine details and performs its (re)loading.
 		/// </summary>
 		private sealed class CachedEngine {
-			private readonly Engine engineConfiguration;
+			private readonly EngineConfiguration engineConfiguration;
 			private readonly string configurationFolder;
 			private readonly IInferenceEngine engine;
 			
@@ -125,13 +125,13 @@ namespace NxBRE.InferenceEngine.Registry {
 			
 			public string ID {
 				get {
-					return engineConfiguration.id;
+					return engineConfiguration.Id;
 				}
 			}
 			
 			public string RuleFile {
 				get {
-					return engineConfiguration.Rules.file;
+					return engineConfiguration.Rules.File;
 				}
 			}
 			
@@ -141,7 +141,7 @@ namespace NxBRE.InferenceEngine.Registry {
 				}
 			}
 			
-			public CachedEngine(string configurationFolder, Engine engineConfiguration)
+			public CachedEngine(string configurationFolder, EngineConfiguration engineConfiguration)
 			{
 				this.configurationFolder = configurationFolder;
 				this.engineConfiguration = engineConfiguration;
@@ -160,11 +160,11 @@ namespace NxBRE.InferenceEngine.Registry {
                                                    "Loading rule file: "
                                                    + ruleFileFullPath
                                                    + " of format: "
-                                                   + engineConfiguration.Rules.format);
+                                                   + engineConfiguration.Rules.Format);
 
 				IRuleBaseAdapter ruleBaseAdapter = null;
 				
-				switch(engineConfiguration.Rules.format) {
+				switch(engineConfiguration.Rules.Format) {
 					case RulesFormat.HRF086:
 						ruleBaseAdapter = new HRF086Adapter(ruleFileFullPath, FileAccess.Read);
 						break;
@@ -192,9 +192,9 @@ namespace NxBRE.InferenceEngine.Registry {
 				       
 				// estimate if a binder is present
 				if (engineConfiguration.Binder != null) {
-					if (engineConfiguration.Binder is CSharpBinder) {
-						CSharpBinder cSharpBinderConfiguration = (CSharpBinder)engineConfiguration.Binder;
-						binderFile = cSharpBinderConfiguration.file;
+					if (engineConfiguration.Binder is CSharpBinderConfiguration) {
+						CSharpBinderConfiguration cSharpBinderConfiguration = (CSharpBinderConfiguration)engineConfiguration.Binder;
+						binderFile = cSharpBinderConfiguration.File;
 						
 						if (Logger.IsInferenceEngineVerbose)
 							Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
@@ -206,12 +206,12 @@ namespace NxBRE.InferenceEngine.Registry {
 						// providing a file path directly
 						using (StreamReader sr = File.OpenText(configurationFolder + Path.DirectorySeparatorChar + binderFile)) {
 							engine.LoadRuleBase(ruleBaseAdapter,
-							                    CSharpBinderFactory.LoadFromString(cSharpBinderConfiguration.@class, sr.ReadToEnd()));
+							                    CSharpBinderFactory.LoadFromString(cSharpBinderConfiguration.Class, sr.ReadToEnd()));
 						}
 					}
-					else if (engineConfiguration.Binder is NxBRE.InferenceEngine.Registry.Configuration.FlowEngineBinder) {
-						NxBRE.InferenceEngine.Registry.Configuration.FlowEngineBinder flowEngineBinderConfiguration = (NxBRE.InferenceEngine.Registry.Configuration.FlowEngineBinder)engineConfiguration.Binder;
-						binderFile = flowEngineBinderConfiguration.file;
+					else if (engineConfiguration.Binder is NxBRE.InferenceEngine.Registry.FlowEngineBinderConfiguration) {
+						NxBRE.InferenceEngine.Registry.FlowEngineBinderConfiguration flowEngineBinderConfiguration = (NxBRE.InferenceEngine.Registry.FlowEngineBinderConfiguration)engineConfiguration.Binder;
+						binderFile = flowEngineBinderConfiguration.File;
 						
 						if (Logger.IsInferenceEngineVerbose)
 							Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
@@ -220,7 +220,7 @@ namespace NxBRE.InferenceEngine.Registry {
 		                                                   + binderFile);
 						
 						engine.LoadRuleBase(ruleBaseAdapter,
-						                    new NxBRE.InferenceEngine.IO.FlowEngineBinder(configurationFolder + Path.DirectorySeparatorChar + binderFile, flowEngineBinderConfiguration.type));
+						                    new NxBRE.InferenceEngine.IO.FlowEngineBinder(configurationFolder + Path.DirectorySeparatorChar + binderFile, flowEngineBinderConfiguration.Type));
 					}
 					else {
 						throw new BREException("Unexpected type of binder object in registry configuration: " + engineConfiguration.Binder.GetType().FullName);
