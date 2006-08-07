@@ -200,6 +200,16 @@ namespace NxBRE.Test.InferenceEngine {
 		}
 		
 		[Test]
+		public void BinderEventsVCB() {
+			// use this binder load method to overcome loading problems because 
+			// the vcb file is not in the same folder as NxBRE.dll
+			using (StreamReader sr = File.OpenText(ruleFilesFolder + "events-test.ruleml.vcb")) {
+	      IInferenceEngine ie = new IEImpl(VisualBasicBinderFactory.LoadFromString("NxBRE.Test.InferenceEngine.EventTestBinder", sr.ReadToEnd()));
+	      RunTestBinderEvents(ie);
+			}
+		}
+		
+		[Test]
 		public void BinderEventsCCB() {
 			// use this binder load method to overcome loading problems because 
 			// the ccb file is not in the same folder as NxBRE.dll
@@ -211,8 +221,7 @@ namespace NxBRE.Test.InferenceEngine {
 		
 		[Test]
 		public void BinderEventsFCE() {
-      IInferenceEngine ie = new IEImpl(new FlowEngineBinder(ruleFilesFolder + "events-test.ruleml.xbre",
-		                       											BindingTypes.BeforeAfter));
+      IInferenceEngine ie = new IEImpl(new FlowEngineBinder(ruleFilesFolder + "events-test.ruleml.xbre", BindingTypes.BeforeAfter));
       RunTestBinderEvents(ie);
 		}
 				

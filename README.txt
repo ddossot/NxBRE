@@ -70,7 +70,16 @@ All static calls on NxBRE helpers and utilities, either from FlowEngine rules or
 
 ## RELEASE NOTES ##
 
-v3.0.0 (compared to NxBRE v2.5.3)
+v3.0.0RC2
+
+ Inference Engine
+
+  * Added support for Visual Basic Compiled Binders (feature request 1535952)
+
+  * Included the Inference Engine Registry in main distribution (feature request 1511119)
+
+
+v3.0.0RC1 (compared to NxBRE v2.5.3)
 
  General
 

@@ -97,6 +97,7 @@ namespace NxBRE.InferenceEngine.Registry {
       
       /// <remarks/>
       [System.Xml.Serialization.XmlElementAttribute("CSharpBinder", typeof(CSharpBinderConfiguration))]
+      [System.Xml.Serialization.XmlElementAttribute("VisualBasicBinder", typeof(VisualBasicBinderConfiguration))]
       [System.Xml.Serialization.XmlElementAttribute("FlowEngineBinder", typeof(FlowEngineBinderConfiguration))]
       public object Binder {
           get {
@@ -188,6 +189,42 @@ namespace NxBRE.InferenceEngine.Registry {
   [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
   [System.Xml.Serialization.XmlRootAttribute(ElementName="CSharpBinder", Namespace="http://nxbre.org/registry/file", IsNullable=false)]
   public partial class CSharpBinderConfiguration {
+      
+      private string fileField;
+      
+      private string classField;
+      
+      /// <remarks/>
+      [System.Xml.Serialization.XmlAttributeAttribute(AttributeName="file")]
+      public string File {
+          get {
+              return this.fileField;
+          }
+          set {
+              this.fileField = value;
+          }
+      }
+      
+      /// <remarks/>
+      [System.Xml.Serialization.XmlAttributeAttribute(AttributeName="class")]
+      public string Class {
+          get {
+              return this.classField;
+          }
+          set {
+              this.classField = value;
+          }
+      }
+  }
+  
+  /// <remarks/>
+  [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "2.0.50727.42")]
+  [System.SerializableAttribute()]
+  [System.Diagnostics.DebuggerStepThroughAttribute()]
+  [System.ComponentModel.DesignerCategoryAttribute("code")]
+  [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+  [System.Xml.Serialization.XmlRootAttribute(ElementName="VisualBasicBinder", Namespace="http://nxbre.org/registry/file", IsNullable=false)]
+  public partial class VisualBasicBinderConfiguration {
       
       private string fileField;
       

@@ -16,6 +16,7 @@
 				<xs:choice minOccurs="0" maxOccurs="1">
 					<xs:element ref="CSharpBinder"/>
 					<xs:element ref="FlowEngineBinder"/>
+					<xs:element ref="VisualBasicBinder"/>
 				</xs:choice>
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:ID"/>
@@ -39,6 +40,12 @@
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="CSharpBinder">
+		<xs:complexType>
+			<xs:attribute name="file" use="required" type="xs:string"/>
+			<xs:attribute name="class" use="required" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="VisualBasicBinder">
 		<xs:complexType>
 			<xs:attribute name="file" use="required" type="xs:string"/>
 			<xs:attribute name="class" use="required" type="xs:string"/>
