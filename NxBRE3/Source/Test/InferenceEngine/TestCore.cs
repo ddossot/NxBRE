@@ -1,6 +1,7 @@
 namespace NxBRE.Test.InferenceEngine {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	
 	using NUnit.Framework;
 	
@@ -257,6 +258,31 @@ namespace NxBRE.Test.InferenceEngine {
 			Atom target = new Atom("belongs", new Variable("person"), new Variable("stuff"));
 			Atom expected = new Atom("belongs", new Variable("person"), new Variable("object"));
 			Assert.AreEqual(expected.GetLongHashCode(), RulesUtil.TranslateVariables(template, source, target).GetLongHashCode());
+		}
+		
+		[Test]
+		public void PredicateNxBREFunction() {
+			FactBase fb = new FactBase();
+			
+			Assert.IsTrue(fb.Assert(new Fact("spending",
+	                        new Individual("Peter Miller"),
+	                        new Individual(5000),
+	                        new Individual("previous year"))), "Assert 'P.Miller Spending'");
+			
+			Assert.IsTrue(fb.Assert(new Fact("JQD Spending",
+			                   "spending",
+	                        new Individual("John Q.Clone Doe"),
+	                        new Individual(7000),
+	                        new Individual("previous year"))), "Assert 'JQD Spending'");
+			
+			Atom filter = new Atom("spending",
+			                       new Variable("name"),
+			                       new Function(Function.FunctionResolutionType.NxBRE, "foo", null, "GreaterThan", "5000"),
+			                       new Individual("previous year"));
+			
+			IList<Fact> result = fb.Select(filter, null);
+
+			Assert.AreEqual(1, result.Count, "Query with NxBRE function");
 		}
 		
 		[Test]
