@@ -154,6 +154,7 @@ namespace NxBRE.InferenceEngine
 		/// </summary>
 		/// <returns>An IEnumerator on the facts contained in the working memory.</returns>
 		/// <remarks>Do not alter the facts from this enumemration: use retract and modify instead.</remarks>
+		//FIXME: return a IEnumerator<Fact> when core FactBase will be fully generic
 		IEnumerator Facts { get; }
 		
 		/// <summary>
