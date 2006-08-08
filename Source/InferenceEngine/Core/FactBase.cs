@@ -14,7 +14,7 @@ namespace NxBRE.InferenceEngine.Core {
 	/// The FactBase is the repository of facts for the inference engine.
 	/// This implementation does not allow duplicated facts.
 	/// </summary>
-	/// <remarks>Core classes are not supposed to be used directly.</remarks>
+	/// <remarks>This class is not thread safe.</remarks>
 	/// <author>David Dossot</author>
 	internal sealed class FactBase:ICloneable, IEnumerable {
 		private static readonly NegativeFact NAF = new NegativeFact();
@@ -40,6 +40,19 @@ namespace NxBRE.InferenceEngine.Core {
 		/// </summary>
 		private Hashtable atomList;
 		
+		
+		//TODO: reorganize declarations
+		private readonly IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>> predicateMap;
+		private readonly IDictionary<string, IList<Fact>> signatureMap;
+		private readonly IDictionary<Fact, IList<IList<Fact>>> factListReferences;
+		private static readonly IList<Fact> EMPTY_SELECT_RESULT = new List<Fact>().AsReadOnly();
+		private static readonly IComparer<IList<Fact>> LIST_COMPARER = new ListSizeComparer();
+		private class ListSizeComparer : IComparer<IList<Fact>> {
+			public int Compare(IList<Fact> x, IList<Fact> y) {
+				return x.Count - y.Count;
+			}
+		}
+		
 		/// <summary>
 		/// A flag that external class can use to detect fact assertions/retractions.
 		/// </summary>
@@ -50,7 +63,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// </summary>
 		public int Count {
 			get {
-				return factList.Count;
+				return factListReferences.Count;
 			}
 		}
 		
@@ -77,22 +90,23 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <summary>
 		/// Instantiates a new fact base.
 		/// </summary>
-		public FactBase() {
-			factList = new Hashtable();
-			atomList = new Hashtable();
-			matchedFactStorageTable = new Hashtable();
-		}
+		public FactBase():this(null, null, null) {}
 		
 		/// <summary>
 		/// Private constructor used for cloning.
 		/// </summary>
-		/// <param name="factList"></param>
-		/// <param name="atomList"></param>
-		/// <param name="matchedFactStorageTable"></param>
-		private FactBase(Hashtable factList, Hashtable atomList, Hashtable matchedFactStorageTable) {
-			this.factList = factList;
-			this.atomList = atomList;
-			this.matchedFactStorageTable = matchedFactStorageTable;
+		private FactBase(IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>> predicateMap, IDictionary<string, IList<Fact>> signatureMap, IDictionary<Fact, IList<IList<Fact>>> factListReferences) {
+			this.predicateMap = (predicateMap == null)
+														?new Dictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>()
+														:new Dictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>(predicateMap);
+			
+			this.signatureMap = (signatureMap == null)
+														?new Dictionary<string, IList<Fact>>()
+														:new Dictionary<string, IList<Fact>>(signatureMap);
+			
+			this.factListReferences = (factListReferences == null)
+																	?new Dictionary<Fact, IList<IList<Fact>>>()
+																	:new Dictionary<Fact, IList<IList<Fact>>>(factListReferences);
 		}
 		
 		/// <summary>
@@ -105,14 +119,7 @@ namespace NxBRE.InferenceEngine.Core {
 		
 		///<summary>Clones the fact base.</summary>
 		public object Clone() {
-			Hashtable newMatchedFactStorageTable = new Hashtable();
-			
-			foreach(string atomSignature in matchedFactStorageTable.Keys)
-				newMatchedFactStorageTable.Add(atomSignature, ((IMatchedFactStorage)matchedFactStorageTable[atomSignature]).Clone());
-				
-			return new FactBase((Hashtable)factList.Clone(),
-			                    (Hashtable)atomList.Clone(),
-			                    newMatchedFactStorageTable);
+			return new FactBase(predicateMap, signatureMap, factListReferences);
 		}
 		
 		/// <summary>
@@ -126,20 +133,8 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="atoms">An array of Atoms</param>
 		/// <returns>The number of atoms registered.</returns>
 		public int RegisterAtoms(params Atom[] atoms) {
-			int result = 0;
-			
-			foreach(Atom atom in atoms) {
-				if (!atomList.ContainsKey(atom.GetLongHashCode())) {
-					atomList.Add(atom.GetLongHashCode(), atom);
-					result++;
-					
-					foreach(Fact fact in this)
-						if (atom.Matches(fact))
-							GetMatchingFactStorageTable(atom).Add(fact, atom);
-				}
-			}
-			
-			return result;
+//FIXME: remove method			
+			return 0;
 		}
 		
 		///<remarks>As Facts labels are basically ignored (no retrieval nor any operation based
@@ -149,21 +144,82 @@ namespace NxBRE.InferenceEngine.Core {
 				throw new BREException("Can not add non-facts to the fact base: "+fact.ToString());
 			
 			if (!Exists(fact)) {
-				factList.Add(fact.GetLongHashCode(), fact);
+				for(int position=0; position<fact.Members.Length; position++) {
+					// store the fact individual predicates in the map, hierarchized on its type, value and position
+					//FIXME: strict typing!
+					IPredicate individual = fact.Members[position];
+					
+					IDictionary<object, IDictionary<int, IList<Fact>>> typedContent;
+					if (predicateMap.ContainsKey(individual.Value.GetType())) {
+						typedContent = predicateMap[individual.Value.GetType()];
+					}
+					else {
+						typedContent = new Dictionary<object, IDictionary<int, IList<Fact>>>();
+						predicateMap.Add(individual.Value.GetType(), typedContent);
+					}
+					
+					IDictionary<int, IList<Fact>> valuedContent;
+					if (typedContent.ContainsKey(individual.Value)) {
+						valuedContent = typedContent[individual.Value];
+					}
+					else {
+						valuedContent = new Dictionary<int, IList<Fact>>();
+						typedContent.Add(individual.Value, valuedContent);
+					}
+					
+					IList<Fact> positionedContent;
+					if (valuedContent.ContainsKey(position)) {
+						positionedContent = valuedContent[position];
+					}
+					else {
+						positionedContent = new List<Fact>();
+						valuedContent.Add(position, positionedContent);
+					}
+					
+					positionedContent.Add(fact);
+					
+					// remember that this fact has been referenced in this list to allow easier retraction
+					AddFactListReference(fact, positionedContent);
+				}
 				
-				// check if the new fact matches any of the registered atoms
-				// and if yes, then reference this fact in the list of matching ones
-				foreach(Atom atom in atomList.Values)
-					if (atom.Matches(fact))
-						GetMatchingFactStorageTable(atom).Add(fact, atom);
+				// store the fact in the signature map, hierarchized on its type and number of predicates
+				IList<Fact> signatureContent;
+				if (signatureMap.ContainsKey(fact.Signature)) {
+					signatureContent = signatureMap[fact.Signature];
+				}
+				else {
+					signatureContent = new List<Fact>();
+					signatureMap.Add(fact.Signature, signatureContent);
+				}
+				signatureContent.Add(fact);
+				
+				// remember that this fact has been referenced in this list to allow easier retraction
+				AddFactListReference(fact, signatureContent);
+				
 				
 				// the fact was new and added to the factbase, return true
 				if (!ModifiedFlag) ModifiedFlag = true;
+				
 				return true;
 			}
 			else
 				// else return false
 				return false;
+		}
+		
+		//TODO: move in private?
+		private void AddFactListReference(Fact fact, IList<Fact> listReference) {
+			IList<IList<Fact>> factListReference;
+			
+			if (factListReferences.ContainsKey(fact)) {
+				factListReference = factListReferences[fact];
+			}
+			else {
+				factListReference = new List<IList<Fact>>();
+				factListReferences.Add(fact, factListReference);
+			}
+			
+			factListReference.Add(listReference);
 		}
 	
 		/// <summary>
@@ -172,14 +228,21 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="fact">The Fact to remove.</param>
 		/// <returns>True if the Fact has been retracted from the FactBase, otherwise False.</returns>
 		public bool Retract(Fact fact) {
-			if (Exists(fact)) {
-				factList.Remove(fact.GetLongHashCode());
-				GetMatchingFactStorageTable(fact).Remove(fact);
+			IList<Fact> storedFacts = Select(fact, null);
+			
+			foreach(Fact storedFact in storedFacts) {
+				// remove the fact from the lists of reference where it is referenced
+				foreach(IList<Fact> factList in factListReferences[storedFact])
+					factList.Remove(storedFact);
+				
+				// and from the reference map itself
+				factListReferences.Remove(storedFact);
 				
 				// the fact existing and removed from the factbase, return true
 				if (!ModifiedFlag) ModifiedFlag = true;
 				return true;
 			}
+			
 			return false;
 		}
 		
@@ -221,7 +284,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="fact">The Fact to check.</param>
 		/// <returns>True if the Fact is already present in the FactBase, otherwise False.</returns>
 		public bool Exists(Fact fact) {
-			return factList.ContainsKey(fact.GetLongHashCode());
+			return Select(fact, null).Count > 0;
 		}
 		
 		/// <summary>
@@ -230,7 +293,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="factLabel">The label of the Fact to get.</param>
 		/// <returns>The Fact matching the label if present in the FactBase, otherwise null.</returns>
 		public Fact GetFact(string factLabel) {
-			foreach(Fact fact in factList.Values)
+			foreach(Fact fact in factListReferences.Keys)
 				if (fact.Label == factLabel)
 					return fact;
 			
@@ -262,11 +325,11 @@ namespace NxBRE.InferenceEngine.Core {
 		public static Fact[] ExtractFacts(ProcessResultSet processResults) {
 			ArrayList facts = new ArrayList();
 			
-			foreach(ArrayList rps in processResults)
-				foreach(ResultPocket rp in rps)
+			foreach(ArrayList processResult in processResults)
+				foreach(PositiveMatchResult pmr in processResult)
 					// naf atom dummy results are skipped
-					if (!(rp.fact is FactBase.NegativeFact)) 
-						facts.Add(rp.fact);
+					if (!(pmr.Fact is FactBase.NegativeFact)) 
+						facts.Add(pmr.Fact);
 			
 			return (Fact[])facts.ToArray(typeof(Fact));
 		}
@@ -311,9 +374,9 @@ namespace NxBRE.InferenceEngine.Core {
 	  	
 	  	// populate the variable elements with predicate values coming
 	  	// from the query part of the implication
-	  	foreach(ResultPocket rp in resultStack)
-	  		if (!(rp.fact is FactBase.NegativeFact))
-	  			RulesUtil.Populate(rp.fact, rp.source, members);
+	  	foreach(PositiveMatchResult pmr in resultStack)
+	  		if (!(pmr.Fact is FactBase.NegativeFact))
+	  			RulesUtil.Populate(pmr.Fact, pmr.Source, members);
 	  	
 	  	// if there are formulas in the atom, resolve these expressions, passing
 	  	// the variable values as arguments
@@ -322,20 +385,20 @@ namespace NxBRE.InferenceEngine.Core {
 	  			// formulas must be evaluated and the results placed in individual predicates
 		  		IDictionary arguments = new Hashtable();
 		  		
-		  		foreach(ResultPocket rp in resultStack) {
-		  			if (!(rp.fact is FactBase.NegativeFact)) {
-			  			for(int i=0; i<rp.source.Members.Length; i++) {
+		  		foreach(PositiveMatchResult pmr in resultStack) {
+		  			if (!(pmr.Fact is FactBase.NegativeFact)) {
+			  			for(int i=0; i<pmr.Source.Members.Length; i++) {
 			  				object sourcePredicateKey = null;
 		  					
-		  					if (rp.source.Members[i] is Variable) {
-			  					sourcePredicateKey = rp.source.Members[i].Value;
+		  					if (pmr.Source.Members[i] is Variable) {
+			  					sourcePredicateKey = pmr.Source.Members[i].Value;
 	    					}
-			  				else if (rp.source.SlotNames[i] != String.Empty) {
-		  						sourcePredicateKey = rp.source.SlotNames[i];
+			  				else if (pmr.Source.SlotNames[i] != String.Empty) {
+		  						sourcePredicateKey = pmr.Source.SlotNames[i];
 		  					}
 			  				
 			  				if ((sourcePredicateKey != null) && (!arguments.Contains(sourcePredicateKey)))
-			  					arguments.Add(sourcePredicateKey, rp.fact.Members[i].Value);
+			  					arguments.Add(sourcePredicateKey, pmr.Fact.Members[i].Value);
 			  				
 		  				}
 	  				}
@@ -396,7 +459,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <remarks>The new fact is added at the top of the result stack, to give it maximum priority in further processing.</remarks>
 		public static ArrayList EnrichResults(ArrayList resultStack, Atom source, Fact result) {
 			ArrayList enrichedProcessResult = new ArrayList();
-			enrichedProcessResult.Add(new ResultPocket(source, result));
+			enrichedProcessResult.Add(new PositiveMatchResult(source, result));
 			enrichedProcessResult.AddRange(resultStack);
 			return enrichedProcessResult;
 		}
@@ -414,7 +477,7 @@ namespace NxBRE.InferenceEngine.Core {
 	  	
 	  	// populate the variable elements with predicate values coming
 	  	// from the query part of the implication
-	  	foreach(ResultPocket rp in resultStack) RulesUtil.Populate(rp.fact, rp.source, members);
+	  	foreach(PositiveMatchResult pmr in resultStack) RulesUtil.Populate(pmr.Fact, pmr.Source, members);
 	  	
 	  	if ((targetAtom.HasFormula) || (targetAtom.HasIndividual)) {
   			// formulas and individuals must be replaced by variables
@@ -437,27 +500,104 @@ namespace NxBRE.InferenceEngine.Core {
 		public static Fact[] GetBasicMatches(Atom targetAtom, ArrayList resultStack) {
 			ArrayList basicMatches = new ArrayList();
 			
-			foreach(ResultPocket rp in resultStack)
-				if (targetAtom.BasicMatches(rp.fact))
-					basicMatches.Add(rp.fact);
+			foreach(PositiveMatchResult pmr in resultStack)
+				if (targetAtom.BasicMatches(pmr.Fact))
+					basicMatches.Add(pmr.Fact);
 			
 			return (Fact[]) basicMatches.ToArray(typeof(Fact));
 		}
 		
 		//----------------------------- PRIVATE MEMBERS ------------------------------
 		
+		/// <summary>
+		/// Gets a list of facts matching a particular atom.
+		/// </summary>
+		/// <param name="atom">The atom to match</param>
+		/// <param name="excludedFacts">A list of facts not to return, or null</param>
+		/// <returns>An IList containing the matching facts (empty if no match, but never null).</returns>
+		private IList<Fact> Select(Atom filter, IList<Fact> excludedFacts) {
+			// if the filter does not contain any individual or function, then it is fully variable so everything should be returned
+			if ((!filter.HasIndividual) && (!filter.HasFunction)) {
+				if (signatureMap.ContainsKey(filter.Signature)) return signatureMap[filter.Signature];
+				else return EMPTY_SELECT_RESULT;
+			}
+			
+			// we build result lists and will reduce the biggest ones from the smallest ones
+			List<IList<Fact>> listOfResults = new List<IList<Fact>>();
+			
+			for (int position=0; position<filter.Members.Length; position++) {
+				bool matched = false;
+				if (filter.Members[position] is Individual) {
+					if (predicateMap.ContainsKey(filter.Members[position].Value.GetType())) {
+						IDictionary<object, IDictionary<int, IList<Fact>>> predicateValueMap = predicateMap[filter.Members[position].Value.GetType()];
+						if (predicateValueMap.ContainsKey(filter.Members[position].Value)) {
+							IDictionary<int, IList<Fact>> predicatePositionMap = predicateValueMap[filter.Members[position].Value];
+							if (predicatePositionMap.ContainsKey(position)) {
+								listOfResults.Add(predicatePositionMap[position]);
+								matched = true;
+							}
+						}
+					}
+				}
+				else if (filter.Members[position] is Individual) {
+					//FIXME: implement!
+				}
+				
+				if (!matched) return EMPTY_SELECT_RESULT;
+			}
+
+			// nothing was found, return an empty enumerator
+			if (listOfResults.Count == 0) return EMPTY_SELECT_RESULT;
+			
+			// only one list of result was found, no post filtering is needed, return directly
+			if (listOfResults.Count == 1) return FilterFactList(listOfResults[0], excludedFacts);
+			
+			// we order the results from the smallest list to the longest one
+			if (listOfResults.Count > 1) listOfResults.Sort(LIST_COMPARER);
+			
+			// we append fact as result only if it is present in all the lists of result
+			IList<Fact> selectResults = new List<Fact>();
+			IList<Fact> rootResults = listOfResults[0];
+			
+			for(int rootResultIndex=0; rootResultIndex < rootResults.Count; rootResultIndex++) {
+				Fact rootResult = rootResults[rootResultIndex];
+				int filteringResultsParser=1;
+	
+				while(true) {
+					IList<Fact> filteringResults = listOfResults[filteringResultsParser];
+					
+					if (filteringResults.IndexOf(rootResult) < 0) break;
+					
+					filteringResultsParser++;
+					
+					if (filteringResultsParser == listOfResults.Count) {
+						selectResults.Add(rootResult);
+						break;
+					}
+				}
+				
+			}
+			
+			return FilterFactList(selectResults, excludedFacts);
+		}
+		
+		private static IList<Fact> FilterFactList(IList<Fact> selectResults, IList<Fact> excludedFacts) {
+			//FIXME: support excluded facts
+			return selectResults;
+		}
+
 		private static IList<IList<Fact>> FilterDistinct(ProcessResultSet processResults) {
 			IDictionary<long, IList<Fact>> resultSet = new Dictionary<long, IList<Fact>>();
 			
-			foreach(ArrayList rps in processResults) {
+			foreach(ArrayList processResult in processResults) {
 				IList<Fact> row = new List<Fact>();
 				long rowLongHashCode = 0;
 	  		
-				foreach(ResultPocket rp in rps) {
+				foreach(PositiveMatchResult pmr in processResult) {
 					// naf atom dummy results are skipped
-					if (!(rp.fact is FactBase.NegativeFact)) {
-						row.Add(rp.fact);
-						rowLongHashCode ^= rp.fact.GetLongHashCode();
+					if (!(pmr.Fact is FactBase.NegativeFact)) {
+						row.Add(pmr.Fact);
+						rowLongHashCode ^= pmr.Fact.GetLongHashCode();
 					}
 					rowLongHashCode <<= 1;
 				}
@@ -488,17 +628,28 @@ namespace NxBRE.InferenceEngine.Core {
 			return GetMatchingFactStorageTable(atom).Select(atom, excludedHashCodes);
 		}
 
-		
 		// Private members ---------------------------------------------------------		
 
-		private struct ResultPocket 
+		private class PositiveMatchResult 
 		{
-			public readonly Atom source;
-			public readonly Fact fact;
+			private readonly Atom source;
+			private readonly Fact fact;
 			
-			public ResultPocket(Atom source, Fact fact) {
+			public PositiveMatchResult(Atom source, Fact fact) {
 				this.source = source;
 				this.fact = fact;
+			}
+			
+			public Atom Source {
+				get {
+					return source;
+				}
+			}
+			
+			public Fact Fact {
+				get {
+					return fact;
+				}
 			}
 			
 			public override string ToString() {
@@ -531,7 +682,7 @@ namespace NxBRE.InferenceEngine.Core {
 				ProcessOr((AtomGroup)AG.ResolvedMembers[parser], subProcessResult, resultStack);
 			  
 				foreach(ArrayList resultRow in subProcessResult) {
-					foreach(ResultPocket rpRow in resultRow) {
+					foreach(PositiveMatchResult rpRow in resultRow) {
 				  	if (resultStack.Count == 0) {
 							ArrayList tempResultStack = (ArrayList)resultStack.Clone();
 							tempResultStack.Add(rpRow);
@@ -544,8 +695,8 @@ namespace NxBRE.InferenceEngine.Core {
 					  	// of facts in this case)
 					  	bool ignore = false;
 					  	
-					  	foreach(ResultPocket rp in resultStack) {
-					  		if (rpRow.source.IsIntersecting(rp.source)) {
+					  	foreach(PositiveMatchResult pmr in resultStack) {
+					  		if (rpRow.Source.IsIntersecting(pmr.Source)) {
 					  			ignore = true;
 					  			break;
 					  		}
@@ -567,9 +718,9 @@ namespace NxBRE.InferenceEngine.Core {
 				Atom atomToRun = Populate((Atom)AG.ResolvedMembers[parser], resultStack, false);
 				ArrayList excludedHashCodes = new ArrayList();
 				
-				foreach(ResultPocket rp in resultStack)
-					if (((Atom)AG.OrderedMembers[parser]).IsIntersecting(rp.source))
-						excludedHashCodes.Add(rp.fact.GetLongHashCode());
+				foreach(PositiveMatchResult pmr in resultStack)
+					if (((Atom)AG.OrderedMembers[parser]).IsIntersecting(pmr.Source))
+						excludedHashCodes.Add(pmr.Fact.GetLongHashCode());
 		  	
 		  	// then get the matching facts
 		  	IEnumerator results = ProcessAtom(atomToRun, excludedHashCodes);
@@ -578,7 +729,7 @@ namespace NxBRE.InferenceEngine.Core {
 		  		while(results.MoveNext()) {
 			  		Fact result = (Fact)results.Current;
 			  		ArrayList tempResultStack = (ArrayList)resultStack.Clone();
-						tempResultStack.Add(new ResultPocket((Atom)AG.OrderedMembers[parser], result));
+						tempResultStack.Add(new PositiveMatchResult((Atom)AG.OrderedMembers[parser], result));
 
 						if (parser < (AG.OrderedMembers.Length-1))
 							ProcessAnd(AG, processResult, parser+1, tempResultStack);
@@ -612,7 +763,7 @@ namespace NxBRE.InferenceEngine.Core {
 						while(results.MoveNext()) {
 				  		Fact result = (Fact)results.Current;
 					  	ArrayList tempResultStack = new ArrayList();
-						  tempResultStack.Add(new ResultPocket((Atom)member, result));
+						  tempResultStack.Add(new PositiveMatchResult((Atom)member, result));
 							processResult.Add(tempResultStack);
 					  }
 					}
