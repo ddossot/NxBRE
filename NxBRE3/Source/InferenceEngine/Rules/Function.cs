@@ -69,8 +69,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		}
 		
 		/// <summary>
-		/// The long hashcode is computed by using MD5 in order to prevent problems with poorly
-		/// implemented predicate object hashcodes.
+		/// The long hashcode is computed from the function definition members' hashcodes.
 		/// </summary>
 		/// <returns>The long hashcode of the predicate.</returns>
 		public override long GetLongHashCode() {
