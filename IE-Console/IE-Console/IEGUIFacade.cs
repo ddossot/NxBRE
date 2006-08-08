@@ -136,6 +136,7 @@ namespace org.nxbre.gui {
 		public void LoadRuleBase(MainForm mf, string uri, bool onlyFacts) {
 			IBinder binder = null;
 			// give priority to custom compiled binders
+			//TODO: support VB Binders
 			if (File.Exists(uri + ".ccb")) {
 				up.lastCCBClassName = mf.PromptForString("Compiled Custom Binder",
 				                                      	 "Enter the fully qualified name of the binder class:",
@@ -156,7 +157,6 @@ namespace org.nxbre.gui {
 
 			switch(Path.GetExtension(uri).ToLower()) {
 				case ".ruleml":
-					//TODO: refactor and move to NxBRE project as a RuleML adapter factory
 					try {
 						if (onlyFacts) ie.LoadFacts(new RuleML09NafDatalogAdapter(uri, FileAccess.Read));
 						else ie.LoadRuleBase(new RuleML09NafDatalogAdapter(uri, FileAccess.Read));
