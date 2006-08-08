@@ -507,7 +507,23 @@ namespace NxBRE.InferenceEngine.Core {
 			return (Fact[]) basicMatches.ToArray(typeof(Fact));
 		}
 		
-		//----------------------------- PRIVATE MEMBERS ------------------------------
+		//----------------------------- INTERNAL & PRIVATE MEMBERS ------------------------------
+
+		//TODO: relocalize
+		private bool AddMatchingFactsToList(int position, object predicateValue, List<IList<Fact>> listOfResults) {
+			if (predicateMap.ContainsKey(predicateValue.GetType())) {
+				IDictionary<object, IDictionary<int, IList<Fact>>> predicateValueMap = predicateMap[predicateValue.GetType()];
+				if (predicateValueMap.ContainsKey(predicateValue)) {
+					IDictionary<int, IList<Fact>> predicatePositionMap = predicateValueMap[predicateValue];
+					if (predicatePositionMap.ContainsKey(position)) {
+						listOfResults.Add(predicatePositionMap[position]);
+						return true;
+					}
+				}
+			}
+			
+			return false;
+		}
 		
 		/// <summary>
 		/// Gets a list of facts matching a particular atom.
@@ -515,7 +531,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="atom">The atom to match</param>
 		/// <param name="excludedFacts">A list of facts not to return, or null</param>
 		/// <returns>An IList containing the matching facts (empty if no match, but never null).</returns>
-		private IList<Fact> Select(Atom filter, IList<Fact> excludedFacts) {
+		internal IList<Fact> Select(Atom filter, IList<Fact> excludedFacts) {
 			// if the filter does not contain any individual or function, then it is fully variable so everything should be returned
 			if ((!filter.HasIndividual) && (!filter.HasFunction)) {
 				if (signatureMap.ContainsKey(filter.Signature)) return signatureMap[filter.Signature];
@@ -528,19 +544,11 @@ namespace NxBRE.InferenceEngine.Core {
 			for (int position=0; position<filter.Members.Length; position++) {
 				bool matched = false;
 				if (filter.Members[position] is Individual) {
-					if (predicateMap.ContainsKey(filter.Members[position].Value.GetType())) {
-						IDictionary<object, IDictionary<int, IList<Fact>>> predicateValueMap = predicateMap[filter.Members[position].Value.GetType()];
-						if (predicateValueMap.ContainsKey(filter.Members[position].Value)) {
-							IDictionary<int, IList<Fact>> predicatePositionMap = predicateValueMap[filter.Members[position].Value];
-							if (predicatePositionMap.ContainsKey(position)) {
-								listOfResults.Add(predicatePositionMap[position]);
-								matched = true;
-							}
-						}
-					}
+					matched = AddMatchingFactsToList(position, filter.Members[position].Value, listOfResults);
 				}
-				else if (filter.Members[position] is Individual) {
+				else if (filter.Members[position] is Function) {
 					//FIXME: implement!
+					//TODO: Function is probably the only class that will need a specific hashcode computation...
 				}
 				
 				if (!matched) return EMPTY_SELECT_RESULT;
@@ -625,7 +633,8 @@ namespace NxBRE.InferenceEngine.Core {
 		}
 		
 		private IEnumerator GetMatchingFacts(Atom atom, ArrayList excludedHashCodes) {
-			return GetMatchingFactStorageTable(atom).Select(atom, excludedHashCodes);
+			throw new NotSupportedException("This should not be used anymore");
+			//return GetMatchingFactStorageTable(atom).Select(atom, excludedHashCodes);
 		}
 
 		// Private members ---------------------------------------------------------		
