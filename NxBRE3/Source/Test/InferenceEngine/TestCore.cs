@@ -265,15 +265,24 @@ namespace NxBRE.Test.InferenceEngine {
 			FactBase fb = new FactBase();
 			
 			Assert.IsTrue(fb.Assert(new Fact("spending",
-	                        new Individual("Peter Miller"),
-	                        new Individual(5000),
-	                        new Individual("previous year"))), "Assert 'P.Miller Spending'");
+								                        new Individual("foo"),
+								                        new Individual(7000))), "Assert 'foo Spending'");
+			
+			Assert.IsTrue(fb.Assert(new Fact("spending",
+								                        new Individual("Peter Miller"),
+								                        new Individual(5000),
+								                        new Individual("previous year"))), "Assert 'P.Miller Spending'");
 			
 			Assert.IsTrue(fb.Assert(new Fact("JQD Spending",
-			                   "spending",
-	                        new Individual("John Q.Clone Doe"),
-	                        new Individual(7000),
-	                        new Individual("previous year"))), "Assert 'JQD Spending'");
+										                   "spending",
+								                        new Individual("John Q.Clone Doe"),
+								                        new Individual(7000),
+								                        new Individual("previous year"))), "Assert 'JQD Spending'");
+			
+			Assert.IsTrue(fb.Assert(new Fact("lending",
+								                        new Individual("John Q.Clone Doe"),
+								                        new Individual(7000),
+								                        new Individual("previous year"))), "Assert 'JQD Lending'");
 			
 			Atom filter = new Atom("spending",
 			                       new Variable("name"),
@@ -369,6 +378,7 @@ namespace NxBRE.Test.InferenceEngine {
 						                       new Individual("previous year"));
 			
 			Assert.IsTrue(fb.Assert(spendingPM1), "Assert 'P.Miller Spending' v1");
+			Assert.IsFalse(fb.Assert(spendingPM1), "Can not assert 'P.Miller Spending' v1 twice!");
 			Assert.IsTrue(fb.Exists(spendingPM1), "Exists 'P.Miller Spending' v1");
 			
 			Fact spendingJQD = new Fact("Spending of John Q. Doe",
