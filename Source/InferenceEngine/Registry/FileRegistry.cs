@@ -26,7 +26,6 @@ namespace NxBRE.InferenceEngine.Registry {
 	/// The registry does not reload itself if its configuration file is changed.
 	/// </remarks>
 	public class FileRegistry:IRegistry {
-		//FIXME: unit test this class!
 		/// <summary>
 		/// Dictionary that stores all the engines, made immutable to prevent any modifications outside of the constructor.
 		/// </summary>
