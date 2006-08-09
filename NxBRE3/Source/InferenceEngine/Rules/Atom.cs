@@ -1,6 +1,7 @@
 namespace NxBRE.InferenceEngine.Rules {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Text;
 	
 	using NxBRE.InferenceEngine.Core;
@@ -235,13 +236,64 @@ namespace NxBRE.InferenceEngine.Rules {
 		}
 		
 		/// <summary>
-		/// Checks if the current Atom basic matches with another one, i.e. if they are of same type,
-		/// and contain the same number of predicates.
+		/// Checks if the signature of the current Atom matches with the signature of another one.
 		/// </summary>
-		/// <param name="atom">The other atom to determine the basic matching.</param>
-		/// <returns>True if the two atoms basic match.</returns>
+		/// <param name="atom">The other atom to determine the signature matching.</param>
+		/// <returns>True if the two atoms have the same signature, False otherwise.</returns>
 		public bool BasicMatches(Atom atom) {
-			return ((atom.Type == Type) && (atom.predicates.Length == predicates.Length));
+			return (atom.Signature == Signature);
+		}
+		
+		/// <summary>
+		/// Checks if the predicates of the current Atom match with the predicates of another one, i.e. are equal or functions resolve to True.
+		/// </summary>
+		/// <param name="atom">The other atom to determine the predicates matching.</param>
+		/// <param name="strictTyping">True if String individual predicate are not considered as potential representations of other types.</param>
+		/// <param name="ignoredPredicates">A list of predicate positions to exclude from comparison, or null if all predicates must be matched</param>
+		/// <returns>True if the two atoms have matching predicates, False otherwise.</returns>
+		internal bool PredicatesMatch(Atom atom, bool strictTyping, IList<int> ignoredPredicates) {
+			for(int position=0; position<predicates.Length; position++) {
+				if ((ignoredPredicates == null) || ((ignoredPredicates != null) && (!ignoredPredicates.Contains(position)))) {
+					if ((predicates[position] is Individual) &&
+					    (atom.predicates[position] is Function) &&
+					    (!((Function)atom.predicates[position]).Evaluate((Individual)predicates[position]))) {
+						return false;
+					}
+					else if ((predicates[position] is Function) &&
+					         (atom.predicates[position] is Individual) &&
+					         (!((Function)predicates[position]).Evaluate((Individual)atom.predicates[position]))) {
+						return false;
+					}
+					else if ((predicates[position] is Function) &&
+					         (atom.predicates[position] is Function) &&
+					         (!(predicates[position].Equals(atom.predicates[position])))) {
+						return false;
+					}
+					else if ((predicates[position] is Individual) && (atom.predicates[position] is Individual)) {
+						// we have two individuals
+						if (predicates[position].Value.GetType() == atom.predicates[position].Value.GetType()) {
+						  if (!predicates[position].Equals(atom.predicates[position])) 
+								// the two individuals are of same types: if equals fail, no match
+								return false;
+						}
+						else {
+							if (!strictTyping) {
+								// the two individuals are of different types and we are not in strict typing, so
+								// we try to cast to stronger type and compare
+								ObjectPair pair = new ObjectPair(predicates[position].Value, atom.predicates[position].Value);
+								Reflection.CastToStrongType(pair);
+								if (!pair.First.Equals(pair.Second)) return false;
+							}
+							else {
+								return false;
+							}
+						}
+					}
+				}
+			}
+			
+			// we went through all the comparisons without a scratch, it means the atoms do match
+			return true;			
 		}
 
 		/// <summary>
@@ -260,38 +312,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		public bool Matches(Atom atom) {
 			if (!BasicMatches(atom)) return false;
 			
-			for(int i=0; i<predicates.Length; i++) {
-				if ((predicates[i] is Individual) &&
-				    (atom.predicates[i] is Function) &&
-						(!((Function)atom.predicates[i]).Evaluate((Individual)predicates[i])))
-					return false;
-				
-				else if ((predicates[i] is Function) &&
-				         (atom.predicates[i] is Individual) &&
-								 (!((Function)predicates[i]).Evaluate((Individual)atom.predicates[i])))
-					return false;
-			
-				else if ((predicates[i] is Function) &&
-				         (atom.predicates[i] is Function) &&
-								 (!(predicates[i].Equals(atom.predicates[i]))))
-					return false;
-			
-				else if ((predicates[i] is Individual) && (atom.predicates[i] is Individual)) {
-					// we have two individuals
-					if ((predicates[i].Value.GetType() == atom.predicates[i].Value.GetType())
-					    && (!predicates[i].Equals(atom.predicates[i]))) {
-						// the two individuals are of same types: direct compare
-						return false;
-					}
-					else {
-						// the two individuals are of different types
-						ObjectPair pair = new ObjectPair(predicates[i].Value, atom.predicates[i].Value);
-						Reflection.CastToStrongType(pair);
-						if (!pair.First.Equals(pair.Second)) return false;
-					}
-				}
-			}
-			return true;
+			return PredicatesMatch(atom, false, null);
 		}
 		
 		/// <summary>

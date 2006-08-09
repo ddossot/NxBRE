@@ -42,16 +42,10 @@ namespace NxBRE.InferenceEngine.Core {
 		
 		
 		//TODO: reorganize declarations
-		private readonly IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>> predicateMap;
+		private readonly IDictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>> predicateMap;
 		private readonly IDictionary<string, IList<Fact>> signatureMap;
 		private readonly IDictionary<Fact, IList<IList<Fact>>> factListReferences;
 		private static readonly IList<Fact> EMPTY_SELECT_RESULT = new List<Fact>().AsReadOnly();
-		private static readonly IComparer<IList<Fact>> LIST_COMPARER = new ListSizeComparer();
-		private class ListSizeComparer : IComparer<IList<Fact>> {
-			public int Compare(IList<Fact> x, IList<Fact> y) {
-				return x.Count - y.Count;
-			}
-		}
 		
 		/// <summary>
 		/// A flag that external class can use to detect fact assertions/retractions.
@@ -95,10 +89,10 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <summary>
 		/// Private constructor used for cloning.
 		/// </summary>
-		private FactBase(IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>> predicateMap, IDictionary<string, IList<Fact>> signatureMap, IDictionary<Fact, IList<IList<Fact>>> factListReferences) {
+		private FactBase(IDictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>> predicateMap, IDictionary<string, IList<Fact>> signatureMap, IDictionary<Fact, IList<IList<Fact>>> factListReferences) {
 			this.predicateMap = (predicateMap == null)
-														?new Dictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>()
-														:new Dictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>(predicateMap);
+														?new Dictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>>()
+														:new Dictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>>(predicateMap);
 			
 			this.signatureMap = (signatureMap == null)
 														?new Dictionary<string, IList<Fact>>()
@@ -119,6 +113,7 @@ namespace NxBRE.InferenceEngine.Core {
 		
 		///<summary>Clones the fact base.</summary>
 		public object Clone() {
+			//FIXME: use real deep & generic cloning of the collections!
 			return new FactBase(predicateMap, signatureMap, factListReferences);
 		}
 		
@@ -145,17 +140,26 @@ namespace NxBRE.InferenceEngine.Core {
 			
 			if (!Exists(fact)) {
 				for(int position=0; position<fact.Members.Length; position++) {
-					// store the fact individual predicates in the map, hierarchized on its type, value and position
-					//FIXME: strict typing!
+					// store the fact individual predicates in the map, hierarchized on its signature, type, value and position
+					//FIXME: support non strict typing!
 					IPredicate individual = fact.Members[position];
 					
+					IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>> signatureContent;
+					if (predicateMap.ContainsKey(fact.Signature)) {
+						signatureContent = predicateMap[fact.Signature];
+					}
+					else {
+						signatureContent = new Dictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>();
+						predicateMap.Add(fact.Signature, signatureContent);
+					}
+					
 					IDictionary<object, IDictionary<int, IList<Fact>>> typedContent;
-					if (predicateMap.ContainsKey(individual.Value.GetType())) {
-						typedContent = predicateMap[individual.Value.GetType()];
+					if (signatureContent.ContainsKey(individual.Value.GetType())) {
+						typedContent = signatureContent[individual.Value.GetType()];
 					}
 					else {
 						typedContent = new Dictionary<object, IDictionary<int, IList<Fact>>>();
-						predicateMap.Add(individual.Value.GetType(), typedContent);
+						signatureContent.Add(individual.Value.GetType(), typedContent);
 					}
 					
 					IDictionary<int, IList<Fact>> valuedContent;
@@ -183,18 +187,18 @@ namespace NxBRE.InferenceEngine.Core {
 				}
 				
 				// store the fact in the signature map, hierarchized on its type and number of predicates
-				IList<Fact> signatureContent;
+				IList<Fact> signatureListOfFact;
 				if (signatureMap.ContainsKey(fact.Signature)) {
-					signatureContent = signatureMap[fact.Signature];
+					signatureListOfFact = signatureMap[fact.Signature];
 				}
 				else {
-					signatureContent = new List<Fact>();
-					signatureMap.Add(fact.Signature, signatureContent);
+					signatureListOfFact = new List<Fact>();
+					signatureMap.Add(fact.Signature, signatureListOfFact);
 				}
-				signatureContent.Add(fact);
+				signatureListOfFact.Add(fact);
 				
 				// remember that this fact has been referenced in this list to allow easier retraction
-				AddFactListReference(fact, signatureContent);
+				AddFactListReference(fact, signatureListOfFact);
 				
 				
 				// the fact was new and added to the factbase, return true
@@ -509,22 +513,6 @@ namespace NxBRE.InferenceEngine.Core {
 		
 		//----------------------------- INTERNAL & PRIVATE MEMBERS ------------------------------
 
-		//TODO: relocalize
-		private bool AddMatchingFactsToList(int position, object predicateValue, List<IList<Fact>> listOfResults) {
-			if (predicateMap.ContainsKey(predicateValue.GetType())) {
-				IDictionary<object, IDictionary<int, IList<Fact>>> predicateValueMap = predicateMap[predicateValue.GetType()];
-				if (predicateValueMap.ContainsKey(predicateValue)) {
-					IDictionary<int, IList<Fact>> predicatePositionMap = predicateValueMap[predicateValue];
-					if (predicatePositionMap.ContainsKey(position)) {
-						listOfResults.Add(predicatePositionMap[position]);
-						return true;
-					}
-				}
-			}
-			
-			return false;
-		}
-		
 		/// <summary>
 		/// Gets a list of facts matching a particular atom.
 		/// </summary>
@@ -532,6 +520,9 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="excludedFacts">A list of facts not to return, or null</param>
 		/// <returns>An IList containing the matching facts (empty if no match, but never null).</returns>
 		internal IList<Fact> Select(Atom filter, IList<Fact> excludedFacts) {
+			// if the predicate map does not contain an entry for the filter signature or if this entry is empty, return empty result
+			if ((!predicateMap.ContainsKey(filter.Signature)) || (predicateMap[filter.Signature].Count == 0)) return EMPTY_SELECT_RESULT;
+			
 			// if the filter does not contain any individual or function, then it is fully variable so everything should be returned
 			if ((!filter.HasIndividual) && (!filter.HasFunction)) {
 				if (signatureMap.ContainsKey(filter.Signature)) return signatureMap[filter.Signature];
@@ -539,53 +530,61 @@ namespace NxBRE.InferenceEngine.Core {
 			}
 			
 			// we build result lists and will reduce the biggest ones from the smallest ones
-			List<IList<Fact>> listOfResults = new List<IList<Fact>>();
+			IList<Fact> resultList = null;
+			int smallestList = Int32.MaxValue;
+			int positionOfSmallestList = -1;
 			
-			for (int position=0; position<filter.Members.Length; position++) {
-				bool matched = false;
+			for (int position=0; position < filter.Members.Length; position++) {
 				if (filter.Members[position] is Individual) {
-					matched = AddMatchingFactsToList(position, filter.Members[position].Value, listOfResults);
+					bool matched = false;
+					object predicateValue = filter.Members[position].Value;
+					
+					if (predicateMap[filter.Signature].ContainsKey(predicateValue.GetType())) {
+						IDictionary<object, IDictionary<int, IList<Fact>>> predicateValueMap = predicateMap[filter.Signature][predicateValue.GetType()];
+						if (predicateValueMap.ContainsKey(predicateValue)) {
+							IDictionary<int, IList<Fact>> predicatePositionMap = predicateValueMap[predicateValue];
+							if ((predicatePositionMap.ContainsKey(position)) && (predicatePositionMap[position].Count > 0)) {
+								resultList = predicatePositionMap[position];
+								
+								if (predicatePositionMap[position].Count < smallestList) {
+									smallestList = predicatePositionMap[position].Count;
+									positionOfSmallestList = position;
+								}
+								
+								matched = true;
+							}
+						}
+					}
+					
+					// no match found on a particular individual predicate? early return an empty result!
+					if (!matched) return EMPTY_SELECT_RESULT;
 				}
-				else if (filter.Members[position] is Function) {
-					//FIXME: implement!
-					//TODO: Function is probably the only class that will need a specific hashcode computation...
-				}
-				
-				if (!matched) return EMPTY_SELECT_RESULT;
 			}
 
-			// nothing was found, return an empty enumerator
-			if (listOfResults.Count == 0) return EMPTY_SELECT_RESULT;
+			// only one predicate in the filter and we matched it, no need for post matching, return filtered results directly
+			if ((filter.Members.Length == 1) && (resultList != null)) return FilterFactList(resultList, excludedFacts);
+
+			// we have not been able to match anything (the filter might contain only variables or functions),
+			// let's load all the facts matching the signature of the filter
+			if (resultList == null) resultList = signatureMap[filter.Signature];
 			
-			// only one list of result was found, no post filtering is needed, return directly
-			if (listOfResults.Count == 1) return FilterFactList(listOfResults[0], excludedFacts);
-			
-			// we order the results from the smallest list to the longest one
-			if (listOfResults.Count > 1) listOfResults.Sort(LIST_COMPARER);
-			
-			// we append fact as result only if it is present in all the lists of result
+			// the resulting list of matching facts
 			IList<Fact> selectResults = new List<Fact>();
-			IList<Fact> rootResults = listOfResults[0];
 			
-			for(int rootResultIndex=0; rootResultIndex < rootResults.Count; rootResultIndex++) {
-				Fact rootResult = rootResults[rootResultIndex];
-				int filteringResultsParser=1;
-	
-				while(true) {
-					IList<Fact> filteringResults = listOfResults[filteringResultsParser];
-					
-					if (filteringResults.IndexOf(rootResult) < 0) break;
-					
-					filteringResultsParser++;
-					
-					if (filteringResultsParser == listOfResults.Count) {
-						selectResults.Add(rootResult);
-						break;
-					}
-				}
-				
+			// we append a fact as a result only if it matches the filter predicates
+			// if a predicate has been previously matched, we do not compare it again in the matching process: we add its position
+			// to the ignore list
+			IList<int> ignoredPredicates = null;
+			if (positionOfSmallestList != -1) {
+				ignoredPredicates = new List<int>();
+				ignoredPredicates.Add(positionOfSmallestList);
 			}
 			
+			foreach(Fact fact in resultList) 
+				//FIXME: deal with strict typing
+				if (fact.PredicatesMatch(filter, true, ignoredPredicates))
+					selectResults.Add(fact);
+
 			return FilterFactList(selectResults, excludedFacts);
 		}
 		
