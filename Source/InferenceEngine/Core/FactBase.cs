@@ -253,9 +253,9 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="fact">The Fact to remove.</param>
 		/// <returns>True if the Fact has been retracted from the FactBase, otherwise False.</returns>
 		public bool Retract(Fact fact) {
-			IList<Fact> storedFacts = Select(fact, null);
-			
-			foreach(Fact storedFact in storedFacts) {
+			for(IEnumerator<Fact> e = Select(fact, null); e.MoveNext() ; ) {
+				Fact storedFact = e.Current;
+				
 				// remove the fact from the lists of reference where it is referenced
 				foreach(IList<Fact> factList in factListReferences[storedFact])
 					factList.Remove(storedFact);
@@ -309,7 +309,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="fact">The Fact to check.</param>
 		/// <returns>True if the Fact is already present in the FactBase, otherwise False.</returns>
 		public bool Exists(Fact fact) {
-			return Select(fact, null).Count > 0;
+			return Select(fact, null).MoveNext();
 		}
 		
 		/// <summary>
@@ -540,15 +540,15 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="atom">The atom to match</param>
 		/// <param name="excludedFacts">A list of facts not to return, or null</param>
 		/// <returns>An IList containing the matching facts (empty if no match, but never null).</returns>
-		internal IList<Fact> Select(Atom filter, IList<Fact> excludedFacts) {
+		internal IEnumerator<Fact> Select(Atom filter, IList<Fact> excludedFacts) {
 			//TODO: add short living cache
 			// if the predicate map does not contain an entry for the filter signature or if this entry is empty, return empty result
-			if ((!predicateMap.ContainsKey(filter.Signature)) || (predicateMap[filter.Signature].Count == 0)) return EMPTY_SELECT_RESULT;
+			if ((!predicateMap.ContainsKey(filter.Signature)) || (predicateMap[filter.Signature].Count == 0)) return EMPTY_SELECT_RESULT.GetEnumerator();
 			
 			// if the filter does not contain any individual or function, then it is fully variable so everything should be returned
 			if ((!filter.HasIndividual) && (!filter.HasFunction)) {
-				if (signatureMap.ContainsKey(filter.Signature)) return signatureMap[filter.Signature];
-				else return EMPTY_SELECT_RESULT;
+				if (signatureMap.ContainsKey(filter.Signature)) return signatureMap[filter.Signature].GetEnumerator();
+				else return EMPTY_SELECT_RESULT.GetEnumerator();
 			}
 			
 			// we build result lists and will reduce the biggest ones from the smallest ones
@@ -579,12 +579,12 @@ namespace NxBRE.InferenceEngine.Core {
 					}
 					
 					// no match found on a particular individual predicate? early return an empty result!
-					if (!matched) return EMPTY_SELECT_RESULT;
+					if (!matched) return EMPTY_SELECT_RESULT.GetEnumerator();
 				}
 			}
 
 			// only one predicate in the filter and we matched it, no need for post matching, return filtered results directly
-			if ((filter.Members.Length == 1) && (resultList != null)) return FilterFactList(resultList, excludedFacts);
+			if ((filter.Members.Length == 1) && (resultList != null)) return FactEnumeratorFactory.NewFactListExcludingEnumerator(resultList, excludedFacts);
 
 			// we have not been able to match anything (the filter might contain only variables or functions),
 			// let's load all the facts matching the signature of the filter
@@ -606,14 +606,13 @@ namespace NxBRE.InferenceEngine.Core {
 				if (fact.PredicatesMatch(filter, strictTyping, ignoredPredicates))
 					selectResults.Add(fact);
 
-			return FilterFactList(selectResults, excludedFacts);
+			return FactEnumeratorFactory.NewFactListPredicateMatchingEnumerator(resultList,
+			                                                                    filter,
+			                                                                    strictTyping,
+			                                                                    ignoredPredicates,
+			                                                                    excludedFacts);
 		}
 		
-		private static IList<Fact> FilterFactList(IList<Fact> selectResults, IList<Fact> excludedFacts) {
-			//FIXME: support excluded facts
-			return selectResults;
-		}
-
 		private static IList<IList<Fact>> FilterDistinct(ProcessResultSet processResults) {
 			IDictionary<long, IList<Fact>> resultSet = new Dictionary<long, IList<Fact>>();
 			
@@ -686,6 +685,7 @@ namespace NxBRE.InferenceEngine.Core {
 			}
 		}
 		
+		//FIXME: kill
 		private class SingleFactEnumerator : AbstractFactEnumerator {
 			private readonly Fact singleFactResult;
 			

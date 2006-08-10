@@ -190,6 +190,7 @@
     <Compile Include="InferenceEngine\Registry\FileRegistryConfiguration.cs" />
     <Compile Include="InferenceEngine\IO\VisualBasicBinderFactory.cs" />
     <Compile Include="Test\InferenceEngine\TestFileRegistry.cs" />
+    <Compile Include="InferenceEngine\Core\FactEnumeratorFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />
