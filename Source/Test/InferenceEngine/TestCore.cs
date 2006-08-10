@@ -251,13 +251,41 @@ namespace NxBRE.Test.InferenceEngine {
 		}
 				
 		[Test]
-		public void VariableTranslation()
-		{
+		public void VariableTranslation()	{
 			Atom template = new Atom("own", new Variable("person"), new Variable("object"));
 			Atom source = new Atom("own", new Variable("person"), new Variable("stuff"));
 			Atom target = new Atom("belongs", new Variable("person"), new Variable("stuff"));
 			Atom expected = new Atom("belongs", new Variable("person"), new Variable("object"));
 			Assert.AreEqual(expected.GetLongHashCode(), RulesUtil.TranslateVariables(template, source, target).GetLongHashCode());
+		}
+		
+		private int RunStrictTypingFactBaseTest(bool strictTyping) {
+			FactBase fb = new FactBase();
+			fb.strictTyping = strictTyping;
+			
+			Assert.IsTrue(fb.Assert(new Fact("spending",
+								                        new Individual("foo"),
+								                        new Individual(7000))), "Assert 'foo Spending'");
+			
+			Assert.IsTrue(fb.Assert(new Fact("spending",
+								                        new Individual("bar"),
+								                        new Individual("7000"))), "Assert 'bar Spending'");
+			
+			Atom filter = new Atom("spending",
+			                       new Variable("name"),
+			                       new Individual("7000"));
+			
+			return fb.Select(filter, null).Count;
+		}
+		
+		[Test]
+		public void StrictTypingFactBase() {
+			Assert.AreEqual(1, RunStrictTypingFactBaseTest(true), "Strict typing selection");
+		}
+		
+		[Test]
+		public void NonStrictTypingFactBase() {
+			Assert.AreEqual(2, RunStrictTypingFactBaseTest(false), "Non-Strict typing selection");
 		}
 		
 		[Test]
