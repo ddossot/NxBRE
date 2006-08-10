@@ -366,7 +366,13 @@ namespace NxBRE.Test.InferenceEngine {
 			PopulateFactBase(fb);
 			
 			FactBase clone = (FactBase)fb.Clone();
-			clone.Retract(clone.GetFact("JQD Spending"));
+			Assert.AreEqual(fb.Count, clone.Count, "Same number of facts");
+			
+			Fact jqdSpending = clone.GetFact("JQD Spending");
+			Assert.AreEqual("JQD Spending", jqdSpending.Label, "Correct fact label");
+			Assert.IsTrue(clone.Retract(jqdSpending), "Retracted 'JQD Spending'");
+			Assert.IsFalse(clone.Exists(jqdSpending), "'JQD Spending' really retracted");
+			Assert.IsTrue(fb.Exists(jqdSpending), "'JQD Spending' still in original");
 			
 			Atom filter = new Atom("spending",
                        new Variable("name"),
@@ -445,8 +451,13 @@ namespace NxBRE.Test.InferenceEngine {
 			
 			Assert.IsFalse(fb.Assert(fact3bis), "Assert fact3bis");
 			Assert.IsTrue(fb.Assert(factX), "Assert factX");
-			fb.Retract(fb.GetFact("JQD Spending"));
-			Assert.IsNull(fb.GetFact("JQD Spending"), "Retract 'JQD Spending'");
+			
+			Fact jqdSpending = fb.GetFact("JQD Spending");
+			Assert.IsTrue(fb.Exists(jqdSpending));
+			Assert.IsTrue(fb.Retract(jqdSpending));
+			Assert.IsFalse(fb.Exists(jqdSpending));
+			
+			Assert.IsNull(fb.GetFact("JQD Spending"), "Get Retracted 'JQD Spending'");
 		}
 		
 		[Test]

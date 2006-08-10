@@ -244,7 +244,7 @@ namespace NxBRE.Test
 		
 			String dBefore = Misc.IDictionaryToString((System.Collections.IDictionary)d);
 			
-			IDictionary<int, IDictionary<string, IList<bool>>> e = (IDictionary<int, IDictionary<string, IList<bool>>>) Misc.DeepClone((System.Collections.IDictionary)d);
+			IDictionary<int, IDictionary<string, IList<bool>>> e = (IDictionary<int, IDictionary<string, IList<bool>>>) Misc.DeepClone((System.Collections.IDictionary)d, false);
 			e[1]["A"].Add(false);
 			
 			Assert.AreEqual(dBefore, Misc.IDictionaryToString((System.Collections.IDictionary)d));

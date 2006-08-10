@@ -137,18 +137,18 @@ namespace NxBRE.Util
 		/// <summary>
 		/// Deep clones an IDictionary.
 		/// If a value element is an IDictionary or IList, DeepClone will be called recursively.
-		/// If a value element is ICloneable, it will be cloned else the same object will be used in the clone.
 		/// </summary>
 		/// <param name="source">The source collection.</param>
+		/// <param name="cloneContent">If true, the content of the collections will be cloned if it supports ICloneable ; else the same object will be used</param>
 		/// <returns>A clone of the source collection.</returns>
-		public static IDictionary DeepClone(IDictionary source) {
+		public static IDictionary DeepClone(IDictionary source, bool cloneContent) {
 			IDictionary result = (IDictionary)Activator.CreateInstance(source.GetType());
 			
 			foreach(object key in source.Keys) {
 				object val = source[key];
-				if (val is IDictionary) result.Add(key, DeepClone((IDictionary)val));
-				else if (val is IList) result.Add(key, DeepClone((IList)val));
-				else if (val is ICloneable) result.Add(key, ((ICloneable)val).Clone());
+				if (val is IDictionary) result.Add(key, DeepClone((IDictionary)val, cloneContent));
+				else if (val is IList) result.Add(key, DeepClone((IList)val, cloneContent));
+				else if ((cloneContent) && (val is ICloneable)) result.Add(key, ((ICloneable)val).Clone());
 				else result.Add(key, val);
 			}
 			
@@ -158,17 +158,17 @@ namespace NxBRE.Util
 		/// <summary>
 		/// Deep clones an IList.
 		/// If an element is an IDictionary or IList, DeepClone will be called recursively.
-		/// If an element is ICloneable, it will be cloned else the same object will be used in the clone.
 		/// </summary>
 		/// <param name="source">The source collection.</param>
+		/// <param name="cloneContent">If true, the content of the collections will be cloned if it supports ICloneable ; else the same object will be used</param>
 		/// <returns>A clone of the source collection.</returns>
-		public static IList DeepClone(IList source) {
+		public static IList DeepClone(IList source, bool cloneContent) {
 			IList result = (IList)Activator.CreateInstance(source.GetType());
 			
 			foreach(object val in source) {
-				if (val is IDictionary) result.Add(DeepClone((IDictionary)val));
-				else if (val is IList) result.Add(DeepClone((IList)val));
-				else if (val is ICloneable) result.Add(((ICloneable)val).Clone());
+				if (val is IDictionary) result.Add(DeepClone((IDictionary)val, cloneContent));
+				else if (val is IList) result.Add(DeepClone((IList)val, cloneContent));
+				else if ((cloneContent) && (val is ICloneable)) result.Add(((ICloneable)val).Clone());
 				else result.Add(val);
 			}
 			

@@ -95,43 +95,28 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <summary>
 		/// Instantiates a new fact base.
 		/// </summary>
-		public FactBase():this(null, null, null, null) {}
-		
-		/// <summary>
-		/// Private constructor used for cloning.
-		/// </summary>
-		private FactBase(IDictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>> predicateMap,
-		                 IDictionary<string, IList<Fact>> signatureMap,
-		                 IDictionary<string, Fact> labelMap,
-		                 IDictionary<Fact, IList<IList<Fact>>> factListReferences) {
-			this.predicateMap = (predicateMap == null)
-														?new Dictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>>()
-														:(IDictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>>)Misc.DeepClone((System.Collections.IDictionary)predicateMap);
-			
-			this.signatureMap = (signatureMap == null)
-														?new Dictionary<string, IList<Fact>>()
-														:(IDictionary<string, IList<Fact>>)Misc.DeepClone((System.Collections.IDictionary)signatureMap);
-			
-			this.labelMap = (labelMap == null)
-												?new Dictionary<string, Fact>()
-												:(IDictionary<string, Fact>)Misc.DeepClone((System.Collections.IDictionary)labelMap);
-			
-			this.factListReferences = (factListReferences == null)
-																	?new Dictionary<Fact, IList<IList<Fact>>>()
-																	:(IDictionary<Fact, IList<IList<Fact>>>)Misc.DeepClone((System.Collections.IDictionary)factListReferences);
+		public FactBase() {
+			predicateMap = new Dictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>>();
+			signatureMap = new Dictionary<string, IList<Fact>>();
+			factListReferences = new Dictionary<Fact, IList<IList<Fact>>>();
+			labelMap = new Dictionary<string, Fact>();
 		}
 		
 		/// <summary>
 		/// Gets the enumeration of all facts in the fact base.
 		/// </summary>
 		/// <returns>An IEnumerator of all facts.</returns>
+		//FIXME: make generic asap
 		public IEnumerator GetEnumerator() {
-			return factList.Values.GetEnumerator();
+			return factListReferences.Keys.GetEnumerator();
 		}
 		
 		///<summary>Clones the fact base.</summary>
 		public object Clone() {
-			return new FactBase(predicateMap, signatureMap, labelMap, factListReferences);
+			//TODO: improve this, maybe by intelligent/deep cloning of the core collections
+			FactBase fb = new FactBase();
+			for(IEnumerator e = GetEnumerator(); e.MoveNext(); ) fb.Assert((Fact)e.Current);
+			return fb;
 		}
 		
 		/// <summary>
@@ -202,6 +187,8 @@ namespace NxBRE.InferenceEngine.Core {
 		///<remarks>As Facts labels are basically ignored (no retrieval nor any operation based
 		/// on it, the FactBase does not bother check if we have different facts with same labels.</remarks>
 		public bool Assert(Fact fact) {
+			if (fact == null) throw new ArgumentNullException("Null is not a valid fact to assert");
+			
 			if (!fact.IsFact)
 				throw new BREException("Can not add non-facts to the fact base: "+fact.ToString());
 			
@@ -266,18 +253,21 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="fact">The Fact to remove.</param>
 		/// <returns>True if the Fact has been retracted from the FactBase, otherwise False.</returns>
 		public bool Retract(Fact fact) {
+			if (fact == null) throw new ArgumentNullException("Null is not a valid fact to retract");
+			
 			for(IEnumerator<Fact> e = Select(fact, null); e.MoveNext() ; ) {
 				Fact storedFact = e.Current;
 				
 				// remove the fact from the lists of reference where it is referenced
-				foreach(IList<Fact> factList in factListReferences[storedFact])
+				foreach(IList<Fact> factList in factListReferences[storedFact]) {
 					factList.Remove(storedFact);
+				}
 				
 				// and from the reference map itself
 				factListReferences.Remove(storedFact);
 				
 				// and from the label map
-				if (labelMap.ContainsKey(storedFact.Label)) labelMap.Remove(storedFact.Label);
+				if ((storedFact.Label != null) && (labelMap.ContainsKey(storedFact.Label))) labelMap.Remove(storedFact.Label);
 				
 				// the fact existing and removed from the factbase, return true
 				if (!ModifiedFlag) ModifiedFlag = true;
@@ -296,6 +286,9 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="newFact">The Fact to modify to.</param>
 		/// <returns>True if <term>currentFact</term> has been retracted from the FactBase, otherwise False ; this whether <term>newFact</term> already exists in the factbase, or not.</returns>
 		public bool Modify(Fact currentFact, Fact newFact) {
+			if (currentFact == null) throw new ArgumentNullException("Null is not a valid fact to modify");
+			if (newFact == null) throw new ArgumentNullException("Null is not a valid fact to use as a new value");
+			
 			if (Retract(currentFact)) {
 				// Retraction is done, let's Assert
 				try {
