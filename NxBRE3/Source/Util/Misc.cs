@@ -86,15 +86,25 @@ namespace NxBRE.Util
 		/// <param name="margin">A left margin string to place before each value.</param>
 		/// <returns>The content of the IList in a string.</returns>
 		public static string IListToString(IList objects, string margin) {
-			string result = String.Empty;
+			string result = "(";
 			
 			if (objects != null) {
+				bool first = true;
 				foreach (object o in objects) {
-					result = result + margin + ((o is IList)?String.Concat("{", IListToString((IList)o, margin), "}"):o.ToString()) + "\n";
+					string stringContent;
+					
+					if (o is IDictionary) stringContent = IDictionaryToString((IDictionary)o);
+					else if (o is IList) stringContent = IListToString((IList)o);
+					else stringContent = o.ToString();
+					
+					if (margin != String.Empty) result = result + margin + stringContent + "\n";
+					else result = result + (first?String.Empty:",") + stringContent;
+					
+					first = false;
 				}
 			}
 				
-			return result;	
+			return result + ")";	
 		}
 		
 		/// <summary>
@@ -106,13 +116,18 @@ namespace NxBRE.Util
 			string result = "[";
 
 			if (map != null) {
+				bool first = true;
 				foreach(object key in map.Keys) {
 					object content = map[key];
+					string stringContent;
 					
-					if (content is IDictionary) content = IDictionaryToString((IDictionary)content);
-					else if (content is IList) content = IListToString((IList)content);
+					if (content is IDictionary) stringContent = IDictionaryToString((IDictionary)content);
+					else if (content is IList) stringContent = IListToString((IList)content);
+					else stringContent = content.ToString();
 					
-					result = result + key + "=" + content + ";";
+					result = result + (first?String.Empty:";") + key + "=" + stringContent;
+					
+					first = false;
 				}
 			}
 				
