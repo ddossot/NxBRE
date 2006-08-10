@@ -324,10 +324,7 @@ namespace NxBRE.Test.InferenceEngine {
 			Assert.AreEqual(1, CountEnumerator(fb.Select(filter, excludedFacts)), "Query with NxBRE function with fact exclusion");
 		}
 		
-		[Test]
-		public void PredicateNxBREFunction() {
-			FactBase fb = new FactBase();
-			
+		private void PopulateFactBase(FactBase fb) {
 			Assert.IsTrue(fb.Assert(new Fact("spending",
 								                        new Individual("foo"),
 								                        new Individual(7000))), "Assert 'foo Spending'");
@@ -348,12 +345,36 @@ namespace NxBRE.Test.InferenceEngine {
 								                        new Individual(7000),
 								                        new Individual("previous year"))), "Assert 'JQD Lending'");
 			
+		}
+		
+		[Test]
+		public void PredicateNxBREFunction() {
+			FactBase fb = new FactBase();
+			PopulateFactBase(fb);
+			
 			Atom filter = new Atom("spending",
 			                       new Variable("name"),
 			                       new Function(Function.FunctionResolutionType.NxBRE, "foo", null, "GreaterThan", "5000"),
 			                       new Individual("previous year"));
 			
 			Assert.AreEqual(1, CountEnumerator(fb.Select(filter, null)), "Query with NxBRE function");
+		}
+		
+		[Test]
+		public void FactBaseCloning() {
+			FactBase fb = new FactBase();
+			PopulateFactBase(fb);
+			
+			FactBase clone = (FactBase)fb.Clone();
+			clone.Retract(clone.GetFact("JQD Spending"));
+			
+			Atom filter = new Atom("spending",
+                       new Variable("name"),
+                       new Function(Function.FunctionResolutionType.NxBRE, "foo", null, "GreaterThan", "5000"),
+                       new Individual("previous year"));
+
+			Assert.AreEqual(1, CountEnumerator(fb.Select(filter, null)), "Query on the original");
+			Assert.AreEqual(0, CountEnumerator(clone.Select(filter, null)), "Query on the clone");
 		}
 		
 		[Test]

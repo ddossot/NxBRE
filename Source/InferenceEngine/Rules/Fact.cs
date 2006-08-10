@@ -37,10 +37,9 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <param name="type">The Type of the new Fact.</param>
 		/// <param name="members">The Array of predicates that the Fact will contain.</param>
 		public Fact(string label, string type, params IPredicate[] members):base(false, type, members) {
-			if (!IsFact)
-				throw new BREException("Can not create Facts on Queries: " + ToString());
+			if (!IsFact) throw new BREException("Can not create Facts on Queries: " + ToString());
 
-			if ((null != label) && (String.Empty == label)) this.label = null;
+			if ((label != null) && (label == String.Empty)) this.label = null;
 			else this.label = label;
 		}
 		
@@ -56,7 +55,8 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <param name="label">The Label of the new Fact.</param>
 		/// <param name="atom">The Atom that the Fact will be built on.</param>
 		public Fact(string label, Atom atom):base(atom) {
-			this.label = label;
+			if ((label != null) && (label == String.Empty)) this.label = null;
+			else this.label = label;
 		}
 		
 		private Fact(Fact source, IPredicate[] members):base(source, members) {
