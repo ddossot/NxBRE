@@ -259,6 +259,12 @@ namespace NxBRE.Test.InferenceEngine {
 			Assert.AreEqual(expected.GetLongHashCode(), RulesUtil.TranslateVariables(template, source, target).GetLongHashCode());
 		}
 		
+		private static int CountEnumerator(IEnumerator<Fact> e) {
+			int result = 0;
+			while(e.MoveNext()) result++;
+			return result;
+		}
+		
 		private int RunStrictTypingFactBaseTest(bool strictTyping) {
 			FactBase fb = new FactBase();
 			fb.strictTyping = strictTyping;
@@ -275,7 +281,7 @@ namespace NxBRE.Test.InferenceEngine {
 			                       new Variable("name"),
 			                       new Individual("7000"));
 			
-			return fb.Select(filter, null).Count;
+			return CountEnumerator(fb.Select(filter, null));
 		}
 		
 		[Test]
@@ -286,6 +292,36 @@ namespace NxBRE.Test.InferenceEngine {
 		[Test]
 		public void NonStrictTypingFactBase() {
 			Assert.AreEqual(2, RunStrictTypingFactBaseTest(false), "Non-Strict typing selection");
+		}
+		
+		[Test]
+		public void ExcludeFactsFromSelection() {
+			FactBase fb = new FactBase();
+			
+			Assert.IsTrue(fb.Assert(new Fact("spending",
+								                        new Individual("Peter Miller"),
+								                        new Individual(5000),
+								                        new Individual("previous year"))), "Assert 'P.Miller Spending'");
+			
+			Fact jqdSpending = new Fact("JQD Spending",
+								                   "spending",
+						                        new Individual("John Q.Clone Doe"),
+						                        new Individual(7000),
+						                        new Individual("previous year"));
+			
+			Assert.IsTrue(fb.Assert(jqdSpending), "Assert 'JQD Spending'");
+			
+			Atom filter = new Atom("spending",
+			                       new Variable("name"),
+			                       new Function(Function.FunctionResolutionType.NxBRE, "foo", null, "GreaterThanEqualTo", "5000"),
+			                       new Individual("previous year"));
+			
+			Assert.AreEqual(2, CountEnumerator(fb.Select(filter, null)), "Query with NxBRE function and no fact exclusion");
+			
+			IList<Fact> excludedFacts = new List<Fact>();
+			excludedFacts.Add(jqdSpending);
+			
+			Assert.AreEqual(1, CountEnumerator(fb.Select(filter, excludedFacts)), "Query with NxBRE function with fact exclusion");
 		}
 		
 		[Test]
@@ -317,9 +353,7 @@ namespace NxBRE.Test.InferenceEngine {
 			                       new Function(Function.FunctionResolutionType.NxBRE, "foo", null, "GreaterThan", "5000"),
 			                       new Individual("previous year"));
 			
-			IList<Fact> result = fb.Select(filter, null);
-
-			Assert.AreEqual(1, result.Count, "Query with NxBRE function");
+			Assert.AreEqual(1, CountEnumerator(fb.Select(filter, null)), "Query with NxBRE function");
 		}
 		
 		[Test]
