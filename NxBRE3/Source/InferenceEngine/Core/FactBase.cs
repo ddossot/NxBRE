@@ -55,6 +55,7 @@ namespace NxBRE.InferenceEngine.Core {
 		private readonly IDictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>> predicateMap;
 		private readonly IDictionary<string, IList<Fact>> signatureMap;
 		private readonly IDictionary<Fact, IList<IList<Fact>>> factListReferences;
+		private readonly IDictionary<string, Fact> labelMap;
 		private static readonly IList<Fact> EMPTY_SELECT_RESULT = new List<Fact>().AsReadOnly();
 		
 		/// <summary>
@@ -94,23 +95,30 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <summary>
 		/// Instantiates a new fact base.
 		/// </summary>
-		public FactBase():this(null, null, null) {}
+		public FactBase():this(null, null, null, null) {}
 		
 		/// <summary>
 		/// Private constructor used for cloning.
 		/// </summary>
-		private FactBase(IDictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>> predicateMap, IDictionary<string, IList<Fact>> signatureMap, IDictionary<Fact, IList<IList<Fact>>> factListReferences) {
+		private FactBase(IDictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>> predicateMap,
+		                 IDictionary<string, IList<Fact>> signatureMap,
+		                 IDictionary<string, Fact> labelMap,
+		                 IDictionary<Fact, IList<IList<Fact>>> factListReferences) {
 			this.predicateMap = (predicateMap == null)
 														?new Dictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>>()
-														:new Dictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>>(predicateMap);
+														:(IDictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>>)Misc.DeepClone((System.Collections.IDictionary)predicateMap);
 			
 			this.signatureMap = (signatureMap == null)
 														?new Dictionary<string, IList<Fact>>()
-														:new Dictionary<string, IList<Fact>>(signatureMap);
+														:(IDictionary<string, IList<Fact>>)Misc.DeepClone((System.Collections.IDictionary)signatureMap);
+			
+			this.labelMap = (labelMap == null)
+												?new Dictionary<string, Fact>()
+												:(IDictionary<string, Fact>)Misc.DeepClone((System.Collections.IDictionary)labelMap);
 			
 			this.factListReferences = (factListReferences == null)
 																	?new Dictionary<Fact, IList<IList<Fact>>>()
-																	:new Dictionary<Fact, IList<IList<Fact>>>(factListReferences);
+																	:(IDictionary<Fact, IList<IList<Fact>>>)Misc.DeepClone((System.Collections.IDictionary)factListReferences);
 		}
 		
 		/// <summary>
@@ -123,8 +131,7 @@ namespace NxBRE.InferenceEngine.Core {
 		
 		///<summary>Clones the fact base.</summary>
 		public object Clone() {
-			//FIXME: use real deep & generic cloning of the collections!
-			return new FactBase(predicateMap, signatureMap, factListReferences);
+			return new FactBase(predicateMap, signatureMap, labelMap, factListReferences);
 		}
 		
 		/// <summary>
@@ -221,6 +228,12 @@ namespace NxBRE.InferenceEngine.Core {
 				// remember that this fact has been referenced in this list to allow easier retraction
 				AddFactListReference(fact, signatureListOfFact);
 				
+				// if the fact has a label, store it under a map - if the label is already present, replace the old
+				// entry with the new one
+				if (fact.Label != null) {
+					if (labelMap.ContainsKey(fact.Label)) labelMap.Remove(fact.Label);
+					labelMap.Add(fact.Label, fact);
+				}
 				
 				// the fact was new and added to the factbase, return true
 				if (!ModifiedFlag) ModifiedFlag = true;
@@ -263,8 +276,12 @@ namespace NxBRE.InferenceEngine.Core {
 				// and from the reference map itself
 				factListReferences.Remove(storedFact);
 				
+				// and from the label map
+				if (labelMap.ContainsKey(storedFact.Label)) labelMap.Remove(storedFact.Label);
+				
 				// the fact existing and removed from the factbase, return true
 				if (!ModifiedFlag) ModifiedFlag = true;
+				
 				return true;
 			}
 			
@@ -318,11 +335,8 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="factLabel">The label of the Fact to get.</param>
 		/// <returns>The Fact matching the label if present in the FactBase, otherwise null.</returns>
 		public Fact GetFact(string factLabel) {
-			foreach(Fact fact in factListReferences.Keys)
-				if (fact.Label == factLabel)
-					return fact;
-			
-			return null;
+			if (labelMap.ContainsKey(factLabel)) return labelMap[factLabel];
+			else return null;
 		}
 		
 		/// <summary>
