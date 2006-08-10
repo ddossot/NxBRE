@@ -20,6 +20,16 @@ namespace NxBRE.InferenceEngine.Core {
 		private static readonly NegativeFact NAF = new NegativeFact();
 		
 		/// <summary>
+		/// Defines whether the fact storage should consider typed objects as equivalent to their String representation.
+		/// If StrictTyping is set to true, they are will not be considered equivalent. The default is false.
+		/// </summary>
+		/// <remarks>
+		/// It is internal to allow changing it for unit testing purposes.
+		/// </remarks>
+		//FIXME: use another parameter: factBase.strictTyping
+		internal bool strictTyping = Parameter.Get<bool>("factBaseStorageType.hashtable.strictTyping", false);
+		
+		/// <summary>
 		/// The type of storage configured for this FactBase
 		/// </summary>
 		private FactBaseStorageTypes factBaseStorageType = (FactBaseStorageTypes) Parameter.GetEnum("factBaseStorageTypes", typeof(FactBaseStorageTypes), FactBaseStorageTypes.Hashtable);
@@ -132,6 +142,56 @@ namespace NxBRE.InferenceEngine.Core {
 			return 0;
 		}
 		
+		/// <summary>
+		/// Store the fact in the map, hierarchized on its signature, predicate type, predicate value
+		/// and predicate position
+		/// </summary>
+		/// <param name="fact"></param>
+		/// <param name="predicatePosition"></param>
+		/// <param name="individualValue"></param>
+		private void StoreFactForIndividualValue(Fact fact, int predicatePosition, object individualValue) {
+			IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>> signatureContent;
+			if (predicateMap.ContainsKey(fact.Signature)) {
+				signatureContent = predicateMap[fact.Signature];
+			}
+			else {
+				signatureContent = new Dictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>();
+				predicateMap.Add(fact.Signature, signatureContent);
+			}
+			
+			IDictionary<object, IDictionary<int, IList<Fact>>> typedContent;
+			if (signatureContent.ContainsKey(individualValue.GetType())) {
+				typedContent = signatureContent[individualValue.GetType()];
+			}
+			else {
+				typedContent = new Dictionary<object, IDictionary<int, IList<Fact>>>();
+				signatureContent.Add(individualValue.GetType(), typedContent);
+			}
+			
+			IDictionary<int, IList<Fact>> valuedContent;
+			if (typedContent.ContainsKey(individualValue)) {
+				valuedContent = typedContent[individualValue];
+			}
+			else {
+				valuedContent = new Dictionary<int, IList<Fact>>();
+				typedContent.Add(individualValue, valuedContent);
+			}
+			
+			IList<Fact> positionedContent;
+			if (valuedContent.ContainsKey(predicatePosition)) {
+				positionedContent = valuedContent[predicatePosition];
+			}
+			else {
+				positionedContent = new List<Fact>();
+				valuedContent.Add(predicatePosition, positionedContent);
+			}
+			
+			positionedContent.Add(fact);
+			
+			// remember that this fact has been referenced in this list to allow easier retraction
+			AddFactListReference(fact, positionedContent);
+		}
+		
 		///<remarks>As Facts labels are basically ignored (no retrieval nor any operation based
 		/// on it, the FactBase does not bother check if we have different facts with same labels.</remarks>
 		public bool Assert(Fact fact) {
@@ -140,50 +200,11 @@ namespace NxBRE.InferenceEngine.Core {
 			
 			if (!Exists(fact)) {
 				for(int position=0; position<fact.Members.Length; position++) {
-					// store the fact individual predicates in the map, hierarchized on its signature, type, value and position
-					//FIXME: support non strict typing!
-					IPredicate individual = fact.Members[position];
+					object individualValue = fact.Members[position].Value;
+					StoreFactForIndividualValue(fact, position, individualValue);
 					
-					IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>> signatureContent;
-					if (predicateMap.ContainsKey(fact.Signature)) {
-						signatureContent = predicateMap[fact.Signature];
-					}
-					else {
-						signatureContent = new Dictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>();
-						predicateMap.Add(fact.Signature, signatureContent);
-					}
-					
-					IDictionary<object, IDictionary<int, IList<Fact>>> typedContent;
-					if (signatureContent.ContainsKey(individual.Value.GetType())) {
-						typedContent = signatureContent[individual.Value.GetType()];
-					}
-					else {
-						typedContent = new Dictionary<object, IDictionary<int, IList<Fact>>>();
-						signatureContent.Add(individual.Value.GetType(), typedContent);
-					}
-					
-					IDictionary<int, IList<Fact>> valuedContent;
-					if (typedContent.ContainsKey(individual.Value)) {
-						valuedContent = typedContent[individual.Value];
-					}
-					else {
-						valuedContent = new Dictionary<int, IList<Fact>>();
-						typedContent.Add(individual.Value, valuedContent);
-					}
-					
-					IList<Fact> positionedContent;
-					if (valuedContent.ContainsKey(position)) {
-						positionedContent = valuedContent[position];
-					}
-					else {
-						positionedContent = new List<Fact>();
-						valuedContent.Add(position, positionedContent);
-					}
-					
-					positionedContent.Add(fact);
-					
-					// remember that this fact has been referenced in this list to allow easier retraction
-					AddFactListReference(fact, positionedContent);
+					// if we do not want strict typing, we also store the non-string individuals under their string representation
+					if ((!strictTyping) && (!(individualValue is string))) StoreFactForIndividualValue(fact, position, individualValue.ToString());
 				}
 				
 				// store the fact in the signature map, hierarchized on its type and number of predicates
@@ -520,6 +541,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="excludedFacts">A list of facts not to return, or null</param>
 		/// <returns>An IList containing the matching facts (empty if no match, but never null).</returns>
 		internal IList<Fact> Select(Atom filter, IList<Fact> excludedFacts) {
+			//TODO: add short living cache
 			// if the predicate map does not contain an entry for the filter signature or if this entry is empty, return empty result
 			if ((!predicateMap.ContainsKey(filter.Signature)) || (predicateMap[filter.Signature].Count == 0)) return EMPTY_SELECT_RESULT;
 			
@@ -581,8 +603,7 @@ namespace NxBRE.InferenceEngine.Core {
 			}
 			
 			foreach(Fact fact in resultList) 
-				//FIXME: deal with strict typing
-				if (fact.PredicatesMatch(filter, true, ignoredPredicates))
+				if (fact.PredicatesMatch(filter, strictTyping, ignoredPredicates))
 					selectResults.Add(fact);
 
 			return FilterFactList(selectResults, excludedFacts);
@@ -681,6 +702,8 @@ namespace NxBRE.InferenceEngine.Core {
 		
 		private void ProcessAnd(AtomGroup AG, ArrayList processResult, int parser, ArrayList resultStack)
 		{
+			//TODO: re-order non-function based Atoms according to the number of facts for the atom signature
+			
 			if (AG.ResolvedMembers[parser] is AtomGroup) {
 				if (((AtomGroup)AG.ResolvedMembers[parser]).Operator == AtomGroup.LogicalOperator.And)
 					throw new BREException("Nested And unexpectedly found in atom group:" + AG.ResolvedMembers[parser]);
