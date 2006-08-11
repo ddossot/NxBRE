@@ -446,7 +446,8 @@ namespace NxBRE.InferenceEngine.Core {
 	  	foreach(PositiveMatchResult pmr in resultStack)
 	  		if (!(pmr.Fact is FactBase.NegativeFact))
 	  			RulesUtil.Populate(pmr.Fact, pmr.Source, members);
-	  	
+	  	/*
+	  	//TODO: kill
 	  	// if there are formulas in the atom, resolve these expressions, passing
 	  	// the variable values as arguments
 	  	if (targetAtom.HasFormula) {
@@ -513,7 +514,7 @@ namespace NxBRE.InferenceEngine.Core {
 		  				members[i] = new Variable(i.ToString());
 	  		}
 	  	}
-	  	
+	  	*/
 	  	// clone the target with new members, because atom is immutable
 	  	return targetAtom.CloneWithNewMembers(members);
 		}
@@ -708,13 +709,13 @@ namespace NxBRE.InferenceEngine.Core {
 		private void ProcessAnd(AtomGroup AG, IList<IList<PositiveMatchResult>> processResult, int parser, IList<PositiveMatchResult> resultStack) {
 			//TODO: re-order non-function based Atoms according to the number of facts for the atom signature
 			
-			if (AG.ResolvedMembers[parser] is AtomGroup) {
-				if (((AtomGroup)AG.ResolvedMembers[parser]).Operator == AtomGroup.LogicalOperator.And)
-					throw new BREException("Nested And unexpectedly found in atom group:" + AG.ResolvedMembers[parser]);
+			if (AG.OrderedMembers[parser] is AtomGroup) {
+				if (((AtomGroup)AG.OrderedMembers[parser]).Operator == AtomGroup.LogicalOperator.And)
+					throw new BREException("Nested And unexpectedly found in atom group:" + AG.OrderedMembers[parser]);
 				
 				IList<IList<PositiveMatchResult>> subProcessResult = new List<IList<PositiveMatchResult>>();
 			  
-				ProcessOr((AtomGroup)AG.ResolvedMembers[parser], subProcessResult, resultStack);
+				ProcessOr((AtomGroup)AG.OrderedMembers[parser], subProcessResult, resultStack);
 			  
 				foreach(IList<PositiveMatchResult> resultRow in subProcessResult) {
 					foreach(PositiveMatchResult rpRow in resultRow) {
@@ -750,7 +751,7 @@ namespace NxBRE.InferenceEngine.Core {
 			else {
 		  	// resolve the functions and var parts of the atom 
 		  	// from all the previous facts in the result stack
-				Atom atomToRun = Populate((Atom)AG.ResolvedMembers[parser], resultStack, false);
+				Atom atomToRun = Populate((Atom)AG.OrderedMembers[parser], resultStack, false);
 				IList<Fact> excludedFacts = new List<Fact>();
 				
 				foreach(PositiveMatchResult pmr in resultStack)
@@ -776,7 +777,7 @@ namespace NxBRE.InferenceEngine.Core {
 		}
 		
 		private void ProcessOr(AtomGroup AG, IList<IList<PositiveMatchResult>> processResult, IList<PositiveMatchResult> resultStack) {
-			foreach(object member in AG.ResolvedMembers) {
+			foreach(object member in AG.OrderedMembers) {
 				if (member is AtomGroup) {
 					if (((AtomGroup)member).Operator == AtomGroup.LogicalOperator.Or)
 						throw new BREException("Nested Or unexpectedly found in atom group:" + member);

@@ -361,6 +361,70 @@ namespace NxBRE.Test.InferenceEngine {
 		}
 		
 		[Test]
+		public void ProcessAnd() {
+			FactBase fb = new FactBase();
+			PopulateFactBase(fb);
+			
+			Atom atom1 = new Atom("spending",
+			                       new Variable("name"),
+			                       new Function(Function.FunctionResolutionType.NxBRE, "foo", null, "GreaterThan", "5000"),
+			                       new Individual("previous year"));
+			
+			Atom atom2 = new Atom("lending",
+			                       new Variable("name"),
+			                       new Function(Function.FunctionResolutionType.NxBRE, "foo", null, "GreaterThan", "5000"),
+			                       new Individual("previous year"));
+			
+			IList<IList<FactBase.PositiveMatchResult>> result = fb.ProcessAtomGroup(new AtomGroup(AtomGroup.LogicalOperator.And, atom1, atom2));
+			Assert.AreEqual(1, result.Count, "2 positive atoms");
+			                                                                        
+			atom2 = new Atom("lending",
+                       new Variable("name"),
+                       new Function(Function.FunctionResolutionType.NxBRE, "foo", null, "GreaterThan", "15000"),
+                       new Individual("previous year"));
+			
+			result = fb.ProcessAtomGroup(new AtomGroup(AtomGroup.LogicalOperator.And, atom1, atom2));
+			Assert.AreEqual(0, result.Count, "1 positive and 1 negative atoms");
+
+			atom2 = new Atom("spending", new Variable("otherName"), new Variable("whateverAmount"), new Individual("previous year"));
+			
+			result = fb.ProcessAtomGroup(new AtomGroup(AtomGroup.LogicalOperator.And, atom1, atom2));
+			Assert.AreEqual(2, result.Count, "2 positive combinatorial atoms");
+			
+			atom2 = new Atom("spending", new Variable("otherName"), new Variable("whateverAmount"), new Individual("unknown year"));
+			result = fb.ProcessAtomGroup(new AtomGroup(AtomGroup.LogicalOperator.And, atom1, atom2));
+			Assert.AreEqual(0, result.Count, "1 positive and 1 negative combinatorial atoms");
+		}
+		
+		[Test]
+		public void ProcessOr() {
+			FactBase fb = new FactBase();
+			PopulateFactBase(fb);
+			
+			Atom atom1 = new Atom("spending",
+			                       new Variable("name"),
+			                       new Function(Function.FunctionResolutionType.NxBRE, "foo", null, "GreaterThan", "1000"),
+			                       new Individual("previous year"));
+			
+			Atom atom2 = new Atom("lending",
+			                       new Variable("name"),
+			                       new Function(Function.FunctionResolutionType.NxBRE, "foo", null, "GreaterThan", "5000"),
+			                       new Individual("previous year"));
+			
+			IList<IList<FactBase.PositiveMatchResult>> result = fb.ProcessAtomGroup(new AtomGroup(AtomGroup.LogicalOperator.Or, atom1, atom2));
+			Assert.AreEqual(3, result.Count, "2 positive atoms");
+			
+			atom1 = new Atom("spending",
+                       new Variable("name"),
+                       new Function(Function.FunctionResolutionType.NxBRE, "foo", null, "GreaterThan", "9999"),
+                       new Individual("previous year"));
+			
+			result = fb.ProcessAtomGroup(new AtomGroup(AtomGroup.LogicalOperator.Or, atom1, atom2));
+			Assert.AreEqual(1, result.Count, "1 positive atom");
+			
+		}
+		
+		[Test]
 		public void FactBaseCloning() {
 			FactBase fb = new FactBase();
 			PopulateFactBase(fb);
@@ -375,9 +439,9 @@ namespace NxBRE.Test.InferenceEngine {
 			Assert.IsTrue(fb.Exists(jqdSpending), "'JQD Spending' still in original");
 			
 			Atom filter = new Atom("spending",
-                       new Variable("name"),
-                       new Function(Function.FunctionResolutionType.NxBRE, "foo", null, "GreaterThan", "5000"),
-                       new Individual("previous year"));
+			                       new Variable("name"),
+			                       new Function(Function.FunctionResolutionType.NxBRE, "foo", null, "GreaterThan", "5000"),
+			                       new Individual("previous year"));
 
 			Assert.AreEqual(1, CountEnumerator(fb.Select(filter, null)), "Query on the original");
 			Assert.AreEqual(0, CountEnumerator(clone.Select(filter, null)), "Query on the clone");
@@ -696,13 +760,14 @@ namespace NxBRE.Test.InferenceEngine {
 			Assert.AreEqual(child, parent.OrderedMembers[1], "First member match");
 			Assert.AreEqual(atom3, parent.OrderedMembers[0], "Second member match");
 		}
-		
-		[Test]
-		public void AtomGroupResolvedMemberOrdering() {
-			AtomGroup child = new AtomGroup(AtomGroup.LogicalOperator.Or, atom2_2, atomF);
-			AtomGroup parent = new AtomGroup(AtomGroup.LogicalOperator.And, child, atom3);
-			Assert.AreEqual(child, parent.ResolvedMembers[1], "First member match");
-			Assert.AreEqual(atom3, parent.ResolvedMembers[0], "Second member match");
-		}
+
+//FIXME: kill
+//		[Test]
+//		public void AtomGroupResolvedMemberOrdering() {
+//			AtomGroup child = new AtomGroup(AtomGroup.LogicalOperator.Or, atom2_2, atomF);
+//			AtomGroup parent = new AtomGroup(AtomGroup.LogicalOperator.And, child, atom3);
+//			Assert.AreEqual(child, parent.ResolvedMembers[1], "First member match");
+//			Assert.AreEqual(atom3, parent.ResolvedMembers[0], "Second member match");
+//		}
 	}
 }

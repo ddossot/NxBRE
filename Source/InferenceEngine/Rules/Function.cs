@@ -1,6 +1,7 @@
 namespace NxBRE.InferenceEngine.Rules {
 	using System;
 	using System.Collections;
+	using System.Text;
 	
 	using NxBRE.InferenceEngine.IO;
 	using NxBRE.InferenceEngine.Core;
@@ -92,12 +93,25 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <param name="individual">The Individual to check.</param>
 		/// <returns>True if the Individual matches the Function.</returns>
 		public bool Evaluate(Individual individual) {
-			if (resolutionType == FunctionResolutionType.NxBRE)
-				return EvaluateNxBREOperator(individual.Value, name, arguments);
-			else if (resolutionType == FunctionResolutionType.Binder)
-				return bob.Evaluate(individual.Value, functionSignature, arguments);
-			else
-				throw new BREException("Function evaluation mode not supported: " + resolutionType);
+			try {
+				if (resolutionType == FunctionResolutionType.NxBRE)
+					return EvaluateNxBREOperator(individual.Value, name, arguments);
+				else if (resolutionType == FunctionResolutionType.Binder)
+					return bob.Evaluate(individual.Value, functionSignature, arguments);
+				else
+					throw new BREException("Function evaluation mode not supported: " + resolutionType);
+			}
+			catch (Exception ex) {
+				// Chuck Cross added try/catch block with addtional info in new thrown exception
+				StringBuilder sb = new StringBuilder("Error evaluating formula ")
+																			.Append(this)
+																			.Append(".\r\n  Arguments:");
+				
+				foreach(string argument in arguments) 
+					sb.Append("   ").Append(argument==null?"Null":argument).Append("\r\n");
+				
+				throw new BREException(sb.ToString(), ex);
+			}
 		}
 		
 		private bool EvaluateNxBREOperator(object individualValue, string operatorName, string[] arguments) {
