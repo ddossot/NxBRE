@@ -130,7 +130,11 @@ namespace NxBRE.InferenceEngine.Rules {
 				}
 				else if ((resolutionType == RelationResolutionType.Binder)
 				      || (resolutionType == RelationResolutionType.Expression)) {
-					return bob.Relate(functionSignature, PredicateValues);
+					try {
+						return bob.Relate(functionSignature, PredicateValues);
+					} catch(Exception e) {
+						throw new BREException("Error when evaluating '"+ functionSignature + "' with predicates: " + Misc.IListToString(PredicateValues) ,e);
+					}
 				}
 				else
 					throw new BREException("Relation evaluation mode not supported: " + resolutionType);

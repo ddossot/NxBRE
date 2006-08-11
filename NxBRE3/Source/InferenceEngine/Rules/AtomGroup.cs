@@ -20,6 +20,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		private readonly LogicalOperator logicalOperator;
 		private readonly object[] members;
 		private readonly object[] orderedMembers;
+		//FIXME: kill
 		private readonly object[] resolvedMembers;
 		
 		/// <summary>
@@ -68,7 +69,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <summary>
 		/// The atom groups and atoms in the current group with their functions resolved, in the processing order.
 		/// </summary>
-		internal object[] ResolvedMembers {
+		private object[] ResolvedMembers {
 			get {
 				return resolvedMembers;
 			}
