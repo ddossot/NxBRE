@@ -98,8 +98,9 @@ namespace NxBRE.Test.InferenceEngine {
 			
 			deductionsToCheck = new string[] {"flag{foo,andTestA}", "flag{foo,andTestB}"};
 			qrs = ie.RunQuery("Query A and B");
-			Assert.AreEqual(1, qrs.Count, "Query A and B: Count");
+			
 			ParseResult();
+			Assert.AreEqual(1, qrs.Count, "Query A and B: Count");
 			Assert.IsFalse(wrongDeduction, "Query A and B Deductions OK");
 			
 			deductionsToCheck = new string[] {"flag{foo,andTestA}", "flag{foo,andTestB}", "flag{turnip,andTestC}",
