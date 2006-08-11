@@ -1,5 +1,6 @@
 namespace NxBRE.InferenceEngine.Core {
 	using System;
+	//FIXME: remove using
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
@@ -16,7 +17,7 @@ namespace NxBRE.InferenceEngine.Core {
 	/// </summary>
 	/// <remarks>This class is not thread safe.</remarks>
 	/// <author>David Dossot</author>
-	internal sealed class FactBase:ICloneable, IEnumerable {
+	internal sealed class FactBase:ICloneable, IEnumerable<Fact> {
 		private static readonly NegativeFact NAF = new NegativeFact();
 		
 		/// <summary>
@@ -93,6 +94,36 @@ namespace NxBRE.InferenceEngine.Core {
 		}
 		
 		/// <summary>
+		/// A class representing one selected match between an atom and a fact
+		/// </summary>
+		public class PositiveMatchResult {
+			private readonly Atom source;
+			private readonly Fact fact;
+			
+			public PositiveMatchResult(Atom source, Fact fact) {
+				this.source = source;
+				this.fact = fact;
+			}
+			
+			public Atom Source {
+				get {
+					return source;
+				}
+			}
+			
+			public Fact Fact {
+				get {
+					return fact;
+				}
+			}
+			
+			public override string ToString() {
+				return "~" + source + "->" + fact;
+			}
+		}
+
+		
+		/// <summary>
 		/// Instantiates a new fact base.
 		/// </summary>
 		public FactBase() {
@@ -106,14 +137,20 @@ namespace NxBRE.InferenceEngine.Core {
 		/// Gets the enumeration of all facts in the fact base.
 		/// </summary>
 		/// <returns>An IEnumerator of all facts.</returns>
-		//FIXME: make generic asap
-		public IEnumerator GetEnumerator() {
+		public IEnumerator<Fact> GetEnumerator() {
+			return factListReferences.Keys.GetEnumerator();
+		}
+
+		/// <summary>
+		/// Gets the enumeration of all facts in the fact base.
+		/// </summary>
+		/// <returns>An IEnumerator of all facts.</returns>
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
 			return factListReferences.Keys.GetEnumerator();
 		}
 		
 		///<summary>Clones the fact base.</summary>
 		public object Clone() {
-			//TODO: improve this, maybe by intelligent/deep cloning of the core collections
 			FactBase fb = new FactBase();
 			for(IEnumerator e = GetEnumerator(); e.MoveNext(); ) fb.Assert((Fact)e.Current);
 			return fb;
@@ -354,31 +391,31 @@ namespace NxBRE.InferenceEngine.Core {
 		/// </summary>
 		/// <param name="processResults">The process results from where facts must be extracted.</param>
 		/// <returns>The array of extracted facts.</returns>
-		public static Fact[] ExtractFacts(ProcessResultSet processResults) {
-			ArrayList facts = new ArrayList();
+		public static IList<Fact> ExtractFacts(IList<IList<PositiveMatchResult>> processResults) {
+			IList<Fact> result = new List<Fact>();
 			
-			foreach(ArrayList processResult in processResults)
+			foreach(IList<PositiveMatchResult> processResult in processResults)
 				foreach(PositiveMatchResult pmr in processResult)
 					// naf atom dummy results are skipped
 					if (!(pmr.Fact is FactBase.NegativeFact)) 
-						facts.Add(pmr.Fact);
+						result.Add(pmr.Fact);
 			
-			return (Fact[])facts.ToArray(typeof(Fact));
+			return result;
 		}
 
 		/// <summary>
 		/// A read-only collection designed for holding process results.
 		/// </summary>
-		public class ProcessResultSet:ReadOnlyCollectionBase {
-			public ProcessResultSet(ArrayList results) {
-				InnerList.AddRange(results);
-			}
-			public ArrayList this[int index] {
-			  get  {
-					return((ArrayList)InnerList[index]);
-			  }
-			}
-		}
+//		public class ProcessResultSet:ReadOnlyCollectionBase {
+//			public ProcessResultSet(ArrayList results) {
+//				InnerList.AddRange(results);
+//			}
+//			public ArrayList this[int index] {
+//			  get  {
+//					return((ArrayList)InnerList[index]);
+//			  }
+//			}
+//		}
 		
 		/// <summary>
 		/// Runs an AtomGroup against the FactBase.
@@ -387,21 +424,21 @@ namespace NxBRE.InferenceEngine.Core {
 		/// Each Atom in the group and sub-groups must have been registered.
 		/// </remarks>
 		/// <param name="AG">The AtomGroup to execute</param>
-		/// <returns>A ProcessResults object containing the results.</returns>
-		public ProcessResultSet ProcessAtomGroup(AtomGroup AG) {
-			ArrayList runResult = new ArrayList();
+		/// <returns>An IList<IList<PositiveMatchResult>> object containing the results.</returns>
+		public IList<IList<PositiveMatchResult>> ProcessAtomGroup(AtomGroup AG) {
+			List<IList<PositiveMatchResult>> runResult = new List<IList<PositiveMatchResult>>();
 			
 			if (AG.Operator == AtomGroup.LogicalOperator.And)
-				ProcessAnd(AG, runResult, 0, new ArrayList());
+				ProcessAnd(AG, runResult, 0, new List<PositiveMatchResult>());
 			else if (AG.Operator == AtomGroup.LogicalOperator.Or)
-				ProcessOr(AG, runResult, new ArrayList());
+				ProcessOr(AG, runResult, new List<PositiveMatchResult>());
 			else
 				throw new BREException("Processor encountered unsupported logical operator: " + AG.Operator);
 			
-			return new ProcessResultSet(runResult);
+			return runResult.AsReadOnly();
 		}
 
-		public static Atom Populate(Atom targetAtom, ArrayList resultStack, bool evaluateFormulas) {
+		public static Atom Populate(Atom targetAtom, IList<PositiveMatchResult> resultStack, bool evaluateFormulas) {
 	  	IPredicate[] members = (IPredicate[])targetAtom.Members.Clone();
 	  	
 	  	// populate the variable elements with predicate values coming
@@ -489,8 +526,8 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="result">The fact to add to the result stack.</param>
 		/// <returns>An arraylist containing the original result stack enriched by the new fact.</returns>
 		/// <remarks>The new fact is added at the top of the result stack, to give it maximum priority in further processing.</remarks>
-		public static ArrayList EnrichResults(ArrayList resultStack, Atom source, Fact result) {
-			ArrayList enrichedProcessResult = new ArrayList();
+		public static IList<PositiveMatchResult> EnrichResults(IList<PositiveMatchResult> resultStack, Atom source, Fact result) {
+			List<PositiveMatchResult> enrichedProcessResult = new List<PositiveMatchResult>();
 			enrichedProcessResult.Add(new PositiveMatchResult(source, result));
 			enrichedProcessResult.AddRange(resultStack);
 			return enrichedProcessResult;
@@ -504,7 +541,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="targetAtom">The implication deduction atom.</param>
 		/// <param name="resultStack">The implication result stack.</param>
 		/// <returns>The atom ready for querying facts.</returns>
-		public static Atom BuildQueryFromDeduction(Atom targetAtom, ArrayList resultStack) {
+		public static Atom BuildQueryFromDeduction(Atom targetAtom, IList<PositiveMatchResult> resultStack) {
 	  	IPredicate[] members = (IPredicate[])targetAtom.Members.Clone();
 	  	
 	  	// populate the variable elements with predicate values coming
@@ -529,15 +566,16 @@ namespace NxBRE.InferenceEngine.Core {
 	  	return targetAtom.CloneWithNewMembers(members);
 		}
 		
-		public static Fact[] GetBasicMatches(Atom targetAtom, ArrayList resultStack) {
-			ArrayList basicMatches = new ArrayList();
-			
-			foreach(PositiveMatchResult pmr in resultStack)
-				if (targetAtom.BasicMatches(pmr.Fact))
-					basicMatches.Add(pmr.Fact);
-			
-			return (Fact[]) basicMatches.ToArray(typeof(Fact));
-		}
+		//TODO: useful? make generic
+//		public static Fact[] GetBasicMatches(Atom targetAtom, ArrayList resultStack) {
+//			ArrayList basicMatches = new ArrayList();
+//			
+//			foreach(PositiveMatchResult pmr in resultStack)
+//				if (targetAtom.BasicMatches(pmr.Fact))
+//					basicMatches.Add(pmr.Fact);
+//			
+//			return (Fact[]) basicMatches.ToArray(typeof(Fact));
+//		}
 		
 		//----------------------------- INTERNAL & PRIVATE MEMBERS ------------------------------
 
@@ -620,10 +658,11 @@ namespace NxBRE.InferenceEngine.Core {
 			                                                                    excludedFacts);
 		}
 		
-		private static IList<IList<Fact>> FilterDistinct(ProcessResultSet processResults) {
+		//FIXME: is this really needed? probably yes but not based on long hashcode
+		private static IList<IList<Fact>> FilterDistinct(IList<IList<PositiveMatchResult>> processResults) {
 			IDictionary<long, IList<Fact>> resultSet = new Dictionary<long, IList<Fact>>();
 			
-			foreach(ArrayList processResult in processResults) {
+			foreach(IList<PositiveMatchResult> processResult in processResults) {
 				IList<Fact> row = new List<Fact>();
 				long rowLongHashCode = 0;
 	  		
@@ -640,9 +679,10 @@ namespace NxBRE.InferenceEngine.Core {
 				if (!resultSet.ContainsKey(rowLongHashCode)) resultSet.Add(rowLongHashCode, new ReadOnlyCollection<Fact>(row));
 			}
 			
-			return new ReadOnlyCollection<IList<Fact>>(new List<IList<Fact>>(resultSet.Values));
+			return new List<IList<Fact>>(resultSet.Values).AsReadOnly();
 		}
-		
+	
+		/*
 		private IMatchedFactStorage GetMatchingFactStorageTable(Atom atom) {
 			IMatchedFactStorage mfs = (IMatchedFactStorage)matchedFactStorageTable[atom.Signature];
 			
@@ -662,67 +702,24 @@ namespace NxBRE.InferenceEngine.Core {
 			throw new NotSupportedException("This should not be used anymore");
 			//return GetMatchingFactStorageTable(atom).Select(atom, excludedHashCodes);
 		}
-
+*/
 		// Private members ---------------------------------------------------------		
 
-		private class PositiveMatchResult 
-		{
-			private readonly Atom source;
-			private readonly Fact fact;
-			
-			public PositiveMatchResult(Atom source, Fact fact) {
-				this.source = source;
-				this.fact = fact;
-			}
-			
-			public Atom Source {
-				get {
-					return source;
-				}
-			}
-			
-			public Fact Fact {
-				get {
-					return fact;
-				}
-			}
-			
-			public override string ToString() {
-				return "~" + source + "->" + fact;
-			}
-		}
-		
-		//FIXME: kill
-		private class SingleFactEnumerator : AbstractFactEnumerator {
-			private readonly Fact singleFactResult;
-			
-			public SingleFactEnumerator(Fact singleFactResult, IList excludedHashCodes):base() {
-				this.singleFactResult = singleFactResult;
-			}
-			
-			protected override bool DoMoveNext() {
-				if (position > 0) return false;
-				currentFact = singleFactResult;
-				return true;
-			}
-		}
-		
-		private void ProcessAnd(AtomGroup AG, ArrayList processResult, int parser, ArrayList resultStack)
-		{
+		private void ProcessAnd(AtomGroup AG, IList<IList<PositiveMatchResult>> processResult, int parser, IList<PositiveMatchResult> resultStack) {
 			//TODO: re-order non-function based Atoms according to the number of facts for the atom signature
 			
 			if (AG.ResolvedMembers[parser] is AtomGroup) {
 				if (((AtomGroup)AG.ResolvedMembers[parser]).Operator == AtomGroup.LogicalOperator.And)
 					throw new BREException("Nested And unexpectedly found in atom group:" + AG.ResolvedMembers[parser]);
 				
-				ArrayList subProcessResult = new ArrayList();
+				IList<IList<PositiveMatchResult>> subProcessResult = new List<IList<PositiveMatchResult>>();
 			  
 				ProcessOr((AtomGroup)AG.ResolvedMembers[parser], subProcessResult, resultStack);
 			  
-				foreach(ArrayList resultRow in subProcessResult) {
+				foreach(IList<PositiveMatchResult> resultRow in subProcessResult) {
 					foreach(PositiveMatchResult rpRow in resultRow) {
 				  	if (resultStack.Count == 0) {
-							ArrayList tempResultStack = (ArrayList)resultStack.Clone();
+							IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>(resultStack);
 							tempResultStack.Add(rpRow);
 							
 							if (parser < (AG.OrderedMembers.Length-1)) ProcessAnd(AG, processResult, parser+1, tempResultStack);
@@ -739,7 +736,7 @@ namespace NxBRE.InferenceEngine.Core {
 					  			break;
 					  		}
 					  		if (!ignore) {
-							  	ArrayList tempResultStack = (ArrayList)resultStack.Clone();
+							  	IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>(resultStack);
 									tempResultStack.Add(rpRow);
 									
 									if (parser < (AG.OrderedMembers.Length-1)) ProcessAnd(AG, processResult, parser+1, tempResultStack);
@@ -754,19 +751,19 @@ namespace NxBRE.InferenceEngine.Core {
 		  	// resolve the functions and var parts of the atom 
 		  	// from all the previous facts in the result stack
 				Atom atomToRun = Populate((Atom)AG.ResolvedMembers[parser], resultStack, false);
-				ArrayList excludedHashCodes = new ArrayList();
+				IList<Fact> excludedFacts = new List<Fact>();
 				
 				foreach(PositiveMatchResult pmr in resultStack)
 					if (((Atom)AG.OrderedMembers[parser]).IsIntersecting(pmr.Source))
-						excludedHashCodes.Add(pmr.Fact.GetLongHashCode());
+						excludedFacts.Add(pmr.Fact);
 		  	
 		  	// then get the matching facts
-		  	IEnumerator results = ProcessAtom(atomToRun, excludedHashCodes);
+		  	IEnumerator results = ProcessAtom(atomToRun, excludedFacts);
 			
 				if (results != null) {
 		  		while(results.MoveNext()) {
 			  		Fact result = (Fact)results.Current;
-			  		ArrayList tempResultStack = (ArrayList)resultStack.Clone();
+			  		IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>(resultStack);
 						tempResultStack.Add(new PositiveMatchResult((Atom)AG.OrderedMembers[parser], result));
 
 						if (parser < (AG.OrderedMembers.Length-1))
@@ -778,16 +775,16 @@ namespace NxBRE.InferenceEngine.Core {
 			}
 		}
 		
-		private void ProcessOr(AtomGroup AG, ArrayList processResult, ArrayList resultStack)	{
+		private void ProcessOr(AtomGroup AG, IList<IList<PositiveMatchResult>> processResult, IList<PositiveMatchResult> resultStack) {
 			foreach(object member in AG.ResolvedMembers) {
 				if (member is AtomGroup) {
 					if (((AtomGroup)member).Operator == AtomGroup.LogicalOperator.Or)
 						throw new BREException("Nested Or unexpectedly found in atom group:" + member);
 
-					ArrayList subProcessResult = new ArrayList();
+					IList<IList<PositiveMatchResult>> subProcessResult = new List<IList<PositiveMatchResult>>();
 					ProcessAnd((AtomGroup)member, subProcessResult, 0, resultStack);
 					
-					foreach(ArrayList resultRow in subProcessResult) processResult.Add(resultRow);
+					foreach(IList<PositiveMatchResult> resultRow in subProcessResult) processResult.Add(resultRow);
 				}
 				else if (member is Atom) {
 			  	// resolve the functions and var parts of the atom 
@@ -800,7 +797,7 @@ namespace NxBRE.InferenceEngine.Core {
 					if (results != null) {
 						while(results.MoveNext()) {
 				  		Fact result = (Fact)results.Current;
-					  	ArrayList tempResultStack = new ArrayList();
+					  	IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>();
 						  tempResultStack.Add(new PositiveMatchResult((Atom)member, result));
 							processResult.Add(tempResultStack);
 					  }
@@ -811,13 +808,12 @@ namespace NxBRE.InferenceEngine.Core {
 			
 		} //ProcessOr
 
-		private IEnumerator ProcessAtom(Atom atomToRun, ArrayList excludedHashCodes) {
+		private IEnumerator<Fact> ProcessAtom(Atom atomToRun, IList<Fact> excludedFacts) {
 			if (atomToRun is AtomFunction) {
 				// an atom function is either positive or negative, it does not return any fact
 				// if this atom function is wrapped in naf, then the base result is negated,
 				// leading to a positive result if the underlying function is negative!
-				if (((AtomFunction)atomToRun).PositiveRelation != atomToRun.Negative)
-					return new SingleFactEnumerator(NAF, null);
+				if (((AtomFunction)atomToRun).PositiveRelation != atomToRun.Negative) return FactEnumeratorFactory.NewSingleFactEnumerator(NAF);
 			}
 			else {
 				if (atomToRun.Negative) {
@@ -825,12 +821,12 @@ namespace NxBRE.InferenceEngine.Core {
 					// and succeed if no data collection (ie returns one dummy fact as a token)
 					// if no facts are actually found
 					// Bug #1332214 pinpointed that excludedHashCodes should not be applied on Negative atoms
-					IEnumerator matchResult = GetMatchingFacts(atomToRun, null);
-					if ((matchResult == null) || (!matchResult.MoveNext()))
-						return new SingleFactEnumerator(NAF, null);
+					IEnumerator matchResult = Select(atomToRun, null);
+					if ((matchResult == null) || (!matchResult.MoveNext())) return FactEnumeratorFactory.NewSingleFactEnumerator(NAF);
 				}
-				else
-					return GetMatchingFacts(atomToRun, excludedHashCodes);
+				else {
+					return Select(atomToRun, excludedFacts);
+				}
 			}
 			
 			return null;

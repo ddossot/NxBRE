@@ -600,7 +600,7 @@ namespace NxBRE.InferenceEngine {
 		/// </summary>
 		/// <returns>An IEnumerator on the facts contained in the working memory.</returns>
 		/// <remarks>Do not alter the facts from this enumemration: use retract and modify instead.</remarks>
-		public IEnumerator Facts {
+		public IEnumerator<Fact> Facts {
 			get {
 				CheckInitialized();
 				return WM.FB.GetEnumerator();
@@ -865,7 +865,7 @@ namespace NxBRE.InferenceEngine {
 		private int RunImplication(Implication implication) {
 			int implicationResultsCount = 0;
 			
-			FactBase.ProcessResultSet processResults = WM.FB.ProcessAtomGroup(implication.AtomGroup);
+			IList<IList<FactBase.PositiveMatchResult>> processResults = WM.FB.ProcessAtomGroup(implication.AtomGroup);
 
 			if (implication.Action == ImplicationAction.Count)
 			{
@@ -896,7 +896,7 @@ namespace NxBRE.InferenceEngine {
 	      		|| (implication.Action == ImplicationAction.Retract))
 			{
 				// loop on each result and try to build a new fact out of the predicates coming for each result
-				foreach(ArrayList processResult in processResults) {
+				foreach(IList<FactBase.PositiveMatchResult> processResult in processResults) {
 					Fact deductedFact = BuildFact(implication.Deduction, processResult);
 						
 					if (deductedFact != null) {
@@ -919,7 +919,7 @@ namespace NxBRE.InferenceEngine {
 			}
 			else if (implication.Action == ImplicationAction.Modify)
 			{
-			  foreach(ArrayList processResult in processResults) {
+			  foreach(IList<FactBase.PositiveMatchResult> processResult in processResults) {
 				  // look for facts to modify by:
 				  //  - resolving variable predicates of the deduction
 				  //  - replacing formulas with variables
@@ -952,7 +952,7 @@ namespace NxBRE.InferenceEngine {
 			return implicationResultsCount;
 		}
 
-		private Fact BuildFact(Atom targetAtom, ArrayList processResult) {
+		private Fact BuildFact(Atom targetAtom, IList<FactBase.PositiveMatchResult> processResult) {
 			Atom factBuilder = FactBase.Populate(targetAtom, processResult, true);
 			
 			if (!factBuilder.IsFact) {
