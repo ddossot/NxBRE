@@ -29,6 +29,11 @@ namespace NxBRE.Test.InferenceEngine {
 		protected AbstractTestEngine() {
 			ruleFilesFolder = Parameter.GetString("unittest.ruleml.inputfolder") + "/";
 			outFilesFolder = Parameter.GetString("unittest.outputfolder") + "/";
+			
+			// activate verbose trace to console
+//			Logger.InferenceEngineSource.Switch.Level = System.Diagnostics.SourceLevels.Verbose;
+//			Logger.RefreshBooleanSwitches();
+//			Logger.InferenceEngineSource.Listeners.Add(new System.Diagnostics.ConsoleTraceListener());
 		}
 
 		protected void HandleNewFactEvent(NewFactEventArgs nfea) 

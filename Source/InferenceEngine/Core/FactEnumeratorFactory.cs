@@ -2,22 +2,28 @@ namespace NxBRE.InferenceEngine.Core
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	
 	using NxBRE.InferenceEngine.Rules;
+	
+	using NxBRE.Util;
 	
 	internal abstract class FactEnumeratorFactory
 	{
 		private FactEnumeratorFactory() {}
 		
 		public static IEnumerator<Fact> NewSingleFactEnumerator(Fact fact) {
+			if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "NewSingleFactEnumerator: " + fact);
 			return new SingleFactEnumerator(fact);
 		}
 		
 		public static IEnumerator<Fact> NewFactListExcludingEnumerator(IList<Fact> factList, IList<Fact> excludedFacts) {
+			if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "NewFactListExcludingEnumerator: factList.Count=" + factList.Count + " - excludedFacts.Count=" + excludedFacts.Count);
 			return new FactListEnumerator(factList, excludedFacts);
 		}
 		
 		public static IEnumerator<Fact> NewFactListPredicateMatchingEnumerator(IList<Fact> factList, Atom filter, bool strictTyping, IList<int> ignoredPredicates, IList<Fact> excludedFacts) {
+			if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "NewFactListPredicateMatchingEnumerator: factList.Count=" + factList.Count + " - filter=" + filter + " - strictTyping=" + strictTyping + " - ignoredPredicates=" + Misc.IListToString((System.Collections.IList)ignoredPredicates) + " - excludedFacts.Count=" + excludedFacts.Count);
 			return new FactListPredicateMatchingEnumerator(factList, filter, strictTyping, ignoredPredicates, excludedFacts);
 		}
 			
@@ -148,6 +154,8 @@ namespace NxBRE.InferenceEngine.Core
 			
 			public override bool MoveNext() {
 				if (base.MoveNext()) {
+					if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "FactListPredicateMatchingEnumerator.MoveNext: currentFact=" + currentFact + " -> " + currentFact.PredicatesMatch(filter, strictTyping, ignoredPredicates));
+					
 					if (!currentFact.PredicatesMatch(filter, strictTyping, ignoredPredicates)) return MoveNext();
 					else return true;
 				}

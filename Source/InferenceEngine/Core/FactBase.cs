@@ -5,6 +5,7 @@ namespace NxBRE.InferenceEngine.Core {
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
 	using System.Data;
+	using System.Diagnostics;
 	using System.Text;
 	
 	using NxBRE.InferenceEngine.Rules;
@@ -588,13 +589,27 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <returns>An IList containing the matching facts (empty if no match, but never null).</returns>
 		internal IEnumerator<Fact> Select(Atom filter, IList<Fact> excludedFacts) {
 			//TODO: add short living cache
+			if (Logger.IsInferenceEngineVerbose)
+				Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
+				                                        0,
+				                                        "FactBase.Select: " + filter + " - Excluding: " + Misc.IListToString((IList)excludedFacts));
+
 			// if the predicate map does not contain an entry for the filter signature or if this entry is empty, return empty result
-			if ((!predicateMap.ContainsKey(filter.Signature)) || (predicateMap[filter.Signature].Count == 0)) return EMPTY_SELECT_RESULT.GetEnumerator();
+			if ((!predicateMap.ContainsKey(filter.Signature)) || (predicateMap[filter.Signature].Count == 0)) {
+				if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "No fact matching signature: " + filter.Signature);
+				return EMPTY_SELECT_RESULT.GetEnumerator();
+			}
 			
 			// if the filter does not contain any individual or function, then it is fully variable so everything should be returned
 			if ((!filter.HasIndividual) && (!filter.HasFunction)) {
-				if (signatureMap.ContainsKey(filter.Signature)) return signatureMap[filter.Signature].GetEnumerator();
-				else return EMPTY_SELECT_RESULT.GetEnumerator();
+				if (signatureMap.ContainsKey(filter.Signature)) {
+					if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Filter with no Ind or Fun -> Return all facts matching signature: " + filter.Signature);
+					return signatureMap[filter.Signature].GetEnumerator();
+				}
+				else{
+					if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Filter with no Ind or Fun -> Return no fact");
+					return EMPTY_SELECT_RESULT.GetEnumerator();
+				}
 			}
 			
 			// we build result lists and will reduce the biggest ones from the smallest ones
@@ -612,11 +627,20 @@ namespace NxBRE.InferenceEngine.Core {
 						if (predicateValueMap.ContainsKey(predicateValue)) {
 							IDictionary<int, IList<Fact>> predicatePositionMap = predicateValueMap[predicateValue];
 							if ((predicatePositionMap.ContainsKey(position)) && (predicatePositionMap[position].Count > 0)) {
-								resultList = predicatePositionMap[position];
-								
+								if (Logger.IsInferenceEngineVerbose)
+									Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
+									                                        0,
+									                                        "Matched predicateValue: "+ predicateValue + " [" + predicateValue.GetType() + "]");
+
 								if (predicatePositionMap[position].Count < smallestList) {
+									resultList = predicatePositionMap[position];
 									smallestList = predicatePositionMap[position].Count;
 									positionOfSmallestList = position;
+									
+									if (Logger.IsInferenceEngineVerbose)
+										Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
+										                                        0,
+										                                        "Smallest list of size: "+ smallestList + " at position: " + positionOfSmallestList);
 								}
 								
 								matched = true;
@@ -625,16 +649,28 @@ namespace NxBRE.InferenceEngine.Core {
 					}
 					
 					// no match found on a particular individual predicate? early return an empty result!
-					if (!matched) return EMPTY_SELECT_RESULT.GetEnumerator();
+					if (!matched) {
+						if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "No match -> Return no fact");
+
+						return EMPTY_SELECT_RESULT.GetEnumerator();
+					}
 				}
 			}
 
 			// only one predicate in the filter and we matched it, no need for post matching, return filtered results directly
-			if ((filter.Members.Length == 1) && (resultList != null)) return FactEnumeratorFactory.NewFactListExcludingEnumerator(resultList, excludedFacts);
+			if ((filter.Members.Length == 1) && (resultList != null)) {
+				if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "One member filter and got resultList -> Return facts immediatly");
+				
+				return FactEnumeratorFactory.NewFactListExcludingEnumerator(resultList, excludedFacts);
+			}
 
 			// we have not been able to match anything (the filter might contain only variables or functions),
 			// let's load all the facts matching the signature of the filter
-			if (resultList == null) resultList = signatureMap[filter.Signature];
+			if (resultList == null) {
+				resultList = signatureMap[filter.Signature];
+				
+				if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "No resultList -> Used the list matching the signature, which contains: " + resultList.Count);
+			}
 			
 			// the resulting list of matching facts
 			IList<Fact> selectResults = new List<Fact>();
