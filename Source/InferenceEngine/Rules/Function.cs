@@ -52,6 +52,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <param name="name">The name of the function, as it was analyzed by the binder.</param>
 		/// <param name="arguments">The array of arguments of the function, as it was analyzed by the binder.</param>
 		public Function(FunctionResolutionType resolutionType, string predicate, IBinder bob, string name, params string[] arguments):base(predicate) {
+			//FIXME: hashcode should be overriden to use these fields as well
 			this.resolutionType = resolutionType;
 			this.bob = bob;
 			this.name = name;

@@ -21,7 +21,6 @@ namespace NxBRE.Test.InferenceEngine {
 		protected void ShowAllNewFacts(NewFactEventArgs nfea) 
 	  {
 			deducted++;
-			Console.WriteLine("NxBRE Deducted: {0}", nfea.Fact);
 	  }
 
 		public class Character {
