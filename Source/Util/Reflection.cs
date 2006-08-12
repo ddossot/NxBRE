@@ -13,6 +13,8 @@ namespace NxBRE.Util
 		/// </summary>
 		public static CultureInfo US_FORMAT = new CultureInfo(Parameter.Get<string>("cultureInfo", "en-US"), false);
 
+		public static readonly string NXBRE_VERSION = Assembly.GetAssembly(typeof(NxBRE.Util.Reflection)).GetName().Version.ToString();
+		
 		private Reflection() {}
 		
 		/// <summary>
