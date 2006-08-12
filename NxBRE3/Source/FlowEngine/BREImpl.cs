@@ -399,8 +399,9 @@ namespace NxBRE.FlowEngine
 			if (Logger.IsInferenceEngineInformation)
 				Logger.FlowEngineSource.TraceEvent(TraceEventType.Information,
 				                                   0,
-				                                   "BRE Processing" + ((setId == null)?String.Empty:" Set: " + setId)
-																								            + ((wasRunning)?" (Re-entrant)":String.Empty));
+				                                   "NxBRE v" + Reflection.NXBRE_VERSION + " Flow Engine Processing"
+				                                   					 + ((setId == null)?String.Empty:" Set: " + setId)
+																								     + ((wasRunning)?" (Re-entrant)":String.Empty));
 			
 			if (ruleContext == null) {
 				if (Logger.IsFlowEngineCritical) Logger.FlowEngineSource.TraceEvent(TraceEventType.Critical, 0, "RuleContext is null");
