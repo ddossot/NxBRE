@@ -188,6 +188,7 @@
     <Compile Include="Test\InferenceEngine\TestFileRegistry.cs" />
     <Compile Include="InferenceEngine\Core\FactEnumeratorFactory.cs" />
     <Compile Include="Util\HashCodeBuilder.cs" />
+    <Compile Include="Util\HashSet.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />
