@@ -39,5 +39,10 @@
     <Compile Include="CustomBinder.cs" />
     <Compile Include="DummyData.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="InferenceEngineFactCollision.exe.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>
