@@ -447,12 +447,10 @@ namespace NxBRE.InferenceEngine.Core {
 	  	foreach(PositiveMatchResult pmr in resultStack)
 	  		if (!(pmr.Fact is FactBase.NegativeFact))
 	  			RulesUtil.Populate(pmr.Fact, pmr.Source, members);
-	  	/*
-	  	//TODO: kill
+
 	  	// if there are formulas in the atom, resolve these expressions, passing
 	  	// the variable values as arguments
-	  	if (targetAtom.HasFormula) {
-	  		if (evaluateFormulas) {
+	  	if ((evaluateFormulas) && (targetAtom.HasFormula)) {
 	  			// formulas must be evaluated and the results placed in individual predicates
 		  		IDictionary arguments = new Hashtable();
 		  		
@@ -507,15 +505,15 @@ namespace NxBRE.InferenceEngine.Core {
 							}
 		  			}
 		  		}
-	  		}
-	  		else {
-	  			// formulas must be replaced by variables named after the position of the predicate
-		  		for(int i=0; i<members.Length; i++)
-		  			if (members[i] is Formula)
-		  				members[i] = new Variable(i.ToString());
-	  		}
+//	  		}
+//	  		else {
+//	  			// formulas must be replaced by variables named after the position of the predicate
+//		  		for(int i=0; i<members.Length; i++)
+//		  			if (members[i] is Formula)
+//		  				members[i] = new Variable(i.ToString());
+//	  		}
 	  	}
-	  	*/
+	  	
 	  	// clone the target with new members, because atom is immutable
 	  	return targetAtom.CloneWithNewMembers(members);
 		}
