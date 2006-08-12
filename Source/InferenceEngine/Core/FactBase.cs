@@ -28,8 +28,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <remarks>
 		/// It is internal to allow changing it for unit testing purposes.
 		/// </remarks>
-		//FIXME: use another parameter: factBase.strictTyping
-		internal bool strictTyping = Parameter.Get<bool>("factBaseStorageType.hashtable.strictTyping", false);
+		internal bool strictTyping = Parameter.Get<bool>("factBase.strictTyping", false);
 		
 		/// <summary>
 		/// The type of storage configured for this FactBase
