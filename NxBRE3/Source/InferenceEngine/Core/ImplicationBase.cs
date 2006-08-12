@@ -22,7 +22,6 @@ namespace NxBRE.InferenceEngine.Core {
 		}
 
 		public ImplicationBase() {
-			//TODO: really need to be sync?
 			implications = new List<Implication>();
 			implicationsMap = new Dictionary<string, IList<Implication>>();
 		}

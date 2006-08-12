@@ -22,7 +22,6 @@ namespace NxBRE.InferenceEngine.Core {
 		}
 		
 		public QueryBase() {
-			//TODO: really need to be sync?
 			queryDefs = new List<Query>();
 		}
 		

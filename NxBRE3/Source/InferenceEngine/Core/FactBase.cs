@@ -40,56 +40,6 @@ namespace NxBRE.InferenceEngine.Core {
 		private readonly IDictionary<Fact, IList<ICollection<Fact>>> factListReferences;
 		private readonly IDictionary<string, Fact> labelMap;
 		private static readonly IList<Fact> EMPTY_SELECT_RESULT = new List<Fact>().AsReadOnly();
-		private class HashSet<Fact>:ICollection<Fact> {
-			private IDictionary<Fact, Fact> content = new Dictionary<Fact, Fact>();
-			public int Count {
-				get {
-					return content.Count;
-				}
-			}
-			
-			public bool IsReadOnly {
-				get {
-					return false;
-				}
-			}
-			
-			public void Add(Fact item)
-			{
-				content.Add(item, item);
-			}
-			
-			public void Clear()
-			{
-				content.Clear();
-			}
-			
-			public bool Contains(Fact item)
-			{
-				return content.ContainsKey(item);
-			}
-			
-			public void CopyTo(Fact[] array, int arrayIndex)
-			{
-				content.Keys.CopyTo(array, arrayIndex);
-			}
-			
-			public bool Remove(Fact item)
-			{
-				return content.Remove(item);
-			}
-			
-			public IEnumerator<Fact> GetEnumerator()
-			{
-				return content.Keys.GetEnumerator();
-			}
-			
-			System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-			{
-				return content.Keys.GetEnumerator();
-			}
-			
-		}
 		
 		/// <summary>
 		/// A flag that external class can use to detect fact assertions/retractions.
