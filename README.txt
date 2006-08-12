@@ -78,6 +78,8 @@ v3.0.0RC2
 
   * Included the Inference Engine Registry in main distribution (feature request 1511119)
 
+  * Refactored the core fact base to leverage generics and to use a much simpler and efficient fact storage
+
 
 v3.0.0RC1 (compared to NxBRE v2.5.3)
 
