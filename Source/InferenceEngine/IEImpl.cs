@@ -311,8 +311,6 @@ namespace NxBRE.InferenceEngine {
 					if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Loaded " + equivalents.Count + " Equivalents");
 					
 					integrityQueries = ((IExtendedRuleBaseAdapter)adapter).IntegrityQueries;
-					foreach(Query integrityQuery in integrityQueries) WM.FB.RegisterAtoms(integrityQuery.AtomGroup.AllAtoms);
-				
 					if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Loaded " + integrityQueries.Count + " IntegrityQueries");
 				}
 				else {
@@ -330,24 +328,11 @@ namespace NxBRE.InferenceEngine {
 				initialized = true;
 				
 				// load queries
-				foreach(Query query in adapter.Queries) {
-					QB.Add(query);
-					WM.FB.RegisterAtoms(query.AtomGroup.AllAtoms);
-				}
+				foreach(Query query in adapter.Queries) QB.Add(query);
 				if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Loaded " + QB.Count + " Queries");
 				
 				// load implications
-				foreach(Implication implication in adapter.Implications) {
-					IB.Add(implication);
-					int nbRA = WM.FB.RegisterAtoms(implication.AtomGroup.AllAtoms);
-					if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Registered: " + nbRA + " body atoms");
-					
-					// modifying implication must run searches based on their deduction, so must register the atom
-					if (implication.Action == ImplicationAction.Modify) {
-						nbRA = WM.FB.RegisterAtoms(implication.Deduction);
-						if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Registered: " + nbRA + " head atoms");
-					}
-				}
+				foreach(Implication implication in adapter.Implications) IB.Add(implication);
 				if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Loaded " + IB.Count + " Implications\n");
 				
 				// load mutexes
@@ -726,7 +711,9 @@ namespace NxBRE.InferenceEngine {
 		/// <returns>An IList<IList<Fact>> containing the results found.</returns>
 		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
 		public IList<IList<Fact>> RunQuery(Query query) {
-			return RunQuery(query, true);
+			CheckInitialized();
+			if (query == null) throw new BREException("Query is null or not found.");
+			return WM.FB.RunQuery(query);
 		}
 		
 		/// <summary>
@@ -737,7 +724,7 @@ namespace NxBRE.InferenceEngine {
 		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
 		/// <remarks>It is recommanded to use labelled queries.</remarks>
 		public IList<IList<Fact>> RunQuery(int queryIndex) {
-			return RunQuery(QB.Get(queryIndex), false);
+			return RunQuery(QB.Get(queryIndex));
 		}
 		
 		/// <summary>
@@ -747,7 +734,7 @@ namespace NxBRE.InferenceEngine {
 		/// <returns>An IList<IList<Fact>> containing the results found.</returns>
 		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
 		public IList<IList<Fact>> RunQuery(string queryLabel) {
-			return RunQuery(QB.Get(queryLabel), false);
+			return RunQuery(QB.Get(queryLabel));
 		}
 
 		// Private methods ---------------------------------------------------------
@@ -853,13 +840,6 @@ namespace NxBRE.InferenceEngine {
 																            WM.FB.Count + " facts, " +
 																            IB.Count + " implications, " +
 																            QB.Count + " queries.");
-		}
-		
-		private IList<IList<Fact>> RunQuery(Query query, bool newQuery) {
-			CheckInitialized();
-			if (query == null) throw new BREException("Query is null or not found.");
-			if (newQuery) WM.FB.RegisterAtoms(query.AtomGroup.AllAtoms);
-			return WM.FB.RunQuery(query);
 		}
 		
 		private int RunImplication(Implication implication) {

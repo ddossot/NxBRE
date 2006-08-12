@@ -20,8 +20,6 @@ namespace NxBRE.InferenceEngine.Rules {
 		private readonly LogicalOperator logicalOperator;
 		private readonly object[] members;
 		private readonly object[] orderedMembers;
-		//FIXME: kill
-		private readonly object[] resolvedMembers;
 		
 		/// <summary>
 		/// The logical operator used to link the members together
@@ -63,15 +61,6 @@ namespace NxBRE.InferenceEngine.Rules {
 		internal object[] OrderedMembers {
 			get {
 				return orderedMembers;
-			}
-		}
-		
-		/// <summary>
-		/// The atom groups and atoms in the current group with their functions resolved, in the processing order.
-		/// </summary>
-		private object[] ResolvedMembers {
-			get {
-				return resolvedMembers;
 			}
 		}
 		
@@ -127,13 +116,6 @@ namespace NxBRE.InferenceEngine.Rules {
 			object[] membersToOrder = (object[])runningMembers.Clone();
 			Array.Sort(membersToOrder, new AtomComparer());
 			this.orderedMembers = membersToOrder;
-			
-			resolvedMembers = new object[orderedMembers.Length];
-			
-			for(int i=0; i<orderedMembers.Length; i++) {
-				if (orderedMembers[i] is Atom) resolvedMembers[i] = RulesUtil.ResolveFunctions((Atom)orderedMembers[i]);
-				else resolvedMembers[i] = orderedMembers[i];
-			}
 		}
 		
 		/// <summary>
@@ -160,6 +142,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// </summary>
 		/// <returns>A 32-bit signed integer hash code.</returns>
 		public override int GetHashCode() {
+			//TODO: check if really needed
 		  int hashCode = logicalOperator.GetHashCode();
 	
 			foreach(object o in members) 

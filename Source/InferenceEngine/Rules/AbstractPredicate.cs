@@ -9,7 +9,8 @@ namespace NxBRE.InferenceEngine.Rules {
 		private readonly object predicate;
 		
 		// the hashcode is expensive to compute, so do it lazily
-		private int hashCode;
+		private int hashCode = 0;
+		//FIXME: kill
 		private bool hashCodeInitialized;
 		
 		/// <summary>
@@ -31,7 +32,26 @@ namespace NxBRE.InferenceEngine.Rules {
 		}
 		
 		public abstract object Clone();
-		
+
+		public override bool Equals(object o) {
+			if (o.GetType() != this.GetType()) return false;
+			
+			IPredicate other = (IPredicate)o;
+			
+			return Value.Equals(other.Value);
+		}
+
+		public override int GetHashCode() {
+			if (hashCode == 0) {
+				int result = 17;
+				result = 37 * result + Value.GetType().GetHashCode();
+				result = 37 * result + Value.GetHashCode();
+				hashCode = result;
+			}
+			return hashCode;
+		}
+
+		/*
 		public override int GetHashCode() {
 			if (!hashCodeInitialized) {
 				long lhc = GetLongHashCode();
@@ -47,6 +67,7 @@ namespace NxBRE.InferenceEngine.Rules {
 			return ((o.GetType().IsInstanceOfType(this))
 			        && (((IPredicate)o).GetLongHashCode() == this.GetLongHashCode()));
 		}
+		*/
 		
 		public abstract long GetLongHashCode();
 		

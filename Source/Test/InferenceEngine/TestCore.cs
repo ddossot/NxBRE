@@ -256,7 +256,7 @@ namespace NxBRE.Test.InferenceEngine {
 			Atom source = new Atom("own", new Variable("person"), new Variable("stuff"));
 			Atom target = new Atom("belongs", new Variable("person"), new Variable("stuff"));
 			Atom expected = new Atom("belongs", new Variable("person"), new Variable("object"));
-			Assert.AreEqual(expected.GetLongHashCode(), RulesUtil.TranslateVariables(template, source, target).GetLongHashCode());
+			Assert.AreEqual(expected, RulesUtil.TranslateVariables(template, source, target));
 		}
 		
 		private static int CountEnumerator(IEnumerator<Fact> e) {
@@ -761,13 +761,5 @@ namespace NxBRE.Test.InferenceEngine {
 			Assert.AreEqual(atom3, parent.OrderedMembers[0], "Second member match");
 		}
 
-//FIXME: kill
-//		[Test]
-//		public void AtomGroupResolvedMemberOrdering() {
-//			AtomGroup child = new AtomGroup(AtomGroup.LogicalOperator.Or, atom2_2, atomF);
-//			AtomGroup parent = new AtomGroup(AtomGroup.LogicalOperator.And, child, atom3);
-//			Assert.AreEqual(child, parent.ResolvedMembers[1], "First member match");
-//			Assert.AreEqual(atom3, parent.ResolvedMembers[0], "Second member match");
-//		}
 	}
 }
