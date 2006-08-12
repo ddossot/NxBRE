@@ -30,11 +30,7 @@ namespace NxBRE.InferenceEngine.Core
 		// ---- Private Classes -----
 		
 		private abstract class AbstractExcludingFactEnumerator<Fact> : IEnumerator<Fact> {
-			private const int RESET = -1;
-			
 			protected IList<Fact> excludedFacts;
-			
-			protected int position;
 			
 			protected Fact currentFact;
 			
@@ -44,7 +40,6 @@ namespace NxBRE.InferenceEngine.Core
 			
 			public AbstractExcludingFactEnumerator(IList<Fact> excludedFacts) {
 				this.excludedFacts = excludedFacts;
-				Reset();
 			}
 			
 			public virtual void Dispose()
@@ -54,18 +49,14 @@ namespace NxBRE.InferenceEngine.Core
 				currentFact = default(Fact);
 			}
 			
-			private void CheckDisposed() {
+			protected void CheckDisposed() {
 				if (disposed) throw new InvalidOperationException("Impossible operation: the fact enumerator has been disposed.");
 			}
 			
-			public void Reset() {
-				CheckDisposed();
-				position = RESET;
-			}
+			public abstract void Reset();
 			
 			private Fact GetCurrent() {
 				CheckDisposed();
-				if (position == RESET) throw new InvalidOperationException("Impossible operation: the fact enumerator is not positioned for reading.");
 				return currentFact;
 			}
 			
@@ -84,8 +75,6 @@ namespace NxBRE.InferenceEngine.Core
 			public virtual bool MoveNext() {
 				CheckDisposed();
 				
-				position++;
-				
 				if (!DoMoveNext()) return false;
 				
 				if (currentFact == null) return false;
@@ -101,14 +90,27 @@ namespace NxBRE.InferenceEngine.Core
 		private class SingleFactEnumerator : AbstractExcludingFactEnumerator<Fact> {
 			private readonly Fact singleFactResult;
 			
+			private bool readyToRead = true;
+			
 			public SingleFactEnumerator(Fact singleFactResult):base() {
 				this.singleFactResult = singleFactResult;
 			}
 			
+			public override void Reset() {
+				CheckDisposed();
+				readyToRead = true;
+			}
+			
 			protected override bool DoMoveNext() {
-				if (position > 0) return false;
-				currentFact = singleFactResult;
-				return true;
+				if (!readyToRead) {
+					currentFact = null;
+					return false;
+				}
+				else {
+					currentFact = singleFactResult;
+					readyToRead = false;
+					return true;
+				}
 			}
 	}
 	
@@ -119,6 +121,11 @@ namespace NxBRE.InferenceEngine.Core
 			
 			public FactListEnumerator(ICollection<Fact> factList, IList<Fact> excludedFacts):base(excludedFacts) {
 				this.factEnumerator = factList.GetEnumerator();
+			}
+			
+			public override void Reset() {
+				CheckDisposed();
+				factEnumerator.Reset();
 			}
 			
 			public override void Dispose() {
