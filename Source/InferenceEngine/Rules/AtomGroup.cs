@@ -20,6 +20,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		private readonly LogicalOperator logicalOperator;
 		private readonly object[] members;
 		private readonly object[] orderedMembers;
+		private readonly int hashCode;
 		
 		/// <summary>
 		/// The logical operator used to link the members together
@@ -113,6 +114,11 @@ namespace NxBRE.InferenceEngine.Rules {
 			this.logicalOperator = logicalOperator;
 			this.members = members;
 			
+			HashCodeBuilder hcb = new HashCodeBuilder();
+			hcb.Append(logicalOperator);
+		  foreach(object o in members) hcb.Append(o);
+			hashCode = hcb.Value;
+			
 			object[] membersToOrder = (object[])runningMembers.Clone();
 			Array.Sort(membersToOrder, new AtomComparer());
 			this.orderedMembers = membersToOrder;
@@ -142,12 +148,6 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// </summary>
 		/// <returns>A 32-bit signed integer hash code.</returns>
 		public override int GetHashCode() {
-			//TODO: check if really needed
-		  int hashCode = logicalOperator.GetHashCode();
-	
-			foreach(object o in members) 
-				hashCode ^= o.GetHashCode();
-	
 			return hashCode;
 		}
 		

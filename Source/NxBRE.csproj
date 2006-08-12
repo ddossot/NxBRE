@@ -187,6 +187,7 @@
     <Compile Include="InferenceEngine\IO\VisualBasicBinderFactory.cs" />
     <Compile Include="Test\InferenceEngine\TestFileRegistry.cs" />
     <Compile Include="InferenceEngine\Core\FactEnumeratorFactory.cs" />
+    <Compile Include="Util\HashCodeBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />

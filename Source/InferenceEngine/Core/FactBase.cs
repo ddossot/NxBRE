@@ -1,6 +1,5 @@
 namespace NxBRE.InferenceEngine.Core {
 	using System;
-	//FIXME: remove using
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
@@ -36,12 +35,61 @@ namespace NxBRE.InferenceEngine.Core {
 		private FactBaseStorageTypes factBaseStorageType = (FactBaseStorageTypes) Parameter.GetEnum("factBaseStorageTypes", typeof(FactBaseStorageTypes), FactBaseStorageTypes.Hashtable);
 		
 		//TODO: reorganize declarations
-		//TODO: use HashList<Fact> instead of IList<Fact> to enforce fact unicity
-		private readonly IDictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>> predicateMap;
-		private readonly IDictionary<string, IList<Fact>> signatureMap;
-		private readonly IDictionary<Fact, IList<IList<Fact>>> factListReferences;
+		private readonly IDictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, ICollection<Fact>>>>> predicateMap;
+		private readonly IDictionary<string, ICollection<Fact>> signatureMap;
+		private readonly IDictionary<Fact, IList<ICollection<Fact>>> factListReferences;
 		private readonly IDictionary<string, Fact> labelMap;
 		private static readonly IList<Fact> EMPTY_SELECT_RESULT = new List<Fact>().AsReadOnly();
+		private class HashSet<Fact>:ICollection<Fact> {
+			private IDictionary<Fact, Fact> content = new Dictionary<Fact, Fact>();
+			public int Count {
+				get {
+					return content.Count;
+				}
+			}
+			
+			public bool IsReadOnly {
+				get {
+					return false;
+				}
+			}
+			
+			public void Add(Fact item)
+			{
+				content.Add(item, item);
+			}
+			
+			public void Clear()
+			{
+				content.Clear();
+			}
+			
+			public bool Contains(Fact item)
+			{
+				return content.ContainsKey(item);
+			}
+			
+			public void CopyTo(Fact[] array, int arrayIndex)
+			{
+				content.Keys.CopyTo(array, arrayIndex);
+			}
+			
+			public bool Remove(Fact item)
+			{
+				return content.Remove(item);
+			}
+			
+			public IEnumerator<Fact> GetEnumerator()
+			{
+				return content.Keys.GetEnumerator();
+			}
+			
+			System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+			{
+				return content.Keys.GetEnumerator();
+			}
+			
+		}
 		
 		/// <summary>
 		/// A flag that external class can use to detect fact assertions/retractions.
@@ -111,9 +159,9 @@ namespace NxBRE.InferenceEngine.Core {
 		/// Instantiates a new fact base.
 		/// </summary>
 		public FactBase() {
-			predicateMap = new Dictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>>();
-			signatureMap = new Dictionary<string, IList<Fact>>();
-			factListReferences = new Dictionary<Fact, IList<IList<Fact>>>();
+			predicateMap = new Dictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, ICollection<Fact>>>>>();
+			signatureMap = new Dictionary<string, ICollection<Fact>>();
+			factListReferences = new Dictionary<Fact, IList<ICollection<Fact>>>();
 			labelMap = new Dictionary<string, Fact>();
 		}
 		
@@ -136,7 +184,7 @@ namespace NxBRE.InferenceEngine.Core {
 		///<summary>Clones the fact base.</summary>
 		public object Clone() {
 			FactBase fb = new FactBase();
-			for(IEnumerator e = GetEnumerator(); e.MoveNext(); ) fb.Assert((Fact)e.Current);
+			for(IEnumerator<Fact> e = GetEnumerator(); e.MoveNext(); ) fb.Assert(e.Current);
 			return fb;
 		}
 		
@@ -148,39 +196,40 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="predicatePosition"></param>
 		/// <param name="individualValue"></param>
 		private void StoreFactForIndividualValue(Fact fact, int predicatePosition, object individualValue) {
-			IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>> signatureContent;
+			IDictionary<Type, IDictionary<object, IDictionary<int, ICollection<Fact>>>> signatureContent;
 			if (predicateMap.ContainsKey(fact.Signature)) {
 				signatureContent = predicateMap[fact.Signature];
 			}
 			else {
-				signatureContent = new Dictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>();
+				signatureContent = new Dictionary<Type, IDictionary<object, IDictionary<int, ICollection<Fact>>>>();
 				predicateMap.Add(fact.Signature, signatureContent);
 			}
 			
-			IDictionary<object, IDictionary<int, IList<Fact>>> typedContent;
+			IDictionary<object, IDictionary<int, ICollection<Fact>>> typedContent;
 			if (signatureContent.ContainsKey(individualValue.GetType())) {
 				typedContent = signatureContent[individualValue.GetType()];
 			}
 			else {
-				typedContent = new Dictionary<object, IDictionary<int, IList<Fact>>>();
+				typedContent = new Dictionary<object, IDictionary<int, ICollection<Fact>>>();
 				signatureContent.Add(individualValue.GetType(), typedContent);
 			}
 			
-			IDictionary<int, IList<Fact>> valuedContent;
+			IDictionary<int, ICollection<Fact>> valuedContent;
 			if (typedContent.ContainsKey(individualValue)) {
 				valuedContent = typedContent[individualValue];
 			}
 			else {
-				valuedContent = new Dictionary<int, IList<Fact>>();
+				valuedContent = new Dictionary<int, ICollection<Fact>>();
 				typedContent.Add(individualValue, valuedContent);
 			}
 			
-			IList<Fact> positionedContent;
+			ICollection<Fact> positionedContent;
 			if (valuedContent.ContainsKey(predicatePosition)) {
 				positionedContent = valuedContent[predicatePosition];
 			}
 			else {
-				positionedContent = new List<Fact>();
+				// we use a HashSet to enforce fact unicity
+				positionedContent = new HashSet<Fact>();
 				valuedContent.Add(predicatePosition, positionedContent);
 			}
 			
@@ -208,7 +257,7 @@ namespace NxBRE.InferenceEngine.Core {
 				}
 				
 				// store the fact in the signature map, hierarchized on its type and number of predicates
-				IList<Fact> signatureListOfFact;
+				ICollection<Fact> signatureListOfFact;
 				if (signatureMap.ContainsKey(fact.Signature)) {
 					signatureListOfFact = signatureMap[fact.Signature];
 				}
@@ -238,21 +287,6 @@ namespace NxBRE.InferenceEngine.Core {
 				return false;
 		}
 		
-		//TODO: move in private?
-		private void AddFactListReference(Fact fact, IList<Fact> listReference) {
-			IList<IList<Fact>> factListReference;
-			
-			if (factListReferences.ContainsKey(fact)) {
-				factListReference = factListReferences[fact];
-			}
-			else {
-				factListReference = new List<IList<Fact>>();
-				factListReferences.Add(fact, factListReference);
-			}
-			
-			factListReference.Add(listReference);
-		}
-	
 		/// <summary>
 		/// Retracts (removes) a Fact from the FactBase.
 		/// </summary>
@@ -265,7 +299,7 @@ namespace NxBRE.InferenceEngine.Core {
 				Fact storedFact = e.Current;
 				
 				// remove the fact from the lists of reference where it is referenced
-				foreach(IList<Fact> factList in factListReferences[storedFact]) {
+				foreach(ICollection<Fact> factList in factListReferences[storedFact]) {
 					factList.Remove(storedFact);
 				}
 				
@@ -373,20 +407,6 @@ namespace NxBRE.InferenceEngine.Core {
 		}
 
 		/// <summary>
-		/// A read-only collection designed for holding process results.
-		/// </summary>
-//		public class ProcessResultSet:ReadOnlyCollectionBase {
-//			public ProcessResultSet(ArrayList results) {
-//				InnerList.AddRange(results);
-//			}
-//			public ArrayList this[int index] {
-//			  get  {
-//					return((ArrayList)InnerList[index]);
-//			  }
-//			}
-//		}
-		
-		/// <summary>
 		/// Runs an AtomGroup against the FactBase.
 		/// </summary>
 		/// <remarks>
@@ -473,13 +493,6 @@ namespace NxBRE.InferenceEngine.Core {
 							}
 		  			}
 		  		}
-//	  		}
-//	  		else {
-//	  			// formulas must be replaced by variables named after the position of the predicate
-//		  		for(int i=0; i<members.Length; i++)
-//		  			if (members[i] is Formula)
-//		  				members[i] = new Variable(i.ToString());
-//	  		}
 	  	}
 	  	
 	  	// clone the target with new members, because atom is immutable
@@ -534,18 +547,21 @@ namespace NxBRE.InferenceEngine.Core {
 	  	return targetAtom.CloneWithNewMembers(members);
 		}
 		
-		//TODO: useful? make generic
-//		public static Fact[] GetBasicMatches(Atom targetAtom, ArrayList resultStack) {
-//			ArrayList basicMatches = new ArrayList();
-//			
-//			foreach(PositiveMatchResult pmr in resultStack)
-//				if (targetAtom.BasicMatches(pmr.Fact))
-//					basicMatches.Add(pmr.Fact);
-//			
-//			return (Fact[]) basicMatches.ToArray(typeof(Fact));
-//		}
-		
 		//----------------------------- INTERNAL & PRIVATE MEMBERS ------------------------------
+
+		private void AddFactListReference(Fact fact, ICollection<Fact> listReference) {
+			IList<ICollection<Fact>> factListReference;
+			
+			if (factListReferences.ContainsKey(fact)) {
+				factListReference = factListReferences[fact];
+			}
+			else {
+				factListReference = new List<ICollection<Fact>>();
+				factListReferences.Add(fact, factListReference);
+			}
+			
+			factListReference.Add(listReference);
+		}
 
 		/// <summary>
 		/// Gets a list of facts matching a particular atom.
@@ -579,7 +595,7 @@ namespace NxBRE.InferenceEngine.Core {
 			}
 			
 			// we build result lists and will reduce the biggest ones from the smallest ones
-			IList<Fact> resultList = null;
+			ICollection<Fact> resultList = null;
 			int smallestList = Int32.MaxValue;
 			int positionOfSmallestList = -1;
 			
@@ -589,9 +605,9 @@ namespace NxBRE.InferenceEngine.Core {
 					object predicateValue = filter.Members[position].Value;
 					
 					if (predicateMap[filter.Signature].ContainsKey(predicateValue.GetType())) {
-						IDictionary<object, IDictionary<int, IList<Fact>>> predicateValueMap = predicateMap[filter.Signature][predicateValue.GetType()];
+						IDictionary<object, IDictionary<int, ICollection<Fact>>> predicateValueMap = predicateMap[filter.Signature][predicateValue.GetType()];
 						if (predicateValueMap.ContainsKey(predicateValue)) {
-							IDictionary<int, IList<Fact>> predicatePositionMap = predicateValueMap[predicateValue];
+							IDictionary<int, ICollection<Fact>> predicatePositionMap = predicateValueMap[predicateValue];
 							if ((predicatePositionMap.ContainsKey(position)) && (predicatePositionMap[position].Count > 0)) {
 								if (Logger.IsInferenceEngineVerbose)
 									Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
@@ -661,7 +677,6 @@ namespace NxBRE.InferenceEngine.Core {
 			                                                                    excludedFacts);
 		}
 		
-		//FIXME: is this really needed? probably yes but do it the Josh Bloch way
 		private static IList<IList<Fact>> FilterDistinct(IList<IList<PositiveMatchResult>> processResults) {
 			IDictionary<long, IList<Fact>> resultSet = new Dictionary<long, IList<Fact>>();
 			
@@ -675,6 +690,7 @@ namespace NxBRE.InferenceEngine.Core {
 						row.Add(pmr.Fact);
 						rowLongHashCode ^= pmr.Fact.GetHashCode();
 					}
+					//TODO: with more than 16 entries in processResult, we will start losing bits: a rotation would be better
 					rowLongHashCode <<= 1;
 				}
 				
@@ -685,29 +701,6 @@ namespace NxBRE.InferenceEngine.Core {
 			return new List<IList<Fact>>(resultSet.Values).AsReadOnly();
 		}
 	
-		/*
-		private IMatchedFactStorage GetMatchingFactStorageTable(Atom atom) {
-			IMatchedFactStorage mfs = (IMatchedFactStorage)matchedFactStorageTable[atom.Signature];
-			
-			if (mfs == null) {
-				if (factBaseStorageType == FactBaseStorageTypes.DataTable)
-					mfs = new DataTableMatchedFactStorage(atom);
-				else
-					mfs = new HashtableMatchedFactStorage(atom);
-				
-				matchedFactStorageTable.Add(atom.Signature, mfs);
-			}
-			
-			return mfs;
-		}
-		
-		private IEnumerator GetMatchingFacts(Atom atom, ArrayList excludedHashCodes) {
-			throw new NotSupportedException("This should not be used anymore");
-			//return GetMatchingFactStorageTable(atom).Select(atom, excludedHashCodes);
-		}
-*/
-		// Private members ---------------------------------------------------------		
-
 		private void ProcessAnd(AtomGroup AG, IList<IList<PositiveMatchResult>> processResult, int parser, IList<PositiveMatchResult> resultStack) {
 			//TODO: re-order non-function based Atoms according to the number of facts for the atom signature
 			

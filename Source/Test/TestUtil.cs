@@ -211,45 +211,5 @@ namespace NxBRE.Test
 			Assert.IsTrue(Misc.EMPTY_DICTIONARY.IsReadOnly, "EMPTY_DICTIONARY");
 			Assert.IsTrue(Misc.EMPTY_LIST.IsReadOnly, "EMPTY_LIST");
 		}
-		
-		[Test]
-		public void DeepClone() {
-			IList<bool> l1A = new List<bool>();
-			l1A.Add(false);
-			l1A.Add(false);
-			
-			IList<bool> l1B = new List<bool>();
-			l1B.Add(false);
-			l1B.Add(true);
-			
-			IList<bool> l2A = new List<bool>();
-			l2A.Add(true);
-			l2A.Add(false);
-			
-			IList<bool> l2B = new List<bool>();
-			l2B.Add(true);
-			l2B.Add(true);
-			
-			IDictionary<string, IList<bool>> d1 = new Dictionary<string, IList<bool>>();
-			d1.Add("A", l1A);
-			d1.Add("B", l1B);
-			
-			IDictionary<string, IList<bool>> d2 = new Dictionary<string, IList<bool>>();
-			d2.Add("A", l2A);
-			d2.Add("B", l2B);
-			
-			IDictionary<int, IDictionary<string, IList<bool>>> d = new Dictionary<int, IDictionary<string, IList<bool>>>();
-			d.Add(1, d1);
-			d.Add(2, d2);
-		
-			String dBefore = Misc.IDictionaryToString((System.Collections.IDictionary)d);
-			
-			IDictionary<int, IDictionary<string, IList<bool>>> e = (IDictionary<int, IDictionary<string, IList<bool>>>) Misc.DeepClone((System.Collections.IDictionary)d, false);
-			e[1]["A"].Add(false);
-			
-			Assert.AreEqual(dBefore, Misc.IDictionaryToString((System.Collections.IDictionary)d));
-			Assert.AreNotEqual(dBefore, Misc.IDictionaryToString((System.Collections.IDictionary)e));
-		}
-		
 	}
 }

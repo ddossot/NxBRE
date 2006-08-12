@@ -10,9 +10,6 @@ namespace NxBRE.InferenceEngine.Rules {
 	/// </summary>
 	/// <author>David Dossot</author>
 	public sealed class Individual:AbstractPredicate {
-		[ThreadStatic]
-		private static HashAlgorithm ha;
-		
 		private readonly string sourceType;
 		
 		public string SourceType {
@@ -24,8 +21,6 @@ namespace NxBRE.InferenceEngine.Rules {
 		public Individual(object predicate):this(predicate, null) {}
 	
 		public Individual(object predicate, string sourceType):base(predicate) {
-			if (predicate == null) throw new ArgumentNullException("Null is not a valid Individual predicate.");
-				
 			this.sourceType = sourceType;
 		}
 	
@@ -51,41 +46,5 @@ namespace NxBRE.InferenceEngine.Rules {
 			return individuals;
 		}
 		
-		/// <summary>
-		/// The long hashcode is computed by using MD5 in order to prevent problems with poorly
-		/// implemented predicate object hashcodes.
-		/// </summary>
-		/// <returns>The long hashcode of the predicate.</returns>
-		public override long GetLongHashCode() {
-			int hashCode = GetType().GetHashCode() ^ Value.GetHashCode();
-			
-			// bug #1086498, solved by mwherman2000
-			byte[] dataArray = new byte[] { (byte)(hashCode & 0xFF),
-																			(byte)((hashCode >> 8) & 0xFF),
-																			(byte)((hashCode >> 16) & 0xFF),
-																			(byte)((hashCode >> 24) & 0xFF) };
-			
-			byte[] result = HA.ComputeHash(dataArray);
-			
-			long longHashCode = 0;
-			for(int i=0; i<16; i+=8)
-				longHashCode ^= ((long)result[i] |
-						             ((long)result[i+1] << 8) |
-						             ((long)result[i+2] << 16) |
-						             ((long)result[i+3] << 24) |
-						             ((long)result[i+4] << 32) |
-						             ((long)result[i+5] << 40) |
-						             ((long)result[i+6] << 48) |
-						             ((long)result[i+7] << 56));
-			
-			return longHashCode;
-		}
-		
-		private static HashAlgorithm HA {
-			get {
-				if (ha == null) ha = new MD5CryptoServiceProvider();
-				return ha;
-			}
-		}
 	}
 }

@@ -71,15 +71,6 @@ namespace NxBRE.InferenceEngine.Rules {
 		}
 		
 		/// <summary>
-		/// The long hashcode of an Formula should never be used, as an Formula can not be involved in
-		/// any kind of comparison.
-		/// </summary>
-		/// <returns>The long hashcode of the predicate.</returns>
-		public override long GetLongHashCode() {
-			return 0;
-		}
-		
-		/// <summary>
 		/// Evaluate the current Formula with a passed list of arguments.
 		/// </summary>
 		/// <param name="arguments">The name/value pairs of arguments.</param>

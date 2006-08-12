@@ -70,23 +70,6 @@ namespace NxBRE.InferenceEngine.Rules {
 		}
 		
 		/// <summary>
-		/// The long hashcode is computed from the function definition members' hashcodes.
-		/// </summary>
-		/// <returns>The long hashcode of the predicate.</returns>
-		public override long GetLongHashCode() {
-			long longHashCode;
-			
-			if (name != String.Empty) longHashCode = (long)(GetType().GetHashCode() ^ name.GetHashCode());
-			else longHashCode = (long)(GetType().GetHashCode() ^ Value.GetHashCode());
-			
-			foreach(string argument in arguments) {
-				longHashCode <<= 1;
-				longHashCode ^= argument.GetHashCode();
-			}
-			return longHashCode;
-		}
-		
-		/// <summary>
 		/// Checks if an Individual matches the current Function by either calling a NxBRE helper method
 		/// or using a binder.
 		/// </summary>

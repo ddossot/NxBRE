@@ -1,6 +1,6 @@
 namespace NxBRE.InferenceEngine.Core {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	
 	using NxBRE.InferenceEngine.Rules;
 
@@ -12,29 +12,30 @@ namespace NxBRE.InferenceEngine.Core {
 	/// <remarks>Core classes are not supposed to be used directly.</remarks>
 	/// <author>David Dossot</author>
 	internal sealed class Agenda:ICloneable {
-		private ArrayList agenda;
+		private List<Implication> scheduledImplication;
 		private ImplicationComparer implicationComparer;
 		
 		public int Count {
 			get {
-				return agenda.Count;
+				return scheduledImplication.Count;
 			}
 		}
 		
 		public Agenda() {
-			agenda = ArrayList.Synchronized(new ArrayList());
+			//TODO: really need to be sync?
+			scheduledImplication = new List<Implication>();
 			implicationComparer = new ImplicationComparer();
 		}
 		
 		public object Clone() {
 			Agenda agenda = new Agenda();
-			agenda.agenda = (ArrayList)this.agenda.Clone();
+			agenda.scheduledImplication = new List<Implication>(this.scheduledImplication);
 			agenda.implicationComparer = this.implicationComparer;
 			return agenda;
 		}
 		
 		public void PrepareExecution() {
-			agenda.Sort(implicationComparer);
+			scheduledImplication.Sort(implicationComparer);
 		}
 		
 		/// <summary>
@@ -45,8 +46,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// </remarks>
 		/// <param name="implication">The implication to schedule.</param>
 		public void Schedule(Implication implication) {
-			if (!agenda.Contains(implication))
-				agenda.Add(implication);
+			if (!scheduledImplication.Contains(implication)) scheduledImplication.Add(implication);
 		}
 		
 		/// <summary>
@@ -55,7 +55,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// </summary>
 		/// <param name="positiveImplications">Null if it is the first iteration, else en ArrayList of positive implications of current iteration.</param>
 		/// <param name="IB">The current ImplicationBase.</param>
-		public void Schedule(ArrayList positiveImplications, ImplicationBase IB) {
+		public void Schedule(IList<Implication> positiveImplications, ImplicationBase IB) {
 			if (positiveImplications == null) {
 				// schedule all implications
 				foreach(Implication implication in IB) Schedule(implication);
@@ -65,7 +65,7 @@ namespace NxBRE.InferenceEngine.Core {
 					if (positiveImplication.Action != ImplicationAction.Retract) {
 						// for positive implications, schedule only the implications
 						// relevant to the newly asserted facts.
-						ArrayList listeningImplications = IB.GetListeningImplications(positiveImplication.Deduction.Type);
+						IList<Implication> listeningImplications = IB.GetListeningImplications(positiveImplication.Deduction);
 						if (listeningImplications != null)
 							foreach(Implication implication in listeningImplications)
 								Schedule(implication);
@@ -87,10 +87,10 @@ namespace NxBRE.InferenceEngine.Core {
 		
 		public bool HasMoreToExecute {
 			get {
-				if (agenda == null)
+				if (scheduledImplication == null)
 					throw new BREException("The Executing Agenda is null.");
 				
-				return (agenda.Count > 0);
+				return (scheduledImplication.Count > 0);
 			}
 		}
 		
@@ -99,18 +99,15 @@ namespace NxBRE.InferenceEngine.Core {
 				if (!HasMoreToExecute)
 					throw new BREException("The Executing Agenda can not provide any more Implication.");
 				
-				Implication executingImplication = (Implication)agenda[0];
-				agenda.RemoveAt(0);
+				Implication executingImplication = (Implication)scheduledImplication[0];
+				scheduledImplication.RemoveAt(0);
 				return executingImplication;
 			}
 		}
 		
-		private class ImplicationComparer : IComparer  {
-	    int IComparer.Compare(object x, object y)  {
-	    	if ((x is Implication) && (y is Implication))
-	    		return ((Implication)y).Weight - ((Implication)x).Weight;
-	    	else
-	    		return 0;
+		private class ImplicationComparer : IComparer<Implication>  {
+	    public int Compare(Implication x, Implication y)  {
+	    	return ((Implication)y).Weight - ((Implication)x).Weight;
 	    }
 		}
 		

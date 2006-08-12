@@ -24,9 +24,5 @@ namespace NxBRE.InferenceEngine.Rules {
 		public override object Clone() {
 			return new Variable(Value);
 		}
-		
-		public override long GetLongHashCode() {
-			return (long)(GetType().GetHashCode() ^ Value.GetHashCode());
-		}
 	}
 }

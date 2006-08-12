@@ -61,10 +61,7 @@ namespace NxBRE.InferenceEngine.Rules {
 			return Name + "=" + Value.ToString();
 		}
 		
-		public long GetLongHashCode() {
-			return predicate.GetLongHashCode() ^ Name.GetHashCode();
-		}
-		
+		//TODO: override hashcode to include Name?		
 	}
 	
 }

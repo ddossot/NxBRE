@@ -22,8 +22,6 @@ namespace NxBRE.InferenceEngine.Rules {
 		private readonly string[] slotNames;
 		
 		private readonly int hashCode;
-		private readonly long longHashCode;
-		private readonly string stringLongHashCode;
 		private readonly bool isFact;
 		private readonly bool hasSlot;
 		private readonly bool hasFormula;
@@ -132,15 +130,6 @@ namespace NxBRE.InferenceEngine.Rules {
 		}
 		
 		/// <summary>
-		/// Pre-casted string rendering of the long hashcode
-		/// </summary>
-		internal string StringLongHashCode {
-			get {
-				return stringLongHashCode;
-			}
-		}
-		
-		/// <summary>
 		/// Instantiates a new Positive (non-NAF) non-function Relation Atom.
 		/// </summary>
 		/// <param name="type">Type of the Atom.</param>
@@ -177,26 +166,21 @@ namespace NxBRE.InferenceEngine.Rules {
 			}
 			
 			// initialize long hashcode & other characteristics
-			longHashCode = (long)type.GetHashCode() << 32 ^ (long)type.GetHashCode();
+			HashCodeBuilder hcb = new HashCodeBuilder().Append(type);
 			isFact = true;
 			hasFunction = false;
 			hasFormula = false;
 			hasIndividual = false;
 			
 			foreach(IPredicate member in predicates) {
-				longHashCode <<= 1;
-				longHashCode ^= member.GetLongHashCode();
+				hcb.Append(member);
 				if (member is Variable) isFact = false;
 				if (member is Function)	hasFunction = true;
 				if (member is Formula) hasFormula = true;
 				if (member is Individual) hasIndividual = true;
 			}
 			
-			// initialize hashcode
-			hashCode = ((int)(longHashCode & 0xFFFFFFFF) ^ (int)((longHashCode >> 32) & 0xFFFFFFFF));
-			
-			// initialize string hashcode
-			stringLongHashCode = longHashCode.ToString();
+			hashCode = hcb.Value;
 			
 			// initialize signature
 			signature = type + predicates.Length;
@@ -404,43 +388,15 @@ namespace NxBRE.InferenceEngine.Rules {
 			
 			return true;
 		}
-//TODO: kill
-		/*
-		/// <summary>
-		/// Checks if the current Atom is equal to another one, based on their hashcode.
-		/// </summary>
-		/// <param name="o">The other Atom to test the equality.</param>
-		/// <returns>True if the two atoms are equal.</returns>
-		public override bool Equals(object o) {
-			if (o.GetType() != this.GetType()) throw new ArgumentException("Compared object must be a " +
-			                                                               this.GetType() +
-			                                                               " but was " +
-			                                                               o.GetType());
-			
-			return (((Atom)o).GetLongHashCode() == this.GetLongHashCode());
-		}
-
+		
 		/// <summary>
 		/// Calculates the hashcode of the current Atom.
 		/// </summary>
-		/// <remarks>
-		/// The hashcode is a reduction of the long hashcode, obtained by shifting and XORing the
-		/// two Int32 composing the long hashcode. It is therefore less accurate.
-		/// </remarks>
 		/// <returns>The hashcode of the current Atom.</returns>
 		public override int GetHashCode() {
 			return hashCode;
 		}
-		
-		/// <summary>
-		/// Calculates the long hashcode of the current Atom by combining the hashcodes of its predicates.
-		/// The predicates are not permutable, i.e. their position is significant.
-		/// </summary>
-		/// <returns>The long hashcode of the current Atom.</returns>
-		public long GetLongHashCode() {
-			return longHashCode;
-		}
-*/
+
 		/// <summary>
 		/// A helper method for easily reaching a member predicate value from its index.
 		/// </summary>

@@ -2,6 +2,7 @@ namespace NxBRE.Util
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	
 	/// <summary>Misc NxBRE utilities.</summary>
 	/// <author>David Dossot</author>
@@ -80,6 +81,34 @@ namespace NxBRE.Util
 		}
 
 		/// <summary>
+		/// Outputs the content of an Array in a string.
+		/// </summary>
+		/// <param name="objects">The Array to output.</param>
+		/// <returns>The content of the Array in a string.</returns>
+		public static string ArrayToString(Array array) {
+			return IListToString(array, String.Empty);	
+		}
+		
+		/// <summary>
+		/// Outputs the content of a generic IList in a string.
+		/// </summary>
+		/// <param name="objects">The IList to output.</param>
+		/// <returns>The content of the IList in a string.</returns>
+		public static string IListToString<T>(IList<T> objects) {
+			return IListToString((IList)objects, String.Empty);
+		}
+		
+		/// <summary>
+		/// Outputs the content of a generic IList in a string.
+		/// </summary>
+		/// <param name="objects">The generic IList to output.</param>
+		/// <param name="margin">A left margin string to place before each value.</param>
+		/// <returns>The content of the IList in a string.</returns>
+		public static string IListToString<T>(IList<T> objects, string margin) {
+			return IListToString((IList) objects, margin);
+		}
+
+		/// <summary>
 		/// Outputs the content of an IList in a string.
 		/// </summary>
 		/// <param name="objects">The IList to output.</param>
@@ -105,6 +134,15 @@ namespace NxBRE.Util
 			}
 				
 			return result + ")";	
+		}
+				
+		/// <summary>
+		/// Outputs the content of a generic IDictionary in a string.
+		/// </summary>
+		/// <param name="map">The IDictionary to output.</param>
+		/// <returns>The content of the IDictionary in a string.</returns>
+		public static string IDictionaryToString<TKey, TValue>(IDictionary<TKey, TValue> map) {
+			return IDictionaryToString((IDictionary) map);
 		}
 		
 		/// <summary>
@@ -133,58 +171,6 @@ namespace NxBRE.Util
 				
 			return result + "]";
 		}
-		
-		/// <summary>
-		/// Deep clones an IDictionary.
-		/// If a value element is an IDictionary or IList, DeepClone will be called recursively.
-		/// </summary>
-		/// <param name="source">The source collection.</param>
-		/// <param name="cloneContent">If true, the content of the collections will be cloned if it supports ICloneable ; else the same object will be used</param>
-		/// <returns>A clone of the source collection.</returns>
-		public static IDictionary DeepClone(IDictionary source, bool cloneContent) {
-			IDictionary result = (IDictionary)Activator.CreateInstance(source.GetType());
-			
-			foreach(object key in source.Keys) {
-				object val = source[key];
-				if (val is IDictionary) result.Add(key, DeepClone((IDictionary)val, cloneContent));
-				else if (val is IList) result.Add(key, DeepClone((IList)val, cloneContent));
-				else if ((cloneContent) && (val is ICloneable)) result.Add(key, ((ICloneable)val).Clone());
-				else result.Add(key, val);
-			}
-			
-			return result;
-		}
-		
-		/// <summary>
-		/// Deep clones an IList.
-		/// If an element is an IDictionary or IList, DeepClone will be called recursively.
-		/// </summary>
-		/// <param name="source">The source collection.</param>
-		/// <param name="cloneContent">If true, the content of the collections will be cloned if it supports ICloneable ; else the same object will be used</param>
-		/// <returns>A clone of the source collection.</returns>
-		public static IList DeepClone(IList source, bool cloneContent) {
-			IList result = (IList)Activator.CreateInstance(source.GetType());
-			
-			foreach(object val in source) {
-				if (val is IDictionary) result.Add(DeepClone((IDictionary)val, cloneContent));
-				else if (val is IList) result.Add(DeepClone((IList)val, cloneContent));
-				else if ((cloneContent) && (val is ICloneable)) result.Add(((ICloneable)val).Clone());
-				else result.Add(val);
-			}
-			
-			return result;
-		}
-		
 
-		
-		/// <summary>
-		/// Returns either the string value if o is a string, else a string representation of its hashcode.
-		/// </summary>
-		/// <param name="o"></param>
-		/// <returns></returns>
-		public static string GetStringHashcode(object o) {
-			return (o is string)?(string)o:o.GetHashCode().ToString();
-		}
-		
 	}
 }
