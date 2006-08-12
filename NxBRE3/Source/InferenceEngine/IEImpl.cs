@@ -516,7 +516,7 @@ namespace NxBRE.InferenceEngine {
 			
 			iteration = 0;
 
-			if (Logger.IsInferenceEngineInformation) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Information, 0, "NxBRE Inference Engine Processing Started");
+			if (Logger.IsInferenceEngineInformation) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Information, 0, "NxBRE v" + Reflection.NXBRE_VERSION + " Inference Engine Processing Started");
 			
 			if (businessObjects == null)
 				InferUntilNoNewFact(new ArrayList());
