@@ -42,27 +42,6 @@ namespace NxBRE.StressTests
 			Console.WriteLine("Enter to shutdown now or when all processes are finished");
 			Console.ReadLine();
 			if (mc.running) mc.StopTests(null);
-			GC.Collect();
-			Console.WriteLine("GC done. Thread state analysis:");
-			
-			// this is done just for test purpose
-			IDictionaryEnumerator threadEnumerator = mc.threadMap.GetEnumerator();
-			ArrayList deadThreads = new ArrayList();
-			
-			while(threadEnumerator.MoveNext()) {
-				Thread t = ((Thread)threadEnumerator.Key);
-				Console.WriteLine("#{0}.IsAlive={1}", threadEnumerator.Value, t.IsAlive);
-				if (!t.IsAlive) deadThreads.Add(t);
-			}
-			
-			foreach(Thread t in deadThreads) {
-				mc.threadMap.Remove(t);
-				Console.WriteLine("{0} has been dereferenced", t);
-			}
-			
-      Console.WriteLine();
-			Console.WriteLine("Enter to quit");
-			Console.ReadLine();
 		}
 		
 		private void WriteRules() {

@@ -387,6 +387,26 @@ namespace NxBRE.InferenceEngine.Rules {
 		}
 		
 		/// <summary>
+		/// Checks if the current Atom is equal to another one, based on their type and predicates.
+		/// </summary>
+		/// <param name="o">The other Atom to test the equality.</param>
+		/// <returns>True if the two atoms are equal.</returns>
+		public override bool Equals(object o) {
+			if (o.GetType() != this.GetType()) return false;
+			
+			Atom other = (Atom)o;
+			
+			if (Signature != other.Signature) return false;
+			
+			for(int i=0; i<Members.Length; i++)
+				if (!Members[i].Equals(other.Members[i]))
+					return false;
+			
+			return true;
+		}
+//TODO: kill
+		/*
+		/// <summary>
 		/// Checks if the current Atom is equal to another one, based on their hashcode.
 		/// </summary>
 		/// <param name="o">The other Atom to test the equality.</param>
@@ -420,7 +440,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		public long GetLongHashCode() {
 			return longHashCode;
 		}
-
+*/
 		/// <summary>
 		/// A helper method for easily reaching a member predicate value from its index.
 		/// </summary>

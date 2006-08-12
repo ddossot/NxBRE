@@ -91,13 +91,9 @@
     <Compile Include="InferenceEngine\IPredicate.cs" />
     <Compile Include="InferenceEngine\NewFactEvent.cs" />
     <Compile Include="InferenceEngine\Core\AbstractChainManager.cs" />
-    <Compile Include="InferenceEngine\Core\AbstractFactEnumerator.cs" />
     <Compile Include="InferenceEngine\Core\AbstractWorkingMemory.cs" />
     <Compile Include="InferenceEngine\Core\Agenda.cs" />
-    <Compile Include="InferenceEngine\Core\DataTableMatchedFactStorage.cs" />
     <Compile Include="InferenceEngine\Core\FactBase.cs" />
-    <Compile Include="InferenceEngine\Core\HashtableMatchedFactStorage.cs" />
-    <Compile Include="InferenceEngine\Core\IMatchedFactStorage.cs.cs" />
     <Compile Include="InferenceEngine\Core\ImplicationBase.cs" />
     <Compile Include="InferenceEngine\Core\IWorkingMemory.cs" />
     <Compile Include="InferenceEngine\Core\MutexManager.cs" />

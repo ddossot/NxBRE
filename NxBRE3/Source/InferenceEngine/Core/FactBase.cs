@@ -36,24 +36,8 @@ namespace NxBRE.InferenceEngine.Core {
 		/// </summary>
 		private FactBaseStorageTypes factBaseStorageType = (FactBaseStorageTypes) Parameter.GetEnum("factBaseStorageTypes", typeof(FactBaseStorageTypes), FactBaseStorageTypes.Hashtable);
 		
-		/// <summary>
-		/// The central repository of facts
-		/// </summary>
-		private Hashtable factList;
-
-		/// <summary>
-		/// The repository of matched resolved facts for search at inference time.
-		/// </summary>
-		private Hashtable matchedFactStorageTable;
-		
-		/// <summary>
-		/// The list of all atoms found in implications and queries - including transient queries
-		/// run against the fact base.
-		/// </summary>
-		private Hashtable atomList;
-		
-		
 		//TODO: reorganize declarations
+		//TODO: use HashList<Fact> instead of IList<Fact> to enforce fact unicity
 		private readonly IDictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, IList<Fact>>>>> predicateMap;
 		private readonly IDictionary<string, IList<Fact>> signatureMap;
 		private readonly IDictionary<Fact, IList<IList<Fact>>> factListReferences;
@@ -155,21 +139,6 @@ namespace NxBRE.InferenceEngine.Core {
 			FactBase fb = new FactBase();
 			for(IEnumerator e = GetEnumerator(); e.MoveNext(); ) fb.Assert((Fact)e.Current);
 			return fb;
-		}
-		
-		/// <summary>
-		/// Register the provided atoms in the atomMap, in order to allow referencing all facts
-		/// that match each of the atom.
-		/// </summary>
-		/// <remarks>
-		/// This operation facilitates the scheduling of implications to fire in the Agenda,
-		/// by pre-determining all the potentially matching facts.
-		/// </remarks>
-		/// <param name="atoms">An array of Atoms</param>
-		/// <returns>The number of atoms registered.</returns>
-		public int RegisterAtoms(params Atom[] atoms) {
-//FIXME: remove method			
-			return 0;
 		}
 		
 		/// <summary>
@@ -375,7 +344,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// </summary>
 		/// <returns>The String representation of the FactBase.</returns>
 		public override string ToString() {
-			return "FactBase[factList:" + factList.Count + "]";
+			return "FactBase[Count:" + Count + "]";
 		}
 		
 		/// <summary>
@@ -693,7 +662,7 @@ namespace NxBRE.InferenceEngine.Core {
 			                                                                    excludedFacts);
 		}
 		
-		//FIXME: is this really needed? probably yes but not based on long hashcode
+		//FIXME: is this really needed? probably yes but do it the Josh Bloch way
 		private static IList<IList<Fact>> FilterDistinct(IList<IList<PositiveMatchResult>> processResults) {
 			IDictionary<long, IList<Fact>> resultSet = new Dictionary<long, IList<Fact>>();
 			
@@ -705,7 +674,7 @@ namespace NxBRE.InferenceEngine.Core {
 					// naf atom dummy results are skipped
 					if (!(pmr.Fact is FactBase.NegativeFact)) {
 						row.Add(pmr.Fact);
-						rowLongHashCode ^= pmr.Fact.GetLongHashCode();
+						rowLongHashCode ^= pmr.Fact.GetHashCode();
 					}
 					rowLongHashCode <<= 1;
 				}

@@ -13,6 +13,7 @@ namespace NxBRE.InferenceEngine.Core {
 	/// <remarks>Core classes are not supposed to be used directly.</remarks>
 	/// <author>David Dossot</author>
 	internal sealed class QueryBase:IEnumerable {
+		//TODO: make generic
 		private ArrayList queryDefs;
 		
 		public int Count {
