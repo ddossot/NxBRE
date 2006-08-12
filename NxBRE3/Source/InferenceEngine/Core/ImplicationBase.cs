@@ -12,6 +12,7 @@ namespace NxBRE.InferenceEngine.Core {
 	/// <remarks>Core classes are not supposed to be used directly.</remarks>
 	/// <author>David Dossot</author>
 	internal sealed class ImplicationBase:IEnumerable {
+		//TODO: make generic
 		private ArrayList implications;
 		private Hashtable implicationsMap;
 
@@ -38,6 +39,7 @@ namespace NxBRE.InferenceEngine.Core {
 			ArrayList typeListeners;
 			
 			foreach(Atom atom in implication.AtomGroup.AllAtoms) {
+				//TODO: base on atom.Signature, not Type, it will be more accurate
 				if (!implicationsMap.ContainsKey(atom.Type)) {
 					typeListeners = new ArrayList();
 					implicationsMap.Add(atom.Type, typeListeners);
