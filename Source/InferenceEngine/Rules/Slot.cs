@@ -60,8 +60,6 @@ namespace NxBRE.InferenceEngine.Rules {
 		public override string ToString() {
 			return Name + "=" + Value.ToString();
 		}
-		
-		//TODO: override hashcode to include Name?		
 	}
 	
 }

@@ -22,7 +22,6 @@ namespace NxBRE.InferenceEngine.Core {
 		}
 		
 		public Agenda() {
-			//TODO: really need to be sync?
 			scheduledImplication = new List<Implication>();
 			implicationComparer = new ImplicationComparer();
 		}
