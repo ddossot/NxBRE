@@ -755,7 +755,7 @@ namespace NxBRE.InferenceEngine {
 															            QB.Count + " queries.");
 			
 			iniTime = DateTime.Now.Ticks;
-			ArrayList iterationPositiveImplications = null;
+			IList<Implication> iterationPositiveImplications = null;
 			bool iterate = true;
 			Agenda agenda = new Agenda();
 
@@ -777,7 +777,7 @@ namespace NxBRE.InferenceEngine {
 																	            agenda.Count + " implications in agenda, with " +
 																	            positiveImplications.Count + " positive.");
 				
-				iterationPositiveImplications = new ArrayList();
+				iterationPositiveImplications = new List<Implication>();
 					
 				while (agenda.HasMoreToExecute) {
 					Implication firedImplication = agenda.NextToExecute;

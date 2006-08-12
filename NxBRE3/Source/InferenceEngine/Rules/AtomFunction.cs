@@ -133,7 +133,7 @@ namespace NxBRE.InferenceEngine.Rules {
 					try {
 						return bob.Relate(functionSignature, PredicateValues);
 					} catch(Exception e) {
-						throw new BREException("Error when evaluating '"+ functionSignature + "' with predicates: " + Misc.IListToString(PredicateValues) ,e);
+						throw new BREException("Error when evaluating '"+ functionSignature + "' with predicates: " + Misc.ArrayToString(PredicateValues) ,e);
 					}
 				}
 				else

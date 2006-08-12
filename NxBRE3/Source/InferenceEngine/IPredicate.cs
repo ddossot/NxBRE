@@ -10,11 +10,5 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// The actual value of the Predicate.
 		/// </summary>
 		object Value { get; }
-		
-		/// <summary>
-		/// The predicate long hash code, used for calculating highly-differentiated facts.
-		/// </summary>
-		/// <returns>The long hash code.</returns>
-		long GetLongHashCode();
 	}
 }

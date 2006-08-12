@@ -226,7 +226,7 @@ namespace NxBRE.Test.InferenceEngine {
 			ib.Add(impMedHi);
 			new PreconditionManager(ib).AnalyzeImplications();
 			
-			ArrayList preconditionChildren = ib.GetPreconditionChildren(impMedLow);
+			IList<Implication> preconditionChildren = ib.GetPreconditionChildren(impMedLow);
 			Assert.AreEqual(1, preconditionChildren.Count, "preconditionChildren size");
 			Assert.IsTrue(preconditionChildren.Contains(impMedHi), "preconditionChildren content");
 		}

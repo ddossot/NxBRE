@@ -1,6 +1,6 @@
 namespace NxBRE.InferenceEngine.Core {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	
 	using NxBRE.InferenceEngine.Rules;
 	using NxBRE.Util;
@@ -12,9 +12,8 @@ namespace NxBRE.InferenceEngine.Core {
 	/// </summary>
 	/// <remarks>Core classes are not supposed to be used directly.</remarks>
 	/// <author>David Dossot</author>
-	internal sealed class QueryBase:IEnumerable {
-		//TODO: make generic
-		private ArrayList queryDefs;
+	internal sealed class QueryBase:IEnumerable<Query> {
+		private IList<Query> queryDefs;
 		
 		public int Count {
 			get {
@@ -23,17 +22,20 @@ namespace NxBRE.InferenceEngine.Core {
 		}
 		
 		public QueryBase() {
-			queryDefs = ArrayList.Synchronized(new ArrayList());
+			//TODO: really need to be sync?
+			queryDefs = new List<Query>();
 		}
 		
 		public void Add(Query query) {
-			if (queryDefs.Contains(query))
-				throw new BREException("The knowledge base already contains a similar query: " + query);
-
+			if (queryDefs.Contains(query)) throw new BREException("The knowledge base already contains a similar query: " + query);
 			queryDefs.Add(query);
 		}
 		
-		public IEnumerator GetEnumerator() {
+		public IEnumerator<Query> GetEnumerator() {
+			return queryDefs.GetEnumerator();
+		}
+		
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
 			return queryDefs.GetEnumerator();
 		}
 		

@@ -1,17 +1,15 @@
 namespace NxBRE.InferenceEngine.Rules {
 	using System;
 	
+	using NxBRE.Util;
+	
 	/// <summary>
 	/// AbstractPredicate is the prototype for predicates. It is immutable.
 	/// </summary>
 	/// <author>David Dossot</author>
 	public abstract class AbstractPredicate:IPredicate {
 		private readonly object predicate;
-		
-		// the hashcode is expensive to compute, so do it lazily
-		private int hashCode = 0;
-		//FIXME: kill
-		private bool hashCodeInitialized;
+		private readonly int hashCode;
 		
 		/// <summary>
 		/// The actual value of the Predicate.
@@ -23,8 +21,10 @@ namespace NxBRE.InferenceEngine.Rules {
 		}
 		
 		protected AbstractPredicate(object predicate) {
+			if (predicate == null) throw new ArgumentNullException("Null is not a valid predicate.");
+
 			this.predicate = predicate;
-			hashCodeInitialized = false;
+			this.hashCode = new HashCodeBuilder().Append(predicate.GetType()).Append(predicate).Value;
 		}
 		
 		public override string ToString() {
@@ -42,34 +42,8 @@ namespace NxBRE.InferenceEngine.Rules {
 		}
 
 		public override int GetHashCode() {
-			if (hashCode == 0) {
-				int result = 17;
-				result = 37 * result + Value.GetType().GetHashCode();
-				result = 37 * result + Value.GetHashCode();
-				hashCode = result;
-			}
 			return hashCode;
 		}
-
-		/*
-		public override int GetHashCode() {
-			if (!hashCodeInitialized) {
-				long lhc = GetLongHashCode();
-				hashCode = (int)(lhc & 0xFFFFFFFF) ^ (int)((lhc >> 32) & 0xFFFFFFFF);
-				hashCodeInitialized = true;
-			}
-			return hashCode;
-		}
-		
-		public override bool Equals(object o) {
-			if (!(o is IPredicate)) throw new ArgumentException();
-			 
-			return ((o.GetType().IsInstanceOfType(this))
-			        && (((IPredicate)o).GetLongHashCode() == this.GetLongHashCode()));
-		}
-		*/
-		
-		public abstract long GetLongHashCode();
 		
 	}
 	

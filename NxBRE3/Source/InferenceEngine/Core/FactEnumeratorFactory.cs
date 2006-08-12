@@ -17,12 +17,12 @@ namespace NxBRE.InferenceEngine.Core
 			return new SingleFactEnumerator(fact);
 		}
 		
-		public static IEnumerator<Fact> NewFactListExcludingEnumerator(IList<Fact> factList, IList<Fact> excludedFacts) {
+		public static IEnumerator<Fact> NewFactListExcludingEnumerator(ICollection<Fact> factList, IList<Fact> excludedFacts) {
 			if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "NewFactListExcludingEnumerator: factList.Count=" + factList.Count + " - excludedFacts.Count=" + excludedFacts.Count);
 			return new FactListEnumerator(factList, excludedFacts);
 		}
 		
-		public static IEnumerator<Fact> NewFactListPredicateMatchingEnumerator(IList<Fact> factList, Atom filter, bool strictTyping, IList<int> ignoredPredicates, IList<Fact> excludedFacts) {
+		public static IEnumerator<Fact> NewFactListPredicateMatchingEnumerator(ICollection<Fact> factList, Atom filter, bool strictTyping, IList<int> ignoredPredicates, IList<Fact> excludedFacts) {
 			if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "NewFactListPredicateMatchingEnumerator: factList.Count=" + factList.Count + " - filter=" + filter + " - strictTyping=" + strictTyping + " - ignoredPredicates=" + Misc.IListToString((System.Collections.IList)ignoredPredicates) + " - excludedFacts.Count=" + excludedFacts.Count);
 			return new FactListPredicateMatchingEnumerator(factList, filter, strictTyping, ignoredPredicates, excludedFacts);
 		}
@@ -113,22 +113,22 @@ namespace NxBRE.InferenceEngine.Core
 	}
 	
 		private class FactListEnumerator : AbstractExcludingFactEnumerator<Fact> {
-			private IList<Fact> factList;
+			private IEnumerator<Fact> factEnumerator;
 			
-			public FactListEnumerator(IList<Fact> factList):this(factList, null) {}
+			public FactListEnumerator(ICollection<Fact> factList):this(factList, null) {}
 			
-			public FactListEnumerator(IList<Fact> factList, IList<Fact> excludedFacts):base(excludedFacts) {
-				this.factList = factList;
+			public FactListEnumerator(ICollection<Fact> factList, IList<Fact> excludedFacts):base(excludedFacts) {
+				this.factEnumerator = factList.GetEnumerator();
 			}
 			
 			public override void Dispose() {
 				base.Dispose();
-				factList = null;
+				factEnumerator = null;
 			}
 			
 			protected override bool DoMoveNext() {
-				if (position >= factList.Count) return false;
-				currentFact = factList[position];
+				if (!factEnumerator.MoveNext()) return false;
+				currentFact = factEnumerator.Current;
 				return true;
 			}
 		}
@@ -138,9 +138,9 @@ namespace NxBRE.InferenceEngine.Core
 			private bool strictTyping;
 			private IList<int> ignoredPredicates;
 			
-			public FactListPredicateMatchingEnumerator(IList<Fact> factList, Atom filter, bool strictTyping, IList<int> ignoredPredicates):this(factList, filter, strictTyping, ignoredPredicates, null) {}
+			public FactListPredicateMatchingEnumerator(ICollection<Fact> factList, Atom filter, bool strictTyping, IList<int> ignoredPredicates):this(factList, filter, strictTyping, ignoredPredicates, null) {}
 			
-			public FactListPredicateMatchingEnumerator(IList<Fact> factList, Atom filter, bool strictTyping, IList<int> ignoredPredicates, IList<Fact> excludedFacts):base(factList, excludedFacts) {
+			public FactListPredicateMatchingEnumerator(ICollection<Fact> factList, Atom filter, bool strictTyping, IList<int> ignoredPredicates, IList<Fact> excludedFacts):base(factList, excludedFacts) {
 				this.filter = filter;
 				this.strictTyping = strictTyping;
 				this.ignoredPredicates = ignoredPredicates;

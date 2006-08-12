@@ -81,7 +81,7 @@ namespace NxBRE.Util
 		/// <param name="xsdResourceName"></param>
 		/// <returns></returns>
 		public static XmlReader NewValidatingReader(XmlReader xmlReader, ValidationType validationType, params string[] xsdResourceName) {
-			if (Logger.IsUtilVerbose) Logger.UtilSource.TraceEvent(TraceEventType.Verbose, 0, "Instantiating new validating reader with validation: " + validationType + " and XSDs " + Misc.IListToString(xsdResourceName));
+			if (Logger.IsUtilVerbose) Logger.UtilSource.TraceEvent(TraceEventType.Verbose, 0, "Instantiating new validating reader with validation: " + validationType + " and XSDs " + Misc.ArrayToString(xsdResourceName));
 			
 			XmlReaderSettings xmlReaderSettings = new XmlReaderSettings();
 			
