@@ -1,6 +1,7 @@
 namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Xml;
 	using System.Xml.Schema;
@@ -670,7 +671,7 @@ namespace NxBRE.InferenceEngine.IO {
 			foreach(Implication implication in implications) WriteImplication(target, implication);
 		}
 
-		protected override void WriteFacts(ArrayList facts) {
+		protected override void WriteFacts(IList<Fact> facts) {
 			XmlElement target = WriteMapElement("Assert");
 			foreach(Fact fact in facts)	WriteFact(target, fact);
 		}

@@ -1,11 +1,14 @@
 namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Xml;
 	using System.Xml.Xsl;
 	using System.Xml.XPath;
 
+	using NxBRE.InferenceEngine.Rules;
+	
 	using NxBRE.Util;
 	
 	///<summary>Adapter supporting Visio 2003 DatadiagramML Format (VDX file).</summary>
@@ -123,7 +126,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// <summary>
 		/// Collection containing all the facts in the rulebase.
 		/// </summary>
-		public ArrayList Facts {
+		public IList<Fact> Facts {
 			get {
 				return rml086da.Facts;
 			}
