@@ -40,7 +40,6 @@ namespace NxBRE.InferenceEngine.Core {
 		private readonly IDictionary<Fact, IList<ICollection<Fact>>> factListReferences;
 		private readonly IDictionary<string, Fact> labelMap;
 		private static readonly IList<Fact> EMPTY_SELECT_RESULT = new List<Fact>().AsReadOnly();
-		private readonly IDictionary<string, IDictionary<Atom, IEnumerator<Fact>>> resultCache;
 		
 		/// <summary>
 		/// A flag that external class can use to detect fact assertions/retractions.
@@ -115,7 +114,6 @@ namespace NxBRE.InferenceEngine.Core {
 			factListReferences = new Dictionary<Fact, IList<ICollection<Fact>>>();
 			labelMap = new Dictionary<string, Fact>();
 			atomGroupMemberComparer = new AtomGroupMemberComparer(signatureMap);
-			resultCache = new Dictionary<string, IDictionary<Atom, IEnumerator<Fact>>>();
 		}
 		
 		/// <summary>
@@ -233,14 +231,6 @@ namespace NxBRE.InferenceEngine.Core {
 				// the fact was new and added to the factbase, return true
 				if (!ModifiedFlag) ModifiedFlag = true;
 				
-				// purge the cache for this signature
-				if (resultCache.ContainsKey(fact.Signature)) {
-					resultCache.Remove(fact.Signature);
-					
-					if (Logger.IsInferenceEngineVerbose)
-						Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Purged result cache for fact signature: " + fact.Signature);
-				}
-				
 				return true;
 			}
 			else
@@ -273,14 +263,6 @@ namespace NxBRE.InferenceEngine.Core {
 				// the fact existing and removed from the factbase, return true
 				if (!ModifiedFlag) ModifiedFlag = true;
 
-				// purge the cache for this signature
-				if (resultCache.ContainsKey(fact.Signature)) {
-					resultCache.Remove(fact.Signature);
-					
-					if (Logger.IsInferenceEngineVerbose)
-						Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Purged result cache for fact signature: " + fact.Signature);
-				}
-				
 				return true;
 			}
 			
@@ -532,52 +514,13 @@ namespace NxBRE.InferenceEngine.Core {
 			factListReference.Add(listReference);
 		}
 
-		internal IEnumerator<Fact> Select(Atom filter, IList<Fact> excludedFacts) {
-			IEnumerator<Fact> result;
-			
-			// for now, look into cache only if no excluded facts
-			if ((excludedFacts == null) || (excludedFacts.Count == 0)) {
-				if (resultCache.ContainsKey(filter.Signature)) {
-					IDictionary<Atom, IEnumerator<Fact>> resultCacheSignature = resultCache[filter.Signature];
-					if (resultCacheSignature.ContainsKey(filter)) {
-						if (Logger.IsInferenceEngineVerbose)
-							Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "FactBase.Select Cache hit for: " + filter);
-	
-						result = resultCacheSignature[filter];
-						result.Reset();
-						return result;
-					}
-				}
-			}
-			
-			result = SelectNoCache(filter, excludedFacts);
-			
-			// for now, look into cache only if no excluded facts
-			if ((excludedFacts == null) || (excludedFacts.Count == 0)) {
-				IDictionary<Atom, IEnumerator<Fact>> resultCacheSignature;
-				if (!resultCache.ContainsKey(filter.Signature)) {
-					resultCacheSignature = new Dictionary<Atom, IEnumerator<Fact>>();
-					resultCache.Add(filter.Signature, resultCacheSignature);
-				}
-				else {
-					resultCacheSignature = resultCache[filter.Signature];
-				}
-				resultCacheSignature.Add(filter, result);
-
-				if (Logger.IsInferenceEngineVerbose)
-					Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "FactBase.Select Cache stored: " + filter);
-			}
-			
-			return result;
-		}
-		
 		/// <summary>
 		/// Gets a list of facts matching a particular atom.
 		/// </summary>
 		/// <param name="atom">The atom to match</param>
 		/// <param name="excludedFacts">A list of facts not to return, or null</param>
 		/// <returns>An IList containing the matching facts (empty if no match, but never null).</returns>
-		private IEnumerator<Fact> SelectNoCache(Atom filter, IList<Fact> excludedFacts) {
+		public IEnumerator<Fact> Select(Atom filter, IList<Fact> excludedFacts) {
 			if (Logger.IsInferenceEngineVerbose)
 				Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
 				                                        0,
