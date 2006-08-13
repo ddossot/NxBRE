@@ -107,6 +107,9 @@ namespace NxBRE.StressTests
 		private void StopTests(object o) {
 			running = false;
 			
+			// 3 seconds of cool down
+			Thread.Sleep(3000);
+			
 			Console.WriteLine();
 			Console.WriteLine("********************************");
 
@@ -117,6 +120,8 @@ namespace NxBRE.StressTests
 	
 			Console.WriteLine("********************************");
 			Console.WriteLine();
+			Console.Out.Flush();
+			Thread.Sleep(500);
 		}
 		
 		private void SwitchBinder(object o) {
