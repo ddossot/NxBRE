@@ -13,11 +13,16 @@ namespace NxBRE.Util
 			hashCode = 17;
 		}
 		
+		public HashCodeBuilder(int hashCode) {
+			this.hashCode = hashCode;
+		}
+		
 		public HashCodeBuilder Append(object o) {
-			long temp = Math.BigMul(37, hashCode);
+			if (o != null) {
+				long temp = Math.BigMul(37, hashCode);
+				hashCode = (Convert.ToInt32(temp & Int32.MaxValue) ^ (int)(temp >> 32)) ^ o.GetHashCode();
+			}
 			
-			hashCode = (Convert.ToInt32(temp & Int32.MaxValue) ^ (int)(temp >> 32)) ^ o.GetHashCode();
-
 			return this;
 		}
 		
