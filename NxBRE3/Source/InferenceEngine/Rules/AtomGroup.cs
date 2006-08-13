@@ -94,6 +94,8 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// </summary>
 		/// <param name="logicalOperator">The operator that characterizes the relationship between the atoms and atoms group.</param>
 		/// <param name="members">An array containing atoms and atom groups.</param>
+		/// <param name="runningMembers">An array containing atoms and atom groups that will actually be run (they can be different
+		/// from the members because of atom equivalence).</param>
 		internal AtomGroup(LogicalOperator logicalOperator, object[] members, object[] runningMembers) {
 			// order atoms & groups so naf-atoms are at the end
 			foreach(object o in members) {
@@ -161,17 +163,5 @@ namespace NxBRE.InferenceEngine.Rules {
 						 Misc.IListToString(new ArrayList(members), "  ") +
 						 ")";
 		}
-		
-		/// <summary>
-		/// Returns the String representation of the AtomGroup running members for internal purpose only.
-		/// </summary>
-		/// <returns>The String representation of the AtomGroup.</returns>
-		internal string ToStringWithRunningMembers() {
-			return Operator +
-						 "(\n" +
-						 Misc.IListToString(new ArrayList(orderedMembers), "  ") +
-						 ")";
-		}
-		
 	}
 }
