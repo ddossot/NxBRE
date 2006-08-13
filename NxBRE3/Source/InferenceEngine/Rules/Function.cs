@@ -19,6 +19,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		private readonly string name;
 		private readonly string functionSignature;
 		private readonly FunctionResolutionType resolutionType;
+		private readonly int hashCode;
 	
 		/// <summary>
 		/// The different types of resolution methods for the function.
@@ -57,12 +58,16 @@ namespace NxBRE.InferenceEngine.Rules {
 			this.name = name;
 			this.arguments = arguments;
 			
-			HashCodeBuilder hcb = new HashCodeBuilder(base.hashCode).Append(resolutionType).Append(bob).Append(name);
+			HashCodeBuilder hcb = new HashCodeBuilder(base.GetHashCode()).Append(resolutionType).Append(bob).Append(name);
 			foreach(string argument in arguments) hcb.Append(argument);
-			base.hashCode = hcb.Value;
+			hashCode = hcb.Value;
 			
 			// precalculate the function signature to use in the binder to evaluate the function
 			functionSignature = Parameter.BuildFunctionSignature(name, arguments);
+		}
+		
+		public override int GetHashCode() {
+			return hashCode;
 		}
 	
 		/// <summary>
