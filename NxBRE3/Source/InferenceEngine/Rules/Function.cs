@@ -52,11 +52,14 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <param name="name">The name of the function, as it was analyzed by the binder.</param>
 		/// <param name="arguments">The array of arguments of the function, as it was analyzed by the binder.</param>
 		public Function(FunctionResolutionType resolutionType, string predicate, IBinder bob, string name, params string[] arguments):base(predicate) {
-			//FIXME: hashcode should be overriden to use these fields as well
 			this.resolutionType = resolutionType;
 			this.bob = bob;
 			this.name = name;
 			this.arguments = arguments;
+			
+			HashCodeBuilder hcb = new HashCodeBuilder(base.hashCode).Append(resolutionType).Append(bob).Append(name);
+			foreach(string argument in arguments) hcb.Append(argument);
+			base.hashCode = hcb.Value;
 			
 			// precalculate the function signature to use in the binder to evaluate the function
 			functionSignature = Parameter.BuildFunctionSignature(name, arguments);

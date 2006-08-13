@@ -9,7 +9,7 @@ namespace NxBRE.InferenceEngine.Rules {
 	/// <author>David Dossot</author>
 	public abstract class AbstractPredicate:IPredicate {
 		private readonly object predicate;
-		private readonly int hashCode;
+		protected int hashCode;
 		
 		/// <summary>
 		/// The actual value of the Predicate.
