@@ -113,7 +113,6 @@ namespace NxBRE.InferenceEngine.Core {
 			signatureMap = new Dictionary<string, ICollection<Fact>>();
 			factListReferences = new Dictionary<Fact, IList<ICollection<Fact>>>();
 			labelMap = new Dictionary<string, Fact>();
-			atomGroupMemberComparer = new AtomGroupMemberComparer(signatureMap);
 		}
 		
 		/// <summary>
@@ -137,57 +136,6 @@ namespace NxBRE.InferenceEngine.Core {
 			FactBase fb = new FactBase();
 			for(IEnumerator<Fact> e = GetEnumerator(); e.MoveNext(); ) fb.Assert(e.Current);
 			return fb;
-		}
-		
-		/// <summary>
-		/// Store the fact in the map, hierarchized on its signature, predicate type, predicate value
-		/// and predicate position
-		/// </summary>
-		/// <param name="fact"></param>
-		/// <param name="predicatePosition"></param>
-		/// <param name="individualValue"></param>
-		private void StoreFactForIndividualValue(Fact fact, int predicatePosition, object individualValue) {
-			IDictionary<Type, IDictionary<object, IDictionary<int, ICollection<Fact>>>> signatureContent;
-			if (predicateMap.ContainsKey(fact.Signature)) {
-				signatureContent = predicateMap[fact.Signature];
-			}
-			else {
-				signatureContent = new Dictionary<Type, IDictionary<object, IDictionary<int, ICollection<Fact>>>>();
-				predicateMap.Add(fact.Signature, signatureContent);
-			}
-			
-			IDictionary<object, IDictionary<int, ICollection<Fact>>> typedContent;
-			if (signatureContent.ContainsKey(individualValue.GetType())) {
-				typedContent = signatureContent[individualValue.GetType()];
-			}
-			else {
-				typedContent = new Dictionary<object, IDictionary<int, ICollection<Fact>>>();
-				signatureContent.Add(individualValue.GetType(), typedContent);
-			}
-			
-			IDictionary<int, ICollection<Fact>> valuedContent;
-			if (typedContent.ContainsKey(individualValue)) {
-				valuedContent = typedContent[individualValue];
-			}
-			else {
-				valuedContent = new Dictionary<int, ICollection<Fact>>();
-				typedContent.Add(individualValue, valuedContent);
-			}
-			
-			ICollection<Fact> positionedContent;
-			if (valuedContent.ContainsKey(predicatePosition)) {
-				positionedContent = valuedContent[predicatePosition];
-			}
-			else {
-				// we use a HashSet to enforce fact unicity
-				positionedContent = new HashSet<Fact>();
-				valuedContent.Add(predicatePosition, positionedContent);
-			}
-			
-			positionedContent.Add(fact);
-			
-			// remember that this fact has been referenced in this list to allow easier retraction
-			AddFactListReference(fact, positionedContent);
 		}
 		
 		///<remarks>As Facts labels are basically ignored (no retrieval nor any operation based
@@ -499,6 +447,57 @@ namespace NxBRE.InferenceEngine.Core {
 		}
 		
 		//----------------------------- INTERNAL & PRIVATE MEMBERS ------------------------------
+		
+		/// <summary>
+		/// Store the fact in the map, hierarchized on its signature, predicate type, predicate value
+		/// and predicate position
+		/// </summary>
+		/// <param name="fact"></param>
+		/// <param name="predicatePosition"></param>
+		/// <param name="individualValue"></param>
+		private void StoreFactForIndividualValue(Fact fact, int predicatePosition, object individualValue) {
+			IDictionary<Type, IDictionary<object, IDictionary<int, ICollection<Fact>>>> signatureContent;
+			if (predicateMap.ContainsKey(fact.Signature)) {
+				signatureContent = predicateMap[fact.Signature];
+			}
+			else {
+				signatureContent = new Dictionary<Type, IDictionary<object, IDictionary<int, ICollection<Fact>>>>();
+				predicateMap.Add(fact.Signature, signatureContent);
+			}
+			
+			IDictionary<object, IDictionary<int, ICollection<Fact>>> typedContent;
+			if (signatureContent.ContainsKey(individualValue.GetType())) {
+				typedContent = signatureContent[individualValue.GetType()];
+			}
+			else {
+				typedContent = new Dictionary<object, IDictionary<int, ICollection<Fact>>>();
+				signatureContent.Add(individualValue.GetType(), typedContent);
+			}
+			
+			IDictionary<int, ICollection<Fact>> valuedContent;
+			if (typedContent.ContainsKey(individualValue)) {
+				valuedContent = typedContent[individualValue];
+			}
+			else {
+				valuedContent = new Dictionary<int, ICollection<Fact>>();
+				typedContent.Add(individualValue, valuedContent);
+			}
+			
+			ICollection<Fact> positionedContent;
+			if (valuedContent.ContainsKey(predicatePosition)) {
+				positionedContent = valuedContent[predicatePosition];
+			}
+			else {
+				// we use a HashSet to enforce fact unicity
+				positionedContent = new HashSet<Fact>();
+				valuedContent.Add(predicatePosition, positionedContent);
+			}
+			
+			positionedContent.Add(fact);
+			
+			// remember that this fact has been referenced in this list to allow easier retraction
+			AddFactListReference(fact, positionedContent);
+		}
 
 		private void AddFactListReference(Fact fact, ICollection<Fact> listReference) {
 			IList<ICollection<Fact>> factListReference;
@@ -650,44 +649,15 @@ namespace NxBRE.InferenceEngine.Core {
 			
 			return new List<IList<Fact>>(resultSet.Values).AsReadOnly();
 		}
-	
-		//TODO: move declaration elsewhere
-		private class AtomGroupMemberComparer:IComparer<object> {
-			private readonly IDictionary<string, ICollection<Fact>> signatureMap;
 			
-			public AtomGroupMemberComparer(IDictionary<string, ICollection<Fact>> signatureMap) {
-				this.signatureMap = signatureMap;
-			}
-			
-			private int ObjectScore(object x) {
-				if (x is AtomFunction) return Int32.MaxValue;
-				if ((x is Atom) && ((Atom)x).Negative) return Int32.MaxValue - 1;
-				if (x is AtomGroup) return Int32.MaxValue - 2;
-				return signatureMap[((Atom)x).Signature].Count;
-			}
-			
-			public int Compare(object x, object y) {
-				return ObjectScore(x)- ObjectScore(y);
-			}
-		}
-
-		private readonly IComparer<object> atomGroupMemberComparer;
-		
-		private IList<object> GetOrderedMembers(AtomGroup AG) {
-			List<object> result = new List<object>(AG.Members);
-			result.Sort(atomGroupMemberComparer);
-			return result;
-		}
-		
-		private void ProcessAnd(AtomGroup AG, IList<IList<PositiveMatchResult>> processResult, int parser, IList<PositiveMatchResult> resultStack) {
-			//TODO: re-order non-function based Atoms according to the number of facts for the atom signature
-			if (AG.OrderedMembers[parser] is AtomGroup) {
-				if (((AtomGroup)AG.OrderedMembers[parser]).Operator == AtomGroup.LogicalOperator.And)
-					throw new BREException("Nested And unexpectedly found in atom group:" + AG.OrderedMembers[parser]);
+		private void ProcessAnd(AtomGroup AG, IList<IList<PositiveMatchResult>> processResult, int depth, IList<PositiveMatchResult> resultStack) {
+			if (AG.OrderedMembers[depth] is AtomGroup) {
+				if (((AtomGroup)AG.OrderedMembers[depth]).Operator == AtomGroup.LogicalOperator.And)
+					throw new BREException("Nested And unexpectedly found in atom group:" + AG.OrderedMembers[depth]);
 				
 				IList<IList<PositiveMatchResult>> subProcessResult = new List<IList<PositiveMatchResult>>();
 			  
-				ProcessOr((AtomGroup)AG.OrderedMembers[parser], subProcessResult, resultStack);
+				ProcessOr((AtomGroup)AG.OrderedMembers[depth], subProcessResult, resultStack);
 			  
 				foreach(IList<PositiveMatchResult> resultRow in subProcessResult) {
 					foreach(PositiveMatchResult rpRow in resultRow) {
@@ -695,7 +665,7 @@ namespace NxBRE.InferenceEngine.Core {
 							IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>(resultStack);
 							tempResultStack.Add(rpRow);
 							
-							if (parser < (AG.OrderedMembers.Length-1)) ProcessAnd(AG, processResult, parser+1, tempResultStack);
+							if (depth < (AG.OrderedMembers.Length-1)) ProcessAnd(AG, processResult, depth+1, tempResultStack);
 					  	else processResult.Add(tempResultStack);
 				  	}
 				  	else {
@@ -712,7 +682,7 @@ namespace NxBRE.InferenceEngine.Core {
 							  	IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>(resultStack);
 									tempResultStack.Add(rpRow);
 									
-									if (parser < (AG.OrderedMembers.Length-1)) ProcessAnd(AG, processResult, parser+1, tempResultStack);
+									if (depth < (AG.OrderedMembers.Length-1)) ProcessAnd(AG, processResult, depth+1, tempResultStack);
 							  	else processResult.Add(tempResultStack);
 								}
 					  	}
@@ -723,11 +693,11 @@ namespace NxBRE.InferenceEngine.Core {
 			else {
 		  	// resolve the functions and var parts of the atom 
 		  	// from all the previous facts in the result stack
-				Atom atomToRun = Populate((Atom)AG.OrderedMembers[parser], resultStack, false);
+				Atom atomToRun = Populate((Atom)AG.OrderedMembers[depth], resultStack, false);
 				IList<Fact> excludedFacts = new List<Fact>();
 				
 				foreach(PositiveMatchResult pmr in resultStack)
-					if (((Atom)AG.OrderedMembers[parser]).IsIntersecting(pmr.Source))
+					if (((Atom)AG.OrderedMembers[depth]).IsIntersecting(pmr.Source))
 						excludedFacts.Add(pmr.Fact);
 		  	
 		  	// then get the matching facts
@@ -737,10 +707,10 @@ namespace NxBRE.InferenceEngine.Core {
 		  		while(results.MoveNext()) {
 			  		Fact result = (Fact)results.Current;
 			  		IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>(resultStack);
-						tempResultStack.Add(new PositiveMatchResult((Atom)AG.OrderedMembers[parser], result));
+						tempResultStack.Add(new PositiveMatchResult((Atom)AG.OrderedMembers[depth], result));
 
-						if (parser < (AG.OrderedMembers.Length-1))
-							ProcessAnd(AG, processResult, parser+1, tempResultStack);
+						if (depth < (AG.OrderedMembers.Length-1))
+							ProcessAnd(AG, processResult, depth+1, tempResultStack);
 				  	else
 							processResult.Add(tempResultStack);
 				  }

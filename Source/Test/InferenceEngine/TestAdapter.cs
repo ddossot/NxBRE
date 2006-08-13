@@ -1,6 +1,7 @@
 namespace NxBRE.Test.InferenceEngine {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Text;
 	using System.Xml;
@@ -82,10 +83,10 @@ namespace NxBRE.Test.InferenceEngine {
 			string ruleBase = "<rulebase><fact><_head><atom><_opr><rel>regular</rel></_opr><ind>Honda</ind></atom></_head></fact></rulebase>";
 			RuleML08DatalogAdapter adapter = new RuleML08DatalogAdapter(new MemoryStream(new UTF8Encoding().GetBytes(ruleBase)),
 			                                                            FileAccess.Read);
-			ArrayList facts = adapter.Facts;
+			IList<Fact> facts = adapter.Facts;
 			Assert.IsNotNull(facts, "Facts not null");
 			Assert.AreEqual(1, facts.Count, "One fact expected");
-			Assert.AreEqual("regular", ((Fact)facts[0]).Type, "Fact of type 'regular' expected");
+			Assert.AreEqual("regular", facts[0].Type, "Fact of type 'regular' expected");
 		}
 
 		[Test]

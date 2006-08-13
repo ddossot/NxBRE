@@ -390,7 +390,7 @@ namespace NxBRE.InferenceEngine {
 				}
 				
 				// facts
-				ArrayList facts = new ArrayList();
+				IList<Fact> facts = new List<Fact>();
 				foreach(Fact fact in WM.FB)	facts.Add(fact);
 				adapter.Facts = facts;
 			}
@@ -444,7 +444,7 @@ namespace NxBRE.InferenceEngine {
 				adapter.Label = Label;
 		
 				// facts
-				ArrayList facts = new ArrayList();
+				IList<Fact> facts = new List<Fact>();
 				foreach(Fact fact in WM.FB)	facts.Add(fact);
 				adapter.Facts = facts;
 			} //end: using adapter
