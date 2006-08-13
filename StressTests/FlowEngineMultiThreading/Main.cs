@@ -3,6 +3,7 @@ namespace NxBRE.StressTests
 	using System;
 	using System.Collections;
 	using System.IO;
+	using System.Reflection;
 	using System.Text;
 	using System.Threading;
 	
@@ -16,6 +17,8 @@ namespace NxBRE.StressTests
 		private const int LIMIT = 39;	
 		private int DURATION = 30;
 		private int NBTHREADS = 10;
+		
+		private volatile int runningThreads = 0;
 
 		private byte[] XML_RULEBASE;
 		
@@ -38,10 +41,9 @@ namespace NxBRE.StressTests
 			mc.WriteRules();
 			mc.RunTests();
 			
-			Console.WriteLine();
-			Console.WriteLine("Enter to shutdown now or when all processes are finished");
-			Console.ReadLine();
-			if (mc.running) mc.StopTests(null);
+			Thread.Sleep(mc.DURATION*1000);
+			while(mc.runningThreads > 0) Thread.Sleep(1000);
+			Console.WriteLine("{0} terminated.", Assembly.GetExecutingAssembly().GetName().Name);
 		}
 		
 		private void WriteRules() {
@@ -127,6 +129,7 @@ namespace NxBRE.StressTests
 			}
 			
 			public void Run() {
+				mc.runningThreads++;
 				mc.threadMap.Add(Thread.CurrentThread, stresserID);
 				
 				Console.WriteLine("Stresser {0} Starting...", stresserID);
@@ -141,8 +144,10 @@ namespace NxBRE.StressTests
 						if (result != a*b) mc.errors++; //Console.WriteLine("{0}*{1}={2}", a, b, result);
 						bre.Reset();
 					}
+					mc.runningThreads--;
 					Console.WriteLine("Stresser {0} Stopped", stresserID);
 				} catch (System.Exception) {
+					mc.runningThreads--;
 					mc.errors++;
 					Console.WriteLine("Stresser {0} Dead", stresserID);
 				}
