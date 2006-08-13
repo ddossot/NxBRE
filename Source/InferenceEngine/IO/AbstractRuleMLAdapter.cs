@@ -1,6 +1,7 @@
 namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Text;
 	using System.Xml;
@@ -243,9 +244,9 @@ namespace NxBRE.InferenceEngine.IO {
 			}
 		}
 		
-		public ArrayList Facts {
+		public IList<Fact> Facts {
 			get {
-				return ArrayList.ReadOnly(ExtracFacts());
+				return ExtracFacts().AsReadOnly();
 		 	}
 			set {
 				if (value.Count > 0) {
@@ -352,8 +353,8 @@ namespace NxBRE.InferenceEngine.IO {
 		protected abstract XPathExpression RelativeBodyContentXPath {get;}
 		protected abstract XPathExpression QueryElementXPath {get;}
 		
-		protected ArrayList ExtracFacts() {
-			ArrayList result = new ArrayList();
+		protected List<Fact> ExtracFacts() {
+			List<Fact> result = new List<Fact>();
 			XPathNodeIterator facts = Navigator.Select(FactElementXPath);
 
 			while(facts.MoveNext()) {
@@ -596,7 +597,7 @@ namespace NxBRE.InferenceEngine.IO {
 		
 		protected abstract void WriteImplications(ArrayList implications);
 
-		protected abstract void WriteFacts(ArrayList facts);
+		protected abstract void WriteFacts(IList<Fact> facts);
 		
 		protected void WriteAtomGroup(XmlElement target, AtomGroup atomGroup, string andElement, string orElement) {
 			if (atomGroup.Members.Length != 1) {

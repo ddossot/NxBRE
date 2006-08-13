@@ -1,7 +1,9 @@
 namespace NxBRE.InferenceEngine.IO {
 
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
+	
+	using NxBRE.InferenceEngine.Rules;
 	
 	/// <summary>
 	/// NxBRE Inference Engine factbase adapter interface.
@@ -33,7 +35,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// <summary>
 		/// Collection containing all the facts in the factbase.
 		/// </summary>
-		ArrayList Facts {
+		IList<Fact> Facts {
 			get;
 			set;
 		}

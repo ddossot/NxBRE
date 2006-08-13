@@ -17,6 +17,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// <summary>
 		/// Collection containing all the queries in the rulebase.
 		/// </summary>
+		//TODO: make generic
 		ArrayList Queries {
 			get;
 			set;
@@ -25,6 +26,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// <summary>
 		/// Collection containing all the implications in the rulebase.
 		/// </summary>
+		//TODO: make generic
 		ArrayList Implications {
 			get;
 			set;
