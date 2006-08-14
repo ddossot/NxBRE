@@ -27,6 +27,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		private readonly bool hasFormula;
 		private readonly bool hasFunction;
 		private readonly bool hasIndividual;
+		private readonly bool onlyVariables;
 		
 		/// <summary>
 		/// Negative fact.
@@ -49,6 +50,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <summary>
 		/// The array of predicates associated in the Atom.
 		/// </summary>
+		//TODO: make generic & readonly?
 		public IPredicate[] Members {
 			get {
 				return predicates;
@@ -58,6 +60,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <summary>
 		/// The array of slot names in the Atom. Non-named members have a String.Empty slot name.
 		/// </summary>
+		//TODO: make generic & readonly?
 		public string[] SlotNames {
 			get {
 				return slotNames;
@@ -130,6 +133,15 @@ namespace NxBRE.InferenceEngine.Rules {
 		}
 		
 		/// <summary>
+		/// Returns True is the members are only Variable predicates.
+		/// </summary>
+		internal bool OnlyVariables {
+			get {
+				return onlyVariables;
+			}
+		}
+		
+		/// <summary>
 		/// Instantiates a new Positive (non-NAF) non-function Relation Atom.
 		/// </summary>
 		/// <param name="type">Type of the Atom.</param>
@@ -171,13 +183,18 @@ namespace NxBRE.InferenceEngine.Rules {
 			hasFunction = false;
 			hasFormula = false;
 			hasIndividual = false;
+			onlyVariables = true;
 			
 			foreach(IPredicate member in predicates) {
 				hcb.Append(member);
-				if (member is Variable) isFact = false;
-				if (member is Function)	hasFunction = true;
-				if (member is Formula) hasFormula = true;
+				
 				if (member is Individual) hasIndividual = true;
+				else isFact = false;
+				
+				if (!(member is Variable)) onlyVariables = false;
+				
+				if (member is Function) hasFunction = true;
+				else if (member is Formula) hasFormula = true;
 			}
 			
 			hashCode = hcb.Value;
