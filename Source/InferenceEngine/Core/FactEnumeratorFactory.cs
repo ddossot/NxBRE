@@ -18,12 +18,12 @@ namespace NxBRE.InferenceEngine.Core
 		}
 		
 		public static IEnumerator<Fact> NewFactListExcludingEnumerator(ICollection<Fact> factList, IList<Fact> excludedFacts) {
-			if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "NewFactListExcludingEnumerator: factList.Count=" + factList.Count + " - excludedFacts.Count=" + excludedFacts.Count);
+			if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "NewFactListExcludingEnumerator: factList.Count=" + factList.Count + " - excludedFacts.Count=" + (excludedFacts != null?excludedFacts.Count:0));
 			return new FactListEnumerator(factList, excludedFacts);
 		}
 		
 		public static IEnumerator<Fact> NewFactListPredicateMatchingEnumerator(ICollection<Fact> factList, Atom filter, bool strictTyping, IList<int> ignoredPredicates, IList<Fact> excludedFacts) {
-			if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "NewFactListPredicateMatchingEnumerator: factList.Count=" + factList.Count + " - filter=" + filter + " - strictTyping=" + strictTyping + " - ignoredPredicates=" + Misc.IListToString((System.Collections.IList)ignoredPredicates) + " - excludedFacts.Count=" + excludedFacts.Count);
+			if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "NewFactListPredicateMatchingEnumerator: factList.Count=" + factList.Count + " - filter=" + filter + " - strictTyping=" + strictTyping + " - ignoredPredicates=" + Misc.IListToString((System.Collections.IList)ignoredPredicates) + " - excludedFacts.Count=" + (excludedFacts != null?excludedFacts.Count:0));
 			return new FactListPredicateMatchingEnumerator(factList, filter, strictTyping, ignoredPredicates, excludedFacts);
 		}
 			
