@@ -32,12 +32,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <summary>
 		/// The main storage of facts.
 		/// </summary>
-		private readonly IDictionary<long, ICollection<Fact>> factStore;
-		
-		/// <summary>
-		/// Dictionary that gives a quick access to all fact collections.
-		/// </summary>
-		private readonly IDictionary<Fact, IList<ICollection<Fact>>> factListReferences;
+		private readonly IDictionary<long, HashSet<Fact>> factStore;
 		
 		/// <summary>
 		/// A prepared empty fact collection.
@@ -111,9 +106,29 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <summary>
 		/// Instantiates a new fact base.
 		/// </summary>
-		public FactBase() {
-			factListReferences = new Dictionary<Fact, IList<ICollection<Fact>>>();
-			factStore = new Dictionary<long, ICollection<Fact>>();
+		public FactBase():this(null) {}
+		
+		/// <summary>
+		/// Instantiates a new fact base, using an existing factStore as a source.
+		/// </summary>
+		/// <param name="factStore">The factStore to use as a source or null.</param>
+		/// <remarks>
+		/// Usually used for cloning.
+		/// </remarks>
+		private FactBase(IDictionary<long, HashSet<Fact>> initialFactStore) {
+			factStore = new Dictionary<long, HashSet<Fact>>();
+			
+			if (initialFactStore != null) {
+				for(IEnumerator<KeyValuePair<long, HashSet<Fact>>> e = initialFactStore.GetEnumerator(); e.MoveNext() ;) {
+					KeyValuePair<long, HashSet<Fact>> kvp = e.Current;
+					factStore.Add(kvp.Key, new HashSet<Fact>(kvp.Value));
+				}
+			}
+		}
+		
+		///<summary>Clones the fact base.</summary>
+		public object Clone() {
+			return new FactBase(this.factStore);
 		}
 		
 		/// <summary>
@@ -130,13 +145,6 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <returns>An IEnumerator of all facts.</returns>
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
 			return GetFactsForIndex(GetGlobalIndex()).GetEnumerator();
-		}
-		
-		///<summary>Clones the fact base.</summary>
-		public object Clone() {
-			FactBase fb = new FactBase();
-			for(IEnumerator<Fact> e = GetEnumerator(); e.MoveNext(); ) fb.Assert(e.Current);
-			return fb;
 		}
 		
 		///<remarks>As Facts labels are basically ignored (no retrieval nor any operation based
@@ -454,7 +462,7 @@ namespace NxBRE.InferenceEngine.Core {
 			if (Logger.IsInferenceEngineVerbose)
 				Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0 , "FactBase.AddFactToStore @ " + index + " : " + fact);
 			
-			ICollection<Fact> factCollection;
+			HashSet<Fact> factCollection;
 			
 			if (!factStore.TryGetValue(index, out factCollection)) {
 				factCollection = new HashSet<Fact>();
@@ -462,8 +470,6 @@ namespace NxBRE.InferenceEngine.Core {
 			}
 			
 			factCollection.Add(fact);
-			
-			AddFactListReference(fact, factCollection);
 		}
 		
 		/// <summary>
@@ -506,7 +512,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// </remarks>
 		private void RemoveFactFromStore(Fact fact) {
 			// remove the fact from the lists of reference where it is referenced
-			foreach(ICollection<Fact> factList in factListReferences[fact])	factList.Remove(fact);
+			foreach(ICollection<Fact> factList in factStore.Values)	factList.Remove(fact);
 		}
 		
 		/// <summary>
@@ -514,23 +520,9 @@ namespace NxBRE.InferenceEngine.Core {
 		/// </summary>
 		/// <returns>A collection of facts, empty if no collection exists at the index in the fact store.</returns>
 		private ICollection<Fact> GetFactsForIndex(long index) {
-			ICollection<Fact> result;
+			HashSet<Fact> result;
 			if(factStore.TryGetValue(index, out result)) return result;
 			else return EMPTY_FACT_COLLECTION;
-		}
-		
-		/// <summary>
-		/// Remembers the fact that a particular fact is referenced in a particular collection.
-		/// </summary>
-		private void AddFactListReference(Fact fact, ICollection<Fact> listReference) {
-			IList<ICollection<Fact>> factListReference;
-			
-			if (!factListReferences.TryGetValue(fact, out factListReference)) {
-				factListReference = new List<ICollection<Fact>>();
-				factListReferences.Add(fact, factListReference);
-			}
-			
-			factListReference.Add(listReference);
 		}
 
 		/// <summary>

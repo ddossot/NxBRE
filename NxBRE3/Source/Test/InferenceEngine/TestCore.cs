@@ -434,7 +434,11 @@ namespace NxBRE.Test.InferenceEngine {
 			
 			Fact jqdSpending = clone.GetFact("JQD Spending");
 			Assert.AreEqual("JQD Spending", jqdSpending.Label, "Correct fact label");
+			
+			int countBefore = clone.Count;
 			Assert.IsTrue(clone.Retract(jqdSpending), "Retracted 'JQD Spending'");
+			Assert.AreEqual(countBefore-1, clone.Count, "Count after retraction");
+			
 			Assert.IsFalse(clone.Exists(jqdSpending), "'JQD Spending' really retracted");
 			Assert.IsTrue(fb.Exists(jqdSpending), "'JQD Spending' still in original");
 			
