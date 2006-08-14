@@ -29,15 +29,13 @@ namespace NxBRE.InferenceEngine.Core {
 		/// </remarks>
 		internal bool strictTyping = Parameter.Get<bool>("factBase.strictTyping", false);
 		
-		/// <summary>
-		/// The main storage of facts.
-		/// </summary>
-		private readonly IDictionary<long, HashSet<Fact>> factStore;
-		
-		/// <summary>
-		/// A prepared empty fact collection.
-		/// </summary>
-		private static readonly ICollection<Fact> EMPTY_FACT_COLLECTION = new List<Fact>(0).AsReadOnly();
+		//FIXME: reorganize declarations
+		private readonly IDictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, ICollection<Fact>>>>> predicateMap;
+		private readonly IDictionary<string, ICollection<Fact>> signatureMap;
+		//FIXME: probably not necessary
+		private readonly IDictionary<Fact, IList<ICollection<Fact>>> factListReferences;
+		private readonly IDictionary<string, Fact> labelMap;
+		private static readonly IList<Fact> EMPTY_SELECT_RESULT = new List<Fact>(0).AsReadOnly();
 		
 		/// <summary>
 		/// A flag that external class can use to detect fact assertions/retractions.
@@ -49,7 +47,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// </summary>
 		public int Count {
 			get {
-				return GetFactsForIndex(GetGlobalIndex()).Count;
+				return factListReferences.Count;
 			}
 		}
 		
@@ -106,29 +104,11 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <summary>
 		/// Instantiates a new fact base.
 		/// </summary>
-		public FactBase():this(null) {}
-		
-		/// <summary>
-		/// Instantiates a new fact base, using an existing factStore as a source.
-		/// </summary>
-		/// <param name="factStore">The factStore to use as a source or null.</param>
-		/// <remarks>
-		/// Usually used for cloning.
-		/// </remarks>
-		private FactBase(IDictionary<long, HashSet<Fact>> initialFactStore) {
-			factStore = new Dictionary<long, HashSet<Fact>>();
-			
-			if (initialFactStore != null) {
-				for(IEnumerator<KeyValuePair<long, HashSet<Fact>>> e = initialFactStore.GetEnumerator(); e.MoveNext() ;) {
-					KeyValuePair<long, HashSet<Fact>> kvp = e.Current;
-					factStore.Add(kvp.Key, new HashSet<Fact>(kvp.Value));
-				}
-			}
-		}
-		
-		///<summary>Clones the fact base.</summary>
-		public object Clone() {
-			return new FactBase(this.factStore);
+		public FactBase() {
+			predicateMap = new Dictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, ICollection<Fact>>>>>();
+			signatureMap = new Dictionary<string, ICollection<Fact>>();
+			factListReferences = new Dictionary<Fact, IList<ICollection<Fact>>>();
+			labelMap = new Dictionary<string, Fact>();
 		}
 		
 		/// <summary>
@@ -136,7 +116,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// </summary>
 		/// <returns>An IEnumerator of all facts.</returns>
 		public IEnumerator<Fact> GetEnumerator() {
-			return GetFactsForIndex(GetGlobalIndex()).GetEnumerator();
+			return factListReferences.Keys.GetEnumerator();
 		}
 
 		/// <summary>
@@ -144,7 +124,15 @@ namespace NxBRE.InferenceEngine.Core {
 		/// </summary>
 		/// <returns>An IEnumerator of all facts.</returns>
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
-			return GetFactsForIndex(GetGlobalIndex()).GetEnumerator();
+			return factListReferences.Keys.GetEnumerator();
+		}
+		
+		///<summary>Clones the fact base.</summary>
+		public object Clone() {
+			FactBase fb = new FactBase();
+			//FIXME: make more efficient, if possible
+			for(IEnumerator<Fact> e = GetEnumerator(); e.MoveNext(); ) fb.Assert(e.Current);
+			return fb;
 		}
 		
 		///<remarks>As Facts labels are basically ignored (no retrieval nor any operation based
@@ -156,7 +144,34 @@ namespace NxBRE.InferenceEngine.Core {
 				throw new BREException("Can not add non-facts to the fact base: "+fact.ToString());
 			
 			if (!Exists(fact)) {
-				AddFactToStore(fact);
+				for(int position=0; position<fact.Members.Length; position++) {
+					object individualValue = fact.Members[position].Value;
+					StoreFactForIndividualValue(fact, position, individualValue);
+					
+					// if we do not want strict typing, we also store the non-string individuals under their string representation
+					if ((!strictTyping) && (!(individualValue is string))) StoreFactForIndividualValue(fact, position, individualValue.ToString());
+				}
+				
+				// store the fact in the signature map, hierarchized on its type and number of predicates
+				ICollection<Fact> signatureListOfFact;
+				if (signatureMap.ContainsKey(fact.Signature)) {
+					signatureListOfFact = signatureMap[fact.Signature];
+				}
+				else {
+					signatureListOfFact = new List<Fact>();
+					signatureMap.Add(fact.Signature, signatureListOfFact);
+				}
+				signatureListOfFact.Add(fact);
+				
+				// remember that this fact has been referenced in this list to allow easier retraction
+				AddFactListReference(fact, signatureListOfFact);
+				
+				// if the fact has a label, store it under a map - if the label is already present, replace the old
+				// entry with the new one
+				if (fact.Label != null) {
+					if (labelMap.ContainsKey(fact.Label)) labelMap.Remove(fact.Label);
+					labelMap.Add(fact.Label, fact);
+				}
 				
 				// the fact was new and added to the factbase, return true
 				if (!ModifiedFlag) ModifiedFlag = true;
@@ -177,7 +192,18 @@ namespace NxBRE.InferenceEngine.Core {
 			if (fact == null) throw new ArgumentNullException("Null is not a valid fact to retract");
 			
 			for(IEnumerator<Fact> e = Select(fact, null); e.MoveNext() ; ) {
-				RemoveFactFromStore(e.Current);
+				Fact storedFact = e.Current;
+				
+				// remove the fact from the lists of reference where it is referenced
+				foreach(ICollection<Fact> factList in factListReferences[storedFact]) {
+					factList.Remove(storedFact);
+				}
+				
+				// and from the reference map itself
+				factListReferences.Remove(storedFact);
+				
+				// and from the label map
+				if ((storedFact.Label != null) && (labelMap.ContainsKey(storedFact.Label))) labelMap.Remove(storedFact.Label);
 				
 				// the fact existing and removed from the factbase, return true
 				if (!ModifiedFlag) ModifiedFlag = true;
@@ -237,12 +263,8 @@ namespace NxBRE.InferenceEngine.Core {
 		/// </summary>
 		/// <param name="factLabel">The label of the Fact to get.</param>
 		/// <returns>The Fact matching the label if present in the FactBase, otherwise null.</returns>
-		/// <remarks>A label is not discriminent for NxBRE so the engine returns the first fact that matches the searched label.</remarks>
 		public Fact GetFact(string factLabel) {
-			if (factLabel == null) throw new ArgumentNullException("Null is not a valid fact label to search for.");
-			ICollection<Fact> foundFacts = GetFactsForIndex(GetLabelBasedIndex(factLabel));
-			IEnumerator<Fact> e = foundFacts.GetEnumerator();
-			if (e.MoveNext()) return e.Current;
+			if (labelMap.ContainsKey(factLabel)) return labelMap[factLabel];
 			else return null;
 		}
 		
@@ -424,105 +446,68 @@ namespace NxBRE.InferenceEngine.Core {
 		//----------------------------- INTERNAL & PRIVATE MEMBERS ------------------------------
 		
 		/// <summary>
-		/// The index under which all the facts will be stored.
+		/// Store the fact in the map, hierarchized on its signature, predicate type, predicate value
+		/// and predicate position
 		/// </summary>
-		private static long GetGlobalIndex() {
-			return 0;
-		}
-		
-		/// <summary>
-		/// The index under which all the facts with the same label will be stored.
-		/// </summary>
-		private static long GetLabelBasedIndex(string label) {
-			return (long)label.GetHashCode();
-		}
-		
-		/// <summary>
-		/// The index under which all the facts with the same signature will be stored.
-		/// </summary>
-		private static long GetSignatureBasedIndex(string signature) {
-			return (long)signature.GetHashCode() << 32;
-		}
-		
-		/// <summary>
-		/// The index under which all the facts with the same signature, predicate position and predicate will be stored.
-		/// </summary>
-		private static long GetSignatureAndPredicateBasedIndex(string signature, int predicatePosition, IPredicate predicate) {
-			return GetSignatureBasedIndex(signature) ^ (long)predicate.GetHashCode() ^ Math.BigMul(37, predicatePosition);
-		}
-		
-		/// <summary>
-		/// Adds a fact to the store at a particular index position.
-		/// </summary>
-		/// <remarks>
-		/// It assumes that the fact is not already present in the store: in case the fact is alreay there, runtime error
-		/// will occur.
-		/// </remarks>
-		private void AddFactToStore(long index, Fact fact) {
-			if (Logger.IsInferenceEngineVerbose)
-				Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0 , "FactBase.AddFactToStore @ " + index + " : " + fact);
-			
-			HashSet<Fact> factCollection;
-			
-			if (!factStore.TryGetValue(index, out factCollection)) {
-				factCollection = new HashSet<Fact>();
-				factStore.Add(index, factCollection);
+		/// <param name="fact"></param>
+		/// <param name="predicatePosition"></param>
+		/// <param name="individualValue"></param>
+		private void StoreFactForIndividualValue(Fact fact, int predicatePosition, object individualValue) {
+			IDictionary<Type, IDictionary<object, IDictionary<int, ICollection<Fact>>>> signatureContent;
+			if (predicateMap.ContainsKey(fact.Signature)) {
+				signatureContent = predicateMap[fact.Signature];
+			}
+			else {
+				signatureContent = new Dictionary<Type, IDictionary<object, IDictionary<int, ICollection<Fact>>>>();
+				predicateMap.Add(fact.Signature, signatureContent);
 			}
 			
-			factCollection.Add(fact);
-		}
-		
-		/// <summary>
-		/// Adds a fact to the store in all the relevant index positions.
-		/// </summary>
-		/// <remarks>
-		/// It assumes that the fact is not already present in the store: in case the fact is alreay there, runtime error
-		/// will occur.
-		/// </remarks>
-		private void AddFactToStore(Fact fact) {
-			// store in global storage
-			AddFactToStore(GetGlobalIndex(), fact);
-			
-			// store under fact signature
-			AddFactToStore(GetSignatureBasedIndex(fact.Signature), fact);
-			
-			// store under each predicate
-			for(int predicatePosition=0; predicatePosition < fact.Members.Length; predicatePosition++) {
-				AddFactToStore(GetSignatureAndPredicateBasedIndex(fact.Signature, predicatePosition, fact.Members[predicatePosition]), fact);
-				
-				// if we do not want strict typing, we also store the non-string individuals under their string representation
-				if (!strictTyping) {
-					object predicateValue = fact.Members[predicatePosition].Value;
-					if (!(predicateValue is string)){
-						AddFactToStore(GetSignatureAndPredicateBasedIndex(fact.Signature, predicatePosition, new Individual(predicateValue.ToString())), fact);
-					}
-				}
+			IDictionary<object, IDictionary<int, ICollection<Fact>>> typedContent;
+			if (signatureContent.ContainsKey(individualValue.GetType())) {
+				typedContent = signatureContent[individualValue.GetType()];
+			}
+			else {
+				typedContent = new Dictionary<object, IDictionary<int, ICollection<Fact>>>();
+				signatureContent.Add(individualValue.GetType(), typedContent);
 			}
 			
-			// store under label, if available
-			if (fact.Label != null) AddFactToStore(GetLabelBasedIndex(fact.Label), fact);
+			IDictionary<int, ICollection<Fact>> valuedContent;
+			if (typedContent.ContainsKey(individualValue)) {
+				valuedContent = typedContent[individualValue];
+			}
+			else {
+				valuedContent = new Dictionary<int, ICollection<Fact>>();
+				typedContent.Add(individualValue, valuedContent);
+			}
+			
+			ICollection<Fact> positionedContent;
+			if (valuedContent.ContainsKey(predicatePosition)) {
+				positionedContent = valuedContent[predicatePosition];
+			}
+			else {
+				// we use a HashSet to enforce fact unicity
+				positionedContent = new HashSet<Fact>();
+				valuedContent.Add(predicatePosition, positionedContent);
+			}
+			
+			positionedContent.Add(fact);
+			
+			// remember that this fact has been referenced in this list to allow easier retraction
+			AddFactListReference(fact, positionedContent);
 		}
-		
-		/// <summary>
-		/// Removes a fact from the store.
-		/// </summary>
-		/// <remarks>
-		/// It assumes that the fact is actually present in the store: in case the fact is not there, runtime error
-		/// will occur.
-		/// </remarks>
-		private void RemoveFactFromStore(Fact fact) {
-			// remove the fact from the lists of reference where it is referenced
-			foreach(ICollection<Fact> factList in factStore.Values)	factList.Remove(fact);
-		}
-		
-		/// <summary>
-		/// Gets a collection of facts for a particular index.
-		/// </summary>
-		/// <returns>A collection of facts, empty if no collection exists at the index in the fact store.</returns>
-		private ICollection<Fact> GetFactsForIndex(long index) {
-			HashSet<Fact> result;
-			if(factStore.TryGetValue(index, out result)) return result;
-			else return EMPTY_FACT_COLLECTION;
+
+		private void AddFactListReference(Fact fact, ICollection<Fact> listReference) {
+			IList<ICollection<Fact>> factListReference;
+			
+			if (factListReferences.ContainsKey(fact)) {
+				factListReference = factListReferences[fact];
+			}
+			else {
+				factListReference = new List<ICollection<Fact>>();
+				factListReferences.Add(fact, factListReference);
+			}
+			
+			factListReference.Add(listReference);
 		}
 
 		/// <summary>
@@ -538,16 +523,21 @@ namespace NxBRE.InferenceEngine.Core {
 				                                        "FactBase.Select: " + filter + " - Excluding: " + Misc.IListToString((IList)excludedFacts));
 
 			// if the predicate map does not contain an entry for the filter signature or if this entry is empty, return empty result
-			ICollection<Fact> factsMatchingFilterSignature = GetFactsForIndex(GetSignatureBasedIndex(filter.Signature));
-			if (factsMatchingFilterSignature.Count == 0) {
+			if ((!predicateMap.ContainsKey(filter.Signature)) || (predicateMap[filter.Signature].Count == 0)) {
 				if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "No fact matching signature: " + filter.Signature);
-				return EMPTY_FACT_COLLECTION.GetEnumerator();
+				return EMPTY_SELECT_RESULT.GetEnumerator();
 			}
 			
-			// if the filter contains only variable predicates everything matching the signature should be returned
-			if (filter.OnlyVariables) {
-				if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Filter with no Ind or Fun -> Return all facts matching signature: " + filter.Signature);
-				return FactEnumeratorFactory.NewFactListExcludingEnumerator(factsMatchingFilterSignature, excludedFacts);
+			// if the filter does not contain any individual or function, then it is fully variable so everything should be returned
+			if ((!filter.HasIndividual) && (!filter.HasFunction)) {
+				if (signatureMap.ContainsKey(filter.Signature)) {
+					if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Filter with no Ind or Fun -> Return all facts matching signature: " + filter.Signature);
+					return signatureMap[filter.Signature].GetEnumerator();
+				}
+				else{
+					if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Filter with no Ind or Fun -> Return no fact");
+					return EMPTY_SELECT_RESULT.GetEnumerator();
+				}
 			}
 			
 			// we build result lists and will reduce the biggest ones from the smallest ones
@@ -557,31 +547,40 @@ namespace NxBRE.InferenceEngine.Core {
 			
 			for (int position=0; position < filter.Members.Length; position++) {
 				if (filter.Members[position] is Individual) {
-					ICollection<Fact> factsMatchingPositionedIndividual = GetFactsForIndex(GetSignatureAndPredicateBasedIndex(filter.Signature, position, filter.Members[position]));
-					int countOfFactsMatchingPositionedIndividual = factsMatchingPositionedIndividual.Count;
+					bool matched = false;
+					object predicateValue = filter.Members[position].Value;
 					
-					if (countOfFactsMatchingPositionedIndividual > 0) {
-							Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
-							                                        0,
-							                                        "Matched predicateValue: "+ filter.Members[position].Value + " [" + filter.Members[position].Value.GetType() + "]");
-	
-						if (countOfFactsMatchingPositionedIndividual < smallestList) {
-							resultList = factsMatchingPositionedIndividual;
-							smallestList = countOfFactsMatchingPositionedIndividual;
-							positionOfSmallestList = position;
-							
-							if (Logger.IsInferenceEngineVerbose)
-								Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
-								                                        0,
-								                                        "Smallest list of size: "+ smallestList + " at position: " + positionOfSmallestList);
-						}
+					if (predicateMap[filter.Signature].ContainsKey(predicateValue.GetType())) {
+						IDictionary<object, IDictionary<int, ICollection<Fact>>> predicateValueMap = predicateMap[filter.Signature][predicateValue.GetType()];
+						if (predicateValueMap.ContainsKey(predicateValue)) {
+							IDictionary<int, ICollection<Fact>> predicatePositionMap = predicateValueMap[predicateValue];
+							if ((predicatePositionMap.ContainsKey(position)) && (predicatePositionMap[position].Count > 0)) {
+								if (Logger.IsInferenceEngineVerbose)
+									Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
+									                                        0,
+									                                        "Matched predicateValue: "+ predicateValue + " [" + predicateValue.GetType() + "]");
+
+								if (predicatePositionMap[position].Count < smallestList) {
+									resultList = predicatePositionMap[position];
+									smallestList = predicatePositionMap[position].Count;
+									positionOfSmallestList = position;
+									
+									if (Logger.IsInferenceEngineVerbose)
+										Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
+										                                        0,
+										                                        "Smallest list of size: "+ smallestList + " at position: " + positionOfSmallestList);
+								}
 								
+								matched = true;
+							}
+						}
 					}
-					else  {
-						// no match found on a particular individual predicate? early return an empty result!
+					
+					// no match found on a particular individual predicate? early return an empty result!
+					if (!matched) {
 						if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "No match -> Return no fact");
 
-						return EMPTY_FACT_COLLECTION.GetEnumerator();
+						return EMPTY_SELECT_RESULT.GetEnumerator();
 					}
 				}
 			}
@@ -596,7 +595,7 @@ namespace NxBRE.InferenceEngine.Core {
 			// we have not been able to match anything (the filter might contain only variables or functions),
 			// let's load all the facts matching the signature of the filter
 			if (resultList == null) {
-				resultList = factsMatchingFilterSignature;
+				resultList = signatureMap[filter.Signature];
 				
 				if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "No resultList -> Used the list matching the signature, which contains: " + resultList.Count);
 			}
