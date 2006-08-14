@@ -102,26 +102,26 @@ namespace NxBRE.StressTests
 			}
 			
 			stopTests = new Timer(new TimerCallback(StopTests), null, DURATION*1000, Timeout.Infinite);
-		}
-		
-		private void StopTests(object o) {
-			running = false;
 			
-			// 3 seconds of cool down
-			Thread.Sleep(3000);
+			Thread.Sleep(1000+DURATION*1000);
 			
-			Console.WriteLine();
-			Console.WriteLine("********************************");
+			while(running) Thread.Sleep(500);
+			
+			Console.Out.WriteLine();
+			Console.Out.WriteLine("********************************");
 
-			Console.WriteLine("{0} hits, {1} errors in {2} msec",
+			Console.Out.WriteLine("{0} hits, {1} errors in {2} msec",
 	                  hits,
 	                  errors,
 	                  (long)(DateTime.Now.Ticks - iniTime)/10000);
 	
-			Console.WriteLine("********************************");
-			Console.WriteLine();
+			Console.Out.WriteLine("********************************");
+			Console.Out.WriteLine();
 			Console.Out.Flush();
-			Thread.Sleep(500);
+		}
+		
+		private void StopTests(object o) {
+			running = false;
 		}
 		
 		private void SwitchBinder(object o) {
