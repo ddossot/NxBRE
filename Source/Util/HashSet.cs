@@ -1,11 +1,25 @@
 namespace NxBRE.Util {
+	using System;
 	using System.Collections.Generic;
 	
 	/// <summary>
 	/// A HashSet is collection that contains only unique items and uses their hash code to determine their unicity.
 	/// </summary>
-	public class HashSet<T>:ICollection<T> {
-		private IDictionary<T, T> content = new Dictionary<T, T>();
+	public class HashSet<T>:ICollection<T>, ICloneable {
+		private readonly IDictionary<T, T> content;
+		
+		public HashSet() {
+			content = new Dictionary<T, T>();
+		}
+		
+		public HashSet(HashSet<T> hashSet) {
+			content = new Dictionary<T, T>(hashSet.content);
+		}
+		
+		public object Clone()
+		{
+			return new HashSet<T>(this);
+		}
 		
 		public int Count {
 			get {
