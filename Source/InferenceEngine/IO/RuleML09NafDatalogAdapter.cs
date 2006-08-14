@@ -17,7 +17,7 @@ namespace NxBRE.InferenceEngine.IO {
 	public class RuleML09NafDatalogAdapter:AbstractRuleMLAdapter,IExtendedRuleBaseAdapter {
 		private SaveFormatAttributes syntax;
 		private bool forceDataTyping;
-		private ArrayList equivalents;
+		private List<Equivalent> equivalents;
 		private string globalDirection;
 		
 		/// <summary>
@@ -93,14 +93,14 @@ namespace NxBRE.InferenceEngine.IO {
 			}
 		}
 			
-		public ArrayList IntegrityQueries {
+		public IList<Query> IntegrityQueries {
 			get {
-				ArrayList result = new ArrayList();
+				List<Query> result = new List<Query>();
 				
 				XPathNodeIterator integrityQueries = Navigator.Select(BuildXPathExpression("dl:RuleML/dl:Protect//dl:Integrity"));
 				while(integrityQueries.MoveNext()) result.Add(GetQuery(integrityQueries.Current));
 				
-				return ArrayList.ReadOnly(result);
+				return result.AsReadOnly();
 		 	}
 			
 			set {
@@ -112,9 +112,9 @@ namespace NxBRE.InferenceEngine.IO {
 			}
 		}
 		
-		public ArrayList Equivalents {
+		public IList<Equivalent> Equivalents {
 			get {
-				return ArrayList.ReadOnly(equivalents);
+				return equivalents.AsReadOnly();
 		 	}
 			
 			set {
@@ -242,7 +242,7 @@ namespace NxBRE.InferenceEngine.IO {
 				}
 				
 				// load equivalent atom definitions
-				equivalents = new ArrayList();
+				equivalents = new List<Equivalent>();
 				XPathNodeIterator equivalentElements = Navigator.Select(BuildXPathExpression("dl:RuleML/dl:Assert/dl:Equivalent"));
 				
 				while (equivalentElements.MoveNext()) {
@@ -662,11 +662,11 @@ namespace NxBRE.InferenceEngine.IO {
 			}
 		}
 		
-		protected override void WriteQueries(ArrayList queries) {
+		protected override void WriteQueries(IList<Query> queries) {
 			foreach(Query query in queries) WriteQuery(Document.DocumentElement, query);
 		}
 
-		protected override void WriteImplications(ArrayList implications) {
+		protected override void WriteImplications(IList<Implication> implications) {
 			XmlElement target = WriteMapElement("Assert");
 			foreach(Implication implication in implications) WriteImplication(target, implication);
 		}

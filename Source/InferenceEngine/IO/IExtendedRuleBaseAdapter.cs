@@ -1,7 +1,9 @@
 namespace NxBRE.InferenceEngine.IO {
 
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
+	
+	using NxBRE.InferenceEngine.Rules;
 	
 	/// <summary>
 	/// Provides attributes for defining saving format of rule base
@@ -44,7 +46,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// <summary>
 		/// Collection containing all the equivalent atom pairs in the rulebase.
 		/// </summary>
-		ArrayList Equivalents {
+		IList<Equivalent> Equivalents {
 			get;
 			set;
 		}
@@ -52,7 +54,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// <summary>
 		/// Collection containing all the integrity queries.
 		/// </summary>
-		ArrayList IntegrityQueries {
+		IList<Query> IntegrityQueries {
 			get;
 			set;
 		}

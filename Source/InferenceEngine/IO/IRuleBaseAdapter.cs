@@ -1,7 +1,9 @@
 namespace NxBRE.InferenceEngine.IO {
 
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
+	
+	using NxBRE.InferenceEngine.Rules;
 	
 	/// <summary>
 	/// NxBRE Inference Engine rulebase adapter interface.
@@ -17,8 +19,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// <summary>
 		/// Collection containing all the queries in the rulebase.
 		/// </summary>
-		//TODO: make generic
-		ArrayList Queries {
+		IList<Query> Queries {
 			get;
 			set;
 		}
@@ -26,8 +27,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// <summary>
 		/// Collection containing all the implications in the rulebase.
 		/// </summary>
-		//TODO: make generic
-		ArrayList Implications {
+		IList<Implication> Implications {
 			get;
 			set;
 		}
