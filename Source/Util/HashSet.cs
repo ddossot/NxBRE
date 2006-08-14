@@ -34,7 +34,19 @@ namespace NxBRE.Util {
 		}
 		
 		public void Add(T item) {
-			content.Add(item, item);
+			try {
+				content.Add(item, item);
+			}
+			catch(ArgumentException ae) {
+				// we have a duplicated key, it should never happen so give as much context as possible in the exception
+				throw new ArgumentException("New item: " + item.ToString()
+																			+ " [#" + item.GetHashCode()
+																			+ "] - Conflicting existing item: "
+																			+ content[item]
+																			+ " [#" + content[item].GetHashCode()
+																			+ "]",
+																			ae);
+			}
 		}
 		
 		public void Clear() {
