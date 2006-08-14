@@ -2,6 +2,7 @@ namespace NxBRE.InferenceEngine.Core
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	
 	using NxBRE.InferenceEngine.Rules;
 
@@ -15,7 +16,7 @@ namespace NxBRE.InferenceEngine.Core
 		/// Internal method used for exploring the potential hierarchy of equivalence and building the complete
 		/// list of atoms equivalent to one atom.
 		/// </summary>
-		internal static ArrayList GetAll(ArrayList equivalentPairs, Atom atom, ArrayList equivalentAtoms) {
+		internal static ArrayList GetAll(IList<Equivalent> equivalentPairs, Atom atom, ArrayList equivalentAtoms) {
 			if ((atom != null) && (!equivalentAtoms.Contains(atom))) {
 				equivalentAtoms.Add(atom);
 				foreach(Equivalent equivalentPair in equivalentPairs) GetAll(equivalentPairs, equivalentPair.Get(atom), equivalentAtoms);

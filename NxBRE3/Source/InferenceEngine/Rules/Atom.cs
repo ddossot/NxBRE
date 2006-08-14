@@ -50,7 +50,6 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <summary>
 		/// The array of predicates associated in the Atom.
 		/// </summary>
-		//TODO: make generic & readonly?
 		public IPredicate[] Members {
 			get {
 				return predicates;
@@ -60,7 +59,6 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <summary>
 		/// The array of slot names in the Atom. Non-named members have a String.Empty slot name.
 		/// </summary>
-		//TODO: make generic & readonly?
 		public string[] SlotNames {
 			get {
 				return slotNames;

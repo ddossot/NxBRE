@@ -324,14 +324,11 @@ namespace NxBRE.Test.InferenceEngine {
 		
 		[Test]
 		public void Visio2003PageNames() {
-			string[] pageNames = Visio2003Adapter.GetPageNames(ruleFilesFolder + "discount.vdx");			
-			Assert.AreEqual(5, pageNames.Length, "Page count");
+			IList<string> pageNames = Visio2003Adapter.GetPageNames(ruleFilesFolder + "discount.vdx");			
+			Assert.AreEqual(5, pageNames.Count, "Page count");
 			
-			Array.Sort(pageNames);
 			string expectedResult = "|Customer Data|Customer Rules|Discount Rules|Product Data|Queries|";
-			string actualResult = "|";
-			foreach(string pageName in pageNames) actualResult += (pageName + "|");
-			Assert.AreEqual(expectedResult, actualResult, "Page names");
+			foreach(string pageName in pageNames) Assert.IsTrue(expectedResult.Contains("|" + pageName + "|"), pageName + " found");
 		}
 	}
 }

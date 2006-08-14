@@ -37,7 +37,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <summary>
 		/// A prepared empty fact collection.
 		/// </summary>
-		private static readonly ICollection<Fact> EMPTY_FACT_COLLECTION = new List<Fact>().AsReadOnly();
+		private static readonly ICollection<Fact> EMPTY_FACT_COLLECTION = new List<Fact>(0).AsReadOnly();
 		
 		/// <summary>
 		/// A flag that external class can use to detect fact assertions/retractions.

@@ -301,11 +301,11 @@ namespace NxBRE.InferenceEngine.IO {
 			target.AppendChild(eFact);
 		}
 		
-		protected override void WriteQueries(ArrayList queries) {
+		protected override void WriteQueries(IList<Query> queries) {
 			foreach(Query query in queries) WriteQuery(Document.DocumentElement, query);
 		}
 
-		protected override void WriteImplications(ArrayList implications) {
+		protected override void WriteImplications(IList<Implication> implications) {
 			foreach(Implication implication in implications) WriteImplication(Document.DocumentElement, implication);
 		}
 

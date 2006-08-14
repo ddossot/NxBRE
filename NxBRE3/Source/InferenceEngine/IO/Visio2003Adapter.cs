@@ -1,6 +1,5 @@
 namespace NxBRE.InferenceEngine.IO {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Xml;
@@ -103,7 +102,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// <summary>
 		/// Collection containing all the queries in the rulebase.
 		/// </summary>
-		public ArrayList Queries {
+		public IList<Query> Queries {
 			get {
 				return rml086da.Queries;
 			}
@@ -115,7 +114,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// <summary>
 		/// Collection containing all the implications in the rulebase.
 		/// </summary>
-		public ArrayList Implications {
+		public IList<Implication> Implications {
 			get {
 				return rml086da.Implications;
 			}
@@ -157,7 +156,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// </summary>
 		/// <param name="uriVDX">The URI to read from.</param>
 		/// <returns>An array containing the Visio document page names.</returns>
-		public static string[] GetPageNames(string uriVDX) {
+		public static IList<string> GetPageNames(string uriVDX) {
 			return GetPageNames(new XPathDocument(uriVDX));
 		}
 		
@@ -166,14 +165,14 @@ namespace NxBRE.InferenceEngine.IO {
 		/// </summary>
 		/// <param name="streamVDX">The stream to read from.</param>
 		/// <returns>An array containing the Visio document page names.</returns>
-		public static string[] GetPageNames(Stream streamVDX) {
+		public static IList<string> GetPageNames(Stream streamVDX) {
 			return GetPageNames(new XPathDocument(streamVDX));
 		}
 		
 		// Private methods --------------------------------------------------------
 		
-		private static string[] GetPageNames(XPathDocument xpDoc) {
-			ArrayList result = new ArrayList();
+		private static IList<string> GetPageNames(XPathDocument xpDoc) {
+			IList<string> result = new List<string>();
 			
 			XPathNavigator navigator = xpDoc.CreateNavigator();
 			XmlNamespaceManager nsmgr = new XmlNamespaceManager(navigator.NameTable);
@@ -183,7 +182,7 @@ namespace NxBRE.InferenceEngine.IO {
 			XPathNodeIterator pageNames = navigator.Select(xpe);
 			while(pageNames.MoveNext()) result.Add(pageNames.Current.Value);
 				
-			return (string[])result.ToArray(typeof(string));
+			return result;
 		}
 		
 		private void Init(XPathDocument xpDoc, FileAccess mode, bool strict, params string[] pageNames) {

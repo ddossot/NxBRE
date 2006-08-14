@@ -215,14 +215,13 @@ namespace NxBRE.InferenceEngine.IO {
 		public abstract string Direction {	get; set; }
 		
 		public abstract string Label {	get; set; }
-		
 				
 		/// <summary>
 		/// Collection containing all the queries in the rulebase.
 		/// </summary>		
-		public ArrayList Queries {
+		public IList<Query> Queries {
 			get {
-				return ArrayList.ReadOnly(ExtractQueries());
+				return ExtractQueries().AsReadOnly();
 			}
 			set {
 				if (value.Count > 0) {
@@ -232,9 +231,9 @@ namespace NxBRE.InferenceEngine.IO {
 			}
 		}
 		
-		public ArrayList Implications {
+		public IList<Implication> Implications {
 			get {
-				return ArrayList.ReadOnly(ExtractImplications());
+				return ExtractImplications().AsReadOnly();
 		 	}
 			set {
 				if (value.Count > 0) {
@@ -368,8 +367,8 @@ namespace NxBRE.InferenceEngine.IO {
 			return result;
 		}
 		
-		protected ArrayList ExtractQueries() {
-			ArrayList result = new ArrayList();
+		protected List<Query> ExtractQueries() {
+			List<Query> result = new List<Query>();
 			
 			XPathNodeIterator queries = Navigator.Select(QueryElementXPath);
 			while(queries.MoveNext())	result.Add(GetQuery(queries.Current));
@@ -377,8 +376,8 @@ namespace NxBRE.InferenceEngine.IO {
 			return result;
 		}
 		
-		protected ArrayList ExtractImplications() {
-			ArrayList result = new ArrayList();
+		protected List<Implication> ExtractImplications() {
+			List<Implication> result = new List<Implication>();
 				
 			XPathNodeIterator imps = Navigator.Select(ImplicationElementXPath);
 			
@@ -427,10 +426,10 @@ namespace NxBRE.InferenceEngine.IO {
 				
 		protected Atom GetAtom(XPathNavigator atom, bool negative, bool inHead, bool resolveImmediatly) {
 			// build the array of predicates
-			ArrayList relationPredicates = new ArrayList();
+			List<IPredicate> relationPredicates = new List<IPredicate>();
 			XPathNodeIterator predicates = atom.Select(RelativePredicatesXPath);
 			while(predicates.MoveNext()) relationPredicates.Add(BuildPredicate(predicates.Current, inHead, resolveImmediatly));
-			IPredicate[] predicatesArray = (IPredicate[])relationPredicates.ToArray(typeof(IPredicate));
+			IPredicate[] predicatesArray = relationPredicates.ToArray();
 			
 			// identify function based atom relations
 			XPathNodeIterator rel = atom.Select(RelativeRelationXPath);
@@ -593,9 +592,9 @@ namespace NxBRE.InferenceEngine.IO {
 		
 		protected abstract void WriteQuery(XmlElement target, Query query);
 
-		protected abstract void WriteQueries(ArrayList queries);
+		protected abstract void WriteQueries(IList<Query> queries);
 		
-		protected abstract void WriteImplications(ArrayList implications);
+		protected abstract void WriteImplications(IList<Implication> implications);
 
 		protected abstract void WriteFacts(IList<Fact> facts);
 		

@@ -87,8 +87,8 @@ namespace NxBRE.InferenceEngine {
 		/// </summary>
 		public event NewFactEvent ModifyFactHandler;
 		
-		private ArrayList equivalents;
-		private ArrayList integrityQueries;
+		private IList<Equivalent> equivalents;
+		private IList<Query> integrityQueries;
 		private QueryBase qb;
 		private ImplicationBase ib;
 		private IWorkingMemory wm;
@@ -122,13 +122,13 @@ namespace NxBRE.InferenceEngine {
 		/// <remarks>The default is 15000.</remarks>
 		internal int lockTimeOut = Parameter.Get<int>("lockTimeOut", 15000);
 		
-		private ArrayList Equivalents {
+		private IList<Equivalent> Equivalents {
 			get {
 				return equivalents;
 			}
 		}
 		
-		private ArrayList IntegrityQueries {
+		private IList<Query> IntegrityQueries {
 			get {
 				return integrityQueries;
 			}
@@ -314,8 +314,8 @@ namespace NxBRE.InferenceEngine {
 					if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Loaded " + integrityQueries.Count + " IntegrityQueries");
 				}
 				else {
-					equivalents = new ArrayList();
-					integrityQueries = equivalents;
+					equivalents = new List<Equivalent>(0);
+					integrityQueries = new List<Query>(0);
 				}
 
 				// instantiate the implication base and the query base				
@@ -374,12 +374,12 @@ namespace NxBRE.InferenceEngine {
 				adapter.Label = Label;
 		
 				//queries
-				ArrayList queries = new ArrayList();
+				IList<Query> queries = new List<Query>();
 				foreach(Query query in QB)	queries.Add(query);
 				adapter.Queries = queries;
 
 				// implications
-				ArrayList implications = new ArrayList();
+				IList<Implication> implications = new List<Implication>();
 				foreach(Implication implication in IB) implications.Add(implication);
 				adapter.Implications = implications;
 				
