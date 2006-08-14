@@ -6,7 +6,7 @@ namespace NxBRE.Util
 	/// A helper object for building hashcode based certain objects that belongs to a particular class.
 	/// </summary>
 	/// <remarks>
-	/// This helper follows, as much as possible in C#, Joshua Bloch's Effective Java recommandations on computing hashcode.
+	/// This helper follows Joshua Bloch's Effective Java recommandations on computing hashcode.
 	/// </remarks>
 	public class HashCodeBuilder
 	{
@@ -34,11 +34,7 @@ namespace NxBRE.Util
 		/// <param name="o"></param>
 		/// <returns></returns>
 		public HashCodeBuilder Append(object o) {
-			if (o != null) {
-				long temp = Math.BigMul(37, hashCode);
-				hashCode = (Convert.ToInt32(temp & Int32.MaxValue) ^ (int)(temp >> 32)) ^ o.GetHashCode();
-			}
-			
+			if (o != null) hashCode = unchecked(37*hashCode + o.GetHashCode());
 			return this;
 		}
 		
