@@ -15,6 +15,7 @@ namespace NxBRE.InferenceEngine.IO {
 	/// <remarks>Only READ is supported!</remarks>
 	/// <author>David Dossot</author>
 	public class Visio2003Adapter:IRuleBaseAdapter {
+		//TODO: target RuleML09 adapter
 		private RuleML086NafDatalogAdapter rml086da;
 		
 		/// <summary>
@@ -197,6 +198,7 @@ namespace NxBRE.InferenceEngine.IO {
 			    
 			
 			// load the appropriate XSL
+			//TODO: try to refactor into one parametrable XSL
 			XslCompiledTransform xslt = Xml.GetCachedCompiledTransform(strict?"strict-vdx2nxbre-ie.xsl":"vdx2nxbre-ie.xsl");
 			
 			MemoryStream stream = new MemoryStream();
