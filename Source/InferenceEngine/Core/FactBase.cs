@@ -191,7 +191,9 @@ namespace NxBRE.InferenceEngine.Core {
 		public bool Retract(Fact fact) {
 			if (fact == null) throw new ArgumentNullException("Null is not a valid fact to retract");
 			
-			for(IEnumerator<Fact> e = Select(fact, null); e.MoveNext() ; ) {
+			IEnumerator<Fact> e = Select(fact, null);
+			
+			if (e.MoveNext()) {
 				Fact storedFact = e.Current;
 				
 				// remove the fact from the lists of reference where it is referenced
