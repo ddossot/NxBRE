@@ -154,10 +154,7 @@ namespace NxBRE.InferenceEngine.Core {
 				
 				// store the fact in the signature map, hierarchized on its type and number of predicates
 				ICollection<Fact> signatureListOfFact;
-				if (signatureMap.ContainsKey(fact.Signature)) {
-					signatureListOfFact = signatureMap[fact.Signature];
-				}
-				else {
+				if (!signatureMap.TryGetValue(fact.Signature, out signatureListOfFact)) {
 					signatureListOfFact = new List<Fact>();
 					signatureMap.Add(fact.Signature, signatureListOfFact);
 				}
@@ -456,37 +453,29 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="individualValue"></param>
 		private void StoreFactForIndividualValue(Fact fact, int predicatePosition, object individualValue) {
 			IDictionary<Type, IDictionary<object, IDictionary<int, ICollection<Fact>>>> signatureContent;
-			if (predicateMap.ContainsKey(fact.Signature)) {
-				signatureContent = predicateMap[fact.Signature];
-			}
-			else {
+			
+			if (!predicateMap.TryGetValue(fact.Signature, out signatureContent)) {
 				signatureContent = new Dictionary<Type, IDictionary<object, IDictionary<int, ICollection<Fact>>>>();
 				predicateMap.Add(fact.Signature, signatureContent);
 			}
 			
 			IDictionary<object, IDictionary<int, ICollection<Fact>>> typedContent;
-			if (signatureContent.ContainsKey(individualValue.GetType())) {
-				typedContent = signatureContent[individualValue.GetType()];
-			}
-			else {
+			
+			if (!signatureContent.TryGetValue(individualValue.GetType(), out typedContent)) {
 				typedContent = new Dictionary<object, IDictionary<int, ICollection<Fact>>>();
 				signatureContent.Add(individualValue.GetType(), typedContent);
 			}
 			
 			IDictionary<int, ICollection<Fact>> valuedContent;
-			if (typedContent.ContainsKey(individualValue)) {
-				valuedContent = typedContent[individualValue];
-			}
-			else {
+			
+			if (!typedContent.TryGetValue(individualValue, out valuedContent)) {
 				valuedContent = new Dictionary<int, ICollection<Fact>>();
 				typedContent.Add(individualValue, valuedContent);
 			}
 			
 			ICollection<Fact> positionedContent;
-			if (valuedContent.ContainsKey(predicatePosition)) {
-				positionedContent = valuedContent[predicatePosition];
-			}
-			else {
+			
+			if (!valuedContent.TryGetValue(predicatePosition, out positionedContent)) {
 				// we use a HashSet to enforce fact unicity
 				positionedContent = new HashSet<Fact>();
 				valuedContent.Add(predicatePosition, positionedContent);
@@ -501,10 +490,7 @@ namespace NxBRE.InferenceEngine.Core {
 		private void AddFactListReference(Fact fact, ICollection<Fact> listReference) {
 			IList<ICollection<Fact>> factListReference;
 			
-			if (factListReferences.ContainsKey(fact)) {
-				factListReference = factListReferences[fact];
-			}
-			else {
+			if (!factListReferences.TryGetValue(fact, out factListReference)) {
 				factListReference = new List<ICollection<Fact>>();
 				factListReferences.Add(fact, factListReference);
 			}
@@ -530,16 +516,10 @@ namespace NxBRE.InferenceEngine.Core {
 				return EMPTY_SELECT_RESULT.GetEnumerator();
 			}
 			
-			// if the filter does not contain any individual or function, then it is fully variable so everything should be returned
-			if ((!filter.HasIndividual) && (!filter.HasFunction)) {
-				if (signatureMap.ContainsKey(filter.Signature)) {
-					if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Filter with no Ind or Fun -> Return all facts matching signature: " + filter.Signature);
-					return signatureMap[filter.Signature].GetEnumerator();
-				}
-				else{
-					if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Filter with no Ind or Fun -> Return no fact");
-					return EMPTY_SELECT_RESULT.GetEnumerator();
-				}
+			// if the filter contains only variables, everything should be returned
+			if (filter.OnlyVariables) {
+				if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Filter with no Ind or Fun -> Return all facts matching signature: " + filter.Signature);
+				return FactEnumeratorFactory.NewFactListExcludingEnumerator(signatureMap[filter.Signature], excludedFacts);
 			}
 			
 			// we build result lists and will reduce the biggest ones from the smallest ones
@@ -551,11 +531,13 @@ namespace NxBRE.InferenceEngine.Core {
 				if (filter.Members[position] is Individual) {
 					bool matched = false;
 					object predicateValue = filter.Members[position].Value;
-					
-					if (predicateMap[filter.Signature].ContainsKey(predicateValue.GetType())) {
-						IDictionary<object, IDictionary<int, ICollection<Fact>>> predicateValueMap = predicateMap[filter.Signature][predicateValue.GetType()];
-						if (predicateValueMap.ContainsKey(predicateValue)) {
-							IDictionary<int, ICollection<Fact>> predicatePositionMap = predicateValueMap[predicateValue];
+					IDictionary<object, IDictionary<int, ICollection<Fact>>> predicateValueMap;
+						
+					if (predicateMap[filter.Signature].TryGetValue(predicateValue.GetType(), out predicateValueMap)) {
+						IDictionary<int, ICollection<Fact>> predicatePositionMap;
+						
+						if (predicateValueMap.TryGetValue(predicateValue, out predicatePositionMap)) {
+							
 							if ((predicatePositionMap.ContainsKey(position)) && (predicatePositionMap[position].Count > 0)) {
 								if (Logger.IsInferenceEngineVerbose)
 									Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
