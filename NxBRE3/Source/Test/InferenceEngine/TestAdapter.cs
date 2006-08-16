@@ -217,109 +217,82 @@ namespace NxBRE.Test.InferenceEngine {
 		
 		[Test]
 		public void Visio2003ImplicationProperties_2_1() {
-			int totalTest = 0;
-			
 			using(Visio2003Adapter va = new Visio2003Adapter(ruleFilesFolder + "test-2_1.vdx", FileAccess.Read)) {
-				foreach(Implication i in va.Implications) {
-					if (i.Label == "imp1") {
-						Assert.AreEqual(70, i.Priority, "imp1: Priority");
-						Assert.AreEqual("imp2", i.Mutex, "imp1: Mutex");
-						Assert.AreEqual("imp3", i.Precondition, "imp1: Precondition");
-						Assert.AreEqual(ImplicationAction.Assert, i.Action, "imp1: Asserting");
-						totalTest++;
-					}
-					else if (i.Label == "imp2") {
-						Assert.AreEqual(20, i.Priority, "imp2: Priority");
-						Assert.AreEqual("imp1", i.Mutex, "imp2: Mutex");
-						Assert.AreEqual("imp3", i.Precondition, "imp2: Precondition");
-						Assert.AreEqual(ImplicationAction.Assert, i.Action, "imp2: Asserting");
-						totalTest++;
-					}
-				}
+				CommonVisio2003ImplicationProperties(3, va, true);
 			}
-			
-			Assert.AreEqual(2, totalTest, "totalTest");
 		}
 		
 		[Test]
 		public void Visio2003ImplicationProperties_2_2() {
-			int totalTest = 0;
-			
 			using(Visio2003Adapter va = new Visio2003Adapter(ruleFilesFolder + "test-2_2.vdx", FileAccess.Read)) {
-				foreach(Implication i in va.Implications) {
-					if (i.Label == "imp1") {
-						Assert.AreEqual(70, i.Priority, "imp1: Priority");
-						Assert.AreEqual("imp2", i.Mutex, "imp1: Mutex");
-						Assert.AreEqual("imp3", i.Precondition, "imp1: Precondition");
-						Assert.AreEqual(ImplicationAction.Assert, i.Action, "imp1: Asserting");
-					}
-					else if (i.Label == "imp2") {
-						Assert.AreEqual(20, i.Priority, "imp2: Priority");
-						Assert.AreEqual("imp1", i.Mutex, "imp2: Mutex");
-						Assert.AreEqual("imp3", i.Precondition, "imp2: Precondition");
-						Assert.AreEqual(ImplicationAction.Retract, i.Action, "imp2: Retract");
-					}
-					else if (i.Label == "imp3") {
-						Assert.AreEqual(50, i.Priority, "imp3: Priority");
-						Assert.AreEqual(String.Empty, i.Mutex, "imp3: Mutex");
-						Assert.AreEqual(String.Empty, i.Precondition, "imp3: Precondition");
-						Assert.AreEqual(ImplicationAction.Assert, i.Action, "imp3: Assert");
-					}
-					else if (i.Label == "imp4") {
-						Assert.AreEqual(50, i.Priority, "imp4: Priority");
-						Assert.AreEqual(String.Empty, i.Mutex, "imp4: Mutex");
-						Assert.AreEqual(String.Empty, i.Precondition, "imp4: Precondition");
-						Assert.AreEqual(ImplicationAction.Count, i.Action, "imp4: Count");
-					}
-					totalTest++;
-				}
+				CommonVisio2003ImplicationProperties(4, va, false);
 			}
-			
-			Assert.AreEqual(4, totalTest, "totalTest");
 		}
 		
 		[Test]
 		public void Visio2003ImplicationProperties_2_3() {
-			int totalTest = 0;
-			
 			using(Visio2003Adapter va = new Visio2003Adapter(ruleFilesFolder + "test-2_3.vdx", FileAccess.Read)) {
+				CommonVisio2003ImplicationProperties(5, va, false);
 				foreach(Implication i in va.Implications) {
 					if (i.Label == "imp1") {
-						Assert.AreEqual(70, i.Priority, "imp1: Priority");
-						Assert.AreEqual("imp2", i.Mutex, "imp1: Mutex");
-						Assert.AreEqual("imp3", i.Precondition, "imp1: Precondition");
-						Assert.AreEqual(ImplicationAction.Assert, i.Action, "imp1: Asserting");
 						Assert.IsTrue(i.Deduction.HasFormula, "imp1: HasFormula");
+						break;
 					}
-					else if (i.Label == "imp2") {
-						Assert.AreEqual(20, i.Priority, "imp2: Priority");
-						Assert.AreEqual("imp1", i.Mutex, "imp2: Mutex");
-						Assert.AreEqual("imp3", i.Precondition, "imp2: Precondition");
-						Assert.AreEqual(ImplicationAction.Retract, i.Action, "imp2: Retract");
-					}
-					else if (i.Label == "imp3") {
-						Assert.AreEqual(50, i.Priority, "imp3: Priority");
-						Assert.AreEqual(String.Empty, i.Mutex, "imp3: Mutex");
-						Assert.AreEqual(String.Empty, i.Precondition, "imp3: Precondition");
-						Assert.AreEqual(ImplicationAction.Assert,i.Action,  "imp3: Assert");
-					}
-					else if (i.Label == "imp4") {
-						Assert.AreEqual(50, i.Priority, "imp4: Priority");
-						Assert.AreEqual(String.Empty, i.Mutex, "imp4: Mutex");
-						Assert.AreEqual(String.Empty,i.Precondition,  "imp4: Precondition");
-						Assert.AreEqual(ImplicationAction.Count, i.Action, "imp4: Count");
-					}
-					else if (i.Label == "imp5") {
-						Assert.AreEqual(50, i.Priority, "imp5: Priority");
-						Assert.AreEqual(String.Empty, i.Mutex, "imp5: Mutex");
-						Assert.AreEqual(String.Empty, i.Precondition, "imp5: Precondition");
-						Assert.AreEqual(ImplicationAction.Modify, i.Action, "imp4: Modify");
-					}
-					totalTest++;
 				}
 			}
+		}
+		
+		[Test]
+		public void Visio2003ImplicationProperties_3_0() {
+			using(Visio2003Adapter va = new Visio2003Adapter(ruleFilesFolder + "test-3_0.vdx", FileAccess.Read)) {
+				CommonVisio2003ImplicationProperties(5, va, false);
+				foreach(Implication i in va.Implications) {
+					if (i.Label == "imp1") {
+						Assert.IsTrue(i.Deduction.HasFormula, "imp1: HasFormula");
+						Assert.IsInstanceOfType(typeof(byte[]), ((Atom)i.AtomGroup.Members[0]).GetPredicateValue(1), "Typed predicate support");
+						break;
+					}
+				}
+			}
+		}
+		
+		private void CommonVisio2003ImplicationProperties(int expectedTestCount, Visio2003Adapter va, bool onlyAssert) {
+			int totalTest = 0;
 			
-			Assert.AreEqual(5, totalTest, "totalTest");
+			foreach(Implication i in va.Implications) {
+				if (i.Label == "imp1") {
+					Assert.AreEqual(70, i.Priority, "imp1: Priority");
+					Assert.AreEqual("imp2", i.Mutex, "imp1: Mutex");
+					Assert.AreEqual("imp3", i.Precondition, "imp1: Precondition");
+					Assert.AreEqual(ImplicationAction.Assert, i.Action, "imp1: Assert");
+				}
+				else if (i.Label == "imp2") {
+					Assert.AreEqual(20, i.Priority, "imp2: Priority");
+					Assert.AreEqual("imp1", i.Mutex, "imp2: Mutex");
+					Assert.AreEqual("imp3", i.Precondition, "imp2: Precondition");
+					Assert.AreEqual(onlyAssert?ImplicationAction.Assert:ImplicationAction.Retract, i.Action, "imp2: Retract");
+				}
+				else if (i.Label == "imp3") {
+					Assert.AreEqual(50, i.Priority, "imp3: Priority");
+					Assert.AreEqual(String.Empty, i.Mutex, "imp3: Mutex");
+					Assert.AreEqual(String.Empty, i.Precondition, "imp3: Precondition");
+					Assert.AreEqual(ImplicationAction.Assert, i.Action,  "imp3: Assert");
+				}
+				else if (i.Label == "imp4") {
+					Assert.AreEqual(50, i.Priority, "imp4: Priority");
+					Assert.AreEqual(String.Empty, i.Mutex, "imp4: Mutex");
+					Assert.AreEqual(String.Empty,i.Precondition,  "imp4: Precondition");
+					Assert.AreEqual(onlyAssert?ImplicationAction.Assert:ImplicationAction.Count, i.Action, "imp4: Count");
+				}
+				else if (i.Label == "imp5") {
+					Assert.AreEqual(50, i.Priority, "imp5: Priority");
+					Assert.AreEqual(String.Empty, i.Mutex, "imp5: Mutex");
+					Assert.AreEqual(String.Empty, i.Precondition, "imp5: Precondition");
+					Assert.AreEqual(onlyAssert?ImplicationAction.Assert:ImplicationAction.Modify, i.Action, "imp4: Modify");
+				}
+				totalTest++;
+			}
+			Assert.AreEqual(expectedTestCount, totalTest, "totalTest");
 		}
 		
 		[Test]
