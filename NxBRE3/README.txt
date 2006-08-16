@@ -1,13 +1,9 @@
 NxBRE README v3.0.0RC1
 ======================
 
-.NET Version : David Dossot (david@dossot.net)
-             : Ron Evans
-             : Andre Weber
-             : Stephane Joyeux
-JxBRE Author : Sloan Seaman (sloan@sgi.net)
-Date         : 19-JUL-2006
+Date         : XX-XXX-2006
 URL          : http://nxbre.org
+EMail        : contact@nxbre.org
 License      : LGPL
 
 
@@ -79,6 +75,10 @@ v3.0.0RC2
   * Included the Inference Engine Registry in main distribution (feature request 1511119)
 
   * Refactored the core fact base to leverage generics and to use a much simpler and efficient fact storage
+
+  * The Visio2003 adapter now supports the following RuleML concepts:
+
+      - typed predicates: (xs:int)123
 
 
 v3.0.0RC1 (compared to NxBRE v2.5.3)
