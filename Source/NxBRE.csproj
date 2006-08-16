@@ -174,7 +174,7 @@
     <EmbeddedResource Include="Resources\ruleml-0_86-nafdatalog.xsd" />
     <EmbeddedResource Include="Resources\ruleml-nafdatalog-0_86-2hrf.xsl" />
     <EmbeddedResource Include="Resources\transformXRules.xsl" />
-    <EmbeddedResource Include="Resources\vdx2nxbre-ie.xsl" />
+    <EmbeddedResource Include="Resources\visio2003toRuleML.xsl" />
     <EmbeddedResource Include="Resources\xBusinessRules.xsd" />
     <Compile Include="FlowEngine\Rules\IInitializable.cs" />
     <EmbeddedResource Include="Resources\identity.xsl" />

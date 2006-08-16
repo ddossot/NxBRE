@@ -14,8 +14,7 @@ namespace NxBRE.InferenceEngine.IO {
 	/// <remarks>Only READ is supported!</remarks>
 	/// <author>David Dossot</author>
 	public class Visio2003Adapter:IRuleBaseAdapter {
-		//TODO: target RuleML09 adapter
-		private RuleML086NafDatalogAdapter rml086da;
+		private IRuleBaseAdapter ruleBaseAdapter;
 		
 		/// <summary>
 		/// Instantiates a non-strict Visio 2003 DatadiagramML (VDX file) adapter for reading from a stream.
@@ -80,10 +79,10 @@ namespace NxBRE.InferenceEngine.IO {
 		/// </summary>
 		public string Direction {
 			get {
-				return rml086da.Direction;
+				return ruleBaseAdapter.Direction;
 			}
 			set {
-				rml086da.Direction = value;
+				ruleBaseAdapter.Direction = value;
 			}
 		}
 		
@@ -92,10 +91,10 @@ namespace NxBRE.InferenceEngine.IO {
 		/// </summary>
 		public string Label {
 			get {
-				return rml086da.Label;
+				return ruleBaseAdapter.Label;
 			}
 			set {
-				rml086da.Label = value;
+				ruleBaseAdapter.Label = value;
 			}
 		}
 		
@@ -104,10 +103,10 @@ namespace NxBRE.InferenceEngine.IO {
 		/// </summary>
 		public IList<Query> Queries {
 			get {
-				return rml086da.Queries;
+				return ruleBaseAdapter.Queries;
 			}
 			set {
-				rml086da.Queries = value;
+				ruleBaseAdapter.Queries = value;
 			}
 		}
 		
@@ -116,10 +115,10 @@ namespace NxBRE.InferenceEngine.IO {
 		/// </summary>
 		public IList<Implication> Implications {
 			get {
-				return rml086da.Implications;
+				return ruleBaseAdapter.Implications;
 			}
 			set {
-				rml086da.Implications = value;
+				ruleBaseAdapter.Implications = value;
 			}
 		}
 		
@@ -128,10 +127,10 @@ namespace NxBRE.InferenceEngine.IO {
 		/// </summary>
 		public IList<Fact> Facts {
 			get {
-				return rml086da.Facts;
+				return ruleBaseAdapter.Facts;
 			}
 			set {
-				rml086da.Facts = value;
+				ruleBaseAdapter.Facts = value;
 			}
 		}
 		
@@ -140,7 +139,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// </summary>
 		public IBinder Binder {
 			set {
-				rml086da.Binder = value;
+				ruleBaseAdapter.Binder = value;
 			}
 		}
 		
@@ -148,7 +147,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// Called when the adapter is no longer used.
 		/// </summary>
 		public void Dispose() {
-			rml086da.Dispose();
+			ruleBaseAdapter.Dispose();
 		}
 		
 		/// <summary>
@@ -187,8 +186,9 @@ namespace NxBRE.InferenceEngine.IO {
 		
 		private void Init(XPathDocument xpDoc, FileAccess mode, bool strict, params string[] pageNames) {
 			if (mode != FileAccess.Read) throw new IOException(mode.ToString() + " not supported");
-
+			
 			XsltArgumentList xslArgs = new XsltArgumentList();
+			
 			if (pageNames.Length > 0) {
 				string pageNameList = "|";
 				foreach(string pageName in pageNames) pageNameList += (pageName + "|");
@@ -196,16 +196,13 @@ namespace NxBRE.InferenceEngine.IO {
 			}
 			
 			xslArgs.AddParam("strict", String.Empty, strict?"true":"false");
-			XslCompiledTransform xslt = Xml.GetCachedCompiledTransform("vdx2nxbre-ie.xsl");
-			
-			// load the appropriate XSL
-			//TODO: try to refactor into one parametrable XSL
-			//XslCompiledTransform xslt = Xml.GetCachedCompiledTransform(strict?"strict-vdx2nxbre-ie.xsl":"vdx2nxbre-ie.xsl");
+			XslCompiledTransform xslt = Xml.GetCachedCompiledTransform("visio2003toRuleML.xsl");
 			
 			MemoryStream stream = new MemoryStream();
 			xslt.Transform(xpDoc, xslArgs, stream);
 			stream.Seek(0, SeekOrigin.Begin);
-			rml086da = new RuleML086NafDatalogAdapter(stream, FileAccess.Read);
+
+			ruleBaseAdapter = new RuleML09NafDatalogAdapter(stream, FileAccess.Read);
 		}
 		
 	}
