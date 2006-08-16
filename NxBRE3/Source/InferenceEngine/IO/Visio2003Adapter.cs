@@ -194,11 +194,13 @@ namespace NxBRE.InferenceEngine.IO {
 				foreach(string pageName in pageNames) pageNameList += (pageName + "|");
 				xslArgs.AddParam("selected-pages", String.Empty, pageNameList);
 			}
-			    
+			
+			xslArgs.AddParam("strict", String.Empty, strict?"true":"false");
+			XslCompiledTransform xslt = Xml.GetCachedCompiledTransform("vdx2nxbre-ie.xsl");
 			
 			// load the appropriate XSL
 			//TODO: try to refactor into one parametrable XSL
-			XslCompiledTransform xslt = Xml.GetCachedCompiledTransform(strict?"strict-vdx2nxbre-ie.xsl":"vdx2nxbre-ie.xsl");
+			//XslCompiledTransform xslt = Xml.GetCachedCompiledTransform(strict?"strict-vdx2nxbre-ie.xsl":"vdx2nxbre-ie.xsl");
 			
 			MemoryStream stream = new MemoryStream();
 			xslt.Transform(xpDoc, xslArgs, stream);

@@ -9,6 +9,7 @@
 -->
 <xsl:stylesheet version="1.0" exclude-result-prefixes="vdx" xmlns="http://www.ruleml.org/0.86/xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:vdx="http://schemas.microsoft.com/visio/2003/core">
 	<xsl:param name="selected-pages"/>
+	<xsl:param name="strict"/>
 	<xsl:output indent="yes" method="xml" encoding="utf-8" />
 	
 	<xsl:variable name="MID-implication" select="/vdx:VisioDocument/vdx:Masters/vdx:Master[vdx:PageSheet/vdx:Misc/vdx:ShapeKeywords='RuleML:Implication']/@ID"/>
@@ -219,6 +220,17 @@
 		</atom>
 	</xsl:template>
 	
+	<xsl:template match="text()" mode="trim-string">
+		<xsl:choose>
+			<xsl:when test="$strict='true'">
+				<xsl:value-of select="normalize-space(.)"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="."/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
 	<xsl:template name="nxbre-operators">
 		<xsl:param name="predicate-string"/>
 		<xsl:choose>
@@ -238,40 +250,86 @@
 	<xsl:template name="predicate">
 		<xsl:param name="predicate-string"/>
 		<xsl:choose>
-			<xsl:when test="starts-with($predicate-string, '?')">
-				<var>
-					<xsl:value-of select="normalize-space(substring-after($predicate-string, '?'))"/>
-				</var>
+			<xsl:when test="$strict='true'">
+				<xsl:choose>
+					<xsl:when test="starts-with($predicate-string, '?')">
+						<var>
+							<xsl:value-of select="substring-after($predicate-string, '?')"/>
+						</var>
+					</xsl:when>
+					<xsl:otherwise>
+						<ind>
+							<xsl:call-template name="nxbre-operators">
+								<xsl:with-param name="predicate-string" select="$predicate-string"/>
+							</xsl:call-template>
+						</ind>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
-				<ind>
-					<xsl:call-template name="nxbre-operators">
-						<xsl:with-param name="predicate-string" select="normalize-space($predicate-string)"/>
-					</xsl:call-template>
-				</ind>
+				<xsl:choose>
+					<xsl:when test="starts-with($predicate-string, '?')">
+						<var>
+							<xsl:value-of select="normalize-space(substring-after($predicate-string, '?'))"/>
+						</var>
+					</xsl:when>
+					<xsl:otherwise>
+						<ind>
+							<xsl:call-template name="nxbre-operators">
+								<xsl:with-param name="predicate-string" select="normalize-space($predicate-string)"/>
+							</xsl:call-template>
+						</ind>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 	
 	<xsl:template name="predicates">
 		<xsl:param name="predicate-list"/>
-		<xsl:if test="string-length($predicate-list)">
-			<xsl:choose>
-				<xsl:when test="contains($predicate-list, '&#x0a;')">
-					<xsl:call-template name="predicate">
-						<xsl:with-param name="predicate-string" select="substring-before($predicate-list, '&#x0a;')"/>
-					</xsl:call-template>
-					<xsl:call-template name="predicates">
-						<xsl:with-param name="predicate-list" select="substring-after($predicate-list, '&#x0a;')"/>
-					</xsl:call-template>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:call-template name="predicate">
-						<xsl:with-param name="predicate-string" select="$predicate-list"/>
-					</xsl:call-template>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:if>
+		<xsl:choose>
+			<xsl:when test="$strict='true'">
+				<xsl:variable name="trim-predicate-list">
+					<xsl:value-of select="normalize-space($predicate-list)"/>
+				</xsl:variable>
+				<xsl:if test="string-length($trim-predicate-list)">
+					<xsl:choose>
+						<xsl:when test="contains($trim-predicate-list, ',')">
+							<xsl:call-template name="predicate">
+								<xsl:with-param name="predicate-string" select="substring-before($trim-predicate-list, ',')"/>
+							</xsl:call-template>
+							<xsl:call-template name="predicates">
+								<xsl:with-param name="predicate-list" select="substring-after($trim-predicate-list, ',')"/>
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="predicate">
+								<xsl:with-param name="predicate-string" select="$trim-predicate-list"/>
+							</xsl:call-template>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:if>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:if test="string-length($predicate-list)">
+					<xsl:choose>
+						<xsl:when test="contains($predicate-list, '&#x0a;')">
+							<xsl:call-template name="predicate">
+								<xsl:with-param name="predicate-string" select="substring-before($predicate-list, '&#x0a;')"/>
+							</xsl:call-template>
+							<xsl:call-template name="predicates">
+								<xsl:with-param name="predicate-list" select="substring-after($predicate-list, '&#x0a;')"/>
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="predicate">
+								<xsl:with-param name="predicate-string" select="$predicate-list"/>
+							</xsl:call-template>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:if>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	
 	<xsl:template name="label">

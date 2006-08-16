@@ -173,7 +173,6 @@
     <EmbeddedResource Include="Resources\ruleml-0_86-datalog.xsd" />
     <EmbeddedResource Include="Resources\ruleml-0_86-nafdatalog.xsd" />
     <EmbeddedResource Include="Resources\ruleml-nafdatalog-0_86-2hrf.xsl" />
-    <EmbeddedResource Include="Resources\strict-vdx2nxbre-ie.xsl" />
     <EmbeddedResource Include="Resources\transformXRules.xsl" />
     <EmbeddedResource Include="Resources\vdx2nxbre-ie.xsl" />
     <EmbeddedResource Include="Resources\xBusinessRules.xsd" />
