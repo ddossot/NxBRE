@@ -70,7 +70,14 @@ namespace NxBRE.Test.InferenceEngine {
 		}
 		
 		[Test]
-		public void DiscountStrictVisio2003() {
+		public void DiscountVisio2003StrictOnNonStrict() {
+			ie.LoadRuleBase(new Visio2003Adapter(ruleFilesFolder + "discount.vdx", FileAccess.Read, true));
+			Process();
+			Assert.AreEqual(0, deducted, "Fails to deduct anything");
+		}
+		
+		[Test]
+		public void DiscountVisio2003Strict() {
 			CommonDiscountVisio2003(new Visio2003Adapter(ruleFilesFolder + "discount_spoiled.vdx", FileAccess.Read, true));
 		}
 
