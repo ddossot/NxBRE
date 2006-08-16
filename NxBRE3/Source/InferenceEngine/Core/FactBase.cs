@@ -18,7 +18,35 @@ namespace NxBRE.InferenceEngine.Core {
 	/// <remarks>This class is not thread safe.</remarks>
 	/// <author>David Dossot</author>
 	internal sealed class FactBase:ICloneable, IEnumerable<Fact> {
+		/// <summary>
+		/// A pre-instantiated negative fact.
+		/// </summary>
 		private static readonly NegativeFact NAF = new NegativeFact();
+		
+		/// <summary>
+		/// A pre-instantiated empty list of fact for using as a select result.
+		/// </summary>
+		private static readonly IList<Fact> EMPTY_SELECT_RESULT = new List<Fact>(0).AsReadOnly();
+		
+		/// <summary>
+		/// The main storage of facts, hierarchized on Signature, Predicate Value Type, Predicate Value and Predicate Position
+		/// </summary>
+		private readonly IDictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, ICollection<Fact>>>>> predicateMap;
+		
+		/// <summary>
+		/// A secondary fact storage, used for direct access for a particular signature.
+		/// </summary>
+		private readonly IDictionary<string, ICollection<Fact>> signatureMap;
+		
+		/// <summary>
+		/// An inverted index allowing to discover all the lists where a particular fact is referenced (for fast removal)
+		/// </summary>
+		private readonly IDictionary<Fact, IList<ICollection<Fact>>> factListReferences;
+		
+		/// <summary>
+		/// A storage of facts based on their optional labels.
+		/// </summary>
+		private readonly IDictionary<string, Fact> labelMap;
 		
 		/// <summary>
 		/// Defines whether the fact storage should consider typed objects as equivalent to their String representation.
@@ -28,14 +56,6 @@ namespace NxBRE.InferenceEngine.Core {
 		/// It is internal to allow changing it for unit testing purposes.
 		/// </remarks>
 		internal bool strictTyping = Parameter.Get<bool>("factBase.strictTyping", false);
-		
-		//FIXME: reorganize declarations
-		private readonly IDictionary<string, IDictionary<Type, IDictionary<object, IDictionary<int, ICollection<Fact>>>>> predicateMap;
-		private readonly IDictionary<string, ICollection<Fact>> signatureMap;
-		//FIXME: probably not necessary
-		private readonly IDictionary<Fact, IList<ICollection<Fact>>> factListReferences;
-		private readonly IDictionary<string, Fact> labelMap;
-		private static readonly IList<Fact> EMPTY_SELECT_RESULT = new List<Fact>(0).AsReadOnly();
 		
 		/// <summary>
 		/// A flag that external class can use to detect fact assertions/retractions.
@@ -130,7 +150,6 @@ namespace NxBRE.InferenceEngine.Core {
 		///<summary>Clones the fact base.</summary>
 		public object Clone() {
 			FactBase fb = new FactBase();
-			//FIXME: make more efficient, if possible
 			for(IEnumerator<Fact> e = GetEnumerator(); e.MoveNext(); ) fb.Assert(e.Current);
 			return fb;
 		}
@@ -322,6 +341,13 @@ namespace NxBRE.InferenceEngine.Core {
 			return runResult.AsReadOnly();
 		}
 
+		/// <summary>
+		/// Replaces non-fixed elements of an atom (variables, formulas...) with fixed values (individuals) when possible
+		/// </summary>
+		/// <param name="targetAtom"></param>
+		/// <param name="resultStack"></param>
+		/// <param name="evaluateFormulas"></param>
+		/// <returns></returns>
 		public static Atom Populate(Atom targetAtom, IList<PositiveMatchResult> resultStack, bool evaluateFormulas) {
 	  	IPredicate[] members = (IPredicate[])targetAtom.Members.Clone();
 	  	
@@ -487,6 +513,11 @@ namespace NxBRE.InferenceEngine.Core {
 			AddFactListReference(fact, positionedContent);
 		}
 
+		/// <summary>
+		/// Remembers that a fact has been refered to in a particular list, which will allow convenient and fast removal.
+		/// </summary>
+		/// <param name="fact"></param>
+		/// <param name="listReference"></param>
 		private void AddFactListReference(Fact fact, ICollection<Fact> listReference) {
 			IList<ICollection<Fact>> factListReference;
 			
@@ -600,21 +631,24 @@ namespace NxBRE.InferenceEngine.Core {
 			                                                                    excludedFacts);
 		}
 		
+		/// <summary>
+		/// Performs the equivalent of a SQL select distinct where a rows of data will be lists of PositiveMatchResult.
+		/// </summary>
+		/// <param name="processResults"></param>
+		/// <returns></returns>
 		private static IList<IList<Fact>> FilterDistinct(IList<IList<PositiveMatchResult>> processResults) {
 			IDictionary<long, IList<Fact>> resultSet = new Dictionary<long, IList<Fact>>();
 			
 			foreach(IList<PositiveMatchResult> processResult in processResults) {
 				IList<Fact> row = new List<Fact>();
-				long rowLongHashCode = 0;
+				long rowLongHashCode = 17;
 	  		
 				foreach(PositiveMatchResult pmr in processResult) {
 					// naf atom dummy results are skipped
 					if (!(pmr.Fact is FactBase.NegativeFact)) {
 						row.Add(pmr.Fact);
-						rowLongHashCode ^= pmr.Fact.GetHashCode();
+						rowLongHashCode = unchecked(37L * rowLongHashCode + pmr.Fact.GetHashCode());
 					}
-					//TODO: with more than 16 entries in processResult, we will start losing bits: a rotation would be better
-					rowLongHashCode <<= 1;
 				}
 				
 				// add only new rows to perform a "select distinct"
@@ -623,7 +657,14 @@ namespace NxBRE.InferenceEngine.Core {
 			
 			return new List<IList<Fact>>(resultSet.Values).AsReadOnly();
 		}
-			
+		
+		/// <summary>
+		/// Processes an AND atom group.
+		/// </summary>
+		/// <param name="AG"></param>
+		/// <param name="processResult"></param>
+		/// <param name="depth"></param>
+		/// <param name="resultStack"></param>
 		private void ProcessAnd(AtomGroup AG, IList<IList<PositiveMatchResult>> processResult, int depth, IList<PositiveMatchResult> resultStack) {
 			if (AG.OrderedMembers[depth] is AtomGroup) {
 				if (((AtomGroup)AG.OrderedMembers[depth]).Operator == AtomGroup.LogicalOperator.And)
@@ -692,6 +733,12 @@ namespace NxBRE.InferenceEngine.Core {
 			}
 		}
 		
+		/// <summary>
+		/// Processes an OR atom group.
+		/// </summary>
+		/// <param name="AG"></param>
+		/// <param name="processResult"></param>
+		/// <param name="resultStack"></param>
 		private void ProcessOr(AtomGroup AG, IList<IList<PositiveMatchResult>> processResult, IList<PositiveMatchResult> resultStack) {
 			foreach(object member in AG.OrderedMembers) {
 				if (member is AtomGroup) {
@@ -725,6 +772,12 @@ namespace NxBRE.InferenceEngine.Core {
 			
 		} //ProcessOr
 
+		/// <summary>
+		/// Processes an atom.
+		/// </summary>
+		/// <param name="atomToRun"></param>
+		/// <param name="excludedFacts"></param>
+		/// <returns></returns>
 		private IEnumerator<Fact> ProcessAtom(Atom atomToRun, IList<Fact> excludedFacts) {
 			if (atomToRun is AtomFunction) {
 				// an atom function is either positive or negative, it does not return any fact
