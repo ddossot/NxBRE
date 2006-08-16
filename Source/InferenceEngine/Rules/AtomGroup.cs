@@ -1,6 +1,7 @@
 namespace NxBRE.InferenceEngine.Rules {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	
 	using NxBRE.InferenceEngine.Core;
 	
@@ -19,7 +20,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		
 		private readonly LogicalOperator logicalOperator;
 		private readonly object[] members;
-		private readonly object[] orderedMembers;
+		private readonly IList<object> orderedMembers;
 		private readonly int hashCode;
 		
 		/// <summary>
@@ -59,35 +60,31 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <summary>
 		/// The atom groups and atoms in the current group with their functions resolved, in the processing order.
 		/// </summary>
-		internal object[] OrderedMembers {
+		internal IList<object> OrderedMembers {
 			get {
 				return orderedMembers;
 			}
 		}
 		
 		/// <summary>
-		/// A comparer that sorts in this order: FunctionRel-Atom/Naf-Atom/AtomGroups/Atom
+		/// Compute an index that allows maitaining original order of members of same kind for sorting them while preserving
+		/// order.
 		/// </summary>
-		private class AtomComparer:IComparer {
-			private int ObjectScore(object x) {
-				if (x is AtomFunction) return 3;
-				if ((x is Atom) && ((Atom)x).Negative) return 2;
-				if (x is AtomGroup) return 1;
-				return 0;
-			}
-			
-			public int Compare(object x, object y) {
-				return ObjectScore(x)- ObjectScore(y);
-			}
+		/// <param name="originalIndex"></param>
+		/// <returns></returns>
+		private int GetMemberSortedIndex(object[] runningMembers, int originalIndex) {
+			if (runningMembers[originalIndex] is AtomFunction) return 3 * runningMembers.Length + originalIndex;
+			else if ((runningMembers[originalIndex] is Atom) && ((Atom)runningMembers[originalIndex]).Negative) return 2 * runningMembers.Length + originalIndex;
+			else if (runningMembers[originalIndex] is AtomGroup) return runningMembers.Length + originalIndex;
+			else return originalIndex;
 		}
-
+		
 		/// <summary>
 		/// Instantiates a new atom group.
 		/// </summary>
 		/// <param name="logicalOperator">The operator that characterizes the relationship between the atoms and atoms group.</param>
 		/// <param name="members">An array containing atoms and atom groups.</param>
-		public AtomGroup(LogicalOperator logicalOperator, params object[] members):this(logicalOperator, members, members) {}
-		
+		public AtomGroup(LogicalOperator logicalOperator, params object[] members):this(logicalOperator, members, null) {}
 		
 		/// <summary>
 		/// Instantiates a new atom group.
@@ -97,33 +94,45 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <param name="runningMembers">An array containing atoms and atom groups that will actually be run (they can be different
 		/// from the members because of atom equivalence).</param>
 		internal AtomGroup(LogicalOperator logicalOperator, object[] members, object[] runningMembers) {
-			// order atoms & groups so naf-atoms are at the end
-			foreach(object o in members) {
-				if (o == null)
-					throw new BREException("An atom group can not contain a null member");
-				else if (o is AtomGroup) {
-					if (((AtomGroup)o).logicalOperator == logicalOperator)
-						throw new BREException("An atom group can not contain another group with the same logical operator");
-				}
-				else if (o is Atom) {
-					if (((Atom)o).HasFormula)
-						throw new BREException("An atom group can not contain an atom that contains a formula");
-				}
-				else
-					throw new BREException("An atom group can not hold objects of type: " + o.GetType());
-			}
-			
 			this.logicalOperator = logicalOperator;
 			this.members = members;
 			
 			HashCodeBuilder hcb = new HashCodeBuilder();
 			hcb.Append(logicalOperator);
-		  foreach(object o in members) hcb.Append(o);
+			SortedList<int, object> sortedMembers = new SortedList<int, object>(Comparer<int>.Default);
+			
+			// check the members, compute hashcode and build sorted members list
+			for(int i=0; i < members.Length; i++) {
+				object member =members[i];
+				
+				if (member == null) {
+					throw new BREException("An atom group can not contain a null member");
+				}
+				else if (member is AtomGroup) {
+					if (((AtomGroup)member).logicalOperator == logicalOperator)
+						throw new BREException("An atom group can not contain another group with the same logical operator");
+				}
+				else if (member is Atom) {
+					if (((Atom)member).HasFormula)
+						throw new BREException("An atom group can not contain an atom that contains a formula");
+				}
+				else {
+					throw new BREException("An atom group can not hold objects of type: " + member.GetType());
+				}
+				
+				hcb.Append(member);
+				
+				if (runningMembers == null) sortedMembers.Add(GetMemberSortedIndex(members, i), member);
+			}
+			
 			hashCode = hcb.Value;
 			
-			object[] membersToOrder = (object[])runningMembers.Clone();
-			Array.Sort(membersToOrder, new AtomComparer());
-			this.orderedMembers = membersToOrder;
+			// the members actually used when processing the atom group are not the ones defined in the rule file (usually because of equivalent atoms definitions)
+			if (runningMembers != null) {
+				for(int i=0; i < runningMembers.Length; i++) sortedMembers.Add(GetMemberSortedIndex(runningMembers, i), runningMembers[i]);
+			}
+			
+			this.orderedMembers = sortedMembers.Values;
 		}
 		
 		/// <summary>

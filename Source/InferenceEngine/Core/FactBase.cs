@@ -657,7 +657,7 @@ namespace NxBRE.InferenceEngine.Core {
 							IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>(resultStack);
 							tempResultStack.Add(rpRow);
 							
-							if (depth < (AG.OrderedMembers.Length-1)) ProcessAnd(AG, processResult, depth+1, tempResultStack);
+							if (depth < (AG.OrderedMembers.Count - 1)) ProcessAnd(AG, processResult, depth+1, tempResultStack);
 					  	else processResult.Add(tempResultStack);
 				  	}
 				  	else {
@@ -674,7 +674,7 @@ namespace NxBRE.InferenceEngine.Core {
 							  	IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>(resultStack);
 									tempResultStack.Add(rpRow);
 									
-									if (depth < (AG.OrderedMembers.Length-1)) ProcessAnd(AG, processResult, depth+1, tempResultStack);
+									if (depth < (AG.OrderedMembers.Count - 1)) ProcessAnd(AG, processResult, depth+1, tempResultStack);
 							  	else processResult.Add(tempResultStack);
 								}
 					  	}
@@ -701,7 +701,7 @@ namespace NxBRE.InferenceEngine.Core {
 			  		IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>(resultStack);
 						tempResultStack.Add(new PositiveMatchResult((Atom)AG.OrderedMembers[depth], result));
 
-						if (depth < (AG.OrderedMembers.Length-1))
+						if (depth < (AG.OrderedMembers.Count - 1))
 							ProcessAnd(AG, processResult, depth+1, tempResultStack);
 				  	else
 							processResult.Add(tempResultStack);
