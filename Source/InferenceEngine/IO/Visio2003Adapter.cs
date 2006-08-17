@@ -13,8 +13,8 @@ namespace NxBRE.InferenceEngine.IO {
 	///<summary>Adapter supporting Visio 2003 DatadiagramML Format (VDX file).</summary>
 	/// <remarks>Only READ is supported!</remarks>
 	/// <author>David Dossot</author>
-	public class Visio2003Adapter:IRuleBaseAdapter {
-		private IRuleBaseAdapter ruleBaseAdapter;
+	public class Visio2003Adapter:IRuleBaseAdapter, IExtendedRuleBaseAdapter {
+		private IExtendedRuleBaseAdapter ruleBaseAdapter;
 		
 		/// <summary>
 		/// Instantiates a non-strict Visio 2003 DatadiagramML (VDX file) adapter for reading from a stream.
@@ -82,7 +82,7 @@ namespace NxBRE.InferenceEngine.IO {
 				return ruleBaseAdapter.Direction;
 			}
 			set {
-				ruleBaseAdapter.Direction = value;
+				throw new NotSupportedException("This adapter does not support changes");
 			}
 		}
 		
@@ -94,7 +94,7 @@ namespace NxBRE.InferenceEngine.IO {
 				return ruleBaseAdapter.Label;
 			}
 			set {
-				ruleBaseAdapter.Label = value;
+				throw new NotSupportedException("This adapter does not support changes");
 			}
 		}
 		
@@ -106,7 +106,7 @@ namespace NxBRE.InferenceEngine.IO {
 				return ruleBaseAdapter.Queries;
 			}
 			set {
-				ruleBaseAdapter.Queries = value;
+				throw new NotSupportedException("This adapter does not support changes");
 			}
 		}
 		
@@ -118,7 +118,7 @@ namespace NxBRE.InferenceEngine.IO {
 				return ruleBaseAdapter.Implications;
 			}
 			set {
-				ruleBaseAdapter.Implications = value;
+				throw new NotSupportedException("This adapter does not support changes");
 			}
 		}
 		
@@ -130,7 +130,33 @@ namespace NxBRE.InferenceEngine.IO {
 				return ruleBaseAdapter.Facts;
 			}
 			set {
-				ruleBaseAdapter.Facts = value;
+				throw new NotSupportedException("This adapter does not support changes");
+			}
+		}
+		
+		/// <summary>
+		/// Collection containing all the equivalent atom pairs in the rulebase.
+		/// </summary>
+		public IList<Equivalent> Equivalents {
+			get {
+				return ruleBaseAdapter.Equivalents;
+			}
+			
+			set{
+				throw new NotSupportedException("This adapter does not support changes");
+			}
+		}
+		
+		/// <summary>
+		/// Collection containing all the integrity queries.
+		/// </summary>
+		public IList<Query> IntegrityQueries {
+			get {
+				return ruleBaseAdapter.IntegrityQueries;
+			}
+			
+			set {
+				throw new NotSupportedException("This adapter does not support changes");
 			}
 		}
 		
