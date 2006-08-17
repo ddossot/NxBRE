@@ -77,8 +77,8 @@ v3.0.0RC2
   * Refactored the core fact base to leverage generics and to use a much simpler and efficient fact storage
 
   * The Visio2003 adapter now supports the following RuleML concepts:
-
-      - typed predicates: (xs:int)123
+      - typed predicates: prefix like this (xs:int)
+      - named predicates (aka RuleML slots): prefix like this (?Size)
 
 
 v3.0.0RC1 (compared to NxBRE v2.5.3)

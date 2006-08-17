@@ -185,7 +185,7 @@
 		<xsl:variable name="MasterID" select="@Master"/>
 		<Atom>
 			<xsl:call-template name="label"/>
-			<xsl:call-template name="nxbre-operators">
+			<xsl:call-template name="parse-predicate">
 				<xsl:with-param name="predicate-type">Rel</xsl:with-param>
 				<xsl:with-param name="predicate-string">
 					<xsl:choose>
@@ -226,11 +226,21 @@
 		</xsl:choose>
 	</xsl:template>
 	
-	<xsl:template name="nxbre-operators">
+	<xsl:template name="parse-predicate">
 		<xsl:param name="predicate-type"/>
 		<xsl:param name="predicate-string"/>
 		
 		<xsl:choose>
+			<!-- support of sloted predicates -->
+			<xsl:when test="$predicate-type='Ind' and starts-with($predicate-string, '(?')">
+				<slot>
+					<Ind><xsl:value-of select="substring-before(substring-after($predicate-string, '(?'), ')')"/></Ind>
+					<xsl:call-template name="parse-predicate">
+						<xsl:with-param name="predicate-type" select="$predicate-type"/>
+						<xsl:with-param name="predicate-string" select="normalize-space(substring-after($predicate-string, ')'))"/>
+					</xsl:call-template>
+				</slot>
+			</xsl:when>
 			<!-- support of xs typed predicates -->
 			<xsl:when test="$predicate-type='Ind' and starts-with($predicate-string, '(xs:')">
 				<Data><xsl:attribute name="xsi:type"><xsl:value-of select="substring-before(substring-after($predicate-string, '('), ')')"/></xsl:attribute><xsl:value-of select="normalize-space(substring-after($predicate-string, ')'))"/></Data>
@@ -268,7 +278,7 @@
 						</Var>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:call-template name="nxbre-operators">
+						<xsl:call-template name="parse-predicate">
 							<xsl:with-param name="predicate-type">Ind</xsl:with-param>
 							<xsl:with-param name="predicate-string" select="$predicate-string"/>
 						</xsl:call-template>
@@ -283,7 +293,7 @@
 						</Var>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:call-template name="nxbre-operators">
+						<xsl:call-template name="parse-predicate">
 							<xsl:with-param name="predicate-type">Ind</xsl:with-param>
 							<xsl:with-param name="predicate-string" select="normalize-space($predicate-string)"/>
 						</xsl:call-template>
