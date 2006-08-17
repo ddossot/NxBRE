@@ -249,7 +249,16 @@ namespace NxBRE.Test.InferenceEngine {
 				foreach(Implication i in va.Implications) {
 					if (i.Label == "imp1") {
 						Assert.IsTrue(i.Deduction.HasFormula, "imp1: HasFormula");
-						Assert.IsInstanceOfType(typeof(byte[]), ((Atom)i.AtomGroup.Members[0]).GetPredicateValue(1), "Typed predicate support");
+						Atom atom = (Atom)i.AtomGroup.Members[0];
+						Assert.IsTrue(atom.HasSlot, "Has Slot");
+						Assert.IsInstanceOfType(typeof(byte[]), atom.GetPredicateValue(1), "Typed predicate support");
+						
+						Assert.IsInstanceOfType(typeof(Function), atom.Members[2], "Basic slot type predicate support");
+						Assert.AreEqual("Size", atom.SlotNames[2], "Basic slot name predicate support");
+						
+						Assert.IsInstanceOfType(typeof(int), atom.GetPredicateValue(3), "Typed slot type predicate support");
+						Assert.AreEqual("Year", atom.SlotNames[3], "Typed slot name predicate support");
+						Assert.AreEqual(2006, atom.GetPredicate("Year").Value, "Typed slot value support");
 						break;
 					}
 				}
