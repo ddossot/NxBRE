@@ -21,6 +21,7 @@
 	<xsl:variable name="MID-modifying.implication" select="/vdx:VisioDocument/vdx:Masters/vdx:Master[vdx:PageSheet/vdx:Misc/vdx:ShapeKeywords='RuleML:ModifyingImplication']/@ID"/>
 	<xsl:variable name="MID-fact" select="/vdx:VisioDocument/vdx:Masters/vdx:Master[vdx:PageSheet/vdx:Misc/vdx:ShapeKeywords='RuleML:Fact']/@ID"/>
 	<xsl:variable name="MID-query" select="/vdx:VisioDocument/vdx:Masters/vdx:Master[vdx:PageSheet/vdx:Misc/vdx:ShapeKeywords='RuleML:Query']/@ID"/>
+	<xsl:variable name="MID-integrity.query" select="/vdx:VisioDocument/vdx:Masters/vdx:Master[vdx:PageSheet/vdx:Misc/vdx:ShapeKeywords='RuleML:Integrity']/@ID"/>
 	
 	<xsl:template match="/">
 		<RuleML xsi:schemaLocation="http://www.ruleml.org/0.9/xsd ruleml-0_9-nafdatalog.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
@@ -100,6 +101,16 @@
 				</xsl:choose>
 			</Assert>
 			
+			<xsl:comment> Integrity Queries </xsl:comment>
+			<xsl:choose>
+				<xsl:when test="$selected-pages != ''">
+					<xsl:apply-templates select="/vdx:VisioDocument/vdx:Pages/vdx:Page[contains($selected-pages, concat('|', @Name, '|'))]/vdx:Shapes/vdx:Shape[@Master=$MID-integrity.query]" mode="integrity"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:apply-templates select="/vdx:VisioDocument/vdx:Pages/vdx:Page/vdx:Shapes/vdx:Shape[@Master=$MID-integrity.query]" mode="integrity"/>
+				</xsl:otherwise>
+			</xsl:choose>
+			
 			<xsl:comment> Queries </xsl:comment>
 			<xsl:choose>
 				<xsl:when test="$selected-pages != ''">
@@ -138,6 +149,15 @@
 			<xsl:call-template name="label"/>
 			<xsl:call-template name="connector-start"/>
 		</Query>
+	</xsl:template>
+	
+	<xsl:template match="vdx:Shape" mode="integrity">
+		<Protect>
+			<Integrity>
+				<xsl:call-template name="label"/>
+				<xsl:call-template name="connector-start"/>
+			</Integrity>
+		</Protect>
 	</xsl:template>
 	
 	<xsl:template match="vdx:Shape[@Master=/vdx:VisioDocument/vdx:Masters/vdx:Master[vdx:PageSheet/vdx:Misc/vdx:ShapeKeywords='RuleML:NafAtom']/@ID]">

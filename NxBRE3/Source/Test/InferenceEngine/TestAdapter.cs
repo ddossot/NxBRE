@@ -218,21 +218,21 @@ namespace NxBRE.Test.InferenceEngine {
 		[Test]
 		public void Visio2003ImplicationProperties_2_1() {
 			using(Visio2003Adapter va = new Visio2003Adapter(ruleFilesFolder + "test-2_1.vdx", FileAccess.Read)) {
-				CommonVisio2003ImplicationProperties(3, va, true);
+				CommonVisio2003ImplicationProperties(0, 3, va, true);
 			}
 		}
 		
 		[Test]
 		public void Visio2003ImplicationProperties_2_2() {
 			using(Visio2003Adapter va = new Visio2003Adapter(ruleFilesFolder + "test-2_2.vdx", FileAccess.Read)) {
-				CommonVisio2003ImplicationProperties(4, va, false);
+				CommonVisio2003ImplicationProperties(0, 4, va, false);
 			}
 		}
 		
 		[Test]
 		public void Visio2003ImplicationProperties_2_3() {
 			using(Visio2003Adapter va = new Visio2003Adapter(ruleFilesFolder + "test-2_3.vdx", FileAccess.Read)) {
-				CommonVisio2003ImplicationProperties(5, va, false);
+				CommonVisio2003ImplicationProperties(1, 5, va, false);
 				foreach(Implication i in va.Implications) {
 					if (i.Label == "imp1") {
 						Assert.IsTrue(i.Deduction.HasFormula, "imp1: HasFormula");
@@ -245,7 +245,8 @@ namespace NxBRE.Test.InferenceEngine {
 		[Test]
 		public void Visio2003ImplicationProperties_3_0() {
 			using(Visio2003Adapter va = new Visio2003Adapter(ruleFilesFolder + "test-3_0.vdx", FileAccess.Read)) {
-				CommonVisio2003ImplicationProperties(5, va, false);
+				CommonVisio2003ImplicationProperties(1, 5, va, false);
+				
 				foreach(Implication i in va.Implications) {
 					if (i.Label == "imp1") {
 						Assert.IsTrue(i.Deduction.HasFormula, "imp1: HasFormula");
@@ -262,12 +263,23 @@ namespace NxBRE.Test.InferenceEngine {
 						break;
 					}
 				}
+				
+				Assert.AreEqual(1, va.IntegrityQueries.Count, "Integrity Queries Count");
+				Assert.AreEqual("iq1", va.IntegrityQueries[0].Label, "Integrity Query Label");
 			}
 		}
 		
-		private void CommonVisio2003ImplicationProperties(int expectedTestCount, Visio2003Adapter va, bool onlyAssert) {
-			int totalTest = 0;
+		private void CommonVisio2003ImplicationProperties(int expectedQueryCount, int expectedImplicationCount, Visio2003Adapter va, bool onlyAssert) {
+			Assert.AreEqual(expectedQueryCount, va.Queries.Count, "expectedQueryCount");
 			
+			foreach(Query q in va.Queries) {
+      	if (q.Label == "q1") {
+					Assert.AreEqual(1, q.AtomGroup.AllAtoms.Length, "Count of query atoms");
+      	}
+			}
+			
+			Assert.AreEqual(expectedImplicationCount, va.Implications.Count, "expectedImplicationCount");
+			                
 			foreach(Implication i in va.Implications) {
 				if (i.Label == "imp1") {
 					Assert.AreEqual(70, i.Priority, "imp1: Priority");
@@ -299,9 +311,7 @@ namespace NxBRE.Test.InferenceEngine {
 					Assert.AreEqual(String.Empty, i.Precondition, "imp5: Precondition");
 					Assert.AreEqual(onlyAssert?ImplicationAction.Assert:ImplicationAction.Modify, i.Action, "imp4: Modify");
 				}
-				totalTest++;
 			}
-			Assert.AreEqual(expectedTestCount, totalTest, "totalTest");
 		}
 		
 		[Test]
