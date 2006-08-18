@@ -266,6 +266,11 @@ namespace NxBRE.Test.InferenceEngine {
 				
 				Assert.AreEqual(1, va.IntegrityQueries.Count, "Integrity Queries Count");
 				Assert.AreEqual("iq1", va.IntegrityQueries[0].Label, "Integrity Query Label");
+				
+				Assert.AreEqual(2, va.Equivalents.Count, "Equivalents count");
+				foreach(Equivalent equivalent in va.Equivalents) Assert.AreEqual("eq1", equivalent.Label, "Equivalent label");
+				//FIXME:compare equivalent content
+				foreach(Equivalent equivalent in va.Equivalents) Console.Error.WriteLine("{0}=={1}", equivalent.FirstAtom, equivalent.SecondAtom);
 			}
 		}
 		
