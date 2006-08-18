@@ -1,4 +1,4 @@
-NxBRE README v3.0.0RC1
+NxBRE README v3.0.0RC2
 ======================
 
 Date         : XX-XXX-2006
