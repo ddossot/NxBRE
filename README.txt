@@ -79,6 +79,7 @@ v3.0.0RC2
   * The Visio2003 adapter now supports the following RuleML concepts:
       - typed predicates: prefix like this (xs:int)
       - named predicates (aka RuleML slots): prefix like this (?Size)
+      - integrity queries (new shape in the stencil)
 
 
 v3.0.0RC1 (compared to NxBRE v2.5.3)
