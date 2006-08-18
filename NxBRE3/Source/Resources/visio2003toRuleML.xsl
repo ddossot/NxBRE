@@ -22,6 +22,7 @@
 	<xsl:variable name="MID-fact" select="/vdx:VisioDocument/vdx:Masters/vdx:Master[vdx:PageSheet/vdx:Misc/vdx:ShapeKeywords='RuleML:Fact']/@ID"/>
 	<xsl:variable name="MID-query" select="/vdx:VisioDocument/vdx:Masters/vdx:Master[vdx:PageSheet/vdx:Misc/vdx:ShapeKeywords='RuleML:Query']/@ID"/>
 	<xsl:variable name="MID-integrity.query" select="/vdx:VisioDocument/vdx:Masters/vdx:Master[vdx:PageSheet/vdx:Misc/vdx:ShapeKeywords='RuleML:Integrity']/@ID"/>
+	<xsl:variable name="MID-equivalent" select="/vdx:VisioDocument/vdx:Masters/vdx:Master[vdx:PageSheet/vdx:Misc/vdx:ShapeKeywords='RuleML:Equivalent']/@ID"/>
 	
 	<xsl:template match="/">
 		<RuleML xsi:schemaLocation="http://www.ruleml.org/0.9/xsd ruleml-0_9-nafdatalog.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
@@ -99,6 +100,16 @@
 						<xsl:apply-templates select="/vdx:VisioDocument/vdx:Pages/vdx:Page/vdx:Shapes/vdx:Shape[@Master=$MID-fact]" mode="fact"/>
 					</xsl:otherwise>
 				</xsl:choose>
+			
+				<xsl:comment> Equivalents </xsl:comment>
+				<xsl:choose>
+					<xsl:when test="$selected-pages != ''">
+						<xsl:apply-templates select="/vdx:VisioDocument/vdx:Pages/vdx:Page[contains($selected-pages, concat('|', @Name, '|'))]/vdx:Shapes/vdx:Shape[@Master=$MID-equivalent]" mode="equivalent"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:apply-templates select="/vdx:VisioDocument/vdx:Pages/vdx:Page/vdx:Shapes/vdx:Shape[@Master=$MID-equivalent]" mode="equivalent"/>
+					</xsl:otherwise>
+				</xsl:choose>
 			</Assert>
 			
 			<xsl:comment> Integrity Queries </xsl:comment>
@@ -158,6 +169,15 @@
 				<xsl:call-template name="connector-start"/>
 			</Integrity>
 		</Protect>
+	</xsl:template>
+	
+	<xsl:template match="vdx:Shape" mode="equivalent">
+		<xsl:variable name="page-context" select="../.."/>
+		<xsl:variable name="this-ID" select="@ID"/>
+
+		<!-- select the first connected atom as the "main" member of this equivalent cluster -->
+		<xsl:variable name="main-atom-ID" select="string($page-context/vdx:Connects/vdx:Connect[@FromSheet=$page-context/vdx:Connects/vdx:Connect[@ToSheet=$this-ID]/@FromSheet and @ToSheet!=$this-ID]/@ToSheet)"/>
+		<xsl:comment>EQUIVALENT::<xsl:value-of select="$main-atom-ID"/></xsl:comment>
 	</xsl:template>
 	
 	<xsl:template match="vdx:Shape[@Master=/vdx:VisioDocument/vdx:Masters/vdx:Master[vdx:PageSheet/vdx:Misc/vdx:ShapeKeywords='RuleML:NafAtom']/@ID]">
