@@ -1,7 +1,7 @@
 NxBRE README v3.0.0RC2
 ======================
 
-Date         : XX-XXX-2006
+Date         : 19-AUG-2006
 URL          : http://nxbre.org
 EMail        : contact@nxbre.org
 License      : LGPL
