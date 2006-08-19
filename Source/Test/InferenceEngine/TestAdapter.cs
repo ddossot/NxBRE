@@ -269,8 +269,12 @@ namespace NxBRE.Test.InferenceEngine {
 				
 				Assert.AreEqual(2, va.Equivalents.Count, "Equivalents count");
 				foreach(Equivalent equivalent in va.Equivalents) Assert.AreEqual("eq1", equivalent.Label, "Equivalent label");
-				//FIXME:compare equivalent content
-				foreach(Equivalent equivalent in va.Equivalents) Console.Error.WriteLine("{0}=={1}", equivalent.FirstAtom, equivalent.SecondAtom);
+				
+				List<string> expected = new List<string>(new string[] {"own{?person,?stuff} == possess{?person,?stuff}", "own{?person,?stuff} == belong{?stuff,?person}"});
+				foreach(Equivalent equivalent in va.Equivalents) {
+					Assert.IsTrue(expected.Contains(equivalent.ToString()), equivalent.ToString() + " found.");
+					expected.Remove(equivalent.ToString());
+				}
 			}
 		}
 		

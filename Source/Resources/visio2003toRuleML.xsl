@@ -174,10 +174,25 @@
 	<xsl:template match="vdx:Shape" mode="equivalent">
 		<xsl:variable name="page-context" select="../.."/>
 		<xsl:variable name="this-ID" select="@ID"/>
+		<xsl:variable name="label" select="vdx:Prop[vdx:Label='Label']/vdx:Value/text()"/>
 
 		<!-- select the first connected atom as the "main" member of this equivalent cluster -->
 		<xsl:variable name="main-atom-ID" select="string($page-context/vdx:Connects/vdx:Connect[@FromSheet=$page-context/vdx:Connects/vdx:Connect[@ToSheet=$this-ID]/@FromSheet and @ToSheet!=$this-ID]/@ToSheet)"/>
-		<xsl:comment>EQUIVALENT::<xsl:value-of select="$main-atom-ID"/></xsl:comment>
+		<!-- parse the shapes connected to the equivalent shape and that are different from the main one -->
+		<xsl:for-each select="$page-context/vdx:Connects/vdx:Connect[@FromSheet=$page-context/vdx:Connects/vdx:Connect[@ToSheet=$this-ID]/@FromSheet and @ToSheet!=$this-ID and @ToSheet!=$main-atom-ID]">
+			<xsl:variable name="end-ID" select="string(./@ToSheet)"/>
+			<Equivalent>
+				<xsl:if test="$label!=''">
+					<oid>
+						<Ind>
+							<xsl:value-of select="$label"/>
+						</Ind>
+					</oid>
+				</xsl:if>
+				<xsl:apply-templates select="$page-context/vdx:Shapes/vdx:Shape[@ID=$main-atom-ID]"/>
+				<xsl:apply-templates select="$page-context/vdx:Shapes/vdx:Shape[@ID=$end-ID]"/>
+			</Equivalent>
+		</xsl:for-each>
 	</xsl:template>
 	
 	<xsl:template match="vdx:Shape[@Master=/vdx:VisioDocument/vdx:Masters/vdx:Master[vdx:PageSheet/vdx:Misc/vdx:ShapeKeywords='RuleML:NafAtom']/@ID]">
