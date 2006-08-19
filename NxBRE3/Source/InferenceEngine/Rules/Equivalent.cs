@@ -74,6 +74,15 @@ namespace NxBRE.InferenceEngine.Rules {
 			else return null;
 		}
 		
+		/// <summary>
+		/// A basic string representation of the equivalent, for display purposes only.
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString()
+		{
+			return firstAtom.ToString() + " == " + secondAtom.ToString();
+		}
+		
 	}
 	
 }
