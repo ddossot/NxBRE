@@ -80,6 +80,7 @@ v3.0.0RC2
       - typed predicates: prefix like this (xs:int)
       - named predicates (aka RuleML slots): prefix like this (?Size)
       - integrity queries (new shape in the stencil)
+      - equivalent atoms (new shape in the stencil)
 
 
 v3.0.0RC1 (compared to NxBRE v2.5.3)
