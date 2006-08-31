@@ -77,6 +77,9 @@ namespace NxBRE.Util
 		/// Set the different switches used by NxBRE to the levels defined in the different souces
 		/// (usually set up in the configuration file).
 		/// </summary>
+		/// <remarks>
+		/// This method must be called any time an NxBRE TraceSource Switch Level has been programmatically modified.
+		/// </remarks>
 		public static void RefreshBooleanSwitches() {
 			try {
 				isFlowEngineVerbose = FlowEngineSource.Switch.ShouldTrace(TraceEventType.Verbose);
@@ -111,9 +114,6 @@ namespace NxBRE.Util
 			get {
 				return isFlowEngineVerbose;
 			}
-			set {
-				isFlowEngineVerbose = value;
-			}
 		}
 		
 		/// <summary>
@@ -125,9 +125,6 @@ namespace NxBRE.Util
 		public static bool IsFlowEngineInformation {
 			get {
 				return isFlowEngineInformation;
-			}
-			set {
-				isFlowEngineInformation = value;
 			}
 		}
 		
@@ -141,9 +138,6 @@ namespace NxBRE.Util
 			get {
 				return isFlowEngineWarning;
 			}
-			set {
-				isFlowEngineWarning = value;
-			}
 		}
 		
 		/// <summary>
@@ -155,9 +149,6 @@ namespace NxBRE.Util
 		public static bool IsFlowEngineError {
 			get {
 				return isFlowEngineError;
-			}
-			set {
-				isFlowEngineError = value;
 			}
 		}
 		
@@ -171,9 +162,6 @@ namespace NxBRE.Util
 			get {
 				return isFlowEngineCritical;
 			}
-			set {
-				isFlowEngineCritical = value;
-			}
 		}
 		
 		/// <summary>
@@ -185,9 +173,6 @@ namespace NxBRE.Util
 		public static bool IsFlowEngineRuleBaseError {
 			get {
 				return isFlowEngineRuleBaseError;
-			}
-			set {
-				isFlowEngineRuleBaseError = value;
 			}
 		}
 		
@@ -201,9 +186,6 @@ namespace NxBRE.Util
 			get {
 				return isFlowEngineRuleBaseCritical;
 			}
-			set {
-				isFlowEngineRuleBaseCritical = value;
-			}
 		}
 		
 		/// <summary>
@@ -215,9 +197,6 @@ namespace NxBRE.Util
 		public static bool IsInferenceEngineVerbose {
 			get {
 				return isInferenceEngineVerbose;
-			}
-			set {
-				isInferenceEngineVerbose = value;
 			}
 		}
 		
@@ -231,9 +210,6 @@ namespace NxBRE.Util
 			get {
 				return isInferenceEngineInformation;
 			}
-			set {
-				isInferenceEngineInformation = value;
-			}
 		}
 		
 		/// <summary>
@@ -245,9 +221,6 @@ namespace NxBRE.Util
 		public static bool IsInferenceEngineWarning {
 			get {
 				return isInferenceEngineWarning;
-			}
-			set {
-				isInferenceEngineWarning = value;
 			}
 		}
 		
@@ -261,9 +234,6 @@ namespace NxBRE.Util
 			get {
 				return isUtilVerbose;
 			}
-			set {
-				isUtilVerbose = value;
-			}
 		}
 		
 		/// <summary>
@@ -276,9 +246,6 @@ namespace NxBRE.Util
 			get {
 				return isUtilInformation;
 			}
-			set {
-				isUtilInformation = value;
-			}
 		}
 		
 		/// <summary>
@@ -290,9 +257,6 @@ namespace NxBRE.Util
 		public static bool IsUtilWarning {
 			get {
 				return isUtilWarning;
-			}
-			set {
-				isUtilWarning = value;
 			}
 		}
 
