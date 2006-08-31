@@ -56,14 +56,18 @@ namespace NxBRE.FlowEngine
 			/// <returns></returns>
 			bool Init(IRulesDriver rulesDriver);
 			
-			/// <summary> Execute the BRE.
+			/// <summary>
+			/// Process the rule base, only executing the rules not defined in any set.
 			/// </summary>
-			/// <returns> True if successful, False otherwise
+			/// <returns>
+			/// True if successful, False otherwise
 			/// </returns>
 			bool Process();
 			
 			
-			/// <summary> Execute the BRE but only do all the globals and a certain set.
+			/// <summary>
+			/// Process the rule base, only executing the rules not defined in any set
+			/// <b>and</b> defined in the set whose Id is passed as a parameter.
 			/// </summary>
 			/// <param name="setId">The ID of the set to execute</param>
 			/// <returns> True if successful, False otherwise
