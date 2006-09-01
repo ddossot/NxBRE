@@ -83,7 +83,7 @@ namespace NxBRE.Util
 		/// <summary>
 		/// Outputs the content of an Array in a string.
 		/// </summary>
-		/// <param name="objects">The Array to output.</param>
+		/// <param name="array">The Array to output.</param>
 		/// <returns>The content of the Array in a string.</returns>
 		public static string ArrayToString(Array array) {
 			return IListToString(array, String.Empty);	

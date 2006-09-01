@@ -83,7 +83,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// The implementer should refrain from performing any operation on the IEFacade object,
 		/// like asserting new facts.
 		/// </remarks>
-		/// <see cref="NxBRE.InferenceEngine.Core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
+		/// <see cref="NxBRE.InferenceEngine.NewFactEventArgs">Definition of NewFactEventArgs.</see>
 	  NewFactEvent OnNewFact {
 	  	get;
 	  }
@@ -97,7 +97,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// The implementer should refrain from performing any operation on the IEFacade object,
 		/// like asserting new facts.
 		/// </remarks>
-		/// <see cref="NxBRE.InferenceEngine.Core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
+		/// <see cref="NxBRE.InferenceEngine.NewFactEventArgs">Definition of NewFactEventArgs.</see>
 	  NewFactEvent OnDeleteFact {
 	  	get;
 	  }
@@ -111,7 +111,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// The implementer should refrain from performing any operation on the IEFacade object,
 		/// like asserting new facts.
 		/// </remarks>
-		/// <see cref="NxBRE.InferenceEngine.Core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
+		/// <see cref="NxBRE.InferenceEngine.NewFactEventArgs">Definition of NewFactEventArgs.</see>
 	  NewFactEvent OnModifyFact {
 	  	get;
 	  }

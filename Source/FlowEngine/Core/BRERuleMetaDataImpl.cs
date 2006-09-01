@@ -16,7 +16,7 @@ namespace NxBRE.FlowEngine.Core
 	/// </P>
 	/// *
 	/// </summary>
-	/// <seealso cref="NxBRE.FlowEngine.AbstractBRERuleMetaData">
+	/// <seealso cref="NxBRE.FlowEngine.Core.AbstractBRERuleMetaData">
 	/// </seealso>
 	/// <author>  Sloan Seaman
 	/// </author>

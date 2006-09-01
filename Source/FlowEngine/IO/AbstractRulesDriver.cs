@@ -25,7 +25,7 @@ namespace NxBRE.FlowEngine.IO {
 		}
 		
 		///<summary>The XML rule source (either an URI or a string containing an XML fragment)</summary>
-		/// <param name="xmlFileURI">The URI of the rule file</param>
+		/// <param name="xmlSource">The URI of the rule file</param>
 		protected AbstractRulesDriver(string xmlSource) {
 			if (xmlSource == null)
 				throw new BRERuleFatalException("Null is not a valid XML source");

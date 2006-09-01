@@ -70,6 +70,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// Compute an index that allows maitaining original order of members of same kind for sorting them while preserving
 		/// order.
 		/// </summary>
+		/// <param name="runningMembers"></param>
 		/// <param name="originalIndex"></param>
 		/// <returns></returns>
 		private int GetMemberSortedIndex(object[] runningMembers, int originalIndex) {

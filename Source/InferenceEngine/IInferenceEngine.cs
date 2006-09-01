@@ -234,14 +234,14 @@ namespace NxBRE.InferenceEngine
 		/// and to use RunQuery(queryLabel)
 		/// </remarks>
 		/// <param name="query">The new Query to run.</param>
-		/// <returns>An IList<IList<Fact>> containing the results found.</returns>
+		/// <returns>An <code>IList&lt;IList&lt;Fact>></code> containing the results found.</returns>
 		IList<IList<Fact>> RunQuery(Query query);
 		
 		/// <summary>
 		/// Runs a Query in the current working memory.
 		/// </summary>
 		/// <param name="queryIndex">The query base index of the Query to run.</param>
-		/// <returns>An IList<IList<Fact>> containing the results found.</returns>
+		/// <returns>An <code>IList&lt;IList&lt;Fact>></code> containing the results found.</returns>
 		/// <remarks>It is recommanded to use labelled queries.</remarks>
 		IList<IList<Fact>> RunQuery(int queryIndex);
 		
@@ -249,7 +249,7 @@ namespace NxBRE.InferenceEngine
 		/// Runs a Query in the current working memory.
 		/// </summary>
 		/// <param name="queryLabel">The label of the Query to run.</param>
-		/// <returns>An IList<IList<Fact>> containing the results found.</returns>
+		/// <returns>An <code>IList&lt;IList&lt;Fact>></code> containing the results found.</returns>
 		IList<IList<Fact>> RunQuery(string queryLabel);
 	}
 }

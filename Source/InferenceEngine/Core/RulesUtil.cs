@@ -53,6 +53,7 @@ namespace NxBRE.InferenceEngine.Core
 		/// </summary>
 		/// <remarks>Template and source atoms must match together else unpredictible result may occur.</remarks>
 		/// <param name="template"></param>
+		/// <param name="source"></param>
 		/// <param name="target"></param>
 		/// <returns></returns>
 		internal static Atom TranslateVariables(Atom template, Atom source, Atom target) {
@@ -81,7 +82,7 @@ namespace NxBRE.InferenceEngine.Core
 		/// </summary>
 		/// <param name="data">The data for populating the Atom.</param>
 		/// <param name="template">The template of Atom being populated.</param>
-		/// <param name="target">The members to populate.</param>
+		/// <param name="members">The members to populate.</param>
 		internal static void Populate(Fact data, Atom template, IPredicate[] members) {
 			for(int i=0;i<members.Length;i++)
 				if (members[i] is Variable) {

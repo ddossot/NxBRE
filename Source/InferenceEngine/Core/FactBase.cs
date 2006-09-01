@@ -298,7 +298,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// Runs a Query against a the FactBase.
 		/// </summary>
 		/// <param name="query">The Query to run.</param>
-		/// <returns>An ICollection<IList<Fact>> containing references to facts matching the pattern of the Query.</returns>
+		/// <returns>An <code>IList&lt;IList&lt;Fact>></code> containing references to facts matching the pattern of the Query.</returns>
 		public IList<IList<Fact>> RunQuery(Query query) {
 			return FilterDistinct(ProcessAtomGroup(query.AtomGroup));
 		}
@@ -327,7 +327,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// Each Atom in the group and sub-groups must have been registered.
 		/// </remarks>
 		/// <param name="AG">The AtomGroup to execute</param>
-		/// <returns>An IList<IList<PositiveMatchResult>> object containing the results.</returns>
+		/// <returns>An <code>IList&lt;IList&lt;PositiveMatchResult>></code> object containing the results.</returns>
 		public IList<IList<PositiveMatchResult>> ProcessAtomGroup(AtomGroup AG) {
 			List<IList<PositiveMatchResult>> runResult = new List<IList<PositiveMatchResult>>();
 			
@@ -532,7 +532,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <summary>
 		/// Gets a list of facts matching a particular atom.
 		/// </summary>
-		/// <param name="atom">The atom to match</param>
+		/// <param name="filter">The atom to match</param>
 		/// <param name="excludedFacts">A list of facts not to return, or null</param>
 		/// <returns>An IList containing the matching facts (empty if no match, but never null).</returns>
 		public IEnumerator<Fact> Select(Atom filter, IList<Fact> excludedFacts) {

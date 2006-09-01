@@ -141,7 +141,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// The implementer should refrain from performing any operation on the IEFacade object,
 		/// like asserting new facts.
 		/// </remarks>
-		/// <see cref="NxBRE.InferenceEngine.Core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
+		/// <see cref="NxBRE.InferenceEngine.NewFactEventArgs">Definition of NewFactEventArgs.</see>
 		public virtual NewFactEvent OnNewFact {
 			get {
 				// default: no handler
@@ -158,7 +158,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// The implementer should refrain from performing any operation on the IEFacade object,
 		/// like asserting new facts.
 		/// </remarks>
-		/// <see cref="NxBRE.InferenceEngine.Core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
+		/// <see cref="NxBRE.InferenceEngine.NewFactEventArgs">Definition of NewFactEventArgs.</see>
 	  public virtual NewFactEvent OnDeleteFact {
 			get {
 				// default: no handler
@@ -175,7 +175,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// The implementer should refrain from performing any operation on the IEFacade object,
 		/// like asserting new facts.
 		/// </remarks>
-		/// <see cref="NxBRE.InferenceEngine.Core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
+		/// <see cref="NxBRE.InferenceEngine.NewFactEventArgs">Definition of NewFactEventArgs.</see>
 	  public virtual NewFactEvent OnModifyFact {
 			get {
 				// default: no handler

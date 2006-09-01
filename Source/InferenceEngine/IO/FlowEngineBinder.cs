@@ -94,6 +94,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// The business rules used for the binding must be valid with xBusinessRules.xsd.
 		/// </remarks>
 		/// <param name="stream">The Stream used to read the business rules from.</param>
+		/// <param name="bindingType">The type of binding supported by this binder.</param>
 		public FlowEngineBinder(Stream stream, BindingTypes bindingType):base(bindingType) {
 			Init(new XBusinessRulesStreamDriver(stream));
 		}
@@ -105,6 +106,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// The business rules used for the binding must be valid with xBusinessRules.xsd.
 		/// </remarks>
 		/// <param name="uri">The URI from which the business rules must be read.</param>
+		/// <param name="bindingType">The type of binding supported by this binder.</param>
 		public FlowEngineBinder(string uri, BindingTypes bindingType):base(bindingType) {
 			Init(new XBusinessRulesFileDriver(uri));
 		}
@@ -238,7 +240,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// Object available in the Flow Engine context (ID = Description):
 		/// IE-NEWFACT = The new fact, source of the event.
 		/// </remarks>
-		/// <see cref="NxBRE.InferenceEngine.Core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
+		/// <see cref="NxBRE.InferenceEngine.NewFactEventArgs">Definition of NewFactEventArgs.</see>
 		public override NewFactEvent OnNewFact {
 			get {
 				if (HasFactEventHandler(ON_NEW_FACT)) return new NewFactEvent(NewFactHandler);
@@ -258,7 +260,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// Object available in the Flow Engine context (ID = Description):
 		/// IE-DELETEDFACT = The deleted fact, source of the event.
 		/// </remarks>
-		/// <see cref="NxBRE.InferenceEngine.Core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
+		/// <see cref="NxBRE.InferenceEngine.NewFactEventArgs">Definition of NewFactEventArgs.</see>
 		public override NewFactEvent OnDeleteFact {
 			get {
 				if (HasFactEventHandler(ON_DELETE_FACT)) return new NewFactEvent(DeleteFactHandler);
@@ -279,7 +281,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// IE-MODIFIEDFACT = The modified fact.
 		/// IE-MODIFIEDOTHERFACT = The new fact after modification.
 		/// </remarks>
-		/// <see cref="NxBRE.InferenceEngine.Core.NewFactEventArgs">Definition of NewFactEventArgs.</see>
+		/// <see cref="NxBRE.InferenceEngine.NewFactEventArgs">Definition of NewFactEventArgs.</see>
 		public override NewFactEvent OnModifyFact {
 			get {
 				if (HasFactEventHandler(ON_MODIFY_FACT)) return new NewFactEvent(ModifyFactHandler);
@@ -400,7 +402,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// <param name="functionName">The prefixed name of the helper operator to evaluate.</param>
 		/// <param name="values">The arguments to pass to the operator.</param>
 		/// <returns>True if the value matches the operator.</returns>
-		/// <see cref="NxBRE.FlowEngine.Rules.*"/>
+		/// <see cref="NxBRE.FlowEngine.IBREOperator"/>
 		public static bool EvaluateFERIOperator(string functionName, params object[] values) {
 			if (values.Length != 2)
 				throw new BREException(values.Length +

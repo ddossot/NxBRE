@@ -708,8 +708,7 @@ namespace NxBRE.InferenceEngine {
 		/// and to use RunQuery(queryLabel)
 		/// </remarks>
 		/// <param name="query">The new Query to run.</param>
-		/// <returns>An IList<IList<Fact>> containing the results found.</returns>
-		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
+		/// <returns>An <code>IList&lt;IList&lt;Fact>></code> containing the results found.</returns>
 		public IList<IList<Fact>> RunQuery(Query query) {
 			CheckInitialized();
 			if (query == null) throw new BREException("Query is null or not found.");
@@ -720,8 +719,7 @@ namespace NxBRE.InferenceEngine {
 		/// Runs a Query in the current working memory.
 		/// </summary>
 		/// <param name="queryIndex">The query base index of the Query to run.</param>
-		/// <returns>An IList<IList<Fact>> containing the results found.</returns>
-		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
+		/// <returns>An <code>IList&lt;IList&lt;Fact>></code> containing the results found.</returns>
 		/// <remarks>It is recommanded to use labelled queries.</remarks>
 		public IList<IList<Fact>> RunQuery(int queryIndex) {
 			return RunQuery(QB.Get(queryIndex));
@@ -731,8 +729,7 @@ namespace NxBRE.InferenceEngine {
 		/// Runs a Query in the current working memory.
 		/// </summary>
 		/// <param name="queryLabel">The label of the Query to run.</param>
-		/// <returns>An IList<IList<Fact>> containing the results found.</returns>
-		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
+		/// <returns>An <code>IList&lt;IList&lt;Fact>></code> containing the results found.</returns>
 		public IList<IList<Fact>> RunQuery(string queryLabel) {
 			return RunQuery(QB.Get(queryLabel));
 		}
