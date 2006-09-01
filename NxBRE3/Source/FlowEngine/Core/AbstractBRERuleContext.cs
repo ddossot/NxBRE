@@ -9,7 +9,7 @@ namespace NxBRE.FlowEngine.Core
 	/// client, so an abstract object is provided to assist this.
 	/// Use this if you wish to do inheritance.
 	/// </summary>
-	/// <seealso cref="NxBRE.FlowEngine.rule.BRERuleContextImpl"/>
+	/// <seealso cref="NxBRE.FlowEngine.Core.BRERuleContextImpl"/>
 	/// <author>  Sloan Seaman </author>
 	/// <author>  David Dossot </author>
 	internal abstract class AbstractBRERuleContext : IBRERuleContext

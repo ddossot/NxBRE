@@ -18,12 +18,18 @@ namespace NxBRE.InferenceEngine {
 	  private readonly Fact fact;
 	  private readonly Fact otherFact;
 	
+	  /// <summary>
+	  /// The fact that has generated the event.
+	  /// </summary>
 		public Fact Fact {
 			get {
 				return fact;
 			}
 		}
 		
+	  /// <summary>
+	  /// The optional other fact involved in the event, or null.
+	  /// </summary>
 		public Fact OtherFact {
 			get {
 				return otherFact;
@@ -46,7 +52,7 @@ namespace NxBRE.InferenceEngine {
 		/// DO NOT ASSERT OR RETRACT FACTS WHEN HANDLING THIS EVENT!
 		/// </remarks>
 		/// <param name="fact">The Fact that generated the event.</param>
-		/// <param name="fact">The Other Fact that generated the event.</param>
+		/// <param name="otherFact">The Other Fact that generated the event.</param>
 		public NewFactEventArgs(Fact fact, Fact otherFact)
 		{
 			this.fact = fact;

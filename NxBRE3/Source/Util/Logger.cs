@@ -108,7 +108,7 @@ namespace NxBRE.Util
 		/// A trace switch used by NxBRE. It can be changed at runtime by the user.
 		/// </summary>
 		/// <remarks>
-		/// To revert to the value defined in the configuration file, call InitializeSwitches (<see cref="NxBRE.Util.Logger.InitializeSwitches"/>).
+		/// To revert to the value defined in the configuration file, call RefreshBooleanSwitches (<see cref="NxBRE.Util.Logger.RefreshBooleanSwitches"/>).
 		/// </remarks>
 		public static bool IsFlowEngineVerbose {
 			get {
@@ -120,7 +120,7 @@ namespace NxBRE.Util
 		/// A trace switch used by NxBRE. It can be changed at runtime by the user.
 		/// </summary>
 		/// <remarks>
-		/// To revert to the value defined in the configuration file, call InitializeSwitches (<see cref="NxBRE.Util.Logger.InitializeSwitches"/>).
+		/// To revert to the value defined in the configuration file, call RefreshBooleanSwitches (<see cref="NxBRE.Util.Logger.RefreshBooleanSwitches"/>).
 		/// </remarks>
 		public static bool IsFlowEngineInformation {
 			get {
@@ -132,7 +132,7 @@ namespace NxBRE.Util
 		/// A trace switch used by NxBRE. It can be changed at runtime by the user.
 		/// </summary>
 		/// <remarks>
-		/// To revert to the value defined in the configuration file, call InitializeSwitches (<see cref="NxBRE.Util.Logger.InitializeSwitches"/>).
+		/// To revert to the value defined in the configuration file, call RefreshBooleanSwitches (<see cref="NxBRE.Util.Logger.RefreshBooleanSwitches"/>).
 		/// </remarks>
 		public static bool IsFlowEngineWarning {
 			get {
@@ -144,7 +144,7 @@ namespace NxBRE.Util
 		/// A trace switch used by NxBRE. It can be changed at runtime by the user.
 		/// </summary>
 		/// <remarks>
-		/// To revert to the value defined in the configuration file, call InitializeSwitches (<see cref="NxBRE.Util.Logger.InitializeSwitches"/>).
+		/// To revert to the value defined in the configuration file, call RefreshBooleanSwitches (<see cref="NxBRE.Util.Logger.RefreshBooleanSwitches"/>).
 		/// </remarks>
 		public static bool IsFlowEngineError {
 			get {
@@ -156,7 +156,7 @@ namespace NxBRE.Util
 		/// A trace switch used by NxBRE. It can be changed at runtime by the user.
 		/// </summary>
 		/// <remarks>
-		/// To revert to the value defined in the configuration file, call InitializeSwitches (<see cref="NxBRE.Util.Logger.InitializeSwitches"/>).
+		/// To revert to the value defined in the configuration file, call RefreshBooleanSwitches (<see cref="NxBRE.Util.Logger.RefreshBooleanSwitches"/>).
 		/// </remarks>
 		public static bool IsFlowEngineCritical {
 			get {
@@ -168,7 +168,7 @@ namespace NxBRE.Util
 		/// A trace switch used by NxBRE. It can be changed at runtime by the user.
 		/// </summary>
 		/// <remarks>
-		/// To revert to the value defined in the configuration file, call InitializeSwitches (<see cref="NxBRE.Util.Logger.InitializeSwitches"/>).
+		/// To revert to the value defined in the configuration file, call RefreshBooleanSwitches (<see cref="NxBRE.Util.Logger.RefreshBooleanSwitches"/>).
 		/// </remarks>
 		public static bool IsFlowEngineRuleBaseError {
 			get {
@@ -180,7 +180,7 @@ namespace NxBRE.Util
 		/// A trace switch used by NxBRE. It can be changed at runtime by the user.
 		/// </summary>
 		/// <remarks>
-		/// To revert to the value defined in the configuration file, call InitializeSwitches (<see cref="NxBRE.Util.Logger.InitializeSwitches"/>).
+		/// To revert to the value defined in the configuration file, call RefreshBooleanSwitches (<see cref="NxBRE.Util.Logger.RefreshBooleanSwitches"/>).
 		/// </remarks>
 		public static bool IsFlowEngineRuleBaseCritical {
 			get {
@@ -192,7 +192,7 @@ namespace NxBRE.Util
 		/// A trace switch used by NxBRE. It can be changed at runtime by the user.
 		/// </summary>
 		/// <remarks>
-		/// To revert to the value defined in the configuration file, call InitializeSwitches (<see cref="NxBRE.Util.Logger.InitializeSwitches"/>).
+		/// To revert to the value defined in the configuration file, call RefreshBooleanSwitches (<see cref="NxBRE.Util.Logger.RefreshBooleanSwitches"/>).
 		/// </remarks>
 		public static bool IsInferenceEngineVerbose {
 			get {
@@ -204,7 +204,7 @@ namespace NxBRE.Util
 		/// A trace switch used by NxBRE. It can be changed at runtime by the user.
 		/// </summary>
 		/// <remarks>
-		/// To revert to the value defined in the configuration file, call InitializeSwitches (<see cref="NxBRE.Util.Logger.InitializeSwitches"/>).
+		/// To revert to the value defined in the configuration file, call RefreshBooleanSwitches (<see cref="NxBRE.Util.Logger.RefreshBooleanSwitches"/>).
 		/// </remarks>
 		public static bool IsInferenceEngineInformation {
 			get {
@@ -216,7 +216,7 @@ namespace NxBRE.Util
 		/// A trace switch used by NxBRE. It can be changed at runtime by the user.
 		/// </summary>
 		/// <remarks>
-		/// To revert to the value defined in the configuration file, call InitializeSwitches (<see cref="NxBRE.Util.Logger.InitializeSwitches"/>).
+		/// To revert to the value defined in the configuration file, call RefreshBooleanSwitches (<see cref="NxBRE.Util.Logger.RefreshBooleanSwitches"/>).
 		/// </remarks>
 		public static bool IsInferenceEngineWarning {
 			get {
@@ -228,7 +228,7 @@ namespace NxBRE.Util
 		/// A trace switch used by NxBRE. It can be changed at runtime by the user.
 		/// </summary>
 		/// <remarks>
-		/// To revert to the value defined in the configuration file, call InitializeSwitches (<see cref="NxBRE.Util.Logger.InitializeSwitches"/>).
+		/// To revert to the value defined in the configuration file, call RefreshBooleanSwitches (<see cref="NxBRE.Util.Logger.RefreshBooleanSwitches"/>).
 		/// </remarks>
 		public static bool IsUtilVerbose {
 			get {
@@ -240,7 +240,7 @@ namespace NxBRE.Util
 		/// A trace switch used by NxBRE. It can be changed at runtime by the user.
 		/// </summary>
 		/// <remarks>
-		/// To revert to the value defined in the configuration file, call InitializeSwitches (<see cref="NxBRE.Util.Logger.InitializeSwitches"/>).
+		/// To revert to the value defined in the configuration file, call RefreshBooleanSwitches (<see cref="NxBRE.Util.Logger.RefreshBooleanSwitches"/>).
 		/// </remarks>
 		public static bool IsUtilInformation {
 			get {
@@ -252,7 +252,7 @@ namespace NxBRE.Util
 		/// A trace switch used by NxBRE. It can be changed at runtime by the user.
 		/// </summary>
 		/// <remarks>
-		/// To revert to the value defined in the configuration file, call InitializeSwitches (<see cref="NxBRE.Util.Logger.InitializeSwitches"/>).
+		/// To revert to the value defined in the configuration file, call RefreshBooleanSwitches (<see cref="NxBRE.Util.Logger.RefreshBooleanSwitches"/>).
 		/// </remarks>
 		public static bool IsUtilWarning {
 			get {

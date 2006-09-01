@@ -232,8 +232,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// and to use RunQuery(queryLabel)
 		/// </remarks>
 		/// <param name="query">The new Query to run.</param>
-		/// <returns>An IList<IList<Fact>> containing the results found.</returns>
-		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
+		/// <returns>An <code>IList&lt;IList&lt;Fact>></code> containing the results found.</returns>
 		public IList<IList<Fact>> RunQuery(Query query) {
 			return IE.RunQuery(query);
 		}
@@ -242,8 +241,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// Runs a Query in the current working memory.
 		/// </summary>
 		/// <param name="queryIndex">The query base index of the Query to run.</param>
-		/// <returns>An IList<IList<Fact>> containing the results found.</returns>
-		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
+		/// <returns>An <code>IList&lt;IList&lt;Fact>></code> containing the results found.</returns>
 		/// <remarks>It is recommanded to use labelled queries.</remarks>
 		public IList<IList<Fact>> RunQuery(int queryIndex) {
 			return IE.RunQuery(queryIndex);
@@ -253,8 +251,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// Runs a Query in the current working memory.
 		/// </summary>
 		/// <param name="queryLabel">The label of the Query to run.</param>
-		/// <returns>An IList<IList<Fact>> containing the results found.</returns>
-		/// <see cref="NxBRE.InferenceEngine.Rules.QueryResultSet"/>
+		/// <returns>An <code>IList&lt;IList&lt;Fact>></code> containing the results found.</returns>
 		public IList<IList<Fact>> RunQuery(string queryLabel) {
 			return IE.RunQuery(queryLabel);
 		}

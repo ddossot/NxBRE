@@ -14,7 +14,7 @@ namespace NxBRE.FlowEngine.Core
 	/// AbstractBRERuleContext instead since it is designed to be added on to.
 	/// </P>
 	/// </summary>
-	/// <seealso cref="NxBRE.FlowEngine.AbstractBRERuleContext">
+	/// <seealso cref="NxBRE.FlowEngine.Core.AbstractBRERuleContext">
 	/// </seealso>
 	/// <author>  Sloan Seaman </author>
 	/// <author>  David Dossot </author>

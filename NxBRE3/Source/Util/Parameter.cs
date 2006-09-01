@@ -11,7 +11,15 @@ namespace NxBRE.Util
 	/// </summary>
 	/// <author>David Dossot</author>
 	public abstract class Parameter {
+		
+		/// <summary>
+		/// Chars that NxBRE recognizes as parenthesis.
+		/// </summary>
 		public readonly static char[] PARENTHESIS = new char[] {'(', ')'};
+		
+		/// <summary>
+		/// Char that NxBRE recognizes as a column.
+		/// </summary>
 		public const char COLUMN = ':';
 		
 		private Parameter() {}
@@ -153,6 +161,7 @@ namespace NxBRE.Util
 		/// </summary>
 		/// <param name="arguments">An array of arguments.</param>
 		/// <param name="lengthToReach">The desired length for the new array of arguments.</param>
+		/// <param name="targetType">The type of array that will contain the grouped arguments.</param>
 		/// <returns>A new array of arguments, with the final objects grouped in an array.</returns>
 		public static object[] GroupFinal(object[] arguments, int lengthToReach, Type targetType) {
 			int numberToGroup = arguments.Length - lengthToReach + 1;
@@ -252,13 +261,24 @@ namespace NxBRE.Util
 		private object first;
 		private object second;
 		
+		/// <summary>
+		/// Instantiates a new pair object with no reference (null) to any object.
+		/// </summary>
 		public ObjectPair():this(null, null){}
 		
+		/// <summary>
+		/// Instantiates a new pair object with references to the provided objects.
+		/// </summary>
+		/// <param name="first">Reference of the first object in the pair.</param>
+		/// <param name="second">Reference of the second object in the pair.</param>
 		public ObjectPair(object first, object second) {
 			this.first = first;
 			this.second = second;
 		}
 		
+		/// <summary>
+		/// Gets or sets the reference of the first object in the pair.
+		/// </summary>
 		public object First {
 			get {
 				return first;
@@ -267,6 +287,10 @@ namespace NxBRE.Util
 				first = value;
 			}
 		}
+		
+		/// <summary>
+		/// Gets or sets the reference of the second object in the pair.
+		/// </summary>
 		public object Second {
 			get {
 				return second;

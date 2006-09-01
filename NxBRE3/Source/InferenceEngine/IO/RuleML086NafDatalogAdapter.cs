@@ -34,7 +34,6 @@ namespace NxBRE.InferenceEngine.IO {
 		/// </remarks>
 		/// <param name="uriRuleML">The URI to read rules from or write to.</param>
 		/// <param name="mode">The FileAccess mode.</param>
-		/// <param name="supportTypedFacts">If true, the adapter supports typed facts.</param>
 		public RuleML086NafDatalogAdapter(string uriRuleML, FileAccess mode):this(uriRuleML, mode, false) {}
 		
 		/// <summary>

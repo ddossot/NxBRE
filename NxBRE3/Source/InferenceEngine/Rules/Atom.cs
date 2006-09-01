@@ -353,7 +353,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// If the Inference Engine trace switch is Verbose, the type of non String predicates will be shown.
 		/// </remarks>
 		/// <returns>The String representation of the Atom.</returns>
-		/// <see cref="ToString(bool outputType)"/>
+		/// <see cref="ToString(bool)"/>
 		public override string ToString() {
 			return ToString(Logger.IsInferenceEngineVerbose);
 		}

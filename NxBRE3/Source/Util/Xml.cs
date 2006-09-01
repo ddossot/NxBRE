@@ -11,6 +11,10 @@ namespace NxBRE.Util
 	/// <summary>Schema utilities.</summary>
 	/// <author>David Dossot</author>
 	public abstract class Xml {
+		
+		/// <summary>
+		/// Namespace of XML Schema Instance v1.4.
+		/// </summary>
 		public const string NS_URI = "http://www.w3.org/2001/XMLSchema-instance";
 		
 		private Xml() {}

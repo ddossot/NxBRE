@@ -272,7 +272,8 @@ namespace NxBRE.InferenceEngine.Registry {
 		/// <summary>
 		/// Handles all file events that are intercepted on the file system.
 		/// </summary>
-		/// <param name="fileName">The name of the registry file that has been somehow altered</param>
+		/// <param name="fullFileName">The complete name of the file that has been somehow altered.</param>
+		/// <param name="fileName">The name of the registry file that has been somehow altered.</param>
 		private void OnRegistryFileEvent(String fullFileName, String fileName) {
 			foreach(CachedEngine cachedEngine in fileIndex[fileName]) {
 				// we check if the file is available for reading, if not we ponder until it is.

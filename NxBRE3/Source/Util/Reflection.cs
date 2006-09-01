@@ -13,6 +13,9 @@ namespace NxBRE.Util
 		/// </summary>
 		public static CultureInfo US_FORMAT = new CultureInfo(Parameter.Get<string>("cultureInfo", "en-US"), false);
 
+		/// <summary>
+		/// Version of the current NxBRE engine.
+		/// </summary>
 		public static readonly string NXBRE_VERSION = Assembly.GetAssembly(typeof(NxBRE.Util.Reflection)).GetName().Version.ToString();
 		
 		private Reflection() {}
@@ -31,7 +34,7 @@ namespace NxBRE.Util
 		/// (i.e. except for exceptions).
 		/// </summary>
 		/// <param name="valueObject">The object to cast</param>
-		/// <param name="type">The full name of the type to cast to</param>
+		/// <param name="typeName">The full name of the type to cast to</param>
 		/// <returns>A properly casted object, unless an exception occurs.</returns>
 		public static object CastValue(object valueObject, string typeName) {
 			return CastValue(valueObject, Type.GetType(typeName));
