@@ -37,13 +37,13 @@
     <includeFavorites>False</includeFavorites>
     <preliminary>False</preliminary>
     <rootNSContainer>False</rootNSContainer>
-    <helpTitle>NxBRE API Documentation</helpTitle>
+    <helpTitle>NxBRE v3.0.0 - API Documentation</helpTitle>
     <htmlHelpName>NxBRE-API-3_0_0</htmlHelpName>
     <language>en-US</language>
     <copyrightHref />
     <copyrightText>Copyright (C) 2003-2006 David Dossot et al.</copyrightText>
     <feedbackEMailAddress>contact@nxbre.org</feedbackEMailAddress>
-    <headerText>NxBRE API Documentation</headerText>
+    <headerText>NxBRE v3.0.0 - API Documentation</headerText>
     <projectLinks>Local</projectLinks>
     <sdkLinks>Msdn</sdkLinks>
     <documentAttributes>False</documentAttributes>
