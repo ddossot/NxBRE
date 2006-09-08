@@ -11,7 +11,7 @@ namespace NxBRE.Util
 		/// <summary>
 		/// When casting values, NxBRE uses this format: en-US.
 		/// </summary>
-		public static CultureInfo US_FORMAT = new CultureInfo(Parameter.Get<string>("cultureInfo", "en-US"), false);
+		public static CultureInfo CULTURE_INFO = new CultureInfo(Parameter.Get<string>("cultureInfo", "en-US"), false);
 
 		/// <summary>
 		/// Version of the current NxBRE engine.
@@ -54,7 +54,7 @@ namespace NxBRE.Util
 			else if (type.IsEnum)
 				return Enum.Parse(type, valueObject.ToString(), false);
 			else
-				return Convert.ChangeType(valueObject, type, US_FORMAT);
+				return Convert.ChangeType(valueObject, type, CULTURE_INFO);
 		}
 
 		/// <summary>
