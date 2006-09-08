@@ -1,7 +1,7 @@
-NxBRE README v3.0.0RC2
-======================
+NxBRE README v3.0.0
+===================
 
-Date         : XX-XXX-2006
+Date         : 08-SEP-2006
 URL          : http://nxbre.org
 EMail        : contact@nxbre.org
 License      : LGPL
@@ -66,6 +66,12 @@ All static calls on NxBRE helpers and utilities, either from FlowEngine rules or
 
 ## RELEASE NOTES ##
 
+v3.0.0
+
+  * Added comments to improve the API documentation.
+
+
+
 v3.0.0RC2
 
  Inference Engine
@@ -81,6 +87,7 @@ v3.0.0RC2
       - named predicates (aka RuleML slots): prefix like this (?Size)
       - integrity queries (new shape in the stencil)
       - equivalent atoms (new shape in the stencil)
+
 
 
 v3.0.0RC1 (compared to NxBRE v2.5.3)
