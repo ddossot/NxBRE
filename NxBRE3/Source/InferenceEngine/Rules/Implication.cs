@@ -1,6 +1,6 @@
 namespace NxBRE.InferenceEngine.Rules {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 
 	using NxBRE.InferenceEngine.Rules;
 	using NxBRE.Util;
@@ -24,16 +24,23 @@ namespace NxBRE.InferenceEngine.Rules {
 	/// </description>
 	public sealed class Implication:Query {
 		// Immutable members
-		readonly private Atom deduction;
-		readonly private int priority;
-		readonly private ImplicationAction action;
-		readonly private string mutex = String.Empty;
-		readonly private string precondition = String.Empty;
+		private readonly Atom deduction;
+		private readonly int priority;
+		private readonly ImplicationAction action;
+		private readonly string mutex = String.Empty;
+		private readonly string precondition = String.Empty;
+		private readonly bool hasNaf;
 
 		// Members whose values are estimated by external objects.
 		private int salience = 0;
-		private ArrayList mutexChain = null;
+		private IList<Implication> mutexChain = null;
 		private Implication preconditionImplication = null;
+		
+		internal bool HasNaf {
+			get {
+				return hasNaf;
+			}
+		}
 		
 		/// <summary>
 		/// The Deduction that this Implication tries to make.
@@ -104,7 +111,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <summary>
 		/// The optional MutexChain the current Implication is member of.
 		/// </summary>		
-		public ArrayList MutexChain {
+		public IList<Implication> MutexChain {
 			get {
 				return mutexChain;
 			}
@@ -291,6 +298,15 @@ namespace NxBRE.InferenceEngine.Rules {
 			this.mutex = mutex;
 			this.precondition = precondition;
 			this.action = action;
+			
+			hasNaf = false;
+			foreach(Atom atom in AtomGroup.AllAtoms) {
+				if (atom.Negative) {
+					hasNaf = true;
+					break;
+				}
+			}
+			
 		}
 		
 	}

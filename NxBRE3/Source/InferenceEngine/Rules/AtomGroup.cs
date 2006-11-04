@@ -22,6 +22,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		private readonly object[] members;
 		private readonly IList<object> orderedMembers;
 		private readonly int hashCode;
+		private readonly List<Atom> allAtoms;
 		
 		/// <summary>
 		/// The logical operator used to link the members together
@@ -44,16 +45,9 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <summary>
 		/// The atoms in the current group, and all the subgroups.
 		/// </summary>
-		internal Atom[] AllAtoms {
+		internal IList<Atom> AllAtoms {
 			get {
-				ArrayList result = new ArrayList();
-				
-				foreach(object member in orderedMembers) {
-					if (member is Atom) result.Add(member);
-					else if (member is AtomGroup) result.AddRange(((AtomGroup)member).AllAtoms);
-				}
-				
-				return (Atom[])result.ToArray(typeof(Atom));
+				return allAtoms;
 			}
 		}
 		
@@ -133,7 +127,13 @@ namespace NxBRE.InferenceEngine.Rules {
 				for(int i=0; i < runningMembers.Length; i++) sortedMembers.Add(GetMemberSortedIndex(runningMembers, i), runningMembers[i]);
 			}
 			
-			this.orderedMembers = sortedMembers.Values;
+			orderedMembers = sortedMembers.Values;
+			
+			allAtoms = new List<Atom>();
+			foreach(object member in orderedMembers) {
+				if (member is Atom) allAtoms.Add((Atom)member);
+				else if (member is AtomGroup) allAtoms.AddRange(((AtomGroup)member).AllAtoms);
+			}
 		}
 		
 		/// <summary>

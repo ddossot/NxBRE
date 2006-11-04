@@ -52,19 +52,33 @@ namespace NxBRE.InferenceEngine.Core {
 		/// Schedule all implications that are listening the facts in the fact base
 		/// except if no new fact of the listening type where asserted in the previous iteration.
 		/// </summary>
-		/// <param name="positiveImplications">Null if it is the first iteration, else en ArrayList of positive implications of current iteration.</param>
-		/// <param name="IB">The current ImplicationBase.</param>
-		public void Schedule(IList<Implication> positiveImplications, ImplicationBase IB) {
+		/// <param name="positiveImplications">Null if it is the first iteration, else an IList of positive implications of current iteration.</param>
+		/// <param name="implicationBase">The current implication base.</param>
+		/// <param name="factBase">The working factbase.</param>
+		public void Schedule(IList<Implication> positiveImplications, ImplicationBase implicationBase, FactBase factBase) {
 			if (positiveImplications == null) {
-				// schedule all implications
-				foreach(Implication implication in IB) Schedule(implication);
+				foreach(Implication implication in implicationBase) {
+					// if the implication contains a NAF, always schedule it
+					if (implication.HasNaf) {
+						Schedule(implication);
+					}
+					else {
+						foreach(Atom atom in implication.AtomGroup.AllAtoms) {
+							if (factBase.HasFactsForSignature(atom.Signature)) {
+								Schedule(implication);
+								goto NextImplication;
+							}
+						}
+					}
+				NextImplication:;
+				}
 			}
 			else {
 				foreach(Implication positiveImplication in positiveImplications) {
 					if (positiveImplication.Action != ImplicationAction.Retract) {
 						// for positive implications, schedule only the implications
 						// relevant to the newly asserted facts.
-						IList<Implication> listeningImplications = IB.GetListeningImplications(positiveImplication.Deduction);
+						IList<Implication> listeningImplications = implicationBase.GetListeningImplications(positiveImplication.Deduction);
 						if (listeningImplications != null)
 							foreach(Implication implication in listeningImplications)
 								Schedule(implication);
@@ -72,13 +86,13 @@ namespace NxBRE.InferenceEngine.Core {
 					else {
 						// for negative implications, schedule only the implications
 						// that can potentially assert a fact of same type that was retracted
-						foreach(Implication implication in IB)
+						foreach(Implication implication in implicationBase)
 							if (implication.Deduction.Type == positiveImplication.Deduction.Type)
 								Schedule(implication);
 					}
 					
 					// schedule implications potentially pre-condition unlocked
-					foreach(Implication implication in IB.GetPreconditionChildren(positiveImplication))
+					foreach(Implication implication in implicationBase.GetPreconditionChildren(positiveImplication))
 						Schedule(implication);
 				}
 			}

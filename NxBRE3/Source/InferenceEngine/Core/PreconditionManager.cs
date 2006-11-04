@@ -1,6 +1,6 @@
 namespace NxBRE.InferenceEngine.Core {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	
 	using NxBRE.InferenceEngine.Rules;
 
@@ -15,7 +15,7 @@ namespace NxBRE.InferenceEngine.Core {
 		public PreconditionManager(ImplicationBase ib):base("Precondition", ib) {}
 
 		public void AnalyzeImplications() {
-			Chains = new ArrayList();
+			Chains = new List<IList<Implication>>();
 			Implication preconditionImplication;
 			bool found;
 			int posImplication;
@@ -46,7 +46,7 @@ namespace NxBRE.InferenceEngine.Core {
 					// try first to find if the current implication or its precondition one is somewhere
 					// in a chain, else create a new chain.
 					found = false;
-					foreach(ArrayList chain in Chains) {
+					foreach(IList<Implication> chain in Chains) {
 						posImplication = chain.IndexOf(implication);
 						posPreconditionImplication = chain.IndexOf(preconditionImplication);
 						
@@ -67,7 +67,7 @@ namespace NxBRE.InferenceEngine.Core {
 					}
 					
 					if (!found) {
-						ArrayList chain = new ArrayList();
+						IList<Implication> chain = new List<Implication>();
 						chain.Add(preconditionImplication);
 						chain.Add(implication);
 						Chains.Add(chain);
@@ -75,7 +75,7 @@ namespace NxBRE.InferenceEngine.Core {
 				}
 
 			int salience;
-			foreach(ArrayList chain in Chains) {
+			foreach(IList<Implication> chain in Chains) {
 				salience = chain.Count;
 				foreach(Implication implication in chain) {
 					if (implication.Salience < salience)
@@ -83,8 +83,7 @@ namespace NxBRE.InferenceEngine.Core {
 					salience --;
 				}
 			}
-
-		} //AnalyzeImplications
+		}
 		
 	}
 	
