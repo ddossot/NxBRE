@@ -74,15 +74,15 @@ namespace NxBRE.Test
 		
 		[Test]
 		public void AreIntersecting() {
-			ArrayList a1 = new ArrayList();
+			IList a1 = new ArrayList();
 			a1.Add("a");
 			a1.Add(1);
 			a1.Add(3.14);
-			ArrayList a2 = new ArrayList();
+			IList a2 = new ArrayList();
 			a2.Add("b");
 			a2.Add(1);
 			a2.Add(6.28);
-			ArrayList a3 = new ArrayList();
+			IList a3 = new ArrayList();
 			a3.Add("c");
 			a3.Add(2);
 			a3.Add(9.42);

@@ -1,6 +1,6 @@
 namespace NxBRE.InferenceEngine.Core {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	
 	using NxBRE.InferenceEngine.Rules;
 
@@ -10,10 +10,10 @@ namespace NxBRE.InferenceEngine.Core {
 	/// <author>David Dossot</author>
 	internal abstract class AbstractChainManager {
 		private string type;
-		private ArrayList chains;
+		private IList<IList<Implication>> chains;
 		private ImplicationBase ib;
 
-		protected ArrayList Chains {
+		protected IList<IList<Implication>> Chains {
 			get {
 				return chains;
 			}
@@ -36,13 +36,13 @@ namespace NxBRE.InferenceEngine.Core {
 		public override string ToString() {
 			string result = "";
 
-			foreach(ArrayList chain in chains)
+			foreach(IList<Implication> chain in chains)
 				result += (ChainToString(chain) + "\n");
 
 			return result;
 		}
 		
-		private string ChainToString(ArrayList chain) {
+		private string ChainToString(IList<Implication> chain) {
 			string result = type + " chain: ";
 
 			foreach(Implication implication in chain)

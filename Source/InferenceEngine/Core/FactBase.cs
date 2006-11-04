@@ -295,6 +295,16 @@ namespace NxBRE.InferenceEngine.Core {
 		}
 		
 		/// <summary>
+		/// Checks if there is at least one fact matching a particular signature
+		/// </summary>
+		/// <param name="signature"></param>
+		/// <returns></returns>
+		public bool HasFactsForSignature(string signature) {
+			if (signatureMap.ContainsKey(signature)) return signatureMap[signature].Count > 0;
+			else return false;
+		}
+		
+		/// <summary>
 		/// Runs a Query against a the FactBase.
 		/// </summary>
 		/// <param name="query">The Query to run.</param>

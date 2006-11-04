@@ -283,7 +283,7 @@ namespace NxBRE.Test.InferenceEngine {
 			
 			foreach(Query q in va.Queries) {
       	if (q.Label == "q1") {
-					Assert.AreEqual(1, q.AtomGroup.AllAtoms.Length, "Count of query atoms");
+					Assert.AreEqual(1, q.AtomGroup.AllAtoms.Count, "Count of query atoms");
       	}
 			}
 			

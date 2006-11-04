@@ -504,7 +504,7 @@ namespace NxBRE.InferenceEngine {
 			if (Logger.IsInferenceEngineInformation) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Information, 0, "NxBRE v" + Reflection.NXBRE_VERSION + " Inference Engine Processing Started");
 			
 			if (businessObjects == null)
-				InferUntilNoNewFact(new ArrayList());
+				InferUntilNoNewFact();
 			
 			else if (Binder == null)
 				throw new BREException("NxBRE Inference Engine needs a Binder to process business objects");
@@ -524,7 +524,7 @@ namespace NxBRE.InferenceEngine {
 				while(binderIterate) {
 					binderIterate = false;
 					
-					InferUntilNoNewFact(positiveImplications);
+					InferUntilNoNewFact();
 
 					WM.FB.ModifiedFlag = false;
 					iniTime = DateTime.Now.Ticks;
@@ -536,9 +536,7 @@ namespace NxBRE.InferenceEngine {
 																										            	" milliseconds with " +
 																										            	(binderIterate?"":"no ") +
 																										            	"new fact(s) detected");
-
-				
-				} // while binderIterate			
+				}			
 			}
 			
 			else if (Binder.BindingType == BindingTypes.Control) {
@@ -741,7 +739,7 @@ namespace NxBRE.InferenceEngine {
 				throw new BREException("The inference engine is not yet initialized and can not perform this operation.");
 		}
 		
-		private void InferUntilNoNewFact(ArrayList positiveImplications) {
+		private void InferUntilNoNewFact() {
 			long iniTime;
 			
 			if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "(Starting) " +
@@ -752,6 +750,7 @@ namespace NxBRE.InferenceEngine {
 															            QB.Count + " queries.");
 			
 			iniTime = DateTime.Now.Ticks;
+			IList<Implication> positiveImplications = new List<Implication>();
 			IList<Implication> iterationPositiveImplications = null;
 			bool iterate = true;
 			Agenda agenda = new Agenda();
@@ -765,7 +764,7 @@ namespace NxBRE.InferenceEngine {
 				iteration++;
 
 				// Schedule all implications matching the existing facts
-				agenda.Schedule(iterationPositiveImplications, IB);
+				agenda.Schedule(iterationPositiveImplications, IB, WM.FB);
 				agenda.PrepareExecution();
 				
 				if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Iteration #" +
@@ -784,7 +783,7 @@ namespace NxBRE.InferenceEngine {
 					if ((firedImplication.MutexChain != null) &&
 					    (!positiveImplications.Contains(firedImplication)) &&
 							(Misc.AreIntersecting(firedImplication.MutexChain, positiveImplications))) {
-						if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Mutexed: "+firedImplication.Label);
+						if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Mutexed: " + firedImplication.Label);
 						firedImplication = null;
 					}
 					

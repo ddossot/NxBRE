@@ -77,7 +77,8 @@ namespace NxBRE.InferenceEngine.Core {
 		}
 		
 		public IList<Implication> GetListeningImplications(Atom atom) {
-			if (implicationsMap.ContainsKey(atom.Signature)) return implicationsMap[atom.Signature];
+			IList<Implication> result;
+			if (implicationsMap.TryGetValue(atom.Signature, out result)) return result;
 			else return null;
 		}
 

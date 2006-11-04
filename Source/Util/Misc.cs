@@ -36,7 +36,30 @@ namespace NxBRE.Util
 		/// <remarks>
 		/// For performance reasons, it iterates on the smallest collection and use contains on the other.
 		/// </remarks>
-		public static bool AreIntersecting(ArrayList collectionA, ArrayList collectionB) {
+		public static bool AreIntersecting<T>(IList<T> collectionA, IList<T> collectionB) {
+			if (collectionA.Count > collectionB.Count) {
+				foreach(T o in collectionB)
+					if (collectionA.Contains(o))
+						return true;
+			}
+			else {
+				foreach(T o in collectionA)
+					if (collectionB.Contains(o))
+						return true;
+			}
+			return false;
+		}
+
+		///<summary>
+		/// Determines if two ArrayList are intersecting, i.e. have an object in common.
+		///</summary>
+		/// <param name="collectionA">One of the two collections to evaluate.</param>
+		/// <param name="collectionB">The other of the two collections to evaluate.</param>
+		/// <returns>True if at least one object is found in both collections, otherwise false.</returns>
+		/// <remarks>
+		/// For performance reasons, it iterates on the smallest collection and use contains on the other.
+		/// </remarks>
+		public static bool AreIntersecting(IList collectionA, IList collectionB) {
 			if (collectionA.Count > collectionB.Count) {
 				foreach(object o in collectionB)
 					if (collectionA.Contains(o))
@@ -47,9 +70,9 @@ namespace NxBRE.Util
 					if (collectionB.Contains(o))
 						return true;
 			}
-			return false;
+			return false;	
 		}
-
+		
 		/// <summary>
 		/// Outputs the content of an ArrayList in a string.
 		/// </summary>

@@ -1,6 +1,6 @@
 namespace NxBRE.InferenceEngine.Core {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	
 	using NxBRE.InferenceEngine.Rules;
 	
@@ -14,7 +14,7 @@ namespace NxBRE.InferenceEngine.Core {
 		public MutexManager(ImplicationBase ib):base("Mutex", ib) {}
 
 		public void AnalyzeImplications() {
-			Chains = new ArrayList();
+			Chains = new List<IList<Implication>>();
 			Implication mutex;
 			bool found;
 			
@@ -32,7 +32,7 @@ namespace NxBRE.InferenceEngine.Core {
 					// try first to find if the current implication or its mutexed one is somewhere
 					// in a chain, else create a new chain.
 					found = false;
-					foreach(ArrayList chain in Chains)
+					foreach(IList<Implication> chain in Chains)
 						if ((chain.Contains(implication)) || (chain.Contains(mutex))) {
 							found = true;
 							if (!chain.Contains(implication)) chain.Add(implication);
@@ -41,7 +41,7 @@ namespace NxBRE.InferenceEngine.Core {
 						}
 					
 					if (!found) {
-						ArrayList chain = new ArrayList();
+						IList<Implication> chain = new List<Implication>();
 						chain.Add(implication);
 						chain.Add(mutex);
 						Chains.Add(chain);
@@ -51,12 +51,12 @@ namespace NxBRE.InferenceEngine.Core {
 			// parse a second time to establish all cross references
 			// are linked together by mutex
 			foreach(Implication implication in IB) 
-				foreach(ArrayList chain in Chains) 
+				foreach(IList<Implication> chain in Chains) 
 					if (chain.Contains(implication)) {
 						implication.MutexChain = chain;
 						break;
 					}
-		} //AnalyzeImplications
+		}
 		
 	}
 	
