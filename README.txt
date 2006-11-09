@@ -1,7 +1,7 @@
-NxBRE README v3.0.0
+NxBRE README v3.1.0
 ===================
 
-Date         : 08-SEP-2006
+Date         : XX-XXX-200X
 URL          : http://nxbre.org
 EMail        : contact@nxbre.org
 License      : LGPL
@@ -65,6 +65,12 @@ All static calls on NxBRE helpers and utilities, either from FlowEngine rules or
 
 
 ## RELEASE NOTES ##
+
+v3.1.0
+
+  * Improved implication scheduling in the agenda to limitate the number of fired implications (feature request 1590017).
+
+
 
 v3.0.0
 
