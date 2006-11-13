@@ -1,0 +1,735 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://www.ruleml.org/0.91/xsd" xmlns="http://www.ruleml.org/0.91/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sch="http://www.ascc.net/xml/schematron" elementFormDefault="qualified">
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			XML Schema for a Datalog RuleML sublanguage, including negation as failure (NAF)
+			File: ruleml-0_91-nafdatalog.xsd
+			Version: 0.91
+			Last Modification: 2006-08-18
+		</xs:documentation>
+	</xs:annotation>
+	
+	<xs:attributeGroup name="Naf.attlist"/>
+	<xs:group name="Naf.content">
+		<xs:sequence>
+			<xs:element ref="oid" minOccurs="0"/>
+			<xs:choice>
+				<xs:element ref="weak"/>
+				<xs:group ref="weak.content"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="Naf.type">
+		<xs:group ref="Naf.content"/>
+		<xs:attributeGroup ref="Naf.attlist"/>
+	</xs:complexType>
+	<xs:element name="Naf" type="Naf.type"/>
+	
+	<xs:attributeGroup name="weak.attlist"/>
+	<xs:group name="weak.content">
+		<xs:choice>
+			<xs:element name="Atom" type="Atom.type"/>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="weak.type">
+		<xs:group ref="weak.content"/>
+		<xs:attributeGroup ref="weak.attlist"/>
+	</xs:complexType>
+	<xs:element name="weak" type="weak.type"/>
+	
+	<xs:attributeGroup name="RuleML.attlist"/>
+	<xs:group name="RuleML.content">
+		<xs:sequence>
+			<xs:element ref="oid" minOccurs="0"/>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="Assert"/>
+				<xs:element ref="Retract"/>
+				<xs:element ref="Query"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="RuleML.type">
+		<xs:group ref="RuleML.content"/>
+		<xs:attributeGroup ref="RuleML.attlist"/>
+	</xs:complexType>
+	<xs:element name="RuleML" type="RuleML.type"/>
+	
+	<xs:attributeGroup name="Assert.attlist">
+		<xs:attributeGroup ref="mapDirection.attrib"/>
+		<xs:attributeGroup ref="mapClosure.attrib"/>
+		<xs:attributeGroup ref="mapMaterial.attrib"/>
+	</xs:attributeGroup>
+	<xs:group name="Assert.content">
+		<xs:sequence>
+			<xs:element ref="oid" minOccurs="0"/>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="formula" type="formula-assert.type"/>
+				<xs:group ref="formula-assert.content"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="Assert.type">
+		<xs:group ref="Assert.content"/>
+		<xs:attributeGroup ref="Assert.attlist"/>
+	</xs:complexType>
+	<xs:element name="Assert" type="Assert.type"/>
+	
+	<xs:attributeGroup name="Retract.attlist">
+		<xs:attributeGroup ref="mapDirection.attrib"/>
+		<xs:attributeGroup ref="mapClosure.attrib"/>
+		<xs:attributeGroup ref="mapMaterial.attrib"/>
+	</xs:attributeGroup>
+	<xs:group name="Retract.content">
+		<xs:sequence>
+			<xs:element ref="oid" minOccurs="0"/>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="formula" type="formula-assert.type"/>
+				<xs:group ref="formula-assert.content"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="Retract.type">
+		<xs:group ref="Retract.content"/>
+		<xs:attributeGroup ref="Retract.attlist"/>
+	</xs:complexType>
+	<xs:element name="Retract" type="Retract.type"/>
+	
+	<xs:attributeGroup name="Query.attlist">
+		<xs:attributeGroup ref="closure.attrib"/>
+	</xs:attributeGroup>
+	<xs:group name="Query.content">
+		<xs:sequence>
+			<xs:element ref="oid" minOccurs="0"/>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="formula" type="formula-query.type"/>
+				<xs:group ref="formula-query.content"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="Query.type">
+		<xs:group ref="Query.content"/>
+		<xs:attributeGroup ref="Query.attlist"/>
+	</xs:complexType>
+	<xs:element name="Query" type="Query.type"/>
+	
+	<xs:group name="formula-assert.content">
+		<xs:choice>
+			<xs:element ref="Rulebase"/>
+			<xs:element name="Atom" type="Atom.type"/>
+			<xs:element ref="Implies"/>
+			<xs:element ref="Equivalent"/>
+			<xs:element ref="Entails"/>
+			<xs:element ref="Forall"/>
+		</xs:choice>
+	</xs:group>
+	<xs:group name="formula-query.content">
+		<xs:choice>
+			<xs:element ref="Rulebase"/>
+			<xs:element name="Atom" type="Atom.type"/>
+			<xs:element name="And" type="And-query.type"/>
+			<xs:element name="Or" type="Or-query.type"/>
+			<xs:element ref="Entails"/>
+			<xs:element ref="Exists"/>
+				<xs:element ref="Naf"/>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="formula-assert.type">
+		<xs:group ref="formula-assert.content"/>
+		<xs:attributeGroup ref="formula.attlist"/>
+	</xs:complexType>
+	<xs:complexType name="formula-query.type">
+		<xs:group ref="formula-query.content"/>
+		<xs:attributeGroup ref="formula.attlist"/>
+	</xs:complexType>
+	
+	<xs:attributeGroup name="oid.attlist"/>
+	<xs:group name="oid.content">
+		<xs:choice>
+			<xs:element ref="Ind"/>
+			<xs:element ref="Data"/>
+			<xs:element ref="Var"/>
+			<xs:element ref="Skolem"/>
+			<xs:element ref="Reify"/>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="oid.type">
+		<xs:group ref="oid.content"/>
+		<xs:attributeGroup ref="oid.attlist"/>
+	</xs:complexType>
+	<xs:element name="oid" type="oid.type"/>
+	
+	<xs:attributeGroup name="Forall.attlist"/>
+	<xs:group name="Forall.content">
+		<xs:sequence>
+			<xs:element ref="oid" minOccurs="0"/>
+			<xs:choice minOccurs="1" maxOccurs="unbounded">
+				<xs:element ref="declare"/>
+				<xs:group ref="declare.content"/>
+			</xs:choice>
+			<xs:choice>
+				<xs:element name="formula" type="formula-forall.type"/>
+				<xs:group ref="formula-forall.content"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="Forall.type">
+		<xs:group ref="Forall.content"/>
+		<xs:attributeGroup ref="Forall.attlist"/>
+	</xs:complexType>
+	<xs:element name="Forall" type="Forall.type"/>
+	
+	<xs:attributeGroup name="Exists.attlist"/>
+	<xs:group name="Exists.content">
+		<xs:sequence>
+			<xs:element ref="oid" minOccurs="0"/>
+			<xs:choice minOccurs="1" maxOccurs="unbounded">
+				<xs:element ref="declare"/>
+				<xs:group ref="declare.content"/>
+			</xs:choice>
+			<xs:choice>
+				<xs:element name="formula" type="formula-exists.type"/>
+				<xs:group ref="formula-exists.content"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="Exists.type">
+		<xs:group ref="Exists.content"/>
+		<xs:attributeGroup ref="Exists.attlist"/>
+	</xs:complexType>
+	<xs:element name="Exists" type="Exists.type"/>
+	
+	<xs:attributeGroup name="declare.attlist"/>
+	<xs:group name="declare.content">
+		<xs:sequence>
+			<xs:element ref="Var"/>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="declare.type">
+		<xs:group ref="declare.content"/>
+		<xs:attributeGroup ref="declare.attlist"/>
+	</xs:complexType>
+	<xs:element name="declare" type="declare.type"/>
+	
+	<xs:group name="formula-forall.content">
+		<xs:choice>
+			<xs:element name="Atom" type="Atom.type"/>
+			<xs:element ref="Implies"/>
+			<xs:element ref="Equivalent"/>
+			<xs:element ref="Forall"/>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="formula-forall.type">
+		<xs:group ref="formula-forall.content"/>
+		<xs:attributeGroup ref="formula.attlist"/>
+	</xs:complexType>
+	<xs:group name="formula-exists.content">
+		<xs:choice>
+			<xs:element name="Atom" type="Atom.type"/>
+			<xs:element name="And" type="And-inner.type"/>
+			<xs:element name="Or" type="Or-inner.type"/>
+			<xs:element ref="Exists"/>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="formula-exists.type">
+		<xs:group ref="formula-exists.content"/>
+		<xs:attributeGroup ref="formula.attlist"/>
+	</xs:complexType>
+	
+	<xs:attributeGroup name="Implies.attlist">
+		<xs:attributeGroup ref="closure.attrib"/>
+		<xs:attributeGroup ref="direction.attrib"/>
+		<xs:attributeGroup ref="material.attrib"/>
+	</xs:attributeGroup>
+	<xs:group name="Implies.content">
+		<xs:sequence>
+			<xs:element ref="oid" minOccurs="0"/>
+			<xs:choice>
+				<xs:sequence>
+					<xs:element ref="head"/>
+					<xs:element ref="body"/>
+				</xs:sequence>
+				<xs:sequence>
+					<xs:element ref="body"/>
+					<xs:element ref="head"/>
+				</xs:sequence>
+				<xs:sequence>
+					<xs:group ref="body.content"/>
+					<xs:group ref="head.content"/>
+				</xs:sequence>
+			</xs:choice>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="Implies.type">
+		<xs:group ref="Implies.content"/>
+		<xs:attributeGroup ref="Implies.attlist"/>
+	</xs:complexType>
+	<xs:element name="Implies" type="Implies.type"/>
+	
+	<xs:attributeGroup name="body.attlist"/>
+	<xs:group name="body.content">
+		<xs:choice>
+			<xs:element name="Atom" type="Atom.type"/>
+			<xs:element name="And" type="And-inner.type"/>
+			<xs:element name="Or" type="Or-inner.type"/>
+			<xs:element ref="Naf"/>
+		</xs:choice>
+	</xs:group>
+	<xs:group name="body-entails.content">
+		<xs:choice>
+			<xs:element ref="Rulebase"/>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="body.type">
+		<xs:group ref="body.content"/>
+		<xs:attributeGroup ref="body.attlist"/>
+	</xs:complexType>
+	<xs:complexType name="body-entails.type">
+		<xs:group ref="body-entails.content"/>
+		<xs:attributeGroup ref="body.attlist"/>
+	</xs:complexType>
+	<xs:element name="body" type="body.type"/>
+	
+	<xs:attributeGroup name="head.attlist"/>
+	<xs:group name="head.content">
+		<xs:choice>
+			<xs:element name="Atom" type="Atom.type"/>
+		</xs:choice>
+	</xs:group>
+	<xs:group name="head-entails.content">
+		<xs:choice>
+			<xs:element ref="Rulebase"/>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="head.type">
+		<xs:group ref="head.content"/>
+		<xs:attributeGroup ref="head.attlist"/>
+	</xs:complexType>
+	<xs:complexType name="head-entails.type">
+		<xs:group ref="head-entails.content"/>
+		<xs:attributeGroup ref="head.attlist"/>
+	</xs:complexType>
+	<xs:element name="head" type="head.type"/>
+	
+	<xs:attributeGroup name="Entails.attlist"/>
+	<xs:group name="Entails.content">
+		<xs:sequence>
+			<xs:element ref="oid" minOccurs="0"/>
+			<xs:choice>
+				<xs:element name="body" type="body-entails.type"/>
+				<xs:group ref="body-entails.content"/>
+			</xs:choice>
+			<xs:choice>
+				<xs:element name="head" type="head-entails.type"/>
+				<xs:group ref="head-entails.content"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="Entails.type">
+		<xs:group ref="Entails.content"/>
+		<xs:attributeGroup ref="Entails.attlist"/>
+	</xs:complexType>
+	<xs:element name="Entails" type="Entails.type"/>
+	
+	<xs:attributeGroup name="Equivalent.attlist">
+		<xs:attributeGroup ref="closure.attrib"/>
+	</xs:attributeGroup>
+	<xs:group name="Equivalent.content">
+		<xs:sequence>
+			<xs:element ref="oid" minOccurs="0"/>
+			<xs:choice>
+				<xs:sequence>
+					<xs:element ref="torso" minOccurs="2" maxOccurs="2"/>
+				</xs:sequence>
+				<xs:sequence>
+					<xs:group ref="torso.content" minOccurs="2" maxOccurs="2"/>
+				</xs:sequence>
+			</xs:choice>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="Equivalent.type">
+		<xs:annotation>
+			<xs:appinfo>
+				<sch:pattern name="Equivalent">
+					<sch:rule context="r:Equivalent[count( descendant::r:Equal/r:Expr | descendant::r:Equal/r:lhs/r:Expr )=2]">
+						<sch:assert test="( descendant::r:Equal[1]/descendant::r:Fun[@in = 'no'] and descendant::r:Equal[2]/descendant::r:Fun[@in = 'no'] ) or ( descendant::r:Equal[1]/descendant::r:Fun[@in = 'yes'] and descendant::r:Equal[2]/descendant::r:Fun[@in = 'yes'] )">
+						  Equalities within an equivalence expression must either both be interpreted or both uninterpreted.
+						</sch:assert>
+					</sch:rule>
+				</sch:pattern>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:group ref="Equivalent.content"/>
+		<xs:attributeGroup ref="Equivalent.attlist"/>
+	</xs:complexType>
+	<xs:element name="Equivalent" type="Equivalent.type"/>
+	
+	<xs:attributeGroup name="torso.attlist"/>
+	<xs:group name="torso.content">
+		<xs:choice>
+			<xs:element name="Atom" type="Atom.type"/>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="torso.type">
+		<xs:group ref="torso.content"/>
+		<xs:attributeGroup ref="torso.attlist"/>
+	</xs:complexType>
+	<xs:element name="torso" type="torso.type"/>
+	
+	<xs:attributeGroup name="Rulebase.attlist">
+		<xs:attributeGroup ref="mapClosure.attrib"/>
+		<xs:attributeGroup ref="mapDirection.attrib"/>
+		<xs:attributeGroup ref="mapMaterial.attrib"/>
+	</xs:attributeGroup>
+	<xs:group name="Rulebase.content">
+		<xs:sequence>
+			<xs:element ref="oid" minOccurs="0"/>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="formula" type="formula-rulebase.type"/>
+				<xs:group ref="formula-rulebase.content"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="Rulebase.type">
+		<xs:group ref="Rulebase.content"/>
+		<xs:attributeGroup ref="Rulebase.attlist"/>
+	</xs:complexType>
+	<xs:element name="Rulebase" type="Rulebase.type"/>
+	
+	<xs:attributeGroup name="And-inner.attlist"/>
+	<xs:attributeGroup name="And-query.attlist">
+		<xs:attributeGroup ref="closure.attrib"/>
+	</xs:attributeGroup>
+	<xs:group name="And.content">
+		<xs:sequence>
+			<xs:element ref="oid" minOccurs="0"/>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="formula" type="formula-and-or.type"/>
+				<xs:group ref="formula-and-or.content"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="And-query.type">
+		<xs:group ref="And.content"/>
+		<xs:attributeGroup ref="And-query.attlist"/>
+	</xs:complexType>
+	<xs:complexType name="And-inner.type">
+		<xs:group ref="And.content"/>
+		<xs:attributeGroup ref="And-inner.attlist"/>
+	</xs:complexType>
+	<xs:element name="And" type="And-inner.type"/>
+	
+	<xs:attributeGroup name="Or-query.attlist">
+		<xs:attributeGroup ref="closure.attrib"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="Or-inner.attlist"/>
+	<xs:group name="Or.content">
+		<xs:sequence>
+			<xs:element ref="oid" minOccurs="0"/>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="formula" type="formula-and-or.type"/>
+				<xs:group ref="formula-and-or.content"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="Or-query.type">
+		<xs:group ref="Or.content"/>
+		<xs:attributeGroup ref="Or-query.attlist"/>
+	</xs:complexType>
+	<xs:complexType name="Or-inner.type">
+		<xs:group ref="Or.content"/>
+		<xs:attributeGroup ref="Or-inner.attlist"/>
+	</xs:complexType>
+	<xs:element name="Or" type="Or-inner.type"/>
+	
+	<xs:attributeGroup name="formula.attlist"/>
+	<xs:group name="formula-and-or.content">
+		<xs:choice>
+			<xs:element name="Atom" type="Atom.type"/>
+			<xs:element name="And" type="And-inner.type"/>
+			<xs:element name="Or" type="Or-inner.type"/>
+				<xs:element ref="Naf"/>
+		</xs:choice>
+	</xs:group>
+	
+	<xs:group name="formula-rulebase.content">
+		<xs:choice>
+			<xs:element name="Atom" type="Atom.type"/>
+			<xs:element name="Implies"/>
+			<xs:element name="Equivalent"/>
+			<xs:element name="Forall"/>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="formula-and-or.type">
+		<xs:group ref="formula-and-or.content"/>
+		<xs:attributeGroup ref="formula.attlist"/>
+	</xs:complexType>
+	<xs:complexType name="formula-rulebase.type">
+		<xs:group ref="formula-rulebase.content"/>
+		<xs:attributeGroup ref="formula.attlist"/>
+	</xs:complexType>
+	
+	<xs:attributeGroup name="mapMaterial.attrib">
+		<xs:attribute name="mapMaterial" use="optional" default="yes">
+			<xs:simpleType>
+				<xs:restriction base="xs:NMTOKEN">
+					<xs:enumeration value="no"/>
+					<xs:enumeration value="yes"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:attributeGroup>
+	
+	<xs:attributeGroup name="material.attrib">
+		<xs:attribute name="material" use="optional" default="yes">
+			<xs:simpleType>
+				<xs:restriction base="xs:NMTOKEN">
+					<xs:enumeration value="no"/>
+					<xs:enumeration value="yes"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:attributeGroup>
+	
+	<xs:attributeGroup name="mapDirection.attrib">
+		<xs:attribute name="mapDirection" use="optional" default="bidirectional">
+			<xs:simpleType>
+				<xs:restriction base="xs:NMTOKEN">
+					<xs:enumeration value="forward"/>
+					<xs:enumeration value="backward"/>
+					<xs:enumeration value="bidirectional"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:attributeGroup>
+	
+	<xs:attributeGroup name="direction.attrib">
+		<xs:attribute name="direction" use="optional" default="bidirectional">
+			<xs:simpleType>
+				<xs:restriction base="xs:NMTOKEN">
+					<xs:enumeration value="forward"/>
+					<xs:enumeration value="backward"/>
+					<xs:enumeration value="bidirectional"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:attributeGroup>
+	
+	<xs:attributeGroup name="mapClosure.attrib">
+		<xs:attribute name="mapClosure" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:NMTOKEN">
+					<xs:enumeration value="universal"/>
+					<xs:enumeration value="existential"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:attributeGroup>
+	
+	<xs:attributeGroup name="closure.attrib">
+		<xs:attribute name="closure" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:NMTOKEN">
+					<xs:enumeration value="universal"/>
+					<xs:enumeration value="existential"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:attributeGroup>
+	
+	<xs:attributeGroup name="Atom.attlist">
+		<xs:attributeGroup ref="closure.attrib"/>
+	</xs:attributeGroup>
+	
+	<xs:group name="Atom-repo.extend">
+		<xs:choice>
+			<xs:group ref="Atom-arg.extend"/>
+		</xs:choice>
+	</xs:group>
+	<xs:group name="Atom-arg.extend">
+		<xs:sequence>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="arg"/>
+				<xs:group ref="arg.content"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:group>
+	<xs:group name="Atom-slots.extend">
+		<xs:sequence>
+			<xs:element name="slot" type="slot.type" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:group>
+	<xs:group name="Atom.content">
+		<xs:sequence>
+			<xs:element ref="oid" minOccurs="0"/>
+			<xs:element ref="degree" minOccurs="0"/>
+			<xs:choice>
+				<xs:element name="op" type="op-atom.type"/>
+				<xs:group ref="op-atom.content"/>
+			</xs:choice>
+			<xs:group ref="Atom-slots.extend"/>
+			<xs:sequence minOccurs="0">
+				<xs:group ref="Atom-repo.extend"/>
+				<xs:group ref="Atom-slots.extend"/>
+			</xs:sequence>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="Atom.type">
+		<xs:group ref="Atom.content"/>
+		<xs:attributeGroup ref="Atom.attlist"/>
+	</xs:complexType>
+	<xs:element name="Atom" type="Atom.type"/>
+	
+	<xs:attributeGroup name="op.attlist"/>
+	<xs:group name="op-atom.content">
+		<xs:sequence>
+			<xs:element ref="Rel"/>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="op-atom.type">
+		<xs:group ref="op-atom.content"/>
+		<xs:attributeGroup ref="op.attlist"/>
+	</xs:complexType>
+	<xs:element name="op" type="op-atom.type"/>
+	
+	<xs:attributeGroup name="Rel.attlist">
+		<xs:attributeGroup ref="uri.attrib"/>
+	</xs:attributeGroup>
+	<xs:group name="Rel.content">
+		<xs:sequence/>
+	</xs:group>
+	<xs:complexType name="Rel.type" mixed="true">
+		<xs:group ref="Rel.content"/>
+		<xs:attributeGroup ref="Rel.attlist"/>
+	</xs:complexType>
+	<xs:element name="Rel" type="Rel.type"/>
+	
+	<xs:attributeGroup name="degree.attlist"/>
+	<xs:group name="degree.content">
+		<xs:sequence>
+			<xs:element ref="Data"/>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="degree.type">
+		<xs:group ref="degree.content"/>
+		<xs:attributeGroup ref="degree.attlist"/>
+	</xs:complexType>
+	<xs:element name="degree" type="degree.type"/>
+	
+	<xs:attributeGroup name="slot.attlist">
+		<xs:attributeGroup ref="card.attrib"/>
+		<xs:attributeGroup ref="weight.attrib"/>
+	</xs:attributeGroup>
+	<xs:group name="slot-name.extend">
+		<xs:choice>
+			<xs:element ref="Ind"/>
+			<xs:element ref="Data"/>
+		</xs:choice>
+	</xs:group>
+	<xs:group name="slot.content">
+		<xs:sequence>
+			<xs:group ref="slot-name.extend"/>
+			<xs:group ref="arg.content"/>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="slot.type">
+		<xs:group ref="slot.content"/>
+		<xs:attributeGroup ref="slot.attlist"/>
+	</xs:complexType>
+	<xs:element name="slot" type="slot.type"/>
+	
+	<xs:attributeGroup name="card.attrib">
+		<xs:attribute name="card" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:attributeGroup>
+	
+	<xs:attributeGroup name="weight.attrib">
+		<xs:attribute name="weight" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:decimal">
+					<xs:minInclusive value="0"/>
+					<xs:maxInclusive value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:attributeGroup>
+	
+	<xs:attributeGroup name="arg.attlist">
+		<xs:attributeGroup ref="index.attrib"/>
+	</xs:attributeGroup>
+	<xs:group name="arg.content">
+		<xs:choice>
+			<xs:element ref="Ind"/>
+			<xs:element ref="Data"/>
+			<xs:element ref="Var"/>
+			<xs:element ref="Skolem"/>
+			<xs:element ref="Reify"/>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="arg.type">
+		<xs:group ref="arg.content"/>
+		<xs:attributeGroup ref="arg.attlist"/>
+	</xs:complexType>
+	<xs:element name="arg" type="arg.type"/>
+	
+	<xs:attributeGroup name="Ind.attlist">
+		<xs:attributeGroup ref="type.attrib"/>
+		<xs:attributeGroup ref="uri.attrib"/>
+	</xs:attributeGroup>
+	<xs:group name="Ind.content">
+		<xs:sequence/>
+	</xs:group>
+	<xs:complexType name="Ind.type" mixed="true">
+		<xs:group ref="Ind.content"/>
+		<xs:attributeGroup ref="Ind.attlist"/>
+	</xs:complexType>
+	<xs:element name="Ind" type="Ind.type"/>
+	
+	<xs:element name="Data" type="xs:anyType"/>
+	
+	<xs:attributeGroup name="Var.attlist">
+		<xs:attributeGroup ref="type.attrib"/>
+	</xs:attributeGroup>
+	<xs:group name="Var.content">
+		<xs:sequence/>
+	</xs:group>
+	<xs:complexType name="Var.type" mixed="true">
+		<xs:group ref="Var.content"/>
+		<xs:attributeGroup ref="Var.attlist"/>
+	</xs:complexType>
+	<xs:element name="Var" type="Var.type"/>
+	
+	<xs:attributeGroup name="Skolem.attlist">
+		<xs:attributeGroup ref="type.attrib"/>
+	</xs:attributeGroup>
+	<xs:group name="Skolem.content">
+		<xs:sequence/>
+	</xs:group>
+	<xs:complexType name="Skolem.type" mixed="true">
+		<xs:group ref="Skolem.content"/>
+		<xs:attributeGroup ref="Skolem.attlist"/>
+	</xs:complexType>
+	<xs:element name="Skolem" type="Skolem.type"/>
+	
+	<xs:attributeGroup name="Reify.attlist"/>
+	<xs:group name="Reify.content">
+		<xs:sequence>
+			<xs:any minOccurs="0" processContents="strict" namespace="##targetNamespace"/>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="Reify.type">
+		<xs:group ref="Reify.content"/>
+		<xs:attributeGroup ref="Reify.attlist"/>
+	</xs:complexType>
+	<xs:element name="Reify" type="Reify.type"/>
+	
+	<xs:attributeGroup name="type.attrib">
+		<xs:attribute name="type" type="xs:string" use="optional"/>
+	</xs:attributeGroup>
+	
+	<xs:attributeGroup name="index.attrib">
+		<xs:attribute name="index" type="xs:positiveInteger" use="required"/>
+	</xs:attributeGroup>
+		
+	<xs:attributeGroup name="uri.attrib">
+		<xs:attribute name="uri" type="xs:anyURI" use="optional"/>
+	</xs:attributeGroup>
+</xs:schema>

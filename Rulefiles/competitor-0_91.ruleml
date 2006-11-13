@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RuleML xmlns="http://www.ruleml.org/0.91/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.ruleml.org/0.91/xsd ruleml-0_91-nafdatalog.xsd">
+	<!-- a small example rulebase for testing the Datalog RuleML sublanguage, with negation as failure -->
+	<Assert mapClosure="universal">
+		<Implies>
+			<head>
+				<Atom>
+					<op>
+						<Rel>government</Rel>
+					</op>
+					<Ind>Canada</Ind>
+					<Var>y</Var>
+				</Atom>
+			</head>
+			<body>
+				<Naf>
+					<Atom>
+						<op>
+							<Rel>opposition</Rel>
+						</op>
+						<Ind>Canada</Ind>
+						<Var>y</Var>
+					</Atom>
+				</Naf>
+			</body>
+		</Implies>
+	</Assert>
+	<Query>
+		<Atom>
+			<op>
+				<Rel>mpa</Rel>
+			</op>
+			<Ind>Canada</Ind>
+			<Var>y</Var>
+		</Atom>
+	</Query>
+</RuleML>
