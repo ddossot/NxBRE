@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RuleML xmlns="http://www.ruleml.org/0.91/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.ruleml.org/0.91/xsd ruleml-0_91-nafdatalog.xsd">
+<!-- a trivial example rulebase for testing the Datalog RuleML sublanguage, with negation as failure -->
+	<Assert mapClosure="universal">
+		<Implies>
+			<head>
+				<Atom>
+					<op>
+						<Rel>friend</Rel>
+					</op>
+					<slot>
+						<Ind>t</Ind>
+						<Ind>b</Ind>
+					</slot>
+					<Var>x</Var>
+					<Var>y</Var>
+					<Ind>Steph</Ind>
+				</Atom>
+			</head>
+			<body>
+				<Naf>
+					<Atom>
+						<op>
+							<Rel>friend</Rel>
+						</op>
+						<Ind>Jane</Ind>
+						<Ind>Joan</Ind>
+						<Ind>Jack</Ind>
+						<Var>y</Var>
+						<Ind>Frank</Ind>
+					</Atom>
+				</Naf>
+			</body>
+		</Implies>
+		
+		<Implies>
+			<head>
+				<Atom>
+					<op>
+						<Rel>friend</Rel>
+					</op>
+					<slot>
+						<Ind>t</Ind>
+						<Ind>b</Ind>
+					</slot>
+					<Var>x</Var>
+					<Var>y</Var>
+					<Ind>Steph</Ind>
+				</Atom>
+			</head>
+			<body>
+				<Or>
+					<Naf>
+						<Atom>
+							<op>
+								<Rel>friend</Rel>
+							</op>
+							<Ind>Jane</Ind>
+							<Ind>Joan</Ind>
+							<Ind>Jack</Ind>
+							<Var>y</Var>
+							<Ind>Frank</Ind>
+						</Atom>
+					</Naf>
+				</Or>
+			</body>
+		</Implies>
+
+		
+		<Forall>
+			<Var type="Person">x1</Var>
+			<Var type="Person">x2</Var>
+			<Var type="Person">x3</Var>
+			<Var type="Person">x4</Var>
+			<Implies>
+				<Atom>
+					<op>
+						<Rel>rel1</Rel>
+					</op>
+					<Ind>1</Ind>
+					<Ind>2</Ind>
+					<Ind>3</Ind>
+					<Var>x5</Var>
+				</Atom>
+				<Atom>
+					<op>
+						<Rel>rel2</Rel>
+					</op>
+					<Ind>4</Ind>
+					<Ind>5</Ind>
+					<Var>x6</Var>
+					<Ind>6</Ind>
+				</Atom>
+			</Implies>
+		</Forall>
+		
+		<Atom>
+			<op>
+				<Rel>yet another relation</Rel>
+			</op>
+			<Ind>constant e</Ind>
+			<Ind>constant b</Ind>
+			<slot>
+				<Ind>role_name3</Ind>
+				<Ind>role 3</Ind>
+			</slot>
+		</Atom>
+	</Assert>
+</RuleML>

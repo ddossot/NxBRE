@@ -68,6 +68,8 @@ All static calls on NxBRE helpers and utilities, either from FlowEngine rules or
 
 v3.1.0
 
+ Inference Engine
+
   * Improved implication scheduling in the agenda to limitate the number of fired implications (feature request 1590017).
 
 
