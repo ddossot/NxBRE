@@ -39,6 +39,11 @@
       <HintPath>..\..\..\tags\nxbre-3_0_0\Source\bin\Debug\NxBRE.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainForm.cs" />
@@ -54,6 +59,7 @@
     <EmbeddedResource Include="MainForm.resources" />
     <EmbeddedResource Include="PageListForm.resources" />
     <EmbeddedResource Include="QueryListForm.resources" />
+    <Compile Include="IEGUIConsoleTraceListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="nxbre.ico" />

@@ -6,8 +6,6 @@ namespace NxBRE.InferenceEngine.Console {
 	using NxBRE.InferenceEngine.IO;
 	using NxBRE.InferenceEngine.Rules;
 	
-	public delegate void FactDumperTarget(string fact);
-	
 	/// <summary>
 	/// 
 	/// Basic Console for NxBRE Inference Engine
@@ -18,9 +16,9 @@ namespace NxBRE.InferenceEngine.Console {
 	/// </remarks>
 	public sealed class FactDumperAdapter : IFactBaseAdapter {
 
-		private FactDumperTarget fdt;
+		private ConsoleWriter fdt;
 		
-		public FactDumperAdapter(FactDumperTarget factDumperTarget) {
+		public FactDumperAdapter(ConsoleWriter factDumperTarget) {
 			fdt = factDumperTarget;
 		}
 		
