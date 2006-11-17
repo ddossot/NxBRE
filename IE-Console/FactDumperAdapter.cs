@@ -1,10 +1,10 @@
-namespace org.nxbre.gui {
+namespace NxBRE.InferenceEngine.Console {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	using System.IO;
 	
-	using org.nxbre.ie.adapters;
-	using org.nxbre.ie.rule;
+	using NxBRE.InferenceEngine.IO;
+	using NxBRE.InferenceEngine.Rules;
 	
 	public delegate void FactDumperTarget(string fact);
 	
@@ -42,7 +42,7 @@ namespace org.nxbre.gui {
 			}
 		}
 		
-		public ArrayList Facts {
+		public IList<Fact> Facts {
 			get {
 				throw new NotImplementedException();
 			}

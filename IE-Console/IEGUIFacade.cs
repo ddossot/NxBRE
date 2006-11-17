@@ -1,16 +1,14 @@
-namespace org.nxbre.gui {
+namespace NxBRE.InferenceEngine.Console {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Reflection;
 	using System.Text;
 	
-	using net.ideaity.util.events;
-	
-	using org.nxbre.ie;
-	using org.nxbre.ie.adapters;
-	using org.nxbre.ie.core;
-	using org.nxbre.ie.rule;
+	using NxBRE.InferenceEngine;
+	using NxBRE.InferenceEngine.IO;
+	using NxBRE.InferenceEngine.Rules;
 	
 	public struct UserPreferences {
 		public string lastCCBClassName;
@@ -18,9 +16,7 @@ namespace org.nxbre.gui {
 	}
 	
 	/// <summary>
-	/// 
 	/// Basic Console for NxBRE Inference Engine
-	/// 
 	/// </summary>
 	/// <remarks>
 	/// Shamlessly uncommented code.
@@ -28,10 +24,8 @@ namespace org.nxbre.gui {
 	public class IEGUIFacade {
 		private IInferenceEngine ie = null;
 		private UserPreferences up;
-		private DispatchLog dl;
 		
-		public IEGUIFacade(DispatchLog dl) {
-			this.dl = dl;
+		public IEGUIFacade() {
 			up = Utils.LoadUserPreferences();
 		}
 		
@@ -105,7 +99,7 @@ namespace org.nxbre.gui {
 			ie.SaveFacts(fda);
 		}
 		
-		public string[] QueryLabels {
+		public IList<string> QueryLabels {
 			get {
 				return ie.QueryLabels;
 			}
@@ -136,7 +130,7 @@ namespace org.nxbre.gui {
 		public void LoadRuleBase(MainForm mf, string uri, bool onlyFacts) {
 			IBinder binder = null;
 			// give priority to custom compiled binders
-			//TODO: support VB Binders
+			//FIXME: support VB Binders
 			if (File.Exists(uri + ".ccb")) {
 				up.lastCCBClassName = mf.PromptForString("Compiled Custom Binder",
 				                                      	 "Enter the fully qualified name of the binder class:",
@@ -150,10 +144,7 @@ namespace org.nxbre.gui {
 				binder = new FlowEngineBinder(uri + ".xbre", isBeforeAfter?BindingTypes.BeforeAfter:BindingTypes.Control);
 			}
 			
-			if (!onlyFacts) {
-				ie = new IEImpl(binder);
-				ie.LogHandlers += dl;
-			}
+			if (!onlyFacts) ie = new IEImpl(binder);
 
 			switch(Path.GetExtension(uri).ToLower()) {
 				case ".ruleml":
@@ -232,10 +223,10 @@ namespace org.nxbre.gui {
 		}
 		
 		public string RunQuery(int queryIndex) {
-			QueryResultSet qrs = ie.RunQuery(queryIndex);
+			IList<IList<Fact>> qrs = ie.RunQuery(queryIndex);
 			string result = "Query results:|";
 			int i = 0;
-			foreach(Fact[] facts in qrs) {
+			foreach(IList<Fact> facts in qrs) {
 				i++;
 				result += (" #" + i + ":|");
 				foreach(Fact fact in facts) result += ("  " + fact.ToString() + "|");

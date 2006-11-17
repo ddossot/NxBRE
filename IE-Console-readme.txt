@@ -1,10 +1,10 @@
-NxBRE Inference Engine Console README v1.2.1
+NxBRE Inference Engine Console README v1.3.0
 ============================================
 
 Author       : David Dossot (david@dossot.net)
-Date         : 20-MAY-2006
 URL          : http://nxbre.org
 License      : LGPL
+
 
 ## INTRODUCTION ##
 
@@ -18,15 +18,12 @@ Any contribution to this sub-project is welcome!
 
 
 
-## BUILDING W/VISUAL STUDIO ##
-
-Being develop with SharpDevelop, there is clearly a difficulty when building the Console with VS.NET. The few classes are all in the same folder, for easy importation in a VS.NET project.
-
-The challenge remains the forms resources that are embedded (hence referred) differently on the different IDEs. Users feedback can help others doing the exercise...
-
-
-
 ## RELEASE NOTES ##
+
+v.1.3.0
+
+  * Migrated to .NET 2 / NxBRE 3
+
 
 v.1.2.1
 

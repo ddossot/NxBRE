@@ -1,4 +1,4 @@
-namespace org.nxbre.gui {
+namespace NxBRE.InferenceEngine.Console {
 	using System;
 	using System.Collections;
 	using System.IO;
@@ -6,9 +6,7 @@ namespace org.nxbre.gui {
 	using Microsoft.Win32;
 
 	/// <summary>
-	/// 
 	/// Basic Console for NxBRE Inference Engine
-	/// 
 	/// </summary>
 	/// <remarks>
 	/// Shamlessly uncommented code.

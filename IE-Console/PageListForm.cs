@@ -1,6 +1,7 @@
-namespace org.nxbre.gui
+namespace NxBRE.InferenceEngine.Console
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Windows.Forms;
 
 	/// <summary>
@@ -26,7 +27,7 @@ namespace org.nxbre.gui
 			}
 		}
 		
-		public PageListForm(string[] pageNames)
+		public PageListForm(IList<string> pageNames)
 		{
 			InitializeComponent();
 			
