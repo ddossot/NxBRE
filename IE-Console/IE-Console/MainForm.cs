@@ -1,7 +1,8 @@
-namespace org.nxbre.gui
+namespace NxBRE.InferenceEngine.Console
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Reflection;
 
@@ -11,10 +12,7 @@ namespace org.nxbre.gui
 	using System.Text.RegularExpressions;
 
 	
-	using org.nxbre.ie;
-	using org.nxbre.ie.core;
-	
-	using net.ideaity.util.events;
+	using NxBRE.InferenceEngine.IO;
 
 	/// <summary>
 	/// 
@@ -82,8 +80,8 @@ namespace org.nxbre.gui
 			loadedAssemblyNames = Utils.LoadAssemblies();
 			InitializeComponent();
 
-			iegf = new IEGUIFacade(new DispatchLog(HandleLogEvent));
-			verbosity = LogEventImpl.INFO;
+			iegf = new IEGUIFacade();
+			verbosity = 0; //FIXME LogEventImpl.INFO;
 			consoleLines = new ArrayList();
 			RefreshMenus();
 
@@ -160,22 +158,22 @@ namespace org.nxbre.gui
 					break;
 					
 				case ActionType.VerbositySilent:
-					verbosity = 1 + LogEventImpl.INFO;
+					verbosity = 0; //FIXME 1 + LogEventImpl.INFO;
 					RefreshMenus();
 					break;
 				
 				case ActionType.VerbosityLow:
-					verbosity = LogEventImpl.INFO;
+					verbosity = 0; //FIXME LogEventImpl.INFO;
 					RefreshMenus();
 					break;
 				
 				case ActionType.VerbosityMedium:
-					verbosity = LogEventImpl.FATAL;
+					verbosity = 0; //FIXME LogEventImpl.FATAL;
 					RefreshMenus();
 					break;
 				
 				case ActionType.VerbosityHigh:
-					verbosity = LogEventImpl.DEBUG;
+					verbosity = 0; //FIXME LogEventImpl.DEBUG;
 					RefreshMenus();
 					break;
 					
@@ -251,9 +249,9 @@ namespace org.nxbre.gui
 			}
 		}
 		
-		private void HandleLogEvent(object obj, ILogEvent aLog)
+		private void HandleLogEvent(object obj)
 		{
-			if (aLog.Priority >= verbosity)	ConsoleOut(aLog.Message);
+			//FIXME if (aLog.Priority >= verbosity)	ConsoleOut(aLog.Message);
 		}
 
 		private void HandleNewFactEvent(NewFactEventArgs nfea) 
@@ -345,10 +343,10 @@ namespace org.nxbre.gui
 			
 			menuItemWMCommit.Enabled = (iegf.Valid) && (iegf.WMType != WorkingMemoryTypes.Global);
 			
-			menuItemVerbositySilent.Checked = (verbosity > LogEventImpl.INFO);
-			menuItemVerbosityLow.Checked = (verbosity == LogEventImpl.INFO);
-			menuItemVerbosityMedium.Checked = (verbosity == LogEventImpl.FATAL);
-			menuItemVerbosityHigh.Checked = (verbosity == LogEventImpl.DEBUG);
+			menuItemVerbositySilent.Checked = (verbosity > 0); //FIXME LogEventImpl.INFO);
+			menuItemVerbosityLow.Checked = (verbosity == 0); //FIXME LogEventImpl.INFO);
+			menuItemVerbosityMedium.Checked = (verbosity == 0); //FIXME LogEventImpl.FATAL);
+			menuItemVerbosityHigh.Checked = (verbosity == 0); //FIXME LogEventImpl.DEBUG);
 		}
 		
 		private void Status(string msg) {
@@ -375,7 +373,7 @@ namespace org.nxbre.gui
  			return ajma.Utils.InputBox.Show(this, prompt, title, defaultValue, 0, 0);			
 		}
 		
-		public string[] PromptForVisioPageNameSelection(string[] pageNames) {
+		public string[] PromptForVisioPageNameSelection(IList<string> pageNames) {
 			PageListForm plf = new PageListForm(pageNames);
 			if (plf.ShowDialog(this) == DialogResult.OK)
 				return plf.SelectedPages;
