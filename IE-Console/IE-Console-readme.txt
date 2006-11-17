@@ -24,6 +24,8 @@ v.1.3.0
 
   * Migrated to .NET 2 / NxBRE 3
 
+  * Added support of VB.NET Binder files (*.vcb)
+
 
 v.1.2.1
 
