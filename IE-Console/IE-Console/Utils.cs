@@ -55,7 +55,7 @@ namespace NxBRE.InferenceEngine.Console {
 					RegistryKey rkSoftware = Registry.CurrentUser.OpenSubKey("Software", true);
 					rkNxBRE = rkSoftware.CreateSubKey("NxBRE IE Console");
 				}
-				rkNxBRE.SetValue("LastCCBClassName", up.lastCCBClassName);
+				rkNxBRE.SetValue("LastCCBClassName", up.lastBinderClassName);
 				rkNxBRE.SetValue("LastHRFFact", up.lastHRFFact);
 			} catch(Exception) { // it is not a required feature, so if it does, let it pass away!
 			}
@@ -63,13 +63,13 @@ namespace NxBRE.InferenceEngine.Console {
 		
 		public static UserPreferences LoadUserPreferences() {
 			UserPreferences up = new UserPreferences();
-			up.lastCCBClassName = String.Empty;
+			up.lastBinderClassName = String.Empty;
 			up.lastHRFFact = String.Empty;
 
 			try {
 				RegistryKey rkNxBRE = Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("NxBRE IE Console");
 				if (rkNxBRE != null) {
-					up.lastCCBClassName = (string)rkNxBRE.GetValue("LastCCBClassName", String.Empty);
+					up.lastBinderClassName = (string)rkNxBRE.GetValue("LastCCBClassName", String.Empty);
 					up.lastHRFFact = (string)rkNxBRE.GetValue("LastHRFFact", String.Empty);
 				}
 			} catch(Exception) { // it is not a required feature, so if it does, let it pass away!

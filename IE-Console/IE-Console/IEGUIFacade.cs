@@ -11,7 +11,7 @@ namespace NxBRE.InferenceEngine.Console {
 	using NxBRE.InferenceEngine.Rules;
 	
 	public struct UserPreferences {
-		public string lastCCBClassName;
+		public string lastBinderClassName;
 		public string lastHRFFact;
 	}
 	
@@ -93,7 +93,7 @@ namespace NxBRE.InferenceEngine.Console {
 			}
 		}
 		
-		public void DumpFacts(FactDumperTarget factDumperTarget) {
+		public void DumpFacts(ConsoleWriter factDumperTarget) {
 			factDumperTarget("Facts in " + WMType + " working memory:");
 			FactDumperAdapter fda = new FactDumperAdapter(factDumperTarget);
 			ie.SaveFacts(fda);
@@ -130,15 +130,20 @@ namespace NxBRE.InferenceEngine.Console {
 		public void LoadRuleBase(MainForm mf, string uri, bool onlyFacts) {
 			IBinder binder = null;
 			// give priority to custom compiled binders
-			//FIXME: support VB Binders
 			if (File.Exists(uri + ".ccb")) {
-				up.lastCCBClassName = mf.PromptForString("Compiled Custom Binder",
+				up.lastBinderClassName = mf.PromptForString("C# Custom Binder - " + uri + ".ccb",
 				                                      	 "Enter the fully qualified name of the binder class:",
-				                                     		 up.lastCCBClassName);
-				binder = CSharpBinderFactory.LoadFromFile(up.lastCCBClassName, uri + ".ccb");
+				                                     		 up.lastBinderClassName);
+				binder = CSharpBinderFactory.LoadFromFile(up.lastBinderClassName, uri + ".ccb");
+			}
+			else if (File.Exists(uri + ".vcb")) {
+				up.lastBinderClassName = mf.PromptForString("VB.NET Custom Binder - " + uri + ".vcb",
+				                                      	 "Enter the fully qualified name of the binder class:",
+				                                     		 up.lastBinderClassName);
+				binder = VisualBasicBinderFactory.LoadFromFile(up.lastBinderClassName, uri + ".vcb");
 			}
 			else if (File.Exists(uri + ".xbre")) {
-				bool isBeforeAfter = mf.AskYesNoQuestion("Flow Engine Binder",
+				bool isBeforeAfter = mf.AskYesNoQuestion("Flow Engine Binder - " + uri + ".xbre",
 				                                         uri + ".xbre\n\nIs this binder running in Before/After mode ?\n\n(No would mean that it runs in Control Process mode)");
 				
 				binder = new FlowEngineBinder(uri + ".xbre", isBeforeAfter?BindingTypes.BeforeAfter:BindingTypes.Control);

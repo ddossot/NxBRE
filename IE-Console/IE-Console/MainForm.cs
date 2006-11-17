@@ -1,8 +1,8 @@
-namespace NxBRE.InferenceEngine.Console
-{
+namespace NxBRE.InferenceEngine.Console {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.IO;
 	using System.Reflection;
 
@@ -13,6 +13,7 @@ namespace NxBRE.InferenceEngine.Console
 
 	
 	using NxBRE.InferenceEngine.IO;
+	using NxBRE.Util;
 
 	/// <summary>
 	/// 
@@ -22,8 +23,7 @@ namespace NxBRE.InferenceEngine.Console
 	/// <remarks>
 	/// Shamlessly uncommented code.
 	/// </remarks>
-	public class MainForm : System.Windows.Forms.Form
-	{
+	public class MainForm : System.Windows.Forms.Form {
 		private System.Windows.Forms.MenuItem menuItemRetract;
 		private System.Windows.Forms.MenuItem menuItemConsoleClear;
 		private System.Windows.Forms.MenuItem menuItemLoadFacts;
@@ -71,7 +71,7 @@ namespace NxBRE.InferenceEngine.Console
 		private IEGUIFacade iegf;
 		private ArrayList consoleLines;
 		private ArrayList loadedAssemblyNames;
-		private int verbosity;
+		private SourceLevels verbosity;
 		
 		private Regex specialCharMatcher = new Regex("[\x00-\x1f]");
 			
@@ -81,7 +81,10 @@ namespace NxBRE.InferenceEngine.Console
 			InitializeComponent();
 
 			iegf = new IEGUIFacade();
-			verbosity = 0; //FIXME LogEventImpl.INFO;
+			verbosity = SourceLevels.Warning;
+			TraceListener tl = new IEGUIConsoleTraceListener(new ConsoleWriter(ConsoleOut));
+			Logger.InferenceEngineSource.Listeners.Add(tl);
+			Logger.UtilSource.Listeners.Add(tl);
 			consoleLines = new ArrayList();
 			RefreshMenus();
 
@@ -153,27 +156,27 @@ namespace NxBRE.InferenceEngine.Console
 																	                MessageBoxIcon.Warning,
 																	                MessageBoxDefaultButton.Button2))) return;
 					
-					iegf.DumpFacts(new FactDumperTarget(ConsoleOut));
+					iegf.DumpFacts(new ConsoleWriter(ConsoleOut));
 					ConsoleOut(String.Empty);
 					break;
 					
 				case ActionType.VerbositySilent:
-					verbosity = 0; //FIXME 1 + LogEventImpl.INFO;
+					verbosity = SourceLevels.Critical;
 					RefreshMenus();
 					break;
 				
 				case ActionType.VerbosityLow:
-					verbosity = 0; //FIXME LogEventImpl.INFO;
+					verbosity = SourceLevels.Warning;
 					RefreshMenus();
 					break;
 				
 				case ActionType.VerbosityMedium:
-					verbosity = 0; //FIXME LogEventImpl.FATAL;
+					verbosity = SourceLevels.Information;
 					RefreshMenus();
 					break;
 				
 				case ActionType.VerbosityHigh:
-					verbosity = 0; //FIXME LogEventImpl.DEBUG;
+					verbosity = SourceLevels.Verbose;
 					RefreshMenus();
 					break;
 					
@@ -249,11 +252,6 @@ namespace NxBRE.InferenceEngine.Console
 			}
 		}
 		
-		private void HandleLogEvent(object obj)
-		{
-			//FIXME if (aLog.Priority >= verbosity)	ConsoleOut(aLog.Message);
-		}
-
 		private void HandleNewFactEvent(NewFactEventArgs nfea) 
 	  {
 			if (menuItemShowDeductions.Checked) ConsoleOut("+ " + nfea.Fact);
@@ -325,6 +323,8 @@ namespace NxBRE.InferenceEngine.Console
 		}
 		
 		private void RefreshMenus() {
+			RefreshTraces();
+			
 			menuItemLoadFacts.Enabled = iegf.HasImplications;
 			menuItemSaveRuleBase.Enabled = iegf.Valid;
 			menuItemSaveFacts.Enabled = iegf.HasFacts;
@@ -343,10 +343,16 @@ namespace NxBRE.InferenceEngine.Console
 			
 			menuItemWMCommit.Enabled = (iegf.Valid) && (iegf.WMType != WorkingMemoryTypes.Global);
 			
-			menuItemVerbositySilent.Checked = (verbosity > 0); //FIXME LogEventImpl.INFO);
-			menuItemVerbosityLow.Checked = (verbosity == 0); //FIXME LogEventImpl.INFO);
-			menuItemVerbosityMedium.Checked = (verbosity == 0); //FIXME LogEventImpl.FATAL);
-			menuItemVerbosityHigh.Checked = (verbosity == 0); //FIXME LogEventImpl.DEBUG);
+			menuItemVerbositySilent.Checked = (verbosity == SourceLevels.Critical);
+			menuItemVerbosityLow.Checked = (verbosity == SourceLevels.Warning);
+			menuItemVerbosityMedium.Checked = (verbosity == SourceLevels.Information);
+			menuItemVerbosityHigh.Checked = (verbosity == SourceLevels.Verbose);
+		}
+		
+		private void RefreshTraces() {
+			Logger.InferenceEngineSource.Switch.Level = verbosity;
+			Logger.UtilSource.Switch.Level = verbosity;
+			Logger.RefreshBooleanSwitches();
 		}
 		
 		private void Status(string msg) {
@@ -863,6 +869,7 @@ namespace NxBRE.InferenceEngine.Console
 		{
 			menuItemShowModifications.Checked = !menuItemShowModifications .Checked;
 		}
-		
+	
 	}
+	
 }
