@@ -2,6 +2,8 @@ namespace NxBRE.Test.InferenceEngine {
 
 	using System.IO;
 	
+	using NUnit.Framework;
+	
 	using NxBRE.InferenceEngine.IO;
 	
 	public class TestEngineCoreFeaturesHRF:TestEngineCoreFeaturesRuleML086 {
@@ -12,6 +14,11 @@ namespace NxBRE.Test.InferenceEngine {
 		
 		protected override IRuleBaseAdapter NewGedcomAdapter() {
 			return new HRF086Adapter(ruleFilesFolder + "gedcom-relations.hrf", FileAccess.Read);
+		}
+		
+		[Test]
+		public override void NxBREOperators() {
+			NxBREOperators(false);
 		}
 		
 		// the following tests are disabled because HRF can not support embedded C# expressions. 

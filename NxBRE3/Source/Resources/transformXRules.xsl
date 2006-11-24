@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!-- 
 
-  NxBRE v2.0 - Native syntax rendering of xBusinessRules
+  NxBRE - Native syntax rendering of xBusinessRules
 
   Author: David Dossot
 
@@ -122,6 +122,11 @@
 <!-- operators -->
 <xsl:template match="Equals | GreaterThan | GreaterThanEqualTo | InstanceOf | LessThan | LessThanEqualTo | NotEquals">
 	<Compare leftId="{@leftId}" operator="NxBRE.FlowEngine.Rules.{name()}" rightId="{@rightId}">
+		<xsl:apply-templates/>
+	</Compare>
+</xsl:template>
+<xsl:template match="Matches">
+	<Compare leftId="{@valueId}" operator="NxBRE.FlowEngine.Rules.{name()}" rightId="{@patternId}">
 		<xsl:apply-templates/>
 	</Compare>
 </xsl:template>

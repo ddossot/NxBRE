@@ -4,7 +4,7 @@
 		NxBRE Flow Engine Unit Test File
 
 -->
-<xBusinessRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://nxbre.org/xBusinessRules.xsd">
+<xBusinessRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="xBusinessRules.xsd">
 	<!-- 
 		These rules will execute, no matter what.
 		Their values will be used in the business logic below
@@ -627,7 +627,28 @@
 			<Else>
 				<ThrowFatalException value="LT21"/>
 			</Else>
-		</Logic>		
+		</Logic>	
+		<!--
+			Tests	: Regexp matching test
+			Notes	: None
+			Result	: Should be TRUE
+		-->
+		<Logic>
+			<If>
+				<And>
+					<Matches patternId="EMAIL-PATTERN" valueId="EMAIL">
+						<String id="EMAIL-PATTERN" value="^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$"/>
+						<String id="EMAIL" value="contact@nxbre.org"/>
+					</Matches>
+				</And>
+				<Do>
+					<True id="LT22"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="LT22"/>
+			</Else>
+		</Logic>
 		<!--
 			Tests	: Static rule set invocation
 			Result	: Should process all global rules and the ones in the set named REFLECTION

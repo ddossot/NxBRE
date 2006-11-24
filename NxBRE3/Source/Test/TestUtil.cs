@@ -211,5 +211,13 @@ namespace NxBRE.Test
 			Assert.IsTrue(Misc.EMPTY_DICTIONARY.IsReadOnly, "EMPTY_DICTIONARY");
 			Assert.IsTrue(Misc.EMPTY_LIST.IsReadOnly, "EMPTY_LIST");
 		}
+		
+		[Test]
+		public void ParseOperatorCall() {
+			ObjectPair result = Parameter.ParseOperatorCall(@"Matches(^-?\d+(\.\d{2})?$)");
+			Assert.AreEqual("Matches", result.First);
+			Assert.AreEqual(@"^-?\d+(\.\d{2})?$", result.Second);
+		}
+		
 	}
 }

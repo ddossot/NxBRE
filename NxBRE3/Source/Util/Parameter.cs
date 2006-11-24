@@ -194,6 +194,21 @@ namespace NxBRE.Util
 		}
 		
 		/// <summary>
+		/// Extracts the operator name and its unique argument that must be between parenthesis.
+		/// </summary>
+		/// <param name="source"></param>
+		/// <returns></returns>
+		internal static ObjectPair ParseOperatorCall(string source) {
+			int indexOfFirstOpeningParenthesis = source.IndexOf('(');
+			string operatorName = source.Substring(0, indexOfFirstOpeningParenthesis);
+			
+			int indexOfLastClosingParenthesis = source.LastIndexOf(')');
+			string operatorArgument = source.Substring(indexOfFirstOpeningParenthesis + 1, indexOfLastClosingParenthesis - indexOfFirstOpeningParenthesis -1);
+				
+			return new ObjectPair(operatorName, operatorArgument);
+		}
+		
+		/// <summary>
 		/// Builds a formula signature that takes in account the name and the string arguments passed in the parenthesis.
 		/// </summary>
 		/// <param name="formula">The complete formula.</param>
