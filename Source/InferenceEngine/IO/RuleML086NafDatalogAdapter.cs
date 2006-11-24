@@ -208,12 +208,12 @@ namespace NxBRE.InferenceEngine.IO {
 					}
 					else if (predicateValue.ToLower().StartsWith("nxbre:")) {
 						// NxBRE functions must follow this pattern: NxBRE:Function(uniqueargument)
-						string[] split = predicateValue.Split(Parameter.PARENTHESIS);
+						ObjectPair operatorCall = Parameter.ParseOperatorCall(predicateValue);
 						predicate = new Function(Function.FunctionResolutionType.NxBRE,
 						                         predicateValue,
 						                         null,
-																		 split[0],
-																		 split[1]);
+																		 (string)operatorCall.First,
+																		 (string)operatorCall.Second);
 					}
 					else if (Binder == null) {
 						predicate = new Individual(predicateValue);

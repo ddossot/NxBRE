@@ -8,6 +8,7 @@ namespace NxBRE.Test.FlowEngine
 	
 	using NxBRE.FlowEngine;
 	using NxBRE.FlowEngine.Core;
+	using NxBRE.FlowEngine.Rules;
 
 	using NUnit.Framework;
 	
@@ -33,6 +34,20 @@ namespace NxBRE.Test.FlowEngine
 			
 			rr = new BRERuleResultImpl(rmd, null);
 			Assert.AreEqual("MetaData   :\nID Type : System.String\nID Str  : md-id\nFactory : NxBRE.Test.FlowEngine.TestRule+MockBRERuleFactory\nStack Loc: 0\nResult: Null", rr.ToString());
+		}
+		
+		[Test]
+		public void MatchesOperator() {
+			Matches matches = new Matches();
+			
+			Assert.IsFalse(matches.ExecuteComparison(null, null, null, null));
+			
+	    object[] tests = {"-42", true, "19.99", true, "0.001", false, "100 USD", false, null, false};
+	    for(int j=0; j<2; j++) {
+	    	// we do it twice to see if the internal regex cache does not have any bad side effect
+				for(int i=0; i<tests.Length; i+=2)
+					Assert.AreEqual(tests[i+1], matches.ExecuteComparison(null, null, tests[i], @"^-?\d+(\.\d{2})?$"));
+	    }
 		}
 		
 	}

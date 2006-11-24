@@ -1,6 +1,7 @@
 namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.IO;
 	using System.Xml.XPath;
@@ -394,7 +395,7 @@ namespace NxBRE.InferenceEngine.IO {
 								.MoveNext();
 		}
 		
-		private static Hashtable nxbreOperatorCache = Hashtable.Synchronized(new Hashtable());
+		private static Dictionary<string, IBREOperator> nxbreOperatorCache = new Dictionary<string, IBREOperator>();
 		
 		/// <summary>
 		/// Façade for calling an NxBRE Flow Engine RI helper operator.
@@ -417,12 +418,15 @@ namespace NxBRE.InferenceEngine.IO {
 			
 			IBREOperator operatorObject;
 			
-			if (!nxbreOperatorCache.ContainsKey(operatorType)) {
-				operatorObject = (IBREOperator)Reflection.ClassNew(operatorType, null);
-				nxbreOperatorCache.Add(operatorType, operatorObject);
+			lock(nxbreOperatorCache) {
+				if (!nxbreOperatorCache.ContainsKey(operatorType)) {
+					operatorObject = (IBREOperator)Reflection.ClassNew(operatorType, null);
+					nxbreOperatorCache.Add(operatorType, operatorObject);
+				}
+				else {
+					operatorObject = nxbreOperatorCache[operatorType];
+				}
 			}
-			else
-				operatorObject = (IBREOperator)nxbreOperatorCache[operatorType];
 			
 			ObjectPair pair = new ObjectPair(values[0], values[1]);
 			Reflection.CastToStrongType(pair);

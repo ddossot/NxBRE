@@ -193,6 +193,18 @@
 	</Query>
 	<Query>
 		<oid>
+			<Ind>Operator matches</Ind>
+		</oid>
+		<Atom>
+			<op>
+				<Rel>matchesProbe</Rel>
+			</op>
+			<Var>object</Var>
+			<Ind uri="nxbre://operator">Matches(^-?\d+(\.\d{2})?$)</Ind>
+		</Atom>
+	</Query>
+	<Query>
+		<oid>
 			<Ind>One Atom Var-less</Ind>
 		</oid>
 		<Atom>

@@ -215,6 +215,20 @@
   </query>
   <query>
     <_rlab>
+      <ind>Operator matches</ind>
+    </_rlab>
+    <_body>
+      <atom>
+        <_opr>
+          <rel>matchesProbe</rel>
+        </_opr>
+        <var>object</var>
+        <ind>NxBRE:Matches(^-?\d+(\.\d{2})?$)</ind>
+      </atom>
+    </_body>
+  </query>
+  <query>
+    <_rlab>
       <ind>One Atom Var-less</ind>
     </_rlab>
     <_body>

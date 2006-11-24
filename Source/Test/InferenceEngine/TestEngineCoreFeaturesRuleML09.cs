@@ -318,7 +318,11 @@ namespace NxBRE.Test.InferenceEngine {
 		}
 		
 		[Test]
-		public void NxBREOperators() {
+		public virtual void NxBREOperators() {
+			NxBREOperators(true);
+		}
+		
+		protected void NxBREOperators(bool supportRegex) {
 			ie.LoadRuleBase(NewTestAdapter());
 			
 			Account a50 = new Account(123, 50);
@@ -360,6 +364,18 @@ namespace NxBRE.Test.InferenceEngine {
 			qrs = ie.RunQuery("Operator ne");
 			Assert.AreEqual(2, qrs.Count, "Operator ne: Query Size");
 			
+			if (supportRegex) {
+				ie.Assert(new Fact("matchesProbe",
+				                   new Individual("ok"),
+				                   new Individual("19.99")));
+				
+				ie.Assert(new Fact("matchesProbe",
+				                   new Individual("ko"),
+				                   new Individual("100 USD")));
+	
+				qrs = ie.RunQuery("Operator matches");
+				Assert.AreEqual(1, qrs.Count, "Operator matches: Query Size");
+			}
 		}
 		
 		[Test]

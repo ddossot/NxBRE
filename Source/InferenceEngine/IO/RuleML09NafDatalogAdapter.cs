@@ -322,12 +322,12 @@ namespace NxBRE.InferenceEngine.IO {
 					
 						case "nxbre://operator":
 							// NxBRE operators must follow this pattern: operator(uniqueargument)
-							string[] split = predicateValue.Split(Parameter.PARENTHESIS);
+							ObjectPair operatorCall = Parameter.ParseOperatorCall(predicateValue);
 							predicate = new Function(Function.FunctionResolutionType.NxBRE,
 							                         predicateValue,
 							                         null,
-																			 split[0],
-																			 split[1]);
+							                         (string)operatorCall.First,
+																			 (string)operatorCall.Second);
 							break;
 							
 						case "nxbre://binder":

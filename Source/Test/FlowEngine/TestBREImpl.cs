@@ -19,12 +19,12 @@ namespace NxBRE.Test.FlowEngine
 	[TestFixture]
 	public class TestBREImpl
 	{
-		private const int EXPECTED_CONTEXT_OPERATOR = 7;
+		private const int EXPECTED_CONTEXT_OPERATOR = 8;
 		private const int EXPECTED_EXCEPTION = 4;
 		private const int EXPECTED_WHILE = 39;
 		private const int EXPECTED_GLOBALS = 13;
 		private const int RULE_TESTS = 3;
-		private const int LOGIC_TESTS = 21;
+		private const int LOGIC_TESTS = 22;
 		
 		private const string ASSERTED_HELLO_VALUE = "world";
 		private static int[] ARRAY = {1,3,5,7,11};
