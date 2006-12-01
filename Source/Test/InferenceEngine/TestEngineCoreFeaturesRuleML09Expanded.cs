@@ -4,7 +4,7 @@ namespace NxBRE.Test.InferenceEngine {
 	
 	using NUnit.Framework;
 	
-	public class TestEngineCoreFeaturesRule09Expanded:TestEngineCoreFeaturesRule09Compact {
+	public class TestEngineCoreFeaturesRuleML09Expanded:TestEngineCoreFeaturesRuleML09Compact {
 		[TestFixtureSetUp]
 		public override void GenerateRuleFiles() {
 			testFile = GenerateRuleFile("test-0_9.ruleml", SaveFormatAttributes.Expanded);
