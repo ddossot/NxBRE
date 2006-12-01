@@ -8,7 +8,7 @@ namespace NxBRE.Test.InferenceEngine {
 	
 	using NUnit.Framework;
 	
-	public class TestEngineCoreFeaturesRule09Compact:TestEngineCoreFeaturesRuleML09 {
+	public class TestEngineCoreFeaturesRuleML09Compact:TestEngineCoreFeaturesRuleML09 {
 		protected string testFile;
 		protected string gedcomFile;
 		

@@ -157,8 +157,8 @@
     <Compile Include="Test\InferenceEngine\TestBinder.cs" />
     <Compile Include="Test\InferenceEngine\TestCore.cs" />
     <Compile Include="Test\InferenceEngine\TestEngineCoreFeaturesHRF.cs" />
-    <Compile Include="Test\InferenceEngine\TestEngineCoreFeaturesRule09Compact.cs" />
-    <Compile Include="Test\InferenceEngine\TestEngineCoreFeaturesRule09Expanded.cs" />
+    <Compile Include="Test\InferenceEngine\TestEngineCoreFeaturesRuleML09Compact.cs" />
+    <Compile Include="Test\InferenceEngine\TestEngineCoreFeaturesRuleML09Expanded.cs" />
     <Compile Include="Test\InferenceEngine\TestEngineCoreFeaturesRuleML09.cs" />
     <Compile Include="Test\TestUtil.cs" />
     <Compile Include="Test\TestCompilation.cs" />
@@ -189,6 +189,8 @@
     <Compile Include="Util\HashCodeBuilder.cs" />
     <Compile Include="Util\HashSet.cs" />
     <Compile Include="FlowEngine\Rules\Matches.cs" />
+    <Compile Include="Test\InferenceEngine\TestEngineCoreFeaturesRuleML091.cs" />
+    <Compile Include="InferenceEngine\IO\RuleML091NafDatalogAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />
@@ -210,6 +212,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Folder Include="InferenceEngine\Registry" />
+    <Content Include="Resources\ruleml-0_91-nafdatalog.xsd" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>
