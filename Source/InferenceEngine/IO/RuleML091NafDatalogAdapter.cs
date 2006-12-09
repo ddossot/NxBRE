@@ -65,6 +65,22 @@ namespace NxBRE.InferenceEngine.IO {
 				
 		// Protected/Private methods --------------------------------------------------------
 		
+		protected override XPathExpression FactElementXPath {
+			get{ return BuildXPathExpression(base.FactElementXPath.Expression + " | //dl:Rulebase/dl:Atom | //dl:Rulebase/dl:formula/dl:Atom"); }
+		}
+		
+		protected override XPathExpression ImplicationElementXPath {
+			get { return BuildXPathExpression(base.ImplicationElementXPath.Expression + " | dl:RuleML/dl:Assert/dl:Rulebase/dl:Implies | dl:RuleML/dl:Assert/dl:Rulebase/dl:formula/dl:Implies | dl:RuleML/dl:Assert/dl:Entails/dl:Rulebase[1]/dl:Implies | dl:RuleML/dl:Assert/dl:Entails/dl:Rulebase[1]/dl:formula/dl:Implies"); }
+		}
+
+		protected override XPathExpression EquivalentElementXPath {
+			get { return BuildXPathExpression(base.EquivalentElementXPath +  " | //dl:Rulebase/dl:Equivalent"); }
+		}
+		
+		protected override XPathExpression IntegrityQueriesElementXPath {
+			get { return BuildXPathExpression(base.IntegrityQueriesElementXPath + " | dl:RuleML/dl:Assert/dl:Entails/dl:Rulebase[2]/dl:Implies | dl:RuleML/dl:Assert/dl:Entails/dl:Rulebase[2]/dl:formula/dl:Implies"); }
+		}
+		
 		protected override string DatalogSchema {
 			get {
 				return "ruleml-0_91-nafdatalog.xsd";
@@ -76,6 +92,19 @@ namespace NxBRE.InferenceEngine.IO {
 				return "http://www.ruleml.org/0.91/xsd";
 			}
 		}
+		
+		protected override void ValidateRulebase() {
+			base.ValidateRulebase();
+			
+			//TODO enable the currently unsupported features: retraction, multiple rulebases, "named" rulebases
+			string[] notSupportedXPaths = new string[] {"//dl:Retract", "//dl:Assert/dl:Rulebase", "//dl:Rulebase/dl:oid"};
+			
+			foreach(string notSupportedXPath in notSupportedXPaths)
+				if (Navigator.Select(BuildXPathExpression(notSupportedXPath)).MoveNext())
+					throw new BREException("RuleML syntax '" + notSupportedXPath + "' is currently not supported by this adapter.");
+		}
+		
+		//FIXME support saving!
 
 	}
 	

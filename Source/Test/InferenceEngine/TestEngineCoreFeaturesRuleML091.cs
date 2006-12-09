@@ -11,8 +11,7 @@ namespace NxBRE.Test.InferenceEngine {
 		}	
 		
 		protected override IRuleBaseAdapter NewGedcomAdapter() {
-			//FIXME migrate to 0.91
-			return new RuleML09NafDatalogAdapter(ruleFilesFolder + "gedcom-relations-0_9.ruleml", FileAccess.Read);
+			return new RuleML091NafDatalogAdapter(ruleFilesFolder + "gedcom-relations-0_91.ruleml", FileAccess.Read);
 		}
 
 	}

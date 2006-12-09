@@ -97,7 +97,7 @@ namespace NxBRE.InferenceEngine.IO {
 			get {
 				List<Query> result = new List<Query>();
 				
-				XPathNodeIterator integrityQueries = Navigator.Select(BuildXPathExpression("dl:RuleML/dl:Protect//dl:Integrity"));
+				XPathNodeIterator integrityQueries = Navigator.Select(IntegrityQueriesElementXPath);
 				while(integrityQueries.MoveNext()) result.Add(GetQuery(integrityQueries.Current));
 				
 				return result.AsReadOnly();
@@ -174,6 +174,14 @@ namespace NxBRE.InferenceEngine.IO {
 			get { return BuildXPathExpression("dl:RuleML/dl:Query"); }
 		}
 		
+		protected virtual XPathExpression EquivalentElementXPath {
+			get { return BuildXPathExpression("dl:RuleML/dl:Assert/dl:Equivalent"); }
+		}
+		
+		protected virtual XPathExpression IntegrityQueriesElementXPath {
+			get { return BuildXPathExpression("dl:RuleML/dl:Protect//dl:Integrity"); }
+		}
+		
 		protected override string DatalogSchema {
 			get {
 				return "ruleml-0_9-nafdatalog.xsd";
@@ -243,7 +251,7 @@ namespace NxBRE.InferenceEngine.IO {
 				
 				// load equivalent atom definitions
 				equivalents = new List<Equivalent>();
-				XPathNodeIterator equivalentElements = Navigator.Select(BuildXPathExpression("dl:RuleML/dl:Assert/dl:Equivalent"));
+				XPathNodeIterator equivalentElements = Navigator.Select(EquivalentElementXPath);
 				
 				while (equivalentElements.MoveNext()) {
 					// extract label, if any
