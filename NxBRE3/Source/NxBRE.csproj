@@ -191,6 +191,7 @@
     <Compile Include="FlowEngine\Rules\Matches.cs" />
     <Compile Include="Test\InferenceEngine\TestEngineCoreFeaturesRuleML091.cs" />
     <Compile Include="InferenceEngine\IO\RuleML091NafDatalogAdapter.cs" />
+    <EmbeddedResource Include="Resources\ruleml-0_91-nafdatalog.xsd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />
@@ -212,7 +213,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Folder Include="InferenceEngine\Registry" />
-    <Content Include="Resources\ruleml-0_91-nafdatalog.xsd" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>
