@@ -93,7 +93,7 @@ namespace NxBRE.InferenceEngine.IO {
 			}
 		}
 			
-		public IList<Query> IntegrityQueries {
+		public virtual IList<Query> IntegrityQueries {
 			get {
 				List<Query> result = new List<Query>();
 				
@@ -104,25 +104,17 @@ namespace NxBRE.InferenceEngine.IO {
 		 	}
 			
 			set {
-				if (value.Count > 0) {
-					Document.DocumentElement.AppendChild(Document.CreateComment("Integrity Queries"));
-					XmlElement target = WriteMapElement("Protect");
-					foreach(Query integrityQuery in value) WriteIntegrityQuery(target, integrityQuery);
-				}
+				WriteIntegrityQueries(value);
 			}
 		}
 		
-		public IList<Equivalent> Equivalents {
+		public virtual IList<Equivalent> Equivalents {
 			get {
 				return equivalents.AsReadOnly();
 		 	}
 			
 			set {
-				if (value.Count > 0) {
-					Document.DocumentElement.AppendChild(Document.CreateComment("Equivalents"));
-					XmlElement target = WriteMapElement("Assert");
-					foreach(Equivalent equivalent in value) WriteEquivalent(target, equivalent);
-				}
+				WriteEquivalents(value);
 			}
 		}
 		
@@ -670,26 +662,51 @@ namespace NxBRE.InferenceEngine.IO {
 			}
 		}
 		
-		protected override void WriteQueries(IList<Query> queries) {
-			foreach(Query query in queries) WriteQuery(Document.DocumentElement, query);
-		}
-
-		protected override void WriteImplications(IList<Implication> implications) {
-			XmlElement target = WriteMapElement("Assert");
-			foreach(Implication implication in implications) WriteImplication(target, implication);
-		}
-
-		protected override void WriteFacts(IList<Fact> facts) {
-			XmlElement target = WriteMapElement("Assert");
-			foreach(Fact fact in facts)	WriteFact(target, fact);
-		}
-		
 		private XmlElement WriteMapElement(string name) {
 			XmlElement assert = Document.CreateElement(name, DatalogNamespaceURL);
 			// we ignore "bidirectional" which is the default
 			if ((Direction != null) && (Direction != String.Empty) && (Direction != "bidirectional")) assert.SetAttribute("mapDirection", Direction);
 			Document.DocumentElement.AppendChild(assert);
 			return assert;
+		}
+		
+		protected override void WriteQueries(IList<Query> queries) {
+			if (queries.Count > 0) {
+				Document.DocumentElement.AppendChild(Document.CreateComment("Queries"));
+				foreach(Query query in queries) WriteQuery(Document.DocumentElement, query);
+			}
+		}
+
+		protected override void WriteImplications(IList<Implication> implications) {
+			if (implications.Count > 0) {
+				Document.DocumentElement.AppendChild(Document.CreateComment("Implications"));
+				XmlElement target = WriteMapElement("Assert");
+				foreach(Implication implication in implications) WriteImplication(target, implication);
+			}
+		}
+
+		protected override void WriteFacts(IList<Fact> facts) {
+			if (facts.Count > 0) {
+				Document.DocumentElement.AppendChild(Document.CreateComment("Facts"));
+				XmlElement target = WriteMapElement("Assert");
+				foreach(Fact fact in facts)	WriteFact(target, fact);
+			}
+		}
+		
+		protected virtual void	WriteIntegrityQueries(IList<Query> integrityQueries) {
+			if (integrityQueries.Count > 0) {
+				Document.DocumentElement.AppendChild(Document.CreateComment("Integrity Queries"));
+				XmlElement target = WriteMapElement("Protect");
+				foreach(Query integrityQuery in integrityQueries) WriteIntegrityQuery(target, integrityQuery);
+			}
+		}
+		
+		protected virtual void 	WriteEquivalents(IList<Equivalent> equivalents) {
+			if (equivalents.Count > 0) {
+				Document.DocumentElement.AppendChild(Document.CreateComment("Equivalents"));
+				XmlElement target = WriteMapElement("Assert");
+				foreach(Equivalent equivalent in equivalents) WriteEquivalent(target, equivalent);
+			}
 		}
 		
 	}

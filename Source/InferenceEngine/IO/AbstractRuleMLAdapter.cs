@@ -151,23 +151,19 @@ namespace NxBRE.InferenceEngine.IO {
 		/// </summary>
 		public virtual void Dispose() {
 			try {
-				if (Reader != null) {
+				if ((AdapterState == State.Read) && (reader != null)) {
 					reader.Close();
 					reader = null;
 				}
+				else if ((AdapterState == State.Write) && (writer != null)) {
+					document.WriteTo(writer);
+					writer.Flush();
+					writer.Close();
+					writer = null;
+				} 
 			}
 			finally {
-				try {
-					if (Writer != null) {
-						document.WriteTo(Writer);
-						writer.Flush();
-						writer.Close();
-						writer = null;
-					}
-				}
-				finally {
-					adapterState = State.Disposed;
-				}
+				AdapterState = State.Disposed;
 			}
 		}
 		
@@ -189,7 +185,7 @@ namespace NxBRE.InferenceEngine.IO {
 			
 					ValidateRulebase();
 					
-					adapterState = State.Read;
+					AdapterState = State.Read;
 				}
 				else {
 					if (streamRuleML != null)
@@ -216,42 +212,30 @@ namespace NxBRE.InferenceEngine.IO {
 		
 		public abstract string Label {	get; set; }
 				
-		/// <summary>
-		/// Collection containing all the queries in the rulebase.
-		/// </summary>		
-		public IList<Query> Queries {
+		public virtual IList<Query> Queries {
 			get {
 				return ExtractQueries().AsReadOnly();
 			}
 			set {
-				if (value.Count > 0) {
-					Document.DocumentElement.AppendChild(Document.CreateComment("Queries"));
-					WriteQueries(value);
-				}
+				WriteQueries(value);
 			}
 		}
 		
-		public IList<Implication> Implications {
+		public virtual IList<Implication> Implications {
 			get {
 				return ExtractImplications().AsReadOnly();
 		 	}
 			set {
-				if (value.Count > 0) {
-					Document.DocumentElement.AppendChild(Document.CreateComment("Implications"));
-					WriteImplications(value);
-				}
+				WriteImplications(value);
 			}
 		}
 		
-		public IList<Fact> Facts {
+		public virtual IList<Fact> Facts {
 			get {
 				return ExtracFacts().AsReadOnly();
 		 	}
 			set {
-				if (value.Count > 0) {
-					Document.DocumentElement.AppendChild(Document.CreateComment("Facts"));
-					WriteFacts(value);
-				}
+				WriteFacts(value);
 			}
 		}
 		

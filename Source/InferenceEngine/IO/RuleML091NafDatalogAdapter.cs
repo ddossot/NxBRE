@@ -14,7 +14,7 @@ namespace NxBRE.InferenceEngine.IO {
 	///<summary>Adapter supporting RuleML 0.91 NafDatalog Sublanguage.</summary>
 	///<remarks>UTF-8 is the default encoding.</remarks>
 	/// <author>David Dossot</author>
-	public class RuleML091NafDatalogAdapter:RuleML09NafDatalogAdapter {
+	public class RuleML091NafDatalogAdapter:AccumulatingExtendedRuleBaseAdapter {
 		/// <summary>
 		/// Instantiates a RuleML 0.91 NafDatalog adapter for reading from or writing to a stream.
 		/// </summary>
@@ -103,9 +103,14 @@ namespace NxBRE.InferenceEngine.IO {
 				if (Navigator.Select(BuildXPathExpression(notSupportedXPath)).MoveNext())
 					throw new BREException("RuleML syntax '" + notSupportedXPath + "' is currently not supported by this adapter.");
 		}
-		
-		//FIXME support saving!
 
+		protected override void BuildDomRulebase(IList<Fact> facts, IList<Query> queries, IList<Implication> implications, IList<Equivalent> equivalents, IList<Query> integrityQueries)
+		{
+			//FIXME todo
+			throw new NotSupportedException("This method must be implemented");
+		}
+		
+		
 	}
 	
 }
