@@ -38,7 +38,7 @@ namespace NxBRE.Test.InferenceEngine {
 			doc2.Load(fileName2);
 			CleanAndNormalize(doc2);
 			
-			// for now we compare only the size, which is pretty accurate
+			// for now we compare only the size after normalization, which is accurate enough for this test
 			return (doc1.OuterXml.Length == doc2.OuterXml.Length);
 		}
 		
@@ -95,7 +95,7 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.LoadRuleBase(new RuleML08DatalogAdapter(ruleFilesFolder + "discount.ruleml", FileAccess.Read));
 			ie.SaveRuleBase(new RuleML08DatalogAdapter(outFile, FileAccess.Write));
 
-			// for now, let's reload the rulebase
+			// for now, let's only reload the rulebase
 			ie.LoadRuleBase(new RuleML08DatalogAdapter(outFile, FileAccess.Read));
 		}
 	
@@ -104,8 +104,9 @@ namespace NxBRE.Test.InferenceEngine {
 			IInferenceEngine ie = new IEImpl();
 			ie.LoadRuleBase(new RuleML086DatalogAdapter(ruleFilesFolder + "endlessloop.ruleml", FileAccess.Read));
 			ie.SaveRuleBase(new RuleML086DatalogAdapter(outFile, FileAccess.Write));
-
-			// for now, compare only the size
+			
+			ie.LoadRuleBase(new RuleML086DatalogAdapter(outFile, FileAccess.Read));
+			
 			Assert.IsTrue(AreSameXml(ruleFilesFolder + "endlessloop.ruleml", outFile), "Same XML");
 		}
 	
@@ -117,7 +118,8 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.LoadRuleBase(new RuleML086NafDatalogAdapter(inFile, FileAccess.Read));
 			ie.SaveRuleBase(new RuleML086NafDatalogAdapter(outFile, FileAccess.Write));
 
-			// for now, compare only the size
+			ie.LoadRuleBase(new RuleML086NafDatalogAdapter(outFile, FileAccess.Read));
+
 			Assert.IsTrue(AreSameXml(inFile, outFile), "Same XML");
 		}
 	
@@ -129,7 +131,21 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.LoadRuleBase(new RuleML09NafDatalogAdapter(inFile, FileAccess.Read));
 			ie.SaveRuleBase(new RuleML09NafDatalogAdapter(outFile, FileAccess.Write));
 
-			// for now, compare only the size
+			ie.LoadRuleBase(new RuleML09NafDatalogAdapter(outFile, FileAccess.Read));
+			
+			Assert.IsTrue(AreSameXml(inFile, outFile), "Same XML: " + inFile + " and " + outFile);
+		}
+	
+		[Test]
+		public void RuleMLNaf091SaveRuleBase() {
+			string inFile = ruleFilesFolder + "test-0_91.ruleml";
+			
+			IInferenceEngine ie = new IEImpl();
+			ie.LoadRuleBase(new RuleML091NafDatalogAdapter(inFile, FileAccess.Read));
+			ie.SaveRuleBase(new RuleML091NafDatalogAdapter(outFile, FileAccess.Write));
+
+			ie.LoadRuleBase(new RuleML091NafDatalogAdapter(outFile, FileAccess.Read));
+
 			Assert.IsTrue(AreSameXml(inFile, outFile), "Same XML: " + inFile + " and " + outFile);
 		}
 		
