@@ -15,6 +15,8 @@ namespace NxBRE.InferenceEngine.IO {
 	///<remarks>UTF-8 is the default encoding.</remarks>
 	/// <author>David Dossot</author>
 	public class RuleML091NafDatalogAdapter:AccumulatingExtendedRuleBaseAdapter {
+		private static readonly Fact IGNORED_DEDUCTION = new Fact("_ignored_");
+
 		/// <summary>
 		/// Instantiates a RuleML 0.91 NafDatalog adapter for reading from or writing to a stream.
 		/// </summary>
@@ -103,13 +105,54 @@ namespace NxBRE.InferenceEngine.IO {
 				if (Navigator.Select(BuildXPathExpression(notSupportedXPath)).MoveNext())
 					throw new BREException("RuleML syntax '" + notSupportedXPath + "' is currently not supported by this adapter.");
 		}
-
-		protected override void BuildDomRulebase(IList<Fact> facts, IList<Query> queries, IList<Implication> implications, IList<Equivalent> equivalents, IList<Query> integrityQueries)
-		{
-			//FIXME todo
-			throw new NotSupportedException("This method must be implemented");
-		}
 		
+		protected override void WriteIntegrityQuery(XmlElement target, Query query) {
+			// FIXME check how integrity queries are actually supposed to be written in Naf Datalog!
+			WriteImplication(target, new Implication(query.Label, ImplicationPriority.Medium, String.Empty, String.Empty, IGNORED_DEDUCTION, query.AtomGroup));
+		}
+
+		protected override void BuildDomRulebase(IList<Fact> facts, IList<Query> queries, IList<Implication> implications, IList<Equivalent> equivalents, IList<Query> integrityQueries) {
+			WriteQueries(queries);
+			
+			XmlElement assert = WriteMapElement("Assert");
+			
+			XmlElement mainRuleBaseParent = assert;
+			
+			if (integrityQueries.Count > 0) {
+				XmlElement entails = Document.CreateElement("Entails", DatalogNamespaceURL);
+				assert.AppendChild(entails);
+				mainRuleBaseParent = entails;
+			}
+			
+			XmlElement mainRuleBase = Document.CreateElement("Rulebase", DatalogNamespaceURL);
+			mainRuleBaseParent.AppendChild(mainRuleBase);
+			
+			if (implications.Count > 0) {
+				mainRuleBase.AppendChild(Document.CreateComment("Implications"));
+				foreach(Implication implication in implications) WriteImplication(mainRuleBase, implication);
+			}
+			
+			if (equivalents.Count > 0) {
+				mainRuleBase.AppendChild(Document.CreateComment("Equivalents"));
+				foreach(Equivalent equivalent in equivalents) WriteEquivalent(mainRuleBase, equivalent);
+			}
+			
+			if (facts.Count > 0) {
+				mainRuleBase.AppendChild(Document.CreateComment("Facts"));
+				foreach(Fact fact in facts)	WriteFact(mainRuleBase, fact);
+			}
+			
+			if (integrityQueries.Count > 0) {
+				XmlElement integrityRuleBase = Document.CreateElement("Rulebase", DatalogNamespaceURL);
+				mainRuleBaseParent.AppendChild(integrityRuleBase);
+				
+				if (integrityQueries.Count > 0) {
+					integrityRuleBase.AppendChild(Document.CreateComment("Integrity Queries"));
+					foreach(Query integrityQuery in integrityQueries) WriteIntegrityQuery(integrityRuleBase, integrityQuery);
+				}
+			}
+			
+		}
 		
 	}
 	

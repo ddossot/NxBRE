@@ -576,13 +576,13 @@ namespace NxBRE.InferenceEngine.IO {
 			WriteQueryBody(target, Document.CreateElement("Query", DatalogNamespaceURL), query);
 		}
 		
-		private void WriteQueryBody(XmlElement target, XmlElement queryElement, Query query) {
+		protected void WriteQueryBody(XmlElement target, XmlElement queryElement, Query query) {
 			WriteLabel(queryElement, query.Label);
 			WriteAtomGroup(queryElement, query.AtomGroup);
 			target.AppendChild(queryElement);
 		}
 		
-		private void WriteIntegrityQuery(XmlElement target, Query query) {
+		protected virtual void WriteIntegrityQuery(XmlElement target, Query query) {
 			if (syntax == SaveFormatAttributes.Expanded) {
 				XmlElement warden = Document.CreateElement("warden", DatalogNamespaceURL);
 				target.AppendChild(warden);
@@ -592,7 +592,7 @@ namespace NxBRE.InferenceEngine.IO {
 			WriteQueryBody(target, Document.CreateElement("Integrity", DatalogNamespaceURL), query);
 		}
 		
-		private void WriteEquivalent(XmlElement target, Equivalent equivalent) {
+		protected virtual void WriteEquivalent(XmlElement target, Equivalent equivalent) {
 			XmlElement equivalentElement = Document.CreateElement("Equivalent", DatalogNamespaceURL);
 			WriteLabel(equivalentElement, equivalent.Label);
 			WriteEquivalentAtom(equivalentElement, equivalent.FirstAtom);
@@ -611,7 +611,7 @@ namespace NxBRE.InferenceEngine.IO {
 			}
 		}
 		
-		private void WriteImplication(XmlElement target, Implication implication) {
+		protected void WriteImplication(XmlElement target, Implication implication) {
 			XmlElement implicationElement = Document.CreateElement("Implies", DatalogNamespaceURL);
 			
 			// action mapping
@@ -662,12 +662,12 @@ namespace NxBRE.InferenceEngine.IO {
 			}
 		}
 		
-		private XmlElement WriteMapElement(string name) {
-			XmlElement assert = Document.CreateElement(name, DatalogNamespaceURL);
+		protected XmlElement WriteMapElement(string name) {
+			XmlElement element = Document.CreateElement(name, DatalogNamespaceURL);
 			// we ignore "bidirectional" which is the default
-			if ((Direction != null) && (Direction != String.Empty) && (Direction != "bidirectional")) assert.SetAttribute("mapDirection", Direction);
-			Document.DocumentElement.AppendChild(assert);
-			return assert;
+			if ((Direction != null) && (Direction != String.Empty) && (Direction != "bidirectional")) element.SetAttribute("mapDirection", Direction);
+			Document.DocumentElement.AppendChild(element);
+			return element;
 		}
 		
 		protected override void WriteQueries(IList<Query> queries) {
@@ -685,6 +685,14 @@ namespace NxBRE.InferenceEngine.IO {
 			}
 		}
 
+		protected virtual void WriteEquivalents(IList<Equivalent> equivalents) {
+			if (equivalents.Count > 0) {
+				Document.DocumentElement.AppendChild(Document.CreateComment("Equivalents"));
+				XmlElement target = WriteMapElement("Assert");
+				foreach(Equivalent equivalent in equivalents) WriteEquivalent(target, equivalent);
+			}
+		}
+		
 		protected override void WriteFacts(IList<Fact> facts) {
 			if (facts.Count > 0) {
 				Document.DocumentElement.AppendChild(Document.CreateComment("Facts"));
@@ -693,19 +701,11 @@ namespace NxBRE.InferenceEngine.IO {
 			}
 		}
 		
-		protected virtual void	WriteIntegrityQueries(IList<Query> integrityQueries) {
+		protected virtual void WriteIntegrityQueries(IList<Query> integrityQueries) {
 			if (integrityQueries.Count > 0) {
 				Document.DocumentElement.AppendChild(Document.CreateComment("Integrity Queries"));
 				XmlElement target = WriteMapElement("Protect");
 				foreach(Query integrityQuery in integrityQueries) WriteIntegrityQuery(target, integrityQuery);
-			}
-		}
-		
-		protected virtual void 	WriteEquivalents(IList<Equivalent> equivalents) {
-			if (equivalents.Count > 0) {
-				Document.DocumentElement.AppendChild(Document.CreateComment("Equivalents"));
-				XmlElement target = WriteMapElement("Assert");
-				foreach(Equivalent equivalent in equivalents) WriteEquivalent(target, equivalent);
 			}
 		}
 		
