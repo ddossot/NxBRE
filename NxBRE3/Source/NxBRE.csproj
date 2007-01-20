@@ -193,6 +193,7 @@
     <Compile Include="InferenceEngine\IO\RuleML091NafDatalogAdapter.cs" />
     <EmbeddedResource Include="Resources\ruleml-0_91-nafdatalog.xsd" />
     <Compile Include="InferenceEngine\IO\AccumulatingExtendedRuleBaseAdapter.cs" />
+    <Compile Include="Test\FlowEngine\TestExtra.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />
