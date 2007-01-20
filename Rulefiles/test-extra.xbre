@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+		NxBRE Flow Engine Extra Test File
+
+-->
+<xBusinessRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="xBusinessRules.xsd">
+	<!--
+		Tests : Cancellation of execution used to cause infinite loops
+		Notes : From bug 1632463
+	-->
+	<Set id="CANCEL-WHILE">
+		<Log msg="CANCEL-WHILE running" level="5"/>
+		<While>
+			<And>
+				<LessThan leftId="INC_X" rightId="10i">
+					<Increment id="INC_X" step="1"/>
+					<Integer id="10i" value="10"/>
+				</LessThan>
+			</And>
+			<Do>
+				<ObjectLookup objectId="FlowEngine" member="Stop"/>
+			</Do>
+		</While>
+		<Log msg="CANCEL-WHILE finished" level="5"/>
+	</Set>
+</xBusinessRules>

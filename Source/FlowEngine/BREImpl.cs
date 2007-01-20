@@ -370,7 +370,6 @@ namespace NxBRE.FlowEngine
 		}
 
 		/// <summary> Execute the BRE.
-		/// *
 		/// </summary>
 		/// <returns> True if successful, False otherwise
 		/// 
@@ -381,7 +380,6 @@ namespace NxBRE.FlowEngine
 		}
 		
 		/// <summary> Execute the BRE but only do a certain set.
-		/// *
 		/// </summary>
 		/// <returns> True if successful, False otherwise
 		/// 
@@ -557,25 +555,21 @@ namespace NxBRE.FlowEngine
 				do {
 					bool firstChild = true;
 					XPathNodeIterator children = aNode.SelectChildren(XPathNodeType.Element);
-					while(children.MoveNext())
+					
+					while ((children.MoveNext()) && (running))
 					{
-						if (firstChild) aObj = null;
 						// Thanks Sihong & Bernhard
-						aObj = ProcessXML(children.Current, aSetId, aObj);
+						aObj = ProcessXML(children.Current, aSetId, firstChild?null:aObj);
 						
-						// Only the first child node is considered as test
-						// the rest are executed blindely
-						if ((firstChild) && (aObj is System.Boolean))
-						{
-							bool passed = ((System.Boolean) aObj);
-							if ((!passed) || (!running)) {
-								exitWhile = true;
-								break;
-							}
+						// Only the first child node is considered as test, the rest are executed blindely
+						if ((firstChild) && (aObj is System.Boolean) && (!Convert.ToBoolean(aObj))) {
+							exitWhile = true;
+							break;
 						}
+						
 						firstChild=false;
 					}
-				} while ((nodeName == WHILE) && (!exitWhile));
+				} while ((nodeName == WHILE) && (!exitWhile) && (running));
 			}
 			else if (nodeName== INVOKESET)
 			{
@@ -588,15 +582,10 @@ namespace NxBRE.FlowEngine
 			else if (nodeName == LOGIC)
 			{
 				XPathNodeIterator children = aNode.SelectChildren(XPathNodeType.Element);
-				while(children.MoveNext())
+				while ((children.MoveNext()) && (running))
 				{
 					aObj = ProcessXML(children.Current, aSetId, aObj);
-					if (aObj is System.Boolean)
-					{
-						bool passed = ((System.Boolean) aObj);
-						if ((passed) || (!running))
-							break;
-					}
+					if ((aObj is System.Boolean) && (Convert.ToBoolean(aObj))) break;
 				}
 			}
 			else if (nodeName == PARAMETER)
