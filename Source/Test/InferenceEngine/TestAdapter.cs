@@ -347,5 +347,28 @@ namespace NxBRE.Test.InferenceEngine {
 			string expectedResult = "|Customer Data|Customer Rules|Discount Rules|Product Data|Queries|";
 			foreach(string pageName in pageNames) Assert.IsTrue(expectedResult.Contains("|" + pageName + "|"), pageName + " found");
 		}
+	
+		[Test]
+		public void PerfomativeLoadProcessing() {
+			string inFile = ruleFilesFolder + "discount-0_9.ruleml";
+
+			IInferenceEngine ie = new IEImpl();
+			
+			ie.LoadRuleBase(new RuleML09NafDatalogAdapter(inFile, FileAccess.Read), false);
+			Assert.AreEqual(0, ie.FactsCount, "No fact should have been loaded");
+			
+			ie.Process(RuleTypes.ConnectivesOnly);
+			Assert.AreEqual(0, ie.FactsCount, "No fact should have been deducted");
+			
+			ie.Process(RuleTypes.PerformativesOnly);
+			Assert.AreEqual(3, ie.FactsCount, "Only fact assertion should have happened");
+			
+			ie.LoadRuleBase(new RuleML09NafDatalogAdapter(inFile, FileAccess.Read), false);
+			Assert.AreEqual(0, ie.FactsCount, "Memory should be empty at this point");
+			
+			ie.Process(RuleTypes.All);
+			Assert.AreEqual(6, ie.FactsCount, "Fact assertion and deduction should have happened");
+		}
+		
 	}
 }
