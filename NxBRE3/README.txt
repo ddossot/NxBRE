@@ -74,6 +74,8 @@ v3.1.0
 
  Inference Engine
 
+  * Added features for controlling engine behavior at rule base load time and process time regarding performative and connective rules.
+
   * Improved implication scheduling in the agenda to limitate the number of fired implications (feature request 1590017).
 
 

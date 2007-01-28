@@ -9,6 +9,27 @@ namespace NxBRE.InferenceEngine
 	using NxBRE.InferenceEngine.Rules;
 
 	/// <summary>
+	/// The available types of rules to process.
+	/// </summary>
+	public enum RuleTypes {
+		/// <summary>
+		/// Only process performatives, i.e. only perform assertions and retraction as defined in the loaded rule base.
+		/// </summary>
+		PerformativesOnly,
+		/// <summary>
+		/// Only process connectives, i.e. only run implications defined in the loaded rule base.
+		/// </summary>
+		ConnectivesOnly,
+		/// <summary>
+		/// Process performatives and connectives.
+		/// </summary>
+		/// <remarks>
+		/// This is the default mode of the Inference Engine.
+		/// </remarks>
+		All
+	}
+	
+	/// <summary>
 	/// This interface defines the Inference Engine (IE) of NxBRE.
 	/// </summary>
 	/// <author>David Dossot</author>
@@ -54,25 +75,50 @@ namespace NxBRE.InferenceEngine
 		bool Initialized { get; }
 		
 		/// <summary>
-		/// Loads a rule base. The working memory is reset (all facts are lost).
+		/// Loads a rule base and process the performatives. The working memory is reset (all facts are lost).
 		/// </summary>
 		/// <param name="adapter">The Adapter used to read the rule base.</param>
 		/// <remarks>
 		/// The adapter will be disposed at the end of the method's execution.
+		/// This is equivalent to calling: <code>LoadRuleBase(adapter, true)</code>
 		/// </remarks>
 		/// <see cref="NxBRE.InferenceEngine.IO.IRuleBaseAdapter"/>
 		void LoadRuleBase(IRuleBaseAdapter adapter);
+		
+		/// <summary>
+		/// Loads a rule base and process the performatives. The working memory is reset (all facts are lost).
+		/// </summary>
+		/// <param name="adapter">The Adapter used to read the rule base.</param>
+		/// <param name="businessObjectsBinder">The business object binder that the engine must use.</param>
+		/// <remarks>
+		/// The adapter will be disposed at the end of the method's execution.
+		/// This is equivalent to calling: <code>LoadRuleBase(adapter, businessObjectsBinder, true)</code>
+		/// </remarks>
+		/// <see cref="NxBRE.InferenceEngine.IO.IRuleBaseAdapter"/>
+		void LoadRuleBase(IRuleBaseAdapter adapter, IBinder businessObjectsBinder);
+		
+		/// <summary>
+		/// Loads a rule base. The working memory is reset (all facts are lost).
+		/// </summary>
+		/// <param name="adapter">The Adapter used to read the rule base.</param>
+		/// <param name="processPerformatives">Immediatly process the performative actions (assert, retract) found in the rule base.</param>
+		/// <remarks>
+		/// The adapter will be disposed at the end of the method's execution.
+		/// </remarks>
+		/// <see cref="NxBRE.InferenceEngine.IO.IRuleBaseAdapter"/>
+		void LoadRuleBase(IRuleBaseAdapter adapter, bool processPerformatives);
 		
 		/// <summary>
 		/// Loads a rule base. The working memory is reset (all facts are lost).
 		/// </summary>
 		/// <param name="adapter">The Adapter used to read the rule base.</param>
 		/// <param name="businessObjectsBinder">The business object binder that the engine must use.</param>
+		/// <param name="processPerformatives">Immediatly process the performative actions (assert, retract) found in the rule base.</param>
 		/// <remarks>
 		/// The adapter will be disposed at the end of the method's execution.
 		/// </remarks>
 		/// <see cref="NxBRE.InferenceEngine.IO.IRuleBaseAdapter"/>
-		void LoadRuleBase(IRuleBaseAdapter adapter, IBinder businessObjectsBinder);
+		void LoadRuleBase(IRuleBaseAdapter adapter, IBinder businessObjectsBinder, bool processPerformatives);
 		
 		/// <summary>
 		/// Saves the WorkingMemory in a rule base.
@@ -124,20 +170,51 @@ namespace NxBRE.InferenceEngine
 		void DisposeIsolatedMemory();
 		
 		/// <summary>
-		/// Performs all the possible deductions on the current working memory and stops
-		/// infering when no new Fact is deducted.
+		/// Process all the performative and connective rules on the current working memory and stops
+		/// infering when no new Fact is deducted or retracted.
 		/// </summary>
+		/// <remarks>
+		/// This is equivalent to calling: <code>Process(ProcessModes.ConnectivesOnly)</code>
+		/// </remarks>
 		void Process();
 		
+		
 		/// <summary>
-		/// If businessObjects is Null, this method performs the same operation as the parameterless
-		/// method ; else uses the binder provided in the constructor to perform fact assertions and
-		/// orchestrate the process.
-		/// If businessObjects is not Null and no binder has been provided in the constructor, throws
-		/// a BREException.
+		/// Process the selected rules on the current working memory and stops
+		/// infering when no new Fact is deducted or retracted.
 		/// </summary>
+		/// <param name="ruleType">The particular rule type to process.</param>
+		void Process(RuleTypes ruleType);
+		
+		/// <summary>
+		/// Process all the performative and connective rules on the current working memory and stops
+		/// infering when no new Fact is deducted or retracted.
+		/// </summary>
+		/// <remarks>
+		/// This is equivalent to calling: <code>Process(businessObjects, ProcessModes.ConnectivesOnly)</code>
+		/// If businessObjects is Null, this method performs the same operation as <code>Process()</code>
+		///  ; else it uses the binder provided in the constructor to perform fact operations and
+		/// orchestrate the process.
+		/// If businessObjects is not Null and no binder has been provided in the constructor, it throws
+		/// a BREException.
+		/// </remarks>
 		/// <param name="businessObjects">An IDictionary of business objects, or Null.</param>
 		void Process(IDictionary businessObjects);
+		
+		/// <summary>
+		/// Process the selected rules on the current working memory and stops
+		/// infering when no new Fact is deducted or retracted.
+		/// </summary>
+		/// <remarks>
+		/// If businessObjects is Null, this method performs the same operation as <code>Process()</code>
+		///  ; else it uses the binder provided in the constructor to perform fact operations and
+		/// orchestrate the process.
+		/// If businessObjects is not Null and no binder has been provided in the constructor, it throws
+		/// a BREException.
+		/// </remarks>
+		/// <param name="businessObjects">An IDictionary of business objects, or Null.</param>
+		/// <param name="ruleType">The particular rule type to process.</param>
+		void Process(IDictionary businessObjects, RuleTypes ruleType);
 		
 		/// <summary>
 		/// Gets the number of implications in the current rulebase.

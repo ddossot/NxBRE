@@ -87,6 +87,7 @@ namespace NxBRE.InferenceEngine {
 		/// </summary>
 		public event NewFactEvent ModifyFactHandler;
 		
+		private IList<Fact> performativeAssertions;
 		private IList<Equivalent> equivalents;
 		private IList<Query> integrityQueries;
 		private QueryBase qb;
@@ -121,6 +122,12 @@ namespace NxBRE.InferenceEngine {
 		/// </summary>
 		/// <remarks>The default is 15000.</remarks>
 		internal int lockTimeOut = Parameter.Get<int>("lockTimeOut", 15000);
+		
+		private IList<Fact> PerformativeAssertions {
+			get {
+				return performativeAssertions;
+			}
+		}
 		
 		private IList<Equivalent> Equivalents {
 			get {
@@ -254,15 +261,43 @@ namespace NxBRE.InferenceEngine {
 		}
 		
 		/// <summary>
-		/// Loads a rule base. The working memory is reset (all facts are lost).
+		/// Loads a rule base and process the performatives. The working memory is reset (all facts are lost).
 		/// </summary>
 		/// <param name="adapter">The Adapter used to read the rule base.</param>
 		/// <remarks>
 		/// The adapter will be disposed at the end of the method's execution.
+		/// This is equivalent to calling: <code>LoadRuleBase(adapter, true)</code>
 		/// </remarks>
 		/// <see cref="NxBRE.InferenceEngine.IO.IRuleBaseAdapter"/>
 		public void LoadRuleBase(IRuleBaseAdapter adapter) {
-			LoadRuleBase(adapter, Binder);
+			LoadRuleBase(adapter, true);
+		}
+		
+		/// <summary>
+		/// Loads a rule base and process the performatives. The working memory is reset (all facts are lost).
+		/// </summary>
+		/// <param name="adapter">The Adapter used to read the rule base.</param>
+		/// <param name="businessObjectsBinder">The business object binder that the engine must use.</param>
+		/// <remarks>
+		/// The adapter will be disposed at the end of the method's execution.
+		/// This is equivalent to calling: <code>LoadRuleBase(adapter, businessObjectsBinder, true)</code>
+		/// </remarks>
+		/// <see cref="NxBRE.InferenceEngine.IO.IRuleBaseAdapter"/>
+		public void LoadRuleBase(IRuleBaseAdapter adapter, IBinder businessObjectsBinder) {
+			LoadRuleBase(adapter, businessObjectsBinder, true);
+		}
+		
+		/// <summary>
+		/// Loads a rule base. The working memory is reset (all facts are lost).
+		/// </summary>
+		/// <param name="adapter">The Adapter used to read the rule base.</param>
+		/// <param name="processPerformatives">Immediatly process the performative actions (assert, retract) found in the rule base.</param>
+		/// <remarks>
+		/// The adapter will be disposed at the end of the method's execution.
+		/// </remarks>
+		/// <see cref="NxBRE.InferenceEngine.IO.IRuleBaseAdapter"/>
+		public void LoadRuleBase(IRuleBaseAdapter adapter, bool processPerformatives) {
+			LoadRuleBase(adapter, Binder, processPerformatives);
 		}
 		
 		/// <summary>
@@ -270,11 +305,12 @@ namespace NxBRE.InferenceEngine {
 		/// </summary>
 		/// <param name="adapter">The Adapter used to read the rule base.</param>
 		/// <param name="businessObjectsBinder">The business object binder that the engine must use.</param>
+		/// <param name="processPerformatives">Immediatly process the performative actions (assert, retract) found in the rule base.</param>
 		/// <remarks>
 		/// The adapter will be disposed at the end of the method's execution.
 		/// </remarks>
 		/// <see cref="NxBRE.InferenceEngine.IO.IRuleBaseAdapter"/>
-		public void LoadRuleBase(IRuleBaseAdapter adapter, IBinder businessObjectsBinder) {
+		public void LoadRuleBase(IRuleBaseAdapter adapter, IBinder businessObjectsBinder, bool processPerformatives) {
 			if (Logger.IsInferenceEngineInformation) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Information, 0, "NxBRE Inference Engine Rule Base Loading Started, using adapter " + adapter.GetType().FullName);
 			
 			using(adapter) {
@@ -299,7 +335,7 @@ namespace NxBRE.InferenceEngine {
 					if (Logger.IsInferenceEngineWarning) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Warning, 0, "NxBRE interprets bidirectional as forward chaining.");
 				}
 				else if (direction != "forward") {
-					throw new BREException("NxBRE does not support direction: "+direction);
+					throw new BREException("NxBRE does not support direction: " + direction);
 				}
 				
 				// sets the label
@@ -318,14 +354,13 @@ namespace NxBRE.InferenceEngine {
 					integrityQueries = new List<Query>(0);
 				}
 
-				// instantiate the implication base and the query base				
+				// instantiate the different storage				
 				ib = new ImplicationBase();
 				qb = new QueryBase();
 
 				// instantiate the related managers
 				mm = new MutexManager(IB);
 				pm = new PreconditionManager(IB);
-				initialized = true;
 				
 				// load queries
 				foreach(Query query in adapter.Queries) QB.Add(query);
@@ -343,8 +378,11 @@ namespace NxBRE.InferenceEngine {
 				pm.AnalyzeImplications();
 				if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Loaded Preconditions\n" + pm.ToString());
 				
+				initialized = true;
+
 				// load facts
-				foreach(Fact fact in adapter.Facts) Assert(fact);
+				performativeAssertions = new List<Fact>(adapter.Facts);
+				if (processPerformatives) ProcessPerfomatives();
 				if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Loaded " + WM.FB.Count + " Facts");
 				
 				// finish the WM init
@@ -480,80 +518,65 @@ namespace NxBRE.InferenceEngine {
 			WM.DisposeIsolated();
 		}
 		
+		
 		/// <summary>
-		/// Performs all the possible deductions on the current working memory and stops
-		/// infering when no new Fact is deducted.
+		/// Process all the performative and connective rules on the current working memory and stops
+		/// infering when no new Fact is deducted or retracted.
 		/// </summary>
+		/// <remarks>
+		/// This is equivalent to calling: <code>Process(ProcessModes.All)</code>
+		/// </remarks>
 		public void Process() {
 			Process(null);
 		}
 		
+		
 		/// <summary>
-		/// If businessObjects is Null, this method performs the same operation as the parameterless
-		/// method ; else uses the binder provided in the constructor to perform fact assertions and
-		/// orchestrate the process.
-		/// If businessObjects is not Null and no binder has been provided in the constructor, throws
-		/// a BREException.
+		/// Process the selected rules on the current working memory and stops
+		/// infering when no new Fact is deducted or retracted.
 		/// </summary>
+		/// <param name="ruleType">The particular rule type to process.</param>
+		public void Process(RuleTypes ruleType) {
+			Process(null, ruleType);
+		}
+		
+		/// <summary>
+		/// Process all the performative and connective rules on the current working memory and stops
+		/// infering when no new Fact is deducted or retracted.
+		/// </summary>
+		/// <remarks>
+		/// This is equivalent to calling: <code>Process(businessObjects, ProcessModes.All)</code>
+		/// If businessObjects is Null, this method performs the same operation as <code>Process()</code>
+		///  ; else it uses the binder provided in the constructor to perform fact operations and
+		/// orchestrate the process.
+		/// If businessObjects is not Null and no binder has been provided in the constructor, it throws
+		/// a BREException.
+		/// </remarks>
 		/// <param name="businessObjects">An IDictionary of business objects, or Null.</param>
 		public void Process(IDictionary businessObjects) {
+			Process(businessObjects, RuleTypes.ConnectivesOnly);
+		}
+		
+		/// <summary>
+		/// Process the selected rules on the current working memory and stops
+		/// infering when no new Fact is deducted or retracted.
+		/// </summary>
+		/// <remarks>
+		/// If businessObjects is Null, this method performs the same operation as <code>Process()</code>
+		///  ; else it uses the binder provided in the constructor to perform fact operations and
+		/// orchestrate the process.
+		/// If businessObjects is not Null and no binder has been provided in the constructor, it throws
+		/// a BREException.
+		/// </remarks>
+		/// <param name="businessObjects">An IDictionary of business objects, or Null.</param>
+		/// <param name="ruleType">The particular rule type to process.</param>
+		public void Process(IDictionary businessObjects, RuleTypes ruleType) {
 			CheckInitialized();
-			
-			iteration = 0;
-
 			if (Logger.IsInferenceEngineInformation) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Information, 0, "NxBRE v" + Reflection.NXBRE_VERSION + " Inference Engine Processing Started");
+			if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Processing: " + (businessObjects==null?"null":businessObjects.Count.ToString()) + " business objects and rules of type: " + ruleType);
 			
-			if (businessObjects == null)
-				InferUntilNoNewFact();
-			
-			else if (Binder == null)
-				throw new BREException("NxBRE Inference Engine needs a Binder to process business objects");
-			
-			else if (Binder.BindingType == BindingTypes.BeforeAfter) {
-				long iniTime = DateTime.Now.Ticks;
-				Binder.BusinessObjects = businessObjects;
-				Binder.BeforeProcess();
-				
-				if (Logger.IsInferenceEngineInformation) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Information, 0, "NxBRE Binder 'BeforeProcess' Done in " +
-																										            (long)(DateTime.Now.Ticks - iniTime)/10000 +
-																									            	" milliseconds");
-
-				bool binderIterate = true;
-				ArrayList positiveImplications = new ArrayList();
-				
-				while(binderIterate) {
-					binderIterate = false;
-					
-					InferUntilNoNewFact();
-
-					WM.FB.ModifiedFlag = false;
-					iniTime = DateTime.Now.Ticks;
-					Binder.AfterProcess();
-					binderIterate = WM.FB.ModifiedFlag;			
-
-					if (Logger.IsInferenceEngineInformation) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Information, 0, "NxBRE Binder 'AfterProcess' Done in " +
-																											            (long)(DateTime.Now.Ticks - iniTime)/10000 +
-																										            	" milliseconds with " +
-																										            	(binderIterate?"":"no ") +
-																										            	"new fact(s) detected");
-				}			
-			}
-			
-			else if (Binder.BindingType == BindingTypes.Control) {
-				long iniTime = DateTime.Now.Ticks;
-				Binder.BusinessObjects = businessObjects;
-				Binder.ControlProcess();
-
-				if (Logger.IsInferenceEngineInformation) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Information, 0, "NxBRE Binder 'ControlProcess' Done in " +
-																										            (long)(DateTime.Now.Ticks - iniTime)/10000 +
-																									            	" milliseconds");
-			}
-			
-			else
-				throw new BREException("Unexpected behaviour: BOs=" + 
-				                       businessObjects +
-				                       " ; Binder=" +
-				                       Binder);
+			if ((ruleType == RuleTypes.PerformativesOnly) || (ruleType == RuleTypes.All)) ProcessPerfomatives();
+			if ((ruleType == RuleTypes.ConnectivesOnly) || (ruleType == RuleTypes.All)) ProcessConnectives(businessObjects);
 
 			if (Logger.IsInferenceEngineInformation) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Information, 0, "NxBRE Inference Engine Processing Finished");
 		}
@@ -737,6 +760,71 @@ namespace NxBRE.InferenceEngine {
 		private void CheckInitialized() {	
 			if (!Initialized)
 				throw new BREException("The inference engine is not yet initialized and can not perform this operation.");
+		}
+		
+		private void ProcessPerfomatives() {
+			if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Processing performatives: " + (performativeAssertions==null?"null":performativeAssertions.Count.ToString()));
+
+			if (performativeAssertions != null) {
+				foreach(Fact fact in performativeAssertions) Assert(fact);
+			}
+		}
+		
+		private void ProcessConnectives(IDictionary businessObjects) {
+			if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Processing connectives");
+
+			iteration = 0;
+
+			if (businessObjects == null) {
+				InferUntilNoNewFact();
+			}
+			else if (Binder == null) {
+				throw new BREException("NxBRE Inference Engine needs a Binder to process business objects");
+			}
+			else if (Binder.BindingType == BindingTypes.BeforeAfter) {
+				long iniTime = DateTime.Now.Ticks;
+				Binder.BusinessObjects = businessObjects;
+				Binder.BeforeProcess();
+				
+				if (Logger.IsInferenceEngineInformation) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Information, 0, "NxBRE Binder 'BeforeProcess' Done in " +
+																										            (long)(DateTime.Now.Ticks - iniTime)/10000 +
+																									            	" milliseconds");
+
+				bool binderIterate = true;
+				ArrayList positiveImplications = new ArrayList();
+				
+				while(binderIterate) {
+					binderIterate = false;
+					
+					InferUntilNoNewFact();
+
+					WM.FB.ModifiedFlag = false;
+					iniTime = DateTime.Now.Ticks;
+					Binder.AfterProcess();
+					binderIterate = WM.FB.ModifiedFlag;			
+
+					if (Logger.IsInferenceEngineInformation) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Information, 0, "NxBRE Binder 'AfterProcess' Done in " +
+																											            (long)(DateTime.Now.Ticks - iniTime)/10000 +
+																										            	" milliseconds with " +
+																										            	(binderIterate?"":"no ") +
+																										            	"new fact(s) detected");
+				}			
+			}
+			else if (Binder.BindingType == BindingTypes.Control) {
+				long iniTime = DateTime.Now.Ticks;
+				Binder.BusinessObjects = businessObjects;
+				Binder.ControlProcess();
+
+				if (Logger.IsInferenceEngineInformation) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Information, 0, "NxBRE Binder 'ControlProcess' Done in " +
+																										            (long)(DateTime.Now.Ticks - iniTime)/10000 +
+																									            	" milliseconds");
+			}
+			else {
+				throw new BREException("Unexpected behaviour: BOs=" + 
+				                       businessObjects +
+				                       " ; Binder=" +
+				                       Binder);
+			}
 		}
 		
 		private void InferUntilNoNewFact() {
