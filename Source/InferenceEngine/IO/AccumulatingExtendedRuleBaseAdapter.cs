@@ -13,7 +13,8 @@ namespace NxBRE.InferenceEngine.IO {
 	/// Currently extends RuleML09NafDatalogAdapter but will probably be higher in the class hierarchy later.
 	/// </remarks>
 	public abstract class AccumulatingExtendedRuleBaseAdapter:RuleML09NafDatalogAdapter {
-		private	IList<Fact> accumulatedFacts;
+		private	IList<Fact> accumulatedFactsAssertions;
+		private	IList<Fact> accumulatedFactsRetractions;
 		private	IList<Query> accumulatedQueries;
 		private	IList<Implication> accumulatedImplications;
 		private	IList<Equivalent> accumulatedEquivalents;
@@ -75,12 +76,23 @@ namespace NxBRE.InferenceEngine.IO {
 			}
 		}
 		
-		public override IList<Fact> Facts {
+		public override IList<Fact> Assertions {
 			get {
-				return base.Facts;
+				return base.Assertions;
 		 	}
 			set {
-				accumulatedFacts = value;
+				accumulatedFactsAssertions = value;
+			}
+		}
+		
+		public override IList<Fact> Retractions {
+			get {
+				//FIXME implement get Retractions
+				throw new NotSupportedException("Must be implemented");
+			}
+			
+			set {
+				accumulatedFactsRetractions = value;
 			}
 		}
 		
@@ -107,11 +119,11 @@ namespace NxBRE.InferenceEngine.IO {
 		public override void Dispose()
 		{
 			if (AdapterState == State.Write) {
-				BuildDomRulebase(accumulatedFacts, accumulatedQueries, accumulatedImplications, accumulatedEquivalents, accumulatedIntegrityQueries);
+				BuildDomRulebase(accumulatedFactsAssertions, accumulatedQueries, accumulatedImplications, accumulatedEquivalents, accumulatedIntegrityQueries);
 				
 				base.Dispose();
 				
-				accumulatedFacts = null;
+				accumulatedFactsAssertions = null;
 				accumulatedQueries = null;
 				accumulatedImplications = null;
 				accumulatedEquivalents = null;

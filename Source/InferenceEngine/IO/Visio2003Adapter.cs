@@ -127,8 +127,35 @@ namespace NxBRE.InferenceEngine.IO {
 		/// </summary>
 		public IList<Fact> Facts {
 			get {
+				return Assertions;
+			}
+			
+			set {
+				throw new NotSupportedException("This adapter does not support changes");
+			}
+		}
+
+		/// <summary>
+		/// Collection containing all the facts to assert.
+		/// </summary>
+		public IList<Fact> Assertions {
+			get {
 				return ruleBaseAdapter.Facts;
 			}
+			set {
+				throw new NotSupportedException("This adapter does not support changes");
+			}
+		}
+		
+		/// <summary>
+		/// Collection containing all the facts to retract.
+		/// </summary>
+		public IList<Fact> Retractions {
+			get {
+				//FIXME implement get Retractions
+				throw new NotSupportedException("Must be implemented");
+			}
+			
 			set {
 				throw new NotSupportedException("This adapter does not support changes");
 			}

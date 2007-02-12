@@ -2,6 +2,7 @@ namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
 	using System.IO;
 	using System.Xml;
 	using System.Xml.Schema;
@@ -19,6 +20,8 @@ namespace NxBRE.InferenceEngine.IO {
 		private bool forceDataTyping;
 		private List<Equivalent> equivalents;
 		private string globalDirection;
+		
+		private readonly static IList<Fact> NO_FACT =  new ReadOnlyCollection<Fact>(new List<Fact>());
 		
 		/// <summary>
 		/// Instantiates a RuleML 0.9 NafDatalog adapter for reading from or writing to a stream.
@@ -92,7 +95,34 @@ namespace NxBRE.InferenceEngine.IO {
 				WriteLabel(Document.DocumentElement, value);
 			}
 		}
+		
+		/// <summary>
+		/// Collection containing all the facts to assert.
+		/// </summary>
+		public virtual IList<Fact> Assertions {
+			get {
+				return base.Facts;
+			}
 			
+			set {
+				base.Facts = value;
+			}
+		}
+
+		/// <summary>
+		/// Collection containing all the facts to retract.
+		/// </summary>
+		public virtual IList<Fact> Retractions {
+			get {
+				// not supported in RuleML 0.9
+				return NO_FACT;
+			}
+			
+			set {
+				// not supported in RuleML 0.9
+			}
+		}
+		
 		public virtual IList<Query> IntegrityQueries {
 			get {
 				List<Query> result = new List<Query>();

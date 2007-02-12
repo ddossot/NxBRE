@@ -44,6 +44,25 @@ namespace NxBRE.InferenceEngine.IO {
 	internal interface IExtendedRuleBaseAdapter:IRuleBaseAdapter {
 
 		/// <summary>
+		/// Collection containing all the facts to assert.
+		/// </summary>
+		/// <remarks>
+		/// This will make IFactBaseAdapter.Facts obsolete.
+		/// </remarks>
+		IList<Fact> Assertions {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// Collection containing all the facts to retract.
+		/// </summary>
+		IList<Fact> Retractions {
+			get;
+			set;
+		}
+		
+		/// <summary>
 		/// Collection containing all the equivalent atom pairs in the rulebase.
 		/// </summary>
 		IList<Equivalent> Equivalents {
