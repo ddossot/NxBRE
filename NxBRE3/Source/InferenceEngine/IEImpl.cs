@@ -342,11 +342,14 @@ namespace NxBRE.InferenceEngine {
 				label = adapter.Label;
 				
 				// load the Equivalents and IntegrityQueries if the adapter supports it
+				IExtendedRuleBaseAdapter extendedAdapter = null;
 				if (adapter is IExtendedRuleBaseAdapter) {
-					equivalents = ((IExtendedRuleBaseAdapter)adapter).Equivalents;
+					extendedAdapter = (IExtendedRuleBaseAdapter)adapter;
+					
+					equivalents = extendedAdapter.Equivalents;
 					if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Loaded " + equivalents.Count + " Equivalents");
 					
-					integrityQueries = ((IExtendedRuleBaseAdapter)adapter).IntegrityQueries;
+					integrityQueries = extendedAdapter.IntegrityQueries;
 					if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Loaded " + integrityQueries.Count + " IntegrityQueries");
 				}
 				else {
@@ -380,8 +383,9 @@ namespace NxBRE.InferenceEngine {
 				
 				initialized = true;
 
-				// load facts
-				performativeAssertions = new List<Fact>(adapter.Facts);
+				// load facts assertions
+				performativeAssertions = new List<Fact>((extendedAdapter!=null)?extendedAdapter.Assertions:adapter.Facts);
+				//TODO load facts retractions
 				if (processPerformatives) ProcessPerfomatives();
 				if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Loaded " + WM.FB.Count + " Facts");
 				
@@ -421,16 +425,23 @@ namespace NxBRE.InferenceEngine {
 				foreach(Implication implication in IB) implications.Add(implication);
 				adapter.Implications = implications;
 				
-				// equivalents & integrity queries if supported
+				// build a collection of in-memory facts
+				IList<Fact> factsInWorkingMemory = new List<Fact>();
+				foreach(Fact fact in WM.FB)	factsInWorkingMemory.Add(fact);
+				
 				if (adapter is IExtendedRuleBaseAdapter) {
-					((IExtendedRuleBaseAdapter)adapter).Equivalents = equivalents;
-					((IExtendedRuleBaseAdapter)adapter).IntegrityQueries = integrityQueries;
+					// equivalents & integrity queries, assertions and retractions, if supported
+					IExtendedRuleBaseAdapter extendedAdapter = (IExtendedRuleBaseAdapter)adapter;
+					extendedAdapter.Equivalents = equivalents;
+					extendedAdapter.IntegrityQueries = integrityQueries;
+					extendedAdapter.Assertions = factsInWorkingMemory;
+					//TODO write facts retractions
+				}
+				else {
+					// basic adapter facts output
+					adapter.Facts = factsInWorkingMemory;
 				}
 				
-				// facts
-				IList<Fact> facts = new List<Fact>();
-				foreach(Fact fact in WM.FB)	facts.Add(fact);
-				adapter.Facts = facts;
 			}
 			
 			if (Logger.IsInferenceEngineInformation) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Information, 0, "NxBRE Inference Engine Rule Base Saving Finished");
