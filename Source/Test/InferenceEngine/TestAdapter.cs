@@ -260,7 +260,19 @@ namespace NxBRE.Test.InferenceEngine {
 		
 		[Test]
 		public void Visio2003ImplicationProperties_3_0() {
-			using(Visio2003Adapter va = new Visio2003Adapter(ruleFilesFolder + "test-3_0.vdx", FileAccess.Read)) {
+			RunVisio2003ImplicationProperties_3_0(false);
+		}
+		
+		[Test]
+		public void Visio2003ImplicationProperties_3_0_Strict() {
+			RunVisio2003ImplicationProperties_3_0(true);
+		}
+		
+		private void RunVisio2003ImplicationProperties_3_0(bool strict) {
+			using(Visio2003Adapter va = new Visio2003Adapter(ruleFilesFolder + "test-3_0" + (strict?"-strict":"") + ".vdx",
+			                                                 FileAccess.Read,
+			                                                 strict)) {
+				
 				CommonVisio2003ImplicationProperties(1, 5, va, false);
 				
 				foreach(Implication i in va.Implications) {
