@@ -1,8 +1,11 @@
 namespace NxBRE.InferenceEngine.Core {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	
 	using NxBRE.InferenceEngine.Rules;
+	
+	using NxBRE.Util;
 
 	///<summary>
 	/// The agenda is the "maestro" of the inference engine.
@@ -35,6 +38,11 @@ namespace NxBRE.InferenceEngine.Core {
 		
 		public void PrepareExecution() {
 			scheduledImplication.Sort(implicationComparer);
+			
+			if (Logger.IsInferenceEngineVerbose)
+				Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
+				                                        0,
+				                                        "Execution prepared: " + Misc.IListToString<Implication>(scheduledImplication));
 		}
 		
 		/// <summary>
@@ -45,6 +53,11 @@ namespace NxBRE.InferenceEngine.Core {
 		/// </remarks>
 		/// <param name="implication">The implication to schedule.</param>
 		public void Schedule(Implication implication) {
+			if (Logger.IsInferenceEngineVerbose)
+				Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
+				                                        0,
+				                                        "Scheduling one implication: " + implication);
+			
 			if (!scheduledImplication.Contains(implication)) scheduledImplication.Add(implication);
 		}
 		
