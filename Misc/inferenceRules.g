@@ -13,11 +13,19 @@ HashMap memory = new HashMap();
 }
 
 rulebase 
-	:	'rulebase' SPACE QUOTE words QUOTE (rule | ignored)* {System.out.println("rulebase label: "+$words.text);};
+	:	'rulebase:' SPACE QUOTE words QUOTE (rule | ignored)* {System.out.println("rulebase label: "+$words.text);};
 
-rule 	:	'rule' NEWLINE meta? condition action 'end';
+rule 	:	'rule:' SPACE QUOTE words QUOTE NEWLINE meta condition action 'end.' {System.out.println("rule label: "+$words.text);};
 
-meta	:	TAB 'priority' SPACE NUMERIC NEWLINE {System.out.println("priority: "+$NUMERIC.text);};
+meta	:	priority? precondition? mutex*;
+
+priority
+	:	TAB 'priority' SPACE NUMERIC NEWLINE {System.out.println("priority: "+$NUMERIC.text);};
+
+precondition
+	:	TAB 'precondition' SPACE QUOTE words QUOTE NEWLINE {System.out.println("precondition: "+$words.text);};
+
+mutex	:	TAB 'mutex' SPACE QUOTE words QUOTE NEWLINE {System.out.println("mutex: "+$words.text);};
 
 condition
 	:	'if' NEWLINE statement (logic statement)*;
