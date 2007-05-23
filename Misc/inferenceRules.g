@@ -1,16 +1,22 @@
 grammar inferenceRules;
 
-@header {
-package test;
-import java.util.HashMap;
+/*
+options {
+language=CSharp;
 }
 
-@lexer::header {package test;}
+@header {
+namespace NxBRE.Test;
+}
+
+@lexer::header {
+package NxBRE.Test;
+}
 
 @members {
-/** Map variable name to Integer object holding value */
-HashMap memory = new HashMap();
+//HashMap memory = new HashMap();
 }
+*/
 
 rulebase 
 	:	'rulebase:' SPACE QUOTE words QUOTE (rule | ignored)* {System.out.println("rulebase label: "+$words.text);};
