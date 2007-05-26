@@ -4,19 +4,20 @@ grammar inferenceRules;
 options {
 language=CSharp;
 }
+*/
 
 @header {
-namespace NxBRE.Test;
+import java.util.HashMap;
 }
 
 @lexer::header {
-package NxBRE.Test;
+
 }
 
 @members {
-//HashMap memory = new HashMap();
+HashMap<Integer, String> logicBlocks = new HashMap<Integer, String>();
 }
-*/
+
 
 rulebase 
 	:	'rulebase:' SPACE QUOTE words QUOTE (rule | ignored)* {System.out.println("rulebase label: "+$words.text);};
@@ -41,7 +42,16 @@ action	:	('deduct' | 'forget' | 'count' | 'modify')+ NEWLINE statement;
 statement
 	:	indent words NEWLINE {System.out.println("depth of: '"+$words.text+"' is: "+$indent.text.length());};
 
-logic	:	indent BOOLEAN NEWLINE {System.out.println("depth of: '"+$BOOLEAN.text+"' is: "+$indent.text.length());};
+logic	:	indent BOOLEAN NEWLINE {
+			int depth = $indent.text.length();
+			String operator = $BOOLEAN.text;
+			
+			System.out.println("depth of op.: '"+operator+"' is: "+depth);
+			
+			String existingOperator = logicBlocks.get(depth);
+			if (existingOperator != null && !operator.equals(existingOperator)) throw new RuntimeException("Operator mismatch!");
+			logicBlocks.put(depth, operator);
+		};
 
 words	:	word (SPACE word)*;
 
