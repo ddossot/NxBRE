@@ -1,0 +1,41 @@
+rulebase "Discount policies rulebase"
+
+rule "Discount for regular products"
+if
+	The customer is rated premium
+	and
+	The product is a regular product
+then deduct
+	The discount on this product for the customer is 5.0 percent
+
+rule "Discount for luxury products"
+if
+	The customer is rated premium
+	and
+	The product is a luxury product
+then deduct
+	The discount on this product for the customer is 7.5 percent
+
+rule "Rate premium customers"
+if
+	The customer has spent more than 5000 EUR during the previous year
+then deduct
+	The customer is rated premium
+
+	
+query "Select applied discounts"
+for
+	All discounts on all products for all customers
+	
+fact
+is
+	Peter Miller has spent more than 5000 EUR during the previous year
+
+fact
+is
+	Porsche is a luxury product
+
+fact
+is
+	Honda is a regular product
+
