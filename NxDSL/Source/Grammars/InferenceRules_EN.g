@@ -7,8 +7,6 @@ language=CSharp;
 tokens {
 	RULEBASE='rulebase';
 	FACT='fact';
-	FOR='for';
-	IS='is';
 	QUERY='query';
 	RULE='rule';
 	PRIORITY='priority';
@@ -38,9 +36,9 @@ IDictionary<int, string> logicBlocks = new Dictionary<int, string>();
 rulebase 
 	:	RULEBASE SPACE QUOTE words QUOTE (rule | query | fact | ignored)* EOF {Console.WriteLine("rulebase label: "+$words.text);};
 	
-fact	:	FACT (SPACE QUOTE words QUOTE)? NEWLINE IS NEWLINE statement;
+fact	:	FACT (SPACE QUOTE words QUOTE)? NEWLINE statement;
 
-query	:	QUERY SPACE QUOTE words QUOTE NEWLINE FOR NEWLINE condition;
+query	:	QUERY SPACE QUOTE words QUOTE NEWLINE condition;
 
 rule 	:	RULE SPACE QUOTE words QUOTE NEWLINE meta 'if' NEWLINE condition action {Console.WriteLine("rule label: "+$words.text);};
 
@@ -87,7 +85,7 @@ ignored	:	(TAB | SPACE)* NEWLINE;
 indent	:	TAB+;
 
 anyToken
-	:	(RULEBASE | FACT | FOR | IS | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken);
+	:	(RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken);
 
 booleanToken
 	:	(AND | OR);

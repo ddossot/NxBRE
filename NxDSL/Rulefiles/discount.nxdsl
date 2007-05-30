@@ -24,18 +24,14 @@ then deduct
 
 	
 query "Select applied discounts"
-for
-	All discounts on all products for all customers
+	The discount on any product for any customer is anything
 	
 fact
-is
 	Peter Miller has spent more than 5000 EUR during the previous year
 
 fact
-is
 	Porsche is a luxury product
 
 fact
-is
 	Honda is a regular product
 
