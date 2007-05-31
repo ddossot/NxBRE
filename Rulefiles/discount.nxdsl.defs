@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- work in progress -->
+<NxDSL-Defs caseSensitive="false">
+
+	<PredicatePatterns>
+		<PredicatePattern regexp="(?'var'any(.*))">
+			<Var>${var}</Var>
+		</PredicatePattern>
+	</PredicatePatterns>
+
+	<AtomPatterns>
+		<AtomPattern regexp="(?'product'.*) is a luxury product">
+      		<Atom>
+        		<Rel>luxury</Rel>
+        		<Var>${product}</Var>
+      		</Atom>
+		</AtomPattern>
+	</AtomPatterns>
+
+</NxDSL-Defs>
