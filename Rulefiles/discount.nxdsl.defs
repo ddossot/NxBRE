@@ -1,19 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- work in progress -->
+<!-- TODO work in progress, regexp are approx. -->
 <NxDSL-Defs caseSensitive="false">
-
+	
 	<PredicatePatterns>
-		<PredicatePattern regexp="(?'var'any(.*))">
-			<Var>${var}</Var>
+		<PredicatePattern regexp="(?any(.+))">
+			<Var/>
+		</PredicatePattern>
+		<PredicatePattern regexp="(?[0-9]+)">
+			<Data xsi:type="xs:integer"/>
+		</PredicatePattern>
+		<PredicatePattern regexp="(?(.+))">
+			<Ind/>
 		</PredicatePattern>
 	</PredicatePatterns>
-
+	
 	<AtomPatterns>
+		<!-- Specific Atom Patterns -->
 		<AtomPattern regexp="(?'product'.*) is a luxury product">
-      		<Atom>
-        		<Rel>luxury</Rel>
-        		<Var>${product}</Var>
-      		</Atom>
+			<Atom>
+				<Rel>luxury</Rel>
+				<Predicate id="product"/>
+			</Atom>
+		</AtomPattern>
+
+		<!-- Default NxBRE Patterns -->
+		<AtomPattern regexp="(?'left'.*) is greater than or equal to (?'right'.*)">
+			<Atom>
+				<Rel uri="nxbre://operator">GreaterThanEqualTo</Rel>
+				<Predicate id="left"/>
+				<Predicate id="right"/>
+			</Atom>
 		</AtomPattern>
 	</AtomPatterns>
 
