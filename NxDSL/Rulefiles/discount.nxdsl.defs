@@ -3,20 +3,21 @@
 <NxDSL-Defs caseSensitive="false">
 	
 	<PredicatePatterns>
-		<PredicatePattern regexp="(?any(.+))">
+		<!-- TODO add: date, double -->
+		<PredicatePattern regexp="^(?any(.+))$">
 			<Var/>
 		</PredicatePattern>
-		<PredicatePattern regexp="(?[0-9]+)">
+		<PredicatePattern regexp="^(?[0-9]+)$">
 			<Data xsi:type="xs:integer"/>
 		</PredicatePattern>
-		<PredicatePattern regexp="(?(.+))">
+		<PredicatePattern regexp="^(?(.+))$">
 			<Ind/>
 		</PredicatePattern>
 	</PredicatePatterns>
 	
 	<AtomPatterns>
 		<!-- Specific Atom Patterns -->
-		<AtomPattern regexp="(?'product'.*) is a luxury product">
+		<AtomPattern regexp="^(?'product'.*)\wis a luxury product$">
 			<Atom>
 				<Rel>luxury</Rel>
 				<Predicate id="product"/>
@@ -24,7 +25,7 @@
 		</AtomPattern>
 
 		<!-- Default NxBRE Patterns -->
-		<AtomPattern regexp="(?'left'.*) is greater than or equal to (?'right'.*)">
+		<AtomPattern regexp="^(?'left'.*)\wis greater than or equal to\w(?'right'.*)$">
 			<Atom>
 				<Rel uri="nxbre://operator">GreaterThanEqualTo</Rel>
 				<Predicate id="left"/>
