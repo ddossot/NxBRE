@@ -3,12 +3,8 @@
 <NxDSL-Defs caseSensitive="false">
 	
 	<PredicatePatterns>
-		<!-- TODO add: date, double -->
 		<PredicatePattern regexp="^(?any(.+))$">
 			<Var/>
-		</PredicatePattern>
-		<PredicatePattern regexp="^(?[0-9]+)$">
-			<Data xsi:type="xs:integer"/>
 		</PredicatePattern>
 		<PredicatePattern regexp="^(?(.+))$">
 			<Ind/>
@@ -16,20 +12,24 @@
 	</PredicatePatterns>
 	
 	<AtomPatterns>
-		<!-- Specific Atom Patterns -->
-		<AtomPattern regexp="^(?'product'.*)\wis a luxury product$">
+		<AtomPattern regexp="^(?'customer'.*)\wis rated premium$">
 			<Atom>
-				<Rel>luxury</Rel>
+				<Rel>premium</Rel>
+				<Predicate id="customer"/>
+			</Atom>
+		</AtomPattern>
+		<AtomPattern regexp="^(?'product'.*)\wis a\w(?'type'.*)\wproduct$">
+			<Atom>
+				<Rel>${type}</Rel>
 				<Predicate id="product"/>
 			</Atom>
 		</AtomPattern>
-
-		<!-- Default NxBRE Patterns -->
-		<AtomPattern regexp="^(?'left'.*)\wis greater than or equal to\w(?'right'.*)$">
+		<AtomPattern regexp="^The discount on this product for the customer is\w(?'discount'.*)$">
 			<Atom>
-				<Rel uri="nxbre://operator">GreaterThanEqualTo</Rel>
-				<Predicate id="left"/>
-				<Predicate id="right"/>
+				<Rel>discount</Rel>
+				<Var>customer</Var>
+				<Var>product</Var>
+				<Ind>${discount}</Ind>
 			</Atom>
 		</AtomPattern>
 	</AtomPatterns>
