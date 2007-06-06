@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Standard predicates and atom patterns definitions for NxDSL.
+	They can be used (copied/pasted) in any definition files that needs them.
+-->
+<!-- TODO work in progress, regexp are approx. -->
+<NxDSL-Defs caseSensitive="false">
+	
+	<PredicatePatterns>
+		<!-- TODO add: date, double -->
+		<PredicatePattern regexp="^(?[0-9]+)$">
+			<Data xsi:type="xs:integer"/>
+		</PredicatePattern>
+		<PredicatePattern regexp="^(?(.+))$">
+			<Ind/>
+		</PredicatePattern>
+	</PredicatePatterns>
+	
+	<AtomPatterns>
+		<AtomPattern regexp="^(?'left'.*)\wis greater than or equal to\w(?'right'.*)$">
+			<Atom>
+				<Rel uri="nxbre://operator">GreaterThanEqualTo</Rel>
+				<Predicate id="left"/>
+				<Predicate id="right"/>
+			</Atom>
+		</AtomPattern>
+	</AtomPatterns>
+
+</NxDSL-Defs>
