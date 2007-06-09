@@ -19,14 +19,11 @@ namespace NxDSL.Examples
 	{
 		public static void Main(string[] args)
 		{
-		InferenceRules_ENParser ipr = new InferenceRules_ENParser(
-							new CommonTokenStream(
-								new InferenceRules_ENLexer(
-									new ANTLRFileStream("../../../../Rulefiles/discount.nxdsl"))));
-		ipr.rulebase();
-		
-		Console.WriteLine("Done!");
-		Console.ReadLine();
+			InferenceRules_ENParser ipr = new InferenceRules_ENParser(
+								new CommonTokenStream(
+									new InferenceRules_ENLexer(
+										new ANTLRFileStream("../../../../Rulefiles/discount.nxdsl"))));
+			ipr.rulebase();
 		}
 	}
 }
