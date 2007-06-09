@@ -12,6 +12,7 @@ tokens {
 	PRIORITY='priority';
 	PRECONDITION='precondition';
 	MUTEX='mutex';
+	IF='if';
 	THEN='then';
 	DEDUCT='deduct';
 	FORGET='forget';
@@ -40,7 +41,7 @@ fact	:	FACT (SPACE QUOTE words QUOTE)? NEWLINE statement;
 
 query	:	QUERY SPACE QUOTE words QUOTE NEWLINE condition;
 
-rule 	:	RULE SPACE QUOTE words QUOTE NEWLINE meta 'if' NEWLINE condition action {Console.WriteLine("rule label: "+$words.text);};
+rule 	:	RULE SPACE QUOTE words QUOTE NEWLINE meta IF NEWLINE condition action {Console.WriteLine("rule label: "+$words.text);};
 
 meta	:	priority? precondition? mutex*;
 
@@ -85,7 +86,7 @@ ignored	:	(TAB | SPACE)* NEWLINE;
 indent	:	TAB+;
 
 anyToken
-	:	(RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken);
+	:	(RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | IF | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken);
 
 booleanToken
 	:	(AND | OR);
