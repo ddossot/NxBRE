@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 // you compile.
 
 [assembly: AssemblyTitle("NxDSL")]
-[assembly: AssemblyDescription("Temporary application for NxBRE DSL")]
+[assembly: AssemblyDescription("NxBRE DSL Core Library")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("NxDSL")]

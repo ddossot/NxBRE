@@ -1,11 +1,11 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ProjectGuid>{B6E2AE38-D00C-46D1-8374-9D7A001A3204}</ProjectGuid>
+    <ProjectGuid>{DBB22C65-EF14-4587-84B3-07C9C0DF264B}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Exe</OutputType>
-    <RootNamespace>NxDSL</RootNamespace>
-    <AssemblyName>NxDSL</AssemblyName>
+    <RootNamespace>Examples</RootNamespace>
+    <AssemblyName>Examples</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -24,7 +24,7 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
   <ItemGroup>
     <Reference Include="Antlr3.Runtime">
-      <HintPath>..\Dependencies\Antlr3.Runtime.dll</HintPath>
+      <HintPath>..\..\Dependencies\Antlr3.Runtime.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System" />
@@ -33,8 +33,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="InferenceRules_ENLexer.cs" />
-    <Compile Include="InferenceRules_ENParser.cs" />
     <Compile Include="Main.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NxDSL\NxDSL.csproj">
+      <Project>{B6E2AE38-D00C-46D1-8374-9D7A001A3204}</Project>
+      <Name>NxDSL</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
