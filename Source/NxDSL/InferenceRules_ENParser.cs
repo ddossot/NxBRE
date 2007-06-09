@@ -9,7 +9,8 @@ using IList 		= System.Collections.IList;
 using ArrayList 	= System.Collections.ArrayList;
 using Stack 		= Antlr.Runtime.Collections.StackList;
 
-
+namespace NxDSL.Examples
+{
 
 public class InferenceRules_ENParser : Parser 
 {
@@ -1542,5 +1543,7 @@ public class InferenceRules_ENParser : Parser
     public static readonly BitSet FOLLOW_MODIFY_in_anyToken505 = new BitSet(new ulong[]{0x0000000000000002UL});
     public static readonly BitSet FOLLOW_booleanToken_in_anyToken509 = new BitSet(new ulong[]{0x0000000000000002UL});
     public static readonly BitSet FOLLOW_set_in_booleanToken519 = new BitSet(new ulong[]{0x0000000000000002UL});
+
+}
 
 }

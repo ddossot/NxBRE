@@ -9,7 +9,8 @@ using IList 		= System.Collections.IList;
 using ArrayList 	= System.Collections.ArrayList;
 using Stack 		= Antlr.Runtime.Collections.StackList;
 
-
+namespace NxDSL
+{
 
 public class InferenceRules_ENLexer : Lexer 
 {
@@ -1958,4 +1959,6 @@ public class InferenceRules_ENLexer : Lexer
 
  
     
+}
+
 }

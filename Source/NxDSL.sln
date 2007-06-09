@@ -2,7 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 # SharpDevelop 2.1.0.2429
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NxDSL", "NxDSL.csproj", "{B6E2AE38-D00C-46D1-8374-9D7A001A3204}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NxDSL", "NxDSL\NxDSL.csproj", "{B6E2AE38-D00C-46D1-8374-9D7A001A3204}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Examples", "Examples\Examples.csproj", "{DBB22C65-EF14-4587-84B3-07C9C0DF264B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,5 +16,9 @@ Global
 		{B6E2AE38-D00C-46D1-8374-9D7A001A3204}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B6E2AE38-D00C-46D1-8374-9D7A001A3204}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B6E2AE38-D00C-46D1-8374-9D7A001A3204}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBB22C65-EF14-4587-84B3-07C9C0DF264B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBB22C65-EF14-4587-84B3-07C9C0DF264B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBB22C65-EF14-4587-84B3-07C9C0DF264B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBB22C65-EF14-4587-84B3-07C9C0DF264B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 EndGlobal
