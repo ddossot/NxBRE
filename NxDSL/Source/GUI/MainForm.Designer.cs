@@ -45,14 +45,14 @@ namespace NxDSL.GUI
 			this.webBrowser1.Location = new System.Drawing.Point(0, 0);
 			this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
 			this.webBrowser1.Name = "webBrowser1";
-			this.webBrowser1.Size = new System.Drawing.Size(645, 448);
+			this.webBrowser1.Size = new System.Drawing.Size(821, 566);
 			this.webBrowser1.TabIndex = 0;
 			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(645, 448);
+			this.ClientSize = new System.Drawing.Size(821, 566);
 			this.Controls.Add(this.webBrowser1);
 			this.Name = "MainForm";
 			this.Text = "GUI";
