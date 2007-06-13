@@ -34,28 +34,26 @@ namespace NxDSL.GUI
 		
 		public MainForm()
 		{
-			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
-			//
 			InitializeComponent();
 			
-			//
-			// TODO: using the parser would probably be a better idea because the lexer does not recognize
-			// statements hence does not color CHARs that are recognized as tokens even if they are in
-			// a statement
-			//
 			
 			InferenceRules_ENLexer irl = new InferenceRules_ENLexer(
 								new ANTLRFileStream("../../../../Rulefiles/discount.nxdsl"));
 			
-			StringBuilder sb = new StringBuilder("<html><body><font face='arial' color='#000000'>");
+			StringBuilder sb = new StringBuilder("<html><body><font face='courier' color='#000000'>");
 			
 			IToken token;
+			bool inQuote = false;
+			
 			while((token = irl.NextToken()) != Token.EOF_TOKEN) {
 				Console.Write(token.Text + "/" + token.Type);
 				
 				if (token.Type == InferenceRules_ENLexer.NEWLINE) {
 					sb.Append("<br/>");
+				}
+				else if (token.Type == InferenceRules_ENLexer.TAB) {
+					sb.Append("&nbsp;&nbsp;");
 				}
 				else {
 					if ((token.Type == InferenceRules_ENLexer.RULE)
@@ -64,25 +62,30 @@ namespace NxDSL.GUI
 						sb.Append("<br/>");
 					}
 					
-					string color = null;
-					
-					if ((token.Type == InferenceRules_ENLexer.CHAR)
-					    || (token.Type == InferenceRules_ENLexer.NUMERIC)) {
-						color = "#0000FF";
+					if ((token.Type == InferenceRules_ENLexer.QUOTE) && (!inQuote)) {
+						sb.Append("<font color='#0000FF'>");
+						inQuote = true;
+						sb.Append(token.Text);
 					}
-					
-					if (color != null) {
-						sb.Append("<font color='").Append(color).Append("'>");
-					} else {
-						sb.Append("<b>");
-					}
-					
-					sb.Append(token.Text);
-					
-					if (color != null) {
+					else if ((token.Type == InferenceRules_ENLexer.QUOTE) && (inQuote)) {
+						sb.Append(token.Text);
 						sb.Append("</font>");
-					} else {
-						sb.Append("</b>");
+						inQuote = false;
+					}
+					else if ((inQuote)
+					        || (token.Type == InferenceRules_ENLexer.CHAR)
+					        || (token.Type == InferenceRules_ENLexer.SPACE)
+					        || (token.Type == InferenceRules_ENLexer.NUMERIC)) {
+						sb.Append(token.Text);
+					}
+					else if ((token.Type == InferenceRules_ENLexer.COUNT)
+					        || (token.Type == InferenceRules_ENLexer.DEDUCT)
+					        || (token.Type == InferenceRules_ENLexer.FORGET)
+					        || (token.Type == InferenceRules_ENLexer.MODIFY)) {
+						sb.Append("<font color='#990066'><b>").Append(token.Text).Append("</b></font>");
+					}
+					else {
+						sb.Append("<b>").Append(token.Text).Append("</b>");
 					}
 				}
 			}
