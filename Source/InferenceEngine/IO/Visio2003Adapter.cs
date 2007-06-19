@@ -41,7 +41,10 @@ namespace NxBRE.InferenceEngine.IO {
 		/// <param name="mode">The FileAccess mode.</param>
 		/// <param name="pageNames">An optional list of page names.</param>
 		public Visio2003Adapter(string uriVDX, FileAccess mode, params string[] pageNames) {
-			Init(new XPathDocument(uriVDX), mode, false, pageNames);
+			// manually open the file so that we can specify share permissions (thanks Eric Lyons!)
+			using(Stream streamVDX = new FileStream(uriVDX, FileMode.Open, mode, FileShare.ReadWrite)) {
+				Init(new XPathDocument(streamVDX), mode, false, pageNames);
+			}
 		}
 		
 		/// <summary>
@@ -71,7 +74,9 @@ namespace NxBRE.InferenceEngine.IO {
 		/// <param name="strict">If true, the adapter expects the predicates to be strictly separated by commas.</param>
 		/// <param name="pageNames">An optional list of page names.</param>
 		public Visio2003Adapter(string uriVDX, FileAccess mode, bool strict, params string[] pageNames) {
-			Init(new XPathDocument(uriVDX), mode, strict, pageNames);
+			using(Stream streamVDX = new FileStream(uriVDX, FileMode.Open, mode, FileShare.ReadWrite)) {
+				Init(new XPathDocument(streamVDX), mode, strict, pageNames);
+			}
 		}
 
 		/// <summary>
@@ -209,7 +214,9 @@ namespace NxBRE.InferenceEngine.IO {
 		/// <param name="uriVDX">The URI to read from.</param>
 		/// <returns>An array containing the Visio document page names.</returns>
 		public static IList<string> GetPageNames(string uriVDX) {
-			return GetPageNames(new XPathDocument(uriVDX));
+			using(Stream streamVDX = new FileStream(uriVDX, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+				return GetPageNames(streamVDX);
+			}
 		}
 		
 		/// <summary>

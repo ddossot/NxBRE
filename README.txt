@@ -78,6 +78,8 @@ v3.1.0
 
   * Improved implication scheduling in the agenda to limitate the number of fired implications (feature request 1590017).
 
+  * Improved adapter load method to allow sharing (feature request 1710153).
+
 
 
 v3.0.0
