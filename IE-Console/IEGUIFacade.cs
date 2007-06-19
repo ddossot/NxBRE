@@ -188,8 +188,9 @@ namespace NxBRE.InferenceEngine.Console {
 				case ".vdx":
 					string[] selectedPages = mf.PromptForVisioPageNameSelection(Visio2003Adapter.GetPageNames(uri));
 					if (selectedPages != null) {
+						//FIXME: find a way to prompt for strictness
 						if (onlyFacts) ie.LoadFacts(new Visio2003Adapter(uri, FileAccess.Read, selectedPages));
-						else ie.LoadRuleBase(new Visio2003Adapter(uri, FileAccess.Read, selectedPages));
+						else ie.LoadRuleBase(new Visio2003Adapter(uri, FileAccess.Read, true, selectedPages));
 					}
 					break;
 				
