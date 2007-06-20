@@ -15,21 +15,32 @@ namespace NxBRE.InferenceEngine {
 	/// DO NOT ASSERT OR RETRACT FACTS WHEN HANDLING THIS EVENT!
 	/// </remarks>
 	public sealed class NewFactEventArgs: EventArgs {
-	  private readonly Fact fact;
-	  private readonly Fact otherFact;
-	
-	  /// <summary>
-	  /// The fact that has generated the event.
-	  /// </summary>
+		[ThreadStatic]
+		private static IIEventContext context;
+		
+		private readonly Fact fact;
+		private readonly Fact otherFact;
+		
+		public static IIEventContext Context {
+			get { return context; }
+		}
+		
+		internal static void SetContext(IIEventContext newContext) {
+			context = newContext;
+		}
+		
+		/// <summary>
+		/// The fact that has generated the event.
+		/// </summary>
 		public Fact Fact {
 			get {
 				return fact;
 			}
 		}
 		
-	  /// <summary>
-	  /// The optional other fact involved in the event, or null.
-	  /// </summary>
+		/// <summary>
+		/// The optional other fact involved in the event, or null.
+		/// </summary>
 		public Fact OtherFact {
 			get {
 				return otherFact;
