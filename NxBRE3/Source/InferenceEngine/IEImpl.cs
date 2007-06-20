@@ -938,93 +938,99 @@ namespace NxBRE.InferenceEngine {
 		}
 		
 		private int RunImplication(Implication implication) {
-			int implicationResultsCount = 0;
-			
-			IList<IList<FactBase.PositiveMatchResult>> processResults = WM.FB.ProcessAtomGroup(implication.AtomGroup);
-
-			if (implication.Action == ImplicationAction.Count)
-			{
-				if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Counting Implication '" + implication.Label + "' counted: " + processResults.Count);
-
-				bool variableFound = false;
-				IPredicate[] members = (IPredicate[])implication.Deduction.Members.Clone();
-				for(int i=0; !variableFound && i<members.Length; i++) {
-					if (members[i] is Variable) {
-						members[i] = new Individual(processResults.Count);
-						variableFound = true;
-						break;
-					}
-				}
+			try {
+				int implicationResultsCount = 0;
 				
-				if ((strictImplication) && (!variableFound))
-					throw new BREException("Strict counting implication rejected the assertion due to lack of variable predicate: " + implication.Deduction);
+				IList<IList<FactBase.PositiveMatchResult>> processResults = WM.FB.ProcessAtomGroup(implication.AtomGroup);
+	
+				if (implication.Action == ImplicationAction.Count)
+				{
+					if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Counting Implication '" + implication.Label + "' counted: " + processResults.Count);
+	
+					bool variableFound = false;
+					IPredicate[] members = (IPredicate[])implication.Deduction.Members.Clone();
+					for(int i=0; !variableFound && i<members.Length; i++) {
+						if (members[i] is Variable) {
+							members[i] = new Individual(processResults.Count);
+							variableFound = true;
+							break;
+						}
+					}
 					
-				Fact deductedFact = new Fact(implication.Deduction.Type, members);
-				implicationResultsCount++;
-				
-				// counting implication factbase action
-				bool result = WM.FB.Assert(deductedFact);
-				if ((result) && (NewFactHandler != null)) NewFactHandler(new NewFactEventArgs(deductedFact));
-				if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, (result?"Asserted":"Ignored Assertion of ") + " Fact: " + deductedFact.ToString());
-			}
-			else if ((implication.Action == ImplicationAction.Assert)
-	      		|| (implication.Action == ImplicationAction.Retract))
-			{
-				// loop on each result and try to build a new fact out of the predicates coming for each result
-				foreach(IList<FactBase.PositiveMatchResult> processResult in processResults) {
-					Fact deductedFact = BuildFact(implication.Deduction, processResult);
+					if ((strictImplication) && (!variableFound))
+						throw new BREException("Strict counting implication rejected the assertion due to lack of variable predicate: " + implication.Deduction);
 						
-					if (deductedFact != null) {
-						implicationResultsCount++;
-
-						if (implication.Action == ImplicationAction.Retract) {
-							// retracting implication factbase action
-							bool result = WM.FB.Retract(deductedFact);
-							if ((result) && (DeleteFactHandler != null)) DeleteFactHandler(new NewFactEventArgs(deductedFact));
-							if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, (result?"Retracted":"Ignored Retraction of ") + " Fact: " + deductedFact.ToString());
-						}
-						else {
-							// asserting implication factbase action
-							bool result = WM.FB.Assert(deductedFact);
-							if ((result) && (NewFactHandler != null)) NewFactHandler(new NewFactEventArgs(deductedFact));
-							if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, (result?"Asserted":"Ignored Assertion of ") + " Fact: " + deductedFact.ToString());
+					Fact deductedFact = new Fact(implication.Deduction.Type, members);
+					implicationResultsCount++;
+					
+					// counting implication factbase action
+					bool result = WM.FB.Assert(deductedFact);
+					if ((result) && (NewFactHandler != null)) NewFactHandler(new NewFactEventArgs(deductedFact));
+					if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, (result?"Asserted":"Ignored Assertion of ") + " Fact: " + deductedFact.ToString());
+				}
+				else if ((implication.Action == ImplicationAction.Assert)
+		      		|| (implication.Action == ImplicationAction.Retract))
+				{
+					// loop on each result and try to build a new fact out of the predicates coming for each result
+					foreach(IList<FactBase.PositiveMatchResult> processResult in processResults) {
+						Fact deductedFact = BuildFact(implication.Deduction, processResult);
+							
+						if (deductedFact != null) {
+							implicationResultsCount++;
+	
+							if (implication.Action == ImplicationAction.Retract) {
+								// retracting implication factbase action
+								bool result = WM.FB.Retract(deductedFact);
+								if ((result) && (DeleteFactHandler != null)) DeleteFactHandler(new NewFactEventArgs(deductedFact));
+								if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, (result?"Retracted":"Ignored Retraction of ") + " Fact: " + deductedFact.ToString());
+							}
+							else {
+								// asserting implication factbase action
+								bool result = WM.FB.Assert(deductedFact);
+								if ((result) && (NewFactHandler != null)) NewFactHandler(new NewFactEventArgs(deductedFact));
+								if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, (result?"Asserted":"Ignored Assertion of ") + " Fact: " + deductedFact.ToString());
+							}
 						}
 					}
 				}
-			}
-			else if (implication.Action == ImplicationAction.Modify)
-			{
-			  foreach(IList<FactBase.PositiveMatchResult> processResult in processResults) {
-				  // look for facts to modify by:
-				  //  - resolving variable predicates of the deduction
-				  //  - replacing formulas with variables
-				  // and performing a search in the fact base
-				  Atom modificationTargetLookup = FactBase.BuildQueryFromDeduction(implication.Deduction, processResult);
-
-				  if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Modifying Implication '" + implication.Label + "' will target matches of: " + modificationTargetLookup);
-				  	
-				 	foreach(Fact factToModify in FactBase.ExtractFacts(WM.FB.ProcessAtomGroup(new AtomGroup(AtomGroup.LogicalOperator.And, modificationTargetLookup)))) {
-					  if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "-> found target: " + factToModify);
-
-					  // for each fact, perform the modification
-				  	Fact deductedFact = BuildFact(implication.Deduction,
-				  	                              FactBase.EnrichResults(processResult, modificationTargetLookup, factToModify));
-
-					  if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "-> modified target: " + deductedFact);
-
-					  if ((deductedFact != null) && (!factToModify.Equals(deductedFact))) {
-							implicationResultsCount++;
-							bool result = WM.FB.Modify(factToModify, deductedFact);
-							if ((result) && (ModifyFactHandler != null))ModifyFactHandler(new NewFactEventArgs(factToModify, deductedFact));
-							if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, (result?"Modified":"Ignored Modification of ") + " Fact: " + factToModify.ToString());
-						}
-				  }
+				else if (implication.Action == ImplicationAction.Modify)
+				{
+				  foreach(IList<FactBase.PositiveMatchResult> processResult in processResults) {
+					  // look for facts to modify by:
+					  //  - resolving variable predicates of the deduction
+					  //  - replacing formulas with variables
+					  // and performing a search in the fact base
+					  Atom modificationTargetLookup = FactBase.BuildQueryFromDeduction(implication.Deduction, processResult);
+	
+					  if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Modifying Implication '" + implication.Label + "' will target matches of: " + modificationTargetLookup);
+					  	
+					 	foreach(Fact factToModify in FactBase.ExtractFacts(WM.FB.ProcessAtomGroup(new AtomGroup(AtomGroup.LogicalOperator.And, modificationTargetLookup)))) {
+						  if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "-> found target: " + factToModify);
+	
+						  // for each fact, perform the modification
+					  	Fact deductedFact = BuildFact(implication.Deduction,
+					  	                              FactBase.EnrichResults(processResult, modificationTargetLookup, factToModify));
+	
+						  if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "-> modified target: " + deductedFact);
+	
+						  if ((deductedFact != null) && (!factToModify.Equals(deductedFact))) {
+								implicationResultsCount++;
+								bool result = WM.FB.Modify(factToModify, deductedFact);
+								if ((result) && (ModifyFactHandler != null))ModifyFactHandler(new NewFactEventArgs(factToModify, deductedFact));
+								if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, (result?"Modified":"Ignored Modification of ") + " Fact: " + factToModify.ToString());
+							}
+					  }
+					}
 				}
+				else {
+					throw new BREException("Implication action not supported: " + implication.Action);
+				}
+				
+				return implicationResultsCount;
 			}
-			else
-				throw new BREException("Implication action not supported: " + implication.Action);
-			
-			return implicationResultsCount;
+			finally {
+				NewFactEventArgs.SetContext(null);
+			}
 		}
 
 		private Fact BuildFact(Atom targetAtom, IList<FactBase.PositiveMatchResult> processResult) {

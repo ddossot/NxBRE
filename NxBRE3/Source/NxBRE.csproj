@@ -86,9 +86,9 @@
     <Compile Include="FlowEngine\Rules\False.cs" />
     <Compile Include="FlowEngine\Rules\FatalException.cs" />
     <Compile Include="InferenceEngine\IEImpl.cs" />
+    <Compile Include="InferenceEngine\IEventContext.cs" />
     <Compile Include="InferenceEngine\IInferenceEngine.cs" />
     <Compile Include="InferenceEngine\IntegrityException.cs" />
-    <Compile Include="InferenceEngine\IPredicate.cs" />
     <Compile Include="InferenceEngine\NewFactEvent.cs" />
     <Compile Include="InferenceEngine\Core\AbstractChainManager.cs" />
     <Compile Include="InferenceEngine\Core\AbstractWorkingMemory.cs" />
@@ -128,6 +128,7 @@
     <Compile Include="InferenceEngine\Rules\Function.cs" />
     <Compile Include="InferenceEngine\Rules\Implication.cs" />
     <Compile Include="InferenceEngine\Rules\Individual.cs" />
+    <Compile Include="InferenceEngine\Rules\IPredicate.cs" />
     <Compile Include="InferenceEngine\Rules\Query.cs" />
     <Compile Include="InferenceEngine\Rules\Slot.cs" />
     <Compile Include="InferenceEngine\Rules\Variable.cs" />

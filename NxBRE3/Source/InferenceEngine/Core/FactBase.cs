@@ -251,13 +251,10 @@ namespace NxBRE.InferenceEngine.Core {
 					
 					// Preserve the label if no new one provided
 					if ((currentFact.Label != null) && (currentFact.Label != String.Empty)
-					    && ((newFact.Label == null) || (newFact.Label == String.Empty))) {
+					    && ((newFact.Label == null) || (newFact.Label == String.Empty)))
 						Assert(newFact.ChangeLabel(currentFact.Label));
-					}
-					else {
+					else
 						Assert(newFact);
-					}
-					
 					return true;
 				} catch(Exception e) {
 					// Assert mysteriously failed: compensate the retraction
@@ -285,12 +282,8 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="factLabel">The label of the Fact to get.</param>
 		/// <returns>The Fact matching the label if present in the FactBase, otherwise null.</returns>
 		public Fact GetFact(string factLabel) {
-			if (labelMap.ContainsKey(factLabel)) {
-				return labelMap[factLabel];
-			}
-			else {
-				return null;
-			}
+			if (labelMap.ContainsKey(factLabel)) return labelMap[factLabel];
+			else return null;
 		}
 		
 		/// <summary>
@@ -307,12 +300,8 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="signature"></param>
 		/// <returns></returns>
 		public bool HasFactsForSignature(string signature) {
-			if (signatureMap.ContainsKey(signature)) {
-				return signatureMap[signature].Count > 0;
-			}
-			else {
-				return false;
-			}
+			if (signatureMap.ContainsKey(signature)) return signatureMap[signature].Count > 0;
+			else return false;
 		}
 		
 		/// <summary>
@@ -332,12 +321,11 @@ namespace NxBRE.InferenceEngine.Core {
 		public static IList<Fact> ExtractFacts(IList<IList<PositiveMatchResult>> processResults) {
 			IList<Fact> result = new List<Fact>();
 			
-			foreach(IList<PositiveMatchResult> processResult in processResults) {
-				foreach(PositiveMatchResult pmr in processResult) {
+			foreach(IList<PositiveMatchResult> processResult in processResults)
+				foreach(PositiveMatchResult pmr in processResult)
 					// naf atom dummy results are skipped
-					if (!(pmr.Fact is FactBase.NegativeFact)) result.Add(pmr.Fact);
-				}
-			}
+					if (!(pmr.Fact is FactBase.NegativeFact)) 
+						result.Add(pmr.Fact);
 			
 			return result;
 		}
@@ -353,15 +341,12 @@ namespace NxBRE.InferenceEngine.Core {
 		public IList<IList<PositiveMatchResult>> ProcessAtomGroup(AtomGroup AG) {
 			List<IList<PositiveMatchResult>> runResult = new List<IList<PositiveMatchResult>>();
 			
-			if (AG.Operator == AtomGroup.LogicalOperator.And) {
+			if (AG.Operator == AtomGroup.LogicalOperator.And)
 				ProcessAnd(AG, runResult, 0, new List<PositiveMatchResult>());
-			}
-			else if (AG.Operator == AtomGroup.LogicalOperator.Or) {
+			else if (AG.Operator == AtomGroup.LogicalOperator.Or)
 				ProcessOr(AG, runResult, new List<PositiveMatchResult>());
-			}
-			else {
+			else
 				throw new BREException("Processor encountered unsupported logical operator: " + AG.Operator);
-			}
 			
 			return runResult.AsReadOnly();
 		}
@@ -421,24 +406,22 @@ namespace NxBRE.InferenceEngine.Core {
 		  																				.Append(".\r\n  Arguments:");
       					
 		  					foreach(DictionaryEntry entry in arguments) {
-	      						sb.Append("   ")
-	      							.Append(entry.Key.ToString());
-	      						
-		      						if (entry.Value != null) {
-		      							sb.Append("[")
-		      								.Append(entry.Value.GetType().ToString())
-		      								.Append("] = ")
-		      								.Append(entry.Value.ToString());
-		      						}
-		      						else {
-		      							sb.Append("[Null]");
-		      						}
-	      						
-	      						sb.Append("\r\n");
+      						sb.Append("   ")
+      							.Append(entry.Key.ToString());
+      						
+      						if (entry.Value != null) {
+      							sb.Append("[")
+      								.Append(entry.Value.GetType().ToString())
+      								.Append("] = ")
+      								.Append(entry.Value.ToString());
+      						}
+      						else sb.Append("[Null]");
+      						
+      						sb.Append("\r\n");
 		  					}
       					
       					throw new BREException(sb.ToString(), ex);
-						}
+							}
 		  			}
 		  		}
 	  	}
@@ -703,37 +686,33 @@ namespace NxBRE.InferenceEngine.Core {
 			  
 				foreach(IList<PositiveMatchResult> resultRow in subProcessResult) {
 					foreach(PositiveMatchResult rpRow in resultRow) {
-					  	if (resultStack.Count == 0) {
-							List<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>(resultStack);
+				  	if (resultStack.Count == 0) {
+							IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>(resultStack);
 							tempResultStack.Add(rpRow);
 							
 							if (depth < (AG.OrderedMembers.Count - 1)) ProcessAnd(AG, processResult, depth+1, tempResultStack);
-							else processResult.Add(tempResultStack.AsReadOnly());
-					  	}
-					  	else {
-						  	// exclude similar results for similar atoms (the engine must produce combinations
-						  	// of facts in this case)
-						  	bool ignore = false;
-						  	
-						  	foreach(PositiveMatchResult pmr in resultStack) {
-						  		if (rpRow.Source.IsIntersecting(pmr.Source)) {
-						  			ignore = true;
-						  			break;
-						  		}
-						  		if (!ignore) {
-								  	List<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>(resultStack);
-										tempResultStack.Add(rpRow);
-										
-									if (depth < (AG.OrderedMembers.Count - 1)) {
-										ProcessAnd(AG, processResult, depth+1, tempResultStack);
-									}
-									else {
-										processResult.Add(tempResultStack.AsReadOnly());
-									}
+					  	else processResult.Add(tempResultStack);
+				  	}
+				  	else {
+					  	// exclude similar results for similar atoms (the engine must produce combinations
+					  	// of facts in this case)
+					  	bool ignore = false;
+					  	
+					  	foreach(PositiveMatchResult pmr in resultStack) {
+					  		if (rpRow.Source.IsIntersecting(pmr.Source)) {
+					  			ignore = true;
+					  			break;
+					  		}
+					  		if (!ignore) {
+							  	IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>(resultStack);
+									tempResultStack.Add(rpRow);
+									
+									if (depth < (AG.OrderedMembers.Count - 1)) ProcessAnd(AG, processResult, depth+1, tempResultStack);
+							  	else processResult.Add(tempResultStack);
 								}
-						  	}
-						}
-			  		}
+					  	}
+					  }
+			  	}
 				}
 			}
 			else {
@@ -752,15 +731,13 @@ namespace NxBRE.InferenceEngine.Core {
 				if (results != null) {
 		  		while(results.MoveNext()) {
 			  		Fact result = (Fact)results.Current;
-			  		List<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>(resultStack);
+			  		IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>(resultStack);
 						tempResultStack.Add(new PositiveMatchResult((Atom)AG.OrderedMembers[depth], result));
 
-						if (depth < (AG.OrderedMembers.Count - 1)) {
+						if (depth < (AG.OrderedMembers.Count - 1))
 							ProcessAnd(AG, processResult, depth+1, tempResultStack);
-						}
-						else {
-							processResult.Add(tempResultStack.AsReadOnly());
-						}
+				  	else
+							processResult.Add(tempResultStack);
 				  }
 				}
 			}
@@ -793,11 +770,11 @@ namespace NxBRE.InferenceEngine.Core {
 					
 					if (results != null) {
 						while(results.MoveNext()) {
-							Fact result = (Fact)results.Current;
-							List<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>();
-							tempResultStack.Add(new PositiveMatchResult((Atom)member, result));
-							processResult.Add(tempResultStack.AsReadOnly());
-					  	}
+				  		Fact result = (Fact)results.Current;
+					  	IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>();
+						  tempResultStack.Add(new PositiveMatchResult((Atom)member, result));
+							processResult.Add(tempResultStack);
+					  }
 					}
 				}
 				
