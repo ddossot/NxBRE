@@ -48,9 +48,6 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <summary>
 		/// Schedule a single implication.
 		/// </summary>
-		/// <remarks>
-		/// This method is public just for unit test purposes.
-		/// </remarks>
 		/// <param name="implication">The implication to schedule.</param>
 		public void Schedule(Implication implication) {
 			if (Logger.IsInferenceEngineVerbose)
@@ -69,6 +66,8 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="implicationBase">The current implication base.</param>
 		/// <param name="factBase">The working factbase.</param>
 		public void Schedule(IList<Implication> positiveImplications, ImplicationBase implicationBase, FactBase factBase) {
+			//FIXME revert to 3.1.0 Schedule as this "smart version" seems to create issues with some rulebases (test case shozing the issue not yet available)
+			
 			if (positiveImplications == null) {
 				foreach(Implication implication in implicationBase) {
 					// if the implication contains a NAF, always schedule it
