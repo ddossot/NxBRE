@@ -6,13 +6,18 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Examples</RootNamespace>
     <AssemblyName>Examples</AssemblyName>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\Debug\</OutputPath>
-    <DebugSymbols>True</DebugSymbols>
-    <DebugType>Full</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>PdbOnly</DebugType>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <Optimize>False</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -20,6 +25,13 @@
     <DebugType>None</DebugType>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <BaseAddress>4194304</BaseAddress>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <FileAlignment>4096</FileAlignment>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
   <ItemGroup>
