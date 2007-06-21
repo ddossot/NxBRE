@@ -771,7 +771,7 @@
 			<Argument value="5" type="Integer" />
 			<Argument value="9" type="Integer" />
 		</ObjectLookup>
-		<ObjectLookup id="TestOperate1" type="NxBRE.Test.TestObject" member="Operate1">
+		<ObjectLookup id="TestOperate1" type="NxBRE.Test.TestObject, NxBRE-UnitTest" member="Operate1">
 			<Argument value="0.5" type="Double" />
 			<Argument value="4" type="Integer" />
 			<Argument value="7" type="Integer" />
@@ -781,7 +781,7 @@
 			Notes	: For methods with a parameter followed by a param array of same type, the params must be wrapped in an array
 			Result	: Context object TestOperate2 should contain -3 + (4 * 7) = 25
 		-->
-		<ObjectLookup id="TestOperate2" type="NxBRE.Test.TestObject" member="Operate2">
+		<ObjectLookup id="TestOperate2" type="NxBRE.Test.TestObject, NxBRE-UnitTest" member="Operate2">
 			<Argument value="-3" type="Integer" />
 			<Argument value="4" type="Integer" />
 			<Argument value="7" type="Integer" />
@@ -807,7 +807,7 @@
 						Remember that using the "value" attribute gives a String type, unless you specify a type argument.
 						If you use "ruleValue", then the type will be of the asserted's object type.
 					     The Assembly name can be given after the coma.  -->
-					<ObjectLookup id="TestObject_NewProperty" type="NxBRE.Test.TestObject" member="Add">
+					<ObjectLookup id="TestObject_NewProperty" type="NxBRE.Test.TestObject, NxBRE-UnitTest" member="Add">
 						<Argument valueId="10i"/>
 						<Argument valueId="TestObject_MyProperty"/>
 					</ObjectLookup>
@@ -821,7 +821,7 @@
 					</ObjectLookup>
 					<!-- Instantiates a new TestObject in the context
 						As for methods calls, the constructor used is selected using the arguments' types. -->
-					<Assert id="TestObject2" type="NxBRE.Test.TestObject">
+					<Assert id="TestObject2" type="NxBRE.Test.TestObject, NxBRE-UnitTest">
 						<Argument valueId="STORED_TRUE"/>
 						<Argument value="99" type="Integer"/>
 						<Argument value="world"/>
