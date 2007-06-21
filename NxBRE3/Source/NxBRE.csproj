@@ -36,7 +36,6 @@
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Data" />
-    <Reference Include="nunit.framework" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -144,28 +143,6 @@
     <Compile Include="Util\Xml.cs" />
     <Compile Include="Util\Compilation.cs" />
     <Compile Include="Util\DataAccess.cs" />
-    <Compile Include="Test\FlowEngine\TestDrivers.cs" />
-    <Compile Include="Test\FlowEngine\TestRule.cs" />
-    <Compile Include="Test\FlowEngine\TestBREImpl.cs" />
-    <Compile Include="Test\InferenceEngine\TestEngineCoreFeaturesRuleML086.cs" />
-    <Compile Include="Test\InferenceEngine\TestEngineMisc.cs" />
-    <Compile Include="Test\InferenceEngine\TestEngineMiscHotSwapWM.cs" />
-    <Compile Include="Test\InferenceEngine\TestEngineMiscThreadSafeWM.cs" />
-    <Compile Include="Test\InferenceEngine\TestEngineRuleML09MultiSyntax.cs" />
-    <Compile Include="Test\InferenceEngine\TestTypedFacts.cs" />
-    <Compile Include="Test\InferenceEngine\AbstractTestEngine.cs" />
-    <Compile Include="Test\InferenceEngine\TestAdapter.cs" />
-    <Compile Include="Test\InferenceEngine\TestBinder.cs" />
-    <Compile Include="Test\InferenceEngine\TestCore.cs" />
-    <Compile Include="Test\InferenceEngine\TestEngineCoreFeaturesHRF.cs" />
-    <Compile Include="Test\InferenceEngine\TestEngineCoreFeaturesRuleML09Compact.cs" />
-    <Compile Include="Test\InferenceEngine\TestEngineCoreFeaturesRuleML09Expanded.cs" />
-    <Compile Include="Test\InferenceEngine\TestEngineCoreFeaturesRuleML09.cs" />
-    <Compile Include="Test\TestUtil.cs" />
-    <Compile Include="Test\TestCompilation.cs" />
-    <Compile Include="Test\TestDataSet.cs" />
-    <Compile Include="Test\TestObject.cs" />
-    <Compile Include="Test\TestSchema.cs" />
     <EmbeddedResource Include="Resources\businessRules.xsd" />
     <EmbeddedResource Include="Resources\pseudocode_body.xsl" />
     <EmbeddedResource Include="Resources\pseudocode_frames.xsl" />
@@ -185,16 +162,13 @@
     <Compile Include="InferenceEngine\Registry\IRegistry.cs" />
     <Compile Include="InferenceEngine\Registry\FileRegistryConfiguration.cs" />
     <Compile Include="InferenceEngine\IO\VisualBasicBinderFactory.cs" />
-    <Compile Include="Test\InferenceEngine\TestFileRegistry.cs" />
     <Compile Include="InferenceEngine\Core\FactEnumeratorFactory.cs" />
     <Compile Include="Util\HashCodeBuilder.cs" />
     <Compile Include="Util\HashSet.cs" />
     <Compile Include="FlowEngine\Rules\Matches.cs" />
-    <Compile Include="Test\InferenceEngine\TestEngineCoreFeaturesRuleML091.cs" />
     <Compile Include="InferenceEngine\IO\RuleML091NafDatalogAdapter.cs" />
     <EmbeddedResource Include="Resources\ruleml-0_91-nafdatalog.xsd" />
     <Compile Include="InferenceEngine\IO\AccumulatingExtendedRuleBaseAdapter.cs" />
-    <Compile Include="Test\FlowEngine\TestExtra.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />
@@ -208,10 +182,7 @@
     <Folder Include="InferenceEngine\IO" />
     <Folder Include="InferenceEngine\Rules" />
     <Folder Include="InferenceEngine\IO\Hrf086" />
-    <Folder Include="Test" />
     <Folder Include="Util" />
-    <Folder Include="Test\FlowEngine" />
-    <Folder Include="Test\InferenceEngine" />
     <Content Include="NxBRE.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
