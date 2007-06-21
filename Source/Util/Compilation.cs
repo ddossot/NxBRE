@@ -40,6 +40,8 @@ namespace NxBRE.Util
 		
 		private static ReferenceLinkModes referenceLinkMode = (ReferenceLinkModes) Parameter.GetEnum("referenceLinkMode", typeof(ReferenceLinkModes), ReferenceLinkModes.Full);
 		
+		private static bool generateInMemoryAssembly = Parameter.Get<bool>("generateInMemoryAssembly", true);
+		
 		private Compilation() {}
 		
 		/// <summary>
@@ -75,6 +77,22 @@ namespace NxBRE.Util
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the active mode for dynamic assembly compilation. Default is in-memory.
+		/// <see cref="CompilerParameters.CompilationParameters.GenerateInMemory"/>
+		/// </summary>
+		/// <remarks>
+		/// Patch 1740387 submitted by Marcin Kielar (zorba128)
+		/// </remarks>
+		public static bool GenerateInMemoryAssembly	{
+			get	{
+				return generateInMemoryAssembly;
+			}
+			set	{
+				generateInMemoryAssembly = value;
+			}
+		}
+		
 		/// <summary>
 		/// Performs an immediate evaluation of an expression that takes no argument.
 		/// </summary>
@@ -251,7 +269,7 @@ namespace NxBRE.Util
 		private static object LoadClass(CodeDomProvider codeProvider, string targetClassName, string source, bool sourceIsString) {
 			CompilerParameters compilerParameters = new CompilerParameters();
 			compilerParameters.GenerateExecutable = false;
-			compilerParameters.GenerateInMemory = true;
+			compilerParameters.GenerateInMemory = Compilation.GenerateInMemoryAssembly;
 			compilerParameters.IncludeDebugInformation = true;
 			compilerParameters.TreatWarningsAsErrors = false;
 			
@@ -275,15 +293,37 @@ namespace NxBRE.Util
 		
 			CompilerResults cr;
 			
-			if (sourceIsString)
+			if (sourceIsString) {
 				cr = codeProvider.CompileAssemblyFromSource(compilerParameters, source);
-			else
+			}
+			else {
 				cr = codeProvider.CompileAssemblyFromFile(compilerParameters, source);
+			}
 			
-			if (cr.Errors.Count == 0)
-				return cr.CompiledAssembly.CreateInstance(targetClassName);
-			else
+			if (cr.Errors.Count != 0) {
 				throw new BREException(GetCompilerErrors(cr));
+			}
+			
+			// Marcin Kielar - zorba128
+			// Under some (strange?) conditions, compilation finishes without errors,
+			// but assembly cannot be loaded:
+			//  - any of Assembly's methods (here - GetTypes) throws exception
+			//  - CreateInstance returns null
+			try {
+				cr.CompiledAssembly.GetTypes();
+			}
+			catch(Exception e)
+			{
+				throw new BREException("Unable to create evaluator class instance - assembly loading problem", e);
+			}
+
+			object evaluatorInstance = cr.CompiledAssembly.CreateInstance(targetClassName);
+			
+			if(evaluatorInstance == null) {
+				throw new BREException("Unable to create evaluator class instance");
+			}
+
+			return evaluatorInstance;
 		}
 		
 		//--------- Private Methods ---------------
@@ -321,6 +361,10 @@ namespace NxBRE.Util
 					
 					// Look in the bin subdirectory of the app domain base directory (ASP.NET)
 					nxbreAssemblyLocation = AppDomain.CurrentDomain.BaseDirectory + @"bin/" + NXBRE_DLL;
+					if (File.Exists(nxbreAssemblyLocation)) return nxbreAssemblyLocation;
+					
+					// Try to use assembly from current location
+					nxbreAssemblyLocation = typeof(Compilation).Assembly.Location;
 					if (File.Exists(nxbreAssemblyLocation)) return nxbreAssemblyLocation;
 					
 					throw new BREException(NXBRE_DLL + " is impossible to find");
