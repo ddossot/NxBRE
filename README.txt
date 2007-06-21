@@ -68,6 +68,10 @@ All static calls on NxBRE helpers and utilities, either from FlowEngine rules or
 
 v3.1.0
 
+ General
+
+  * Extracted unit tests in a friend assembly (feature request 1739462)
+
  Flow Engine
 
   * Added regex matcher operator (feature request 1545354).
