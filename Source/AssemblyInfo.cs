@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 [assembly:AssemblyConfiguration("")]
 [assembly:AssemblyCompany("AgilePartner S.A.")]
 [assembly:AssemblyProduct("NxBRE")]
-[assembly:AssemblyCopyright("Copyright (C) 2003-2006 David Dossot et al.")]
+[assembly:AssemblyCopyright("Copyright (C) 2003-2007 David Dossot et al.")]
 [assembly:AssemblyTrademark("NxBRE is distributed under the GNU LESSER GENERAL PUBLIC LICENSE.")]
 [assembly:AssemblyCulture("")]
 [assembly:AssemblyVersion("3.1.0.*")]
