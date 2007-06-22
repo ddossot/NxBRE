@@ -965,8 +965,14 @@ namespace NxBRE.InferenceEngine {
 					
 					// counting implication factbase action
 					bool result = WM.FB.Assert(deductedFact);
-					if ((result) && (NewFactHandler != null)) NewFactHandler(new NewFactEventArgs(deductedFact));
-					if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, (result?"Asserted":"Ignored Assertion of ") + " Fact: " + deductedFact.ToString());
+					
+					if ((result) && (NewFactHandler != null)) {
+						NewFactHandler(new NewFactEventArgs(deductedFact));
+					}
+					
+					if (Logger.IsInferenceEngineVerbose) {
+						Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, (result?"Asserted":"Ignored Assertion of ") + " Fact: " + deductedFact.ToString());
+					}
 				}
 				else if ((implication.Action == ImplicationAction.Assert)
 		      		|| (implication.Action == ImplicationAction.Retract))
@@ -981,14 +987,26 @@ namespace NxBRE.InferenceEngine {
 							if (implication.Action == ImplicationAction.Retract) {
 								// retracting implication factbase action
 								bool result = WM.FB.Retract(deductedFact);
-								if ((result) && (DeleteFactHandler != null)) DeleteFactHandler(new NewFactEventArgs(deductedFact));
-								if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, (result?"Retracted":"Ignored Retraction of ") + " Fact: " + deductedFact.ToString());
+								
+								if ((result) && (DeleteFactHandler != null)) {
+									DeleteFactHandler(new NewFactEventArgs(deductedFact));
+								}
+								
+								if (Logger.IsInferenceEngineVerbose) {
+									Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, (result?"Retracted":"Ignored Retraction of ") + " Fact: " + deductedFact.ToString());
+								}
 							}
 							else {
 								// asserting implication factbase action
 								bool result = WM.FB.Assert(deductedFact);
-								if ((result) && (NewFactHandler != null)) NewFactHandler(new NewFactEventArgs(deductedFact));
-								if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, (result?"Asserted":"Ignored Assertion of ") + " Fact: " + deductedFact.ToString());
+								
+								if ((result) && (NewFactHandler != null)) {
+									NewFactHandler(new NewFactEventArgs(deductedFact));
+								}
+								
+								if (Logger.IsInferenceEngineVerbose) {
+									Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, (result?"Asserted":"Ignored Assertion of ") + " Fact: " + deductedFact.ToString());
+								}
 							}
 						}
 					}
@@ -1016,8 +1034,14 @@ namespace NxBRE.InferenceEngine {
 						  if ((deductedFact != null) && (!factToModify.Equals(deductedFact))) {
 								implicationResultsCount++;
 								bool result = WM.FB.Modify(factToModify, deductedFact);
-								if ((result) && (ModifyFactHandler != null))ModifyFactHandler(new NewFactEventArgs(factToModify, deductedFact));
-								if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, (result?"Modified":"Ignored Modification of ") + " Fact: " + factToModify.ToString());
+								
+								if ((result) && (ModifyFactHandler != null)) {
+									ModifyFactHandler(new NewFactEventArgs(factToModify, deductedFact));
+								}
+								
+								if (Logger.IsInferenceEngineVerbose) {
+									Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, (result?"Modified":"Ignored Modification of ") + " Fact: " + factToModify.ToString());
+								}
 							}
 					  }
 					}

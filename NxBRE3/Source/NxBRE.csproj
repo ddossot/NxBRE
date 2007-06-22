@@ -84,6 +84,7 @@
     <Compile Include="FlowEngine\Rules\Exception.cs" />
     <Compile Include="FlowEngine\Rules\False.cs" />
     <Compile Include="FlowEngine\Rules\FatalException.cs" />
+    <Compile Include="InferenceEngine\Core\EventContextFactory.cs" />
     <Compile Include="InferenceEngine\IEImpl.cs" />
     <Compile Include="InferenceEngine\IEventContext.cs" />
     <Compile Include="InferenceEngine\IInferenceEngine.cs" />
