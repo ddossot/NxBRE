@@ -1,5 +1,4 @@
-namespace NxBRE.InferenceEngine
-{
+namespace NxBRE.InferenceEngine {
 	using System;
 	using System.Collections.Generic;
 	
@@ -9,7 +8,7 @@ namespace NxBRE.InferenceEngine
 	/// Defines the information available in the event context.
 	/// </summary>
 	/// <author>David Dossot</author>
-	public interface IIEventContext
+	public interface IEventContext
 	{
 		/// <summary>
 		/// The facts that are source of this event.
