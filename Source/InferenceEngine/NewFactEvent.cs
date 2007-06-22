@@ -12,20 +12,20 @@ namespace NxBRE.InferenceEngine {
 	/// New Fact event definition.
 	/// </summary>
 	/// <remarks>
-	/// DO NOT ASSERT OR RETRACT FACTS WHEN HANDLING THIS EVENT!
+	/// DO NOT ASSERT OR RETRACT FACTS OR ALTER THE EVENT CONTEXT WHEN HANDLING THIS EVENT!
 	/// </remarks>
 	public sealed class NewFactEventArgs: EventArgs {
 		[ThreadStatic]
-		private static IIEventContext context;
+		private static IEventContext context;
 		
 		private readonly Fact fact;
 		private readonly Fact otherFact;
 		
-		public static IIEventContext Context {
+		public static IEventContext Context {
 			get { return context; }
 		}
 		
-		internal static void SetContext(IIEventContext newContext) {
+		internal static void SetContext(IEventContext newContext) {
 			context = newContext;
 		}
 		
