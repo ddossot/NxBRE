@@ -84,6 +84,8 @@ v3.1.0
 
   * Improved adapter load method to allow sharing (feature request 1710153).
 
+  * Added event context to allow discovering the facts and implication at the origin of the event (feature request 1657420).
+
 
 
 v3.0.0
