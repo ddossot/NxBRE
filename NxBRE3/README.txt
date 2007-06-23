@@ -76,6 +76,10 @@ v3.1.0
 
   * Added regex matcher operator (feature request 1545354).
 
+  * The engine can now load operators and rule factories from a fully qualified class name (bug 1741059).
+
+  * Allow BRE "Compare" element in xBRE schema (feature request 1740988).
+
  Inference Engine
 
   * Added features for controlling engine behavior at rule base load time and process time regarding performative and connective rules.
