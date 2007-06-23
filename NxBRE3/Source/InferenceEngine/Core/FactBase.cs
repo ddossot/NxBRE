@@ -94,7 +94,7 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <summary>
 		/// A class representing one selected match between an atom and a fact
 		/// </summary>
-		public class PositiveMatchResult {
+		internal class PositiveMatchResult {
 			private readonly Atom source;
 			private readonly Fact fact;
 			
@@ -318,18 +318,46 @@ namespace NxBRE.InferenceEngine.Core {
 		/// </summary>
 		/// <param name="processResults">The process results from where facts must be extracted.</param>
 		/// <returns>The array of extracted facts.</returns>
-		public static IList<Fact> ExtractFacts(IList<IList<PositiveMatchResult>> processResults) {
+		public static IList<Fact> ExtractAllFacts(IList<IList<PositiveMatchResult>> processResults) {
 			IList<Fact> result = new List<Fact>();
 			
-			foreach(IList<PositiveMatchResult> processResult in processResults)
-				foreach(PositiveMatchResult pmr in processResult)
+			foreach(IList<PositiveMatchResult> processResult in processResults) {
+				foreach(PositiveMatchResult pmr in processResult) {
 					// naf atom dummy results are skipped
-					if (!(pmr.Fact is FactBase.NegativeFact)) 
+					if (!(pmr.Fact is FactBase.NegativeFact)) {
 						result.Add(pmr.Fact);
+					}
+				}
+			}
 			
 			return result;
 		}
 
+		//TODO comment
+		public static IList<IList<Fact>> ExtractFacts(IList<IList<PositiveMatchResult>> processResults) {
+			IList<IList<Fact>> result = new List<IList<Fact>>();
+			
+			foreach(IList<PositiveMatchResult> processResult in processResults) {
+				result.Add(ExtractFacts(processResult));
+			}
+			
+			return result;
+		}
+
+		//TODO comment
+		public static IList<Fact> ExtractFacts(IList<PositiveMatchResult> processResult) {
+			IList<Fact> result = new List<Fact>();
+			
+			foreach(PositiveMatchResult pmr in processResult) {
+				// naf atom dummy results are skipped
+				if (!(pmr.Fact is FactBase.NegativeFact)) {
+					result.Add(pmr.Fact);
+				}
+			}
+			
+			return result;
+		}
+		
 		/// <summary>
 		/// Runs an AtomGroup against the FactBase.
 		/// </summary>
