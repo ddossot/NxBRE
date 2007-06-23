@@ -458,7 +458,7 @@ namespace NxBRE.FlowEngine
 							if (Logger.IsFlowEngineVerbose) Logger.FlowEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Found Factory: " + factory + " Id: " + id);
 							if (Logger.IsFlowEngineVerbose) Logger.FlowEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Loading Factory: " + id);
 							
-							object tmpClass = Assembly.GetExecutingAssembly().CreateInstance(factory);
+							object tmpClass = Reflection.ClassNew(factory, null);
 							
 							if (tmpClass is IBRERuleFactory)
 							{
@@ -749,11 +749,12 @@ namespace NxBRE.FlowEngine
 			
 			if (!ruleContext.OperatorMap.Contains(operatorId)) {
 				if (Logger.IsFlowEngineVerbose) Logger.FlowEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Loading Operator: " + operatorId);
-				ruleOperator = (IBREOperator) Assembly.GetExecutingAssembly().CreateInstance(operatorId);
+				ruleOperator = (IBREOperator) Reflection.ClassNew(operatorId, null);
 				ruleContext.SetOperator(operatorId, ruleOperator);
 			}
-			else
+			else {
 				ruleOperator = ruleContext.GetOperator(operatorId);
+			}
 			
 			return ruleOperator;
 		}

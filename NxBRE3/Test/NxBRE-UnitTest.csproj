@@ -30,6 +30,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="FlowEngine\StringContainsOperator.cs" />
     <Compile Include="FlowEngine\TestBREImpl.cs" />
     <Compile Include="FlowEngine\TestDrivers.cs" />
     <Compile Include="FlowEngine\TestExtra.cs" />

@@ -650,6 +650,48 @@
 			</Else>
 		</Logic>
 		<!--
+			Tests	: Custom operator using BRE syntax and FQN
+			Notes	: None
+			Result	: Should be TRUE
+		-->
+		<Logic>
+			<If>
+				<And>
+					<Compare leftId="HAYSTACK" operator="NxBRE.Test.FlowEngine.StringContainsOperator, NxBRE-UnitTest" rightId="NEEDLE">
+						<String id="HAYSTACK" value="abcdef"/>
+						<String id="NEEDLE" value="cd"/>
+					</Compare>
+				</And>
+				<Do>
+					<True id="LT23"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="LT23"/>
+			</Else>
+		</Logic>
+		<!--
+			Tests	: Custom operator using BRE syntax and pased in the context
+			Notes	: None
+			Result	: Should be TRUE
+		-->
+		<Logic>
+			<If>
+				<And>
+					<Compare leftId="HAYSTACK" operator="StringContains" rightId="NEEDLE">
+						<String id="HAYSTACK" value="hijklm"/>
+						<String id="NEEDLE" value="jk"/>
+					</Compare>
+				</And>
+				<Do>
+					<True id="LT24"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="LT24"/>
+			</Else>
+		</Logic>
+		<!--
 			Tests	: Static rule set invocation
 			Result	: Should process all global rules and the ones in the set named REFLECTION
 			Notes	: None

@@ -19,12 +19,12 @@ namespace NxBRE.Test.FlowEngine
 	[TestFixture]
 	public class TestBREImpl
 	{
-		private const int EXPECTED_CONTEXT_OPERATOR = 8;
+		private const int EXPECTED_CONTEXT_OPERATOR = 10;
 		private const int EXPECTED_EXCEPTION = 4;
 		private const int EXPECTED_WHILE = 39;
 		private const int EXPECTED_GLOBALS = 13;
 		private const int RULE_TESTS = 3;
-		private const int LOGIC_TESTS = 22;
+		private const int LOGIC_TESTS = 24;
 		
 		private const string ASSERTED_HELLO_VALUE = "world";
 		private static int[] ARRAY = {1,3,5,7,11};
@@ -225,6 +225,9 @@ namespace NxBRE.Test.FlowEngine
 				// It can be usefull to establish bindings on the fly.
 				bre.RuleContext.SetFactory("mulBy5i",
 								                 	 new BRERuleFactory(this, "ContextfullDelegate"));
+				
+				// Add a custom operator to the context
+				bre.RuleContext.SetOperator("StringContains", new StringContainsOperator());
 				
 				// This first process should only load-up some values, that we quickly reset.
 				// The objective is to test that processing with no parameter works.

@@ -68,6 +68,14 @@
 		<xs:attribute name="id" type="xs:NMTOKEN" use="required"/>
 		<xs:attribute name="value" type="xs:byte" use="required"/>
 	</xs:complexType>
+		<xs:complexType name="CompareType">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="AssertGroup"/>
+		</xs:choice>
+		<xs:attribute name="leftId" type="xs:NMTOKEN" use="required"/>
+		<xs:attribute name="operator" type="xs:string" use="required"/>
+		<xs:attribute name="rightId" type="xs:NMTOKEN" use="required"/>
+	</xs:complexType>
 	<xs:complexType name="DateType">
 		<xs:attribute name="id" type="xs:NMTOKEN" use="required"/>
 		<xs:attribute name="value" type="xs:date" use="required"/>
@@ -385,6 +393,7 @@
 			<xs:element name="GreaterThan" type="GreaterThanType"/>
 			<xs:element name="GreaterThanEqualTo" type="GreaterThanEqualToType"/>
 			<xs:element name="Matches" type="MatchesType"/>
+			<xs:element name="Compare" type="CompareType"/>
 		</xs:choice>
 	</xs:group>
 	<xs:group name="NxBREGroup">
