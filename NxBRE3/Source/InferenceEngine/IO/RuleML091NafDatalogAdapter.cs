@@ -1,3 +1,6 @@
+/// <summary>
+/// CURRENTLY INTERNAL BECAUSE NOT READY FOR PRIME TIME!
+/// </summary>
 namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
@@ -14,7 +17,7 @@ namespace NxBRE.InferenceEngine.IO {
 	///<summary>Adapter supporting RuleML 0.91 NafDatalog Sublanguage.</summary>
 	///<remarks>UTF-8 is the default encoding.</remarks>
 	/// <author>David Dossot</author>
-	public class RuleML091NafDatalogAdapter:AccumulatingExtendedRuleBaseAdapter {
+	internal class RuleML091NafDatalogAdapter:AccumulatingExtendedRuleBaseAdapter {
 		private static readonly Fact IGNORED_DEDUCTION = new Fact("_ignored_");
 
 		/// <summary>
