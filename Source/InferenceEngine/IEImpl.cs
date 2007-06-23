@@ -875,7 +875,7 @@ namespace NxBRE.InferenceEngine {
 				iteration++;
 
 				// Schedule all implications matching the existing facts
-				agenda.Schedule(iterationPositiveImplications, IB, WM.FB);
+				agenda.Schedule(iterationPositiveImplications, IB);
 				agenda.PrepareExecution();
 				
 				if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Iteration #" +
