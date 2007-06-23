@@ -15,18 +15,15 @@ namespace NxBRE.InferenceEngine {
 	/// DO NOT ASSERT OR RETRACT FACTS OR ALTER THE EVENT CONTEXT WHEN HANDLING THIS EVENT!
 	/// </remarks>
 	public sealed class NewFactEventArgs: EventArgs {
-		[ThreadStatic]
-		private static IEventContext context;
-		
+		private readonly IEventContext context;
 		private readonly Fact fact;
 		private readonly Fact otherFact;
 		
-		public static IEventContext Context {
+		/// <summary>
+		/// The context in which the event happened.
+		/// </summary>
+		public IEventContext Context {
 			get { return context; }
-		}
-		
-		internal static void SetContext(IEventContext newContext) {
-			context = newContext;
 		}
 		
 		/// <summary>
@@ -54,7 +51,17 @@ namespace NxBRE.InferenceEngine {
 		/// DO NOT ASSERT OR RETRACT FACTS WHEN HANDLING THIS EVENT!
 		/// </remarks>
 		/// <param name="fact">The Fact that generated the event.</param>
-		public NewFactEventArgs(Fact fact):this(fact, null) {}
+		public NewFactEventArgs(Fact fact):this(fact, null, null) {}
+		
+		/// <summary>
+		/// Instantiates a new Fact event definition.
+		/// </summary>
+		/// <remarks>
+		/// DO NOT ASSERT OR RETRACT FACTS WHEN HANDLING THIS EVENT!
+		/// </remarks>
+		/// <param name="fact">The Fact that generated the event.</param>
+		/// <param name="context">The context of the event.</param>
+		public NewFactEventArgs(Fact fact, IEventContext context):this(fact, null, context) {}
 		
 		/// <summary>
 		/// Instantiates a new Fact event definition.
@@ -64,10 +71,21 @@ namespace NxBRE.InferenceEngine {
 		/// </remarks>
 		/// <param name="fact">The Fact that generated the event.</param>
 		/// <param name="otherFact">The Other Fact that generated the event.</param>
-		public NewFactEventArgs(Fact fact, Fact otherFact)
-		{
+		public NewFactEventArgs(Fact fact, Fact otherFact):this(fact, otherFact, null) {}
+		
+		/// <summary>
+		/// Instantiates a new Fact event definition.
+		/// </summary>
+		/// <remarks>
+		/// DO NOT ASSERT OR RETRACT FACTS WHEN HANDLING THIS EVENT!
+		/// </remarks>
+		/// <param name="fact">The Fact that generated the event.</param>
+		/// <param name="otherFact">The Other Fact that generated the event.</param>
+		/// <param name="context">The context of the event.</param>
+		public NewFactEventArgs(Fact fact, Fact otherFact, IEventContext context) {
 			this.fact = fact;
 			this.otherFact = otherFact;
+			this.context = context;
 		}
 	}
 }
