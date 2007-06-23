@@ -36,15 +36,15 @@ namespace NxBRE.InferenceEngine.Core {
 			// NOOP
 		}
 		
-		//FIXME accept IList<IList<FactBase.PositiveMatchResult>>
-		internal static IEventContext NewEventContext(IList<IList<Fact>> facts, Implication implication) {
-			return new ImmutableEventContext(facts, implication);
+		//TODO unit test
+		internal static IEventContext NewEventContext(IList<IList<FactBase.PositiveMatchResult>> facts, Implication implication) {
+			return new ImmutableEventContext(FactBase.ExtractFacts(facts), implication);
 		}
 		
-		//FIXME accept IList<FactBase.PositiveMatchResult>
-		internal static IEventContext NewEventContext(IList<Fact> facts, Implication implication) {
+		//TODO unit test
+		internal static IEventContext NewEventContext(IList<FactBase.PositiveMatchResult> facts, Implication implication) {
 			IList<IList<Fact>> wrappedFacts = new List<IList<Fact>>();
-			wrappedFacts.Add(facts);
+			wrappedFacts.Add(FactBase.ExtractFacts(facts));
 			return new ImmutableEventContext(wrappedFacts, implication);
 		}
 	}

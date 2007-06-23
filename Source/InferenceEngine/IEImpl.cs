@@ -123,6 +123,18 @@ namespace NxBRE.InferenceEngine {
 		/// <remarks>The default is 15000.</remarks>
 		internal int lockTimeOut = Parameter.Get<int>("lockTimeOut", 15000);
 		
+		private bool exposeEventContext = Parameter.Get<bool>("generateInMemoryAssembly", true);
+		
+		//TODO comment and document in PDF guide
+		public bool ExposeEventContext {
+			get	{
+				return exposeEventContext;
+			}
+			set	{
+				exposeEventContext = value;
+			}
+		}
+		
 		private IList<Fact> PerformativeAssertions {
 			get {
 				return performativeAssertions;
@@ -967,6 +979,10 @@ namespace NxBRE.InferenceEngine {
 					bool result = WM.FB.Assert(deductedFact);
 					
 					if ((result) && (NewFactHandler != null)) {
+						if (ExposeEventContext) {
+							NewFactEventArgs.SetContext(EventContextFactory.NewEventContext(processResults, implication));
+						}
+						
 						NewFactHandler(new NewFactEventArgs(deductedFact));
 					}
 					
@@ -989,6 +1005,10 @@ namespace NxBRE.InferenceEngine {
 								bool result = WM.FB.Retract(deductedFact);
 								
 								if ((result) && (DeleteFactHandler != null)) {
+									if (ExposeEventContext) {
+										NewFactEventArgs.SetContext(EventContextFactory.NewEventContext(processResult, implication));
+									}
+						
 									DeleteFactHandler(new NewFactEventArgs(deductedFact));
 								}
 								
@@ -1001,6 +1021,10 @@ namespace NxBRE.InferenceEngine {
 								bool result = WM.FB.Assert(deductedFact);
 								
 								if ((result) && (NewFactHandler != null)) {
+									if (ExposeEventContext) {
+										NewFactEventArgs.SetContext(EventContextFactory.NewEventContext(processResult, implication));
+									}
+						
 									NewFactHandler(new NewFactEventArgs(deductedFact));
 								}
 								
@@ -1022,7 +1046,7 @@ namespace NxBRE.InferenceEngine {
 	
 					  if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Modifying Implication '" + implication.Label + "' will target matches of: " + modificationTargetLookup);
 					  	
-					 	foreach(Fact factToModify in FactBase.ExtractFacts(WM.FB.ProcessAtomGroup(new AtomGroup(AtomGroup.LogicalOperator.And, modificationTargetLookup)))) {
+					 	foreach(Fact factToModify in FactBase.ExtractAllFacts(WM.FB.ProcessAtomGroup(new AtomGroup(AtomGroup.LogicalOperator.And, modificationTargetLookup)))) {
 						  if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "-> found target: " + factToModify);
 	
 						  // for each fact, perform the modification
@@ -1036,6 +1060,10 @@ namespace NxBRE.InferenceEngine {
 								bool result = WM.FB.Modify(factToModify, deductedFact);
 								
 								if ((result) && (ModifyFactHandler != null)) {
+									if (ExposeEventContext) {
+										NewFactEventArgs.SetContext(EventContextFactory.NewEventContext(processResult, implication));
+									}
+						
 									ModifyFactHandler(new NewFactEventArgs(factToModify, deductedFact));
 								}
 								
