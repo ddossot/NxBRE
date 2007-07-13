@@ -14,6 +14,23 @@ namespace NxBRE.Test.InferenceEngine {
 	
 	[TestFixture]
 	public class TestEngineMisc:AbstractTestEngine {
+		
+		[Test]
+		public void AgendaScheduler() {
+			// regression test for bug 1713544
+			ie.LoadRuleBase(new RuleML09NafDatalogAdapter(ruleFilesFolder + "agenda-scheduler-test.ruleml", FileAccess.Read));
+			
+			deductionsToCheck = new string[]{"deduction{B}", "then{C}"};
+		  	NewFactEvent honf = new NewFactEvent(HandleExpectedNewFact);
+		  	ie.NewFactHandler += honf;
+	
+		  	Process();
+	
+		  	Assert.AreEqual(2, deducted, "Deducted");
+			Assert.IsFalse(wrongDeduction, "Wrong deduction");
+	
+			ie.NewFactHandler -= honf;
+		}
 
 		[Test]
 		public void Discount() {
