@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <RuleML xmlns="http://www.ruleml.org/0.9/xsd" xsi:schemaLocation="http://www.ruleml.org/0.9/xsd ruleml-0_9-nafdatalog.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	<oid>
-		<Ind>NxBRE Agenda Scheduler Test File</Ind>
+		<Ind>NxBRE Agenda Scheduler Test File - Regression test for bug 1713544</Ind>
 	</oid>
   <!--Implications-->
 	<Assert mapDirection="forward">
