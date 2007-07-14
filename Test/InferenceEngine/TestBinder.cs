@@ -180,15 +180,15 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.LoadRuleBase(new RuleML09NafDatalogAdapter(ruleFilesFolder + "events-test.ruleml",
 		                                           	 FileAccess.Read));
 
-      Hashtable bo = new Hashtable();
-      bo.Add("ASSERTED", new ArrayList());
-      bo.Add("RETRACTED", new ArrayList());
-      bo.Add("MODIFIED", new ArrayList());
+			Hashtable bo = new Hashtable();
+			bo.Add("ASSERTED", new ArrayList());
+			bo.Add("RETRACTED", new ArrayList());
+			bo.Add("MODIFIED", new ArrayList());
+				
+			ie.Process(bo);
 			
-      ie.Process(bo);
-			
-			Assert.AreEqual(1, ((ArrayList)bo["ASSERTED"]).Count, "Count Asserted");
-			Assert.AreEqual("toAssert{whatever}", ((ArrayList)bo["ASSERTED"])[0].ToString(), "Asserted Right");
+			Assert.AreEqual(2, ((ArrayList)bo["ASSERTED"]).Count, "Count Asserted");
+			Assert.IsTrue(Misc.IListToString((ArrayList)bo["ASSERTED"]).Contains("toAssert{whatever}"), "Asserted Right");
 			
 			Assert.AreEqual(1, ((ArrayList)bo["RETRACTED"]).Count, "Count Retracted");
 			Assert.AreEqual("toRetract{whatever}", ((ArrayList)bo["RETRACTED"])[0].ToString(), "Retracted Right");
