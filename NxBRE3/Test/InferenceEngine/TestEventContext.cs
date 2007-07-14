@@ -39,7 +39,7 @@ namespace NxBRE.Test.InferenceEngine {
 		
 		[Test]
 		public void TestAllActionsWithContext() {
-			ie.ExposeEventContext = true;
+			ie.exposeEventContext = true;
 			
 			ie.NewFactHandler +=  new NewFactEvent(AssertFactHandlerWithContext);
 			ie.DeleteFactHandler += new NewFactEvent(RetractFactHandlerWithContext);
@@ -82,7 +82,7 @@ namespace NxBRE.Test.InferenceEngine {
 		
 		[Test]
 		public void TestAllActionsWithoutContext() {
-			ie.ExposeEventContext = false;
+			ie.exposeEventContext = false;
 			
 			ie.NewFactHandler += new NewFactEvent(EventHandlerWithoutContext);
 			ie.DeleteFactHandler += new NewFactEvent(EventHandlerWithoutContext);

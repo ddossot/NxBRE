@@ -123,21 +123,11 @@ namespace NxBRE.InferenceEngine {
 		/// <remarks>The default is 15000.</remarks>
 		internal int lockTimeOut = Parameter.Get<int>("lockTimeOut", 15000);
 		
-		private bool exposeEventContext = Parameter.Get<bool>("generateInMemoryAssembly", true);
-		
 		/// <summary>
-		/// Determines if the events raised by the engine should contain the context,
+		/// Defines if the events raised by the engine should contain the context,
 		/// i.e. the source facts, implied in the event.
 		/// </summary>
-		public bool ExposeEventContext {
-			//TODO document in PDF guide
-			get	{
-				return exposeEventContext;
-			}
-			set	{
-				exposeEventContext = value;
-			}
-		}
+		internal bool exposeEventContext = Parameter.Get<bool>("exposeEventContext", false);
 		
 		private IList<Fact> PerformativeAssertions {
 			get {
@@ -982,7 +972,7 @@ namespace NxBRE.InferenceEngine {
 				bool result = WM.FB.Assert(deductedFact);
 				
 				if ((result) && (NewFactHandler != null)) {
-					if (ExposeEventContext) {
+					if (exposeEventContext) {
 						NewFactHandler(new NewFactEventArgs(deductedFact,
 						                                    EventContextFactory.NewEventContext(processResults, implication)));
 					} else {
@@ -1009,7 +999,7 @@ namespace NxBRE.InferenceEngine {
 							bool result = WM.FB.Retract(deductedFact);
 							
 							if ((result) && (DeleteFactHandler != null)) {
-								if (ExposeEventContext) {
+								if (exposeEventContext) {
 									DeleteFactHandler(new NewFactEventArgs(deductedFact,
 									                                       EventContextFactory.NewEventContext(processResult, implication)));
 								} else {
@@ -1026,7 +1016,7 @@ namespace NxBRE.InferenceEngine {
 							bool result = WM.FB.Assert(deductedFact);
 							
 							if ((result) && (NewFactHandler != null)) {
-								if (ExposeEventContext) {
+								if (exposeEventContext) {
 									NewFactHandler(new NewFactEventArgs(deductedFact,
 									                                    EventContextFactory.NewEventContext(processResult, implication)));
 								} else {
@@ -1066,7 +1056,7 @@ namespace NxBRE.InferenceEngine {
 							bool result = WM.FB.Modify(factToModify, deductedFact);
 							
 							if ((result) && (ModifyFactHandler != null)) {
-								if (ExposeEventContext) {
+								if (exposeEventContext) {
 									ModifyFactHandler(new NewFactEventArgs(factToModify,
 									                                       deductedFact,
 									                                       EventContextFactory.NewEventContext(processResult, implication)));
