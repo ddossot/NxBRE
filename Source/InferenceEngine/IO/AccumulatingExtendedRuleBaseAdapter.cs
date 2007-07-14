@@ -87,7 +87,7 @@ namespace NxBRE.InferenceEngine.IO {
 		
 		public override IList<Fact> Retractions {
 			get {
-				//FIXME implement get Retractions
+				//TODO FR-1546485: implement get Retractions
 				throw new NotSupportedException("Must be implemented");
 			}
 			

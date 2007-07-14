@@ -397,7 +397,7 @@ namespace NxBRE.InferenceEngine {
 
 				// load facts assertions
 				performativeAssertions = new List<Fact>((extendedAdapter!=null)?extendedAdapter.Assertions:adapter.Facts);
-				//TODO load facts retractions
+				//TODO FR-1546485: load facts retractions
 				if (processPerformatives) ProcessPerfomatives();
 				if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Loaded " + WM.FB.Count + " Facts");
 				
@@ -447,7 +447,7 @@ namespace NxBRE.InferenceEngine {
 					extendedAdapter.Equivalents = equivalents;
 					extendedAdapter.IntegrityQueries = integrityQueries;
 					extendedAdapter.Assertions = factsInWorkingMemory;
-					//TODO write facts retractions
+					//TODO FR-1546485: write facts retractions
 				}
 				else {
 					// basic adapter facts output
