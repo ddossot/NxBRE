@@ -42,6 +42,8 @@ namespace NxBRE.Util
 		
 		private static bool generateInMemoryAssembly = Parameter.Get<bool>("generateInMemoryAssembly", true);
 		
+		private static string compilerOptions = Parameter.Get<string>("compilerOptions", "");
+		
 		private Compilation() {}
 		
 		/// <summary>
@@ -79,7 +81,7 @@ namespace NxBRE.Util
 
 		/// <summary>
 		/// Gets or sets the active mode for dynamic assembly compilation. Default is in-memory.
-		/// <see cref="CompilerParameters.CompilationParameters.GenerateInMemory"/>
+		/// <see cref="CompilerParameters.GenerateInMemory"/>
 		/// </summary>
 		/// <remarks>
 		/// Patch 1740387 submitted by Marcin Kielar (zorba128)
@@ -90,6 +92,19 @@ namespace NxBRE.Util
 			}
 			set	{
 				generateInMemoryAssembly = value;
+			}
+		}
+		
+		/// <summary>
+		/// Gets or sets the optional additional-command line arguments string to use when invoking the compiler.
+		/// </summary>
+		/// <see cref="CompilerParameters.CompilerOptions"/>
+		public static string CompilerOptions {
+			get {
+				return compilerOptions;
+			}
+			set {
+				compilerOptions = value;
 			}
 		}
 		
@@ -272,6 +287,7 @@ namespace NxBRE.Util
 			compilerParameters.GenerateInMemory = Compilation.GenerateInMemoryAssembly;
 			compilerParameters.IncludeDebugInformation = true;
 			compilerParameters.TreatWarningsAsErrors = false;
+			compilerParameters.CompilerOptions = compilerOptions;
 			
 			// Chuck Cross has vastly improved the loading of NxBRE ddl reference mechanism
 			bool nxbreAssemblyLoaded = false;
