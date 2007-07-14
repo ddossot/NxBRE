@@ -69,6 +69,27 @@
 				</Atom>
 			</head>
 		</Implies>
+		<Implies>
+			<oid>
+				<Ind>label:Counting Implication;action:count;</Ind>
+			</oid>
+			<body>
+				<Atom>
+					<op>
+						<Rel>toCount</Rel>
+					</op>
+					<Var>whatever</Var>
+				</Atom>
+			</body>
+			<head>
+				<Atom>
+					<op>
+						<Rel>counted</Rel>
+					</op>
+					<Var>Value</Var>
+				</Atom>
+			</head>
+		</Implies>
 	</Assert>
   <!--Facts-->
 	<Assert mapDirection="forward">
@@ -95,6 +116,24 @@
 				<Rel>trigger</Rel>
 			</op>
 			<Ind>whatever</Ind>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>toCount</Rel>
+			</op>
+			<Ind>a</Ind>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>toCount</Rel>
+			</op>
+			<Ind>b</Ind>
+		</Atom>
+		<Atom>
+			<op>
+				<Rel>toCount</Rel>
+			</op>
+			<Ind>c</Ind>
 		</Atom>
 	</Assert>
 </RuleML>
