@@ -101,7 +101,7 @@ namespace NxBRE.InferenceEngine.IO {
 		protected override void ValidateRulebase() {
 			base.ValidateRulebase();
 			
-			//TODO enable the currently unsupported features: retraction, multiple rulebases, "named" rulebases
+			//TODO FR-1546485: enable the currently unsupported features: retraction, multiple rulebases, "named" rulebases
 			string[] notSupportedXPaths = new string[] {"//dl:Retract", "//dl:Assert/dl:Rulebase", "//dl:Rulebase/dl:oid"};
 			
 			foreach(string notSupportedXPath in notSupportedXPaths)
@@ -110,7 +110,7 @@ namespace NxBRE.InferenceEngine.IO {
 		}
 		
 		protected override void WriteIntegrityQuery(XmlElement target, Query query) {
-			// FIXME check how integrity queries are actually supposed to be written in Naf Datalog!
+			//TODO FR-1546485: check how integrity queries are actually supposed to be written in Naf Datalog!
 			WriteImplication(target, new Implication(query.Label, ImplicationPriority.Medium, String.Empty, String.Empty, IGNORED_DEDUCTION, query.AtomGroup));
 		}
 
