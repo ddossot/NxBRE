@@ -323,7 +323,7 @@ namespace NxBRE.FlowEngine
 				                                     new Hashtable());
 
 			// pre-load all operators
-			foreach(Type type in Assembly.GetExecutingAssembly().GetTypes())
+			foreach(Type type in Reflection.NxBREAssembly.GetTypes())
 				if (null != type.GetInterface(typeof(IBREOperator).FullName, false)) 
 						GetOperator(type.FullName);
 			

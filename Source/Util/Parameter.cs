@@ -38,7 +38,7 @@ namespace NxBRE.Util
 			
 			if (Logger.IsUtilVerbose) Logger.UtilSource.TraceEvent(TraceEventType.Verbose, 0, "Fetching resource '" + fullResourceName + "' from assembly manifest");
 			
-			return Assembly.GetExecutingAssembly().GetManifestResourceStream(fullResourceName);
+			return Reflection.NxBREAssembly.GetManifestResourceStream(fullResourceName);
 		}
 		
 		///<summary>Gets the string value of the config file entry.</summary>
