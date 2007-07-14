@@ -125,8 +125,12 @@ namespace NxBRE.InferenceEngine {
 		
 		private bool exposeEventContext = Parameter.Get<bool>("generateInMemoryAssembly", true);
 		
-		//TODO comment and document in PDF guide
+		/// <summary>
+		/// Determines if the events raised by the engine should contain the context,
+		/// i.e. the source facts, implied in the event.
+		/// </summary>
 		public bool ExposeEventContext {
+			//TODO document in PDF guide
 			get	{
 				return exposeEventContext;
 			}

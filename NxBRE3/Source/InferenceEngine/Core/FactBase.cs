@@ -316,8 +316,8 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <summary>
 		/// Extract all the facts found in process results.
 		/// </summary>
-		/// <param name="processResults">The process results from where facts must be extracted.</param>
-		/// <returns>The array of extracted facts.</returns>
+		/// <param name="processResults">The process results from which facts must be extracted.</param>
+		/// <returns>An <code>IList&lt;Fact></code> of extracted facts.</returns>
 		public static IList<Fact> ExtractAllFacts(IList<IList<PositiveMatchResult>> processResults) {
 			IList<Fact> result = new List<Fact>();
 			
@@ -333,7 +333,11 @@ namespace NxBRE.InferenceEngine.Core {
 			return result;
 		}
 
-		//TODO comment
+		/// <summary>
+		/// Extract the facts found in process results and return them as a standard query result.
+		/// </summary>
+		/// <param name="processResults">The process results from which facts must be extracted.</param>
+		/// <returns>An <code>IList&lt;IList&lt;Fact>></code> of extracted facts.</returns>
 		public static IList<IList<Fact>> ExtractFacts(IList<IList<PositiveMatchResult>> processResults) {
 			IList<IList<Fact>> result = new List<IList<Fact>>();
 			
@@ -344,7 +348,11 @@ namespace NxBRE.InferenceEngine.Core {
 			return result;
 		}
 
-		//TODO comment
+		/// <summary>
+		/// Extract the facts found in one row of a process results and return them as one row of a standard query result.
+		/// </summary>
+		/// <param name="processResult">One row of process results from which facts must be extracted.</param>
+		/// <returns>An <code>IList&lt;Fact></code></returns>
 		public static IList<Fact> ExtractFacts(IList<PositiveMatchResult> processResult) {
 			IList<Fact> result = new List<Fact>();
 			
