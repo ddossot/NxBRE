@@ -88,8 +88,6 @@ v3.1.0
 
   * Added features for controlling engine behavior at rule base load time and process time regarding performative and connective rules.
 
-  * Improved implication scheduling in the agenda to limitate the number of fired implications (feature request 1590017).
-
   * Improved adapter load method to allow sharing (feature request 1710153).
 
   * Added event context to allow discovering the facts and implication at the origin of the event (feature request 1657420).
