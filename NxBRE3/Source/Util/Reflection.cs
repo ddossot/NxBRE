@@ -18,6 +18,8 @@ namespace NxBRE.Util
 		/// </summary>
 		public static readonly string NXBRE_VERSION = Assembly.GetAssembly(typeof(NxBRE.Util.Reflection)).GetName().Version.ToString();
 		
+		private static readonly Assembly NXBRE_ASSEMBLY = typeof(BREException).Assembly;
+		
 		private Reflection() {}
 		
 		/// <summary>
@@ -110,6 +112,18 @@ namespace NxBRE.Util
 			if (ci == null)
 				throw new TargetException("No matching constructor found on "+type);
 			return ci.Invoke(argValues);
+		}
+		
+		/// <summary>
+		/// Returns the NxBRE assembly.
+		/// </summary>
+		/// <remarks>
+		/// Created as a replacement for Assembly.GetExecutingAssembly() per bug report 1709279
+		/// </remarks>
+		public static Assembly NxBREAssembly {
+			get {
+				return NXBRE_ASSEMBLY;
+			}
 		}
 		
 		// Private methods ------------------------------------------------------------------

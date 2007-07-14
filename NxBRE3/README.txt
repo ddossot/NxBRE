@@ -1,5 +1,5 @@
-NxBRE README v3.1.0
-===================
+NxBRE README v3.1.0Beta2
+========================
 
 Date         : XX-XXX-200X
 URL          : http://nxbre.org
@@ -71,6 +71,10 @@ v3.1.0
  General
 
   * Extracted unit tests in a friend assembly (feature request 1739462)
+
+  * Allowed CompilerOptions to be pulled from config file (feature request 1715165)
+
+  * Corrected method to get NxBRE assembly (bug 1709279)
 
  Flow Engine
 
