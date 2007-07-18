@@ -71,13 +71,15 @@ namespace NxBRE.FlowEngine.Core
 		/// </summary>
 		/// <param name="aId">The UID of the business object
 		/// </param>
-		/// <returns> The requested business object
-		/// 
-		/// </returns>
+		/// <returns> The requested business object</returns>
+		/// <remarks>Never use this method in the engine itself: the engine should only rely on GetResult.</remarks>
 		public override object GetObject(object aId) {
-			object aObject = GetResult(aId);
-			if (aObject != null) aObject = ((IBRERuleResult)aObject).Result;
-			return aObject;			
+			IBRERuleResult ruleResult = GetResult(aId);
+			if (ruleResult != null) { 
+				return ruleResult.Result;
+			} else {
+				return null;
+			}
 		}
 	}
 }
