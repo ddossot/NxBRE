@@ -37,60 +37,77 @@ namespace NxDSL.GUI
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			InitializeComponent();
 			
+			Definitions definitions = new Definitions("../../../../Rulefiles/discount.nxdsl.defs");
 			
 			InferenceRules_ENLexer irl = new InferenceRules_ENLexer(
 								new ANTLRFileStream("../../../../Rulefiles/discount.nxdsl"));
 			
-			StringBuilder sb = new StringBuilder("<html><body><font face='courier' color='#000000'>");
+			StringBuilder htmlBuffer = new StringBuilder("<html><body><font face='courier' color='#000000'>");
 			
 			IToken token;
 			bool inQuote = false;
+			StringBuilder statementBuffer = new StringBuilder();
 			
 			while((token = irl.NextToken()) != Token.EOF_TOKEN) {
 				Console.Write(token.Text + "/" + token.Type);
 				
 				if (token.Type == InferenceRules_ENLexer.NEWLINE) {
-					sb.Append("<br/>");
+					string statement = statementBuffer.ToString();
+						
+					if (definitions.Contains(statement)) {
+						htmlBuffer.Append("<font color='#006600'>");
+					} else {
+						htmlBuffer.Append("<font color='#FF0000'>");
+					}
+					
+					htmlBuffer.Append(statement).Append("</font>");
+					
+					htmlBuffer.Append("<br/>");
+					statementBuffer = new StringBuilder();
 				}
 				else if (token.Type == InferenceRules_ENLexer.TAB) {
-					sb.Append("&nbsp;&nbsp;");
+					htmlBuffer.Append("&nbsp;&nbsp;");
 				}
 				else {
 					if ((token.Type == InferenceRules_ENLexer.RULE)
 					    || (token.Type == InferenceRules_ENLexer.FACT)
 					    || (token.Type == InferenceRules_ENLexer.QUERY)){
-						sb.Append("<br/>");
+						htmlBuffer.Append("<br/>");
 					}
 					
 					if ((token.Type == InferenceRules_ENLexer.QUOTE) && (!inQuote)) {
-						sb.Append("<font color='#0000FF'>");
+						htmlBuffer.Append("<font color='#0000FF'>");
+						htmlBuffer.Append(token.Text);
 						inQuote = true;
-						sb.Append(token.Text);
 					}
 					else if ((token.Type == InferenceRules_ENLexer.QUOTE) && (inQuote)) {
-						sb.Append(token.Text);
-						sb.Append("</font>");
+						htmlBuffer.Append(token.Text);
+						htmlBuffer.Append("</font>");
 						inQuote = false;
 					}
-					else if ((inQuote)
-					        || (token.Type == InferenceRules_ENLexer.CHAR)
+					else if (inQuote) {
+						htmlBuffer.Append(token.Text);
+					}
+					else if ((token.Type == InferenceRules_ENLexer.CHAR)
 					        || (token.Type == InferenceRules_ENLexer.SPACE)
 					        || (token.Type == InferenceRules_ENLexer.NUMERIC)) {
-						sb.Append(token.Text);
+						
+						statementBuffer.Append(token.Text);
 					}
 					else if ((token.Type == InferenceRules_ENLexer.COUNT)
 					        || (token.Type == InferenceRules_ENLexer.DEDUCT)
 					        || (token.Type == InferenceRules_ENLexer.FORGET)
 					        || (token.Type == InferenceRules_ENLexer.MODIFY)) {
-						sb.Append("<font color='#990066'><b>").Append(token.Text).Append("</b></font>");
+						
+						htmlBuffer.Append("<font color='#990066'><b>").Append(token.Text).Append(" ").Append("</b></font>");
 					}
 					else {
-						sb.Append("<b>").Append(token.Text).Append("</b>");
+						htmlBuffer.Append("<b>").Append(token.Text).Append(" ").Append("</b>");
 					}
 				}
 			}
 			
-			Html = sb.Append("</font></body></html>").ToString();
+			Html = htmlBuffer.Append("</font></body></html>").ToString();
 		}
 	}
 }

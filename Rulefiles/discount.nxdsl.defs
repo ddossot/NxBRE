@@ -2,7 +2,7 @@
 <NxDSL-Defs caseSensitive="false">
 	
 	<AtomPatterns>
-		<AtomPattern regexp="The discount on any product for any customer is anything">
+		<AtomPattern regex="The discount on any product for any customer is anything">
 			<Atom>
 				<Rel>discount</Rel>
 				<Var>customer</Var>
@@ -10,31 +10,25 @@
 				<Var>amount</Var>
 			</Atom>
 		</AtomPattern>
-		<AtomPattern regexp="The customer is rated premium">
+		<AtomPattern regex="The customer is rated (?'rating'[\w ]+)">
 			<Atom>
-				<Rel>premium</Rel>
+				<Rel>${rating}</Rel>
 				<Var>customer</Var>
 			</Atom>
 		</AtomPattern>
-		<AtomPattern regexp="The customer is rated premium">
-			<Atom>
-				<Rel>premium</Rel>
-				<Var>customer</Var>
-			</Atom>
-		</AtomPattern>
-		<AtomPattern regexp="The product is a (type?) product">
+		<AtomPattern regex="The product is a (?'type'[\w ]+) product">
 			<Atom>
 				<Rel>${type}</Rel>
 				<Var>product</Var>
 			</Atom>
 		</AtomPattern>
-		<AtomPattern regexp="(product?) is a (type?) product">
+		<AtomPattern regex="(?'product'[\w ]+) is a (?'type'[\w ]+) product">
 			<Atom>
 				<Rel>${type}</Rel>
 				<Ind>${product}</Ind>
 			</Atom>
 		</AtomPattern>
-		<AtomPattern regexp="The discount on this product for the customer is (discount?)">
+		<AtomPattern regex="The discount on this product for the customer is (?'discount'[\w \.]+)">
 			<Atom>
 				<Rel>discount</Rel>
 				<Var>customer</Var>
@@ -42,7 +36,7 @@
 				<Ind>${discount}</Ind>
 			</Atom>
 		</AtomPattern>
-		<AtomPattern regexp="The customer has spent (amount?) during (period?)">
+		<AtomPattern regex="The customer has spent (?'amount'[\w ]+) during (?'period'[\w ]+)">
 			<Atom>
 				<Rel>spending</Rel>
 				<Var>customer</Var>
@@ -50,7 +44,7 @@
 				<Ind>${period}</Ind>
 			</Atom>
 		</AtomPattern>
-		<AtomPattern regexp="(customer?) has spent (amount?) during (period?)">
+		<AtomPattern regex="(?'customer'[\w ]+) has spent (?'amount'[\w ]+) during (?'period'[\w ]+)">
 			<Atom>
 				<Rel>spending</Rel>
 				<Ind>${customer}</Ind>

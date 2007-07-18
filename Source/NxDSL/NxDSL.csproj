@@ -33,6 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Definitions.cs" />
     <Compile Include="InferenceRules_ENLexer.cs" />
     <Compile Include="InferenceRules_ENParser.cs" />
   </ItemGroup>
