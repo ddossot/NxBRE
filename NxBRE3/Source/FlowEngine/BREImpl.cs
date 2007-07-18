@@ -541,13 +541,19 @@ namespace NxBRE.FlowEngine
 			{
 				string resultToAssert = aNode.GetAttribute(FOREACH_ATTRS.ID, String.Empty);
 				string objectToEnumerate = aNode.GetAttribute(FOREACH_ATTRS.RULE_VALUE, String.Empty);
-				IEnumerable enumerable = (IEnumerable)ruleContext.GetObject(objectToEnumerate);
-				if (enumerable != null)
-					foreach(object parser in enumerable)
-					{
-						ruleContext.SetObject(resultToAssert, parser);
-						DoRecursion(aNode, aSetId, aObj);
+				
+				IBRERuleResult ruleObjectToEnumerate = ruleContext.GetResult(objectToEnumerate);
+				
+				if (ruleObjectToEnumerate != null) {
+					IEnumerable enumerable = (IEnumerable)ruleObjectToEnumerate.Result;
+					if (enumerable != null) {
+						foreach(object parser in enumerable)
+						{
+							ruleContext.SetObject(resultToAssert, parser);
+							DoRecursion(aNode, aSetId, aObj);
+						}
 					}
+				}
 			}
 			else if ((nodeName == IF) || (nodeName == ELSEIF) || (nodeName == WHILE))
 			{
