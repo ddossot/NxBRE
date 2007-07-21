@@ -32,6 +32,10 @@ using System.Collections.Generic;
 
 @members {
 IDictionary<int, string> logicBlocks = new Dictionary<int, string>();
+
+public override void ReportError(RecognitionException re) {
+  throw new NxDSL.DslException(re);
+}
 }
 
 rulebase 
