@@ -28,7 +28,7 @@
 				<Ind>{0}</Ind>
 			</Atom>
 		</AtomPattern>
-		<AtomPattern regex="The discount on this product for the customer is ([\w \.]+)">
+		<AtomPattern regex="The discount on this product for the customer is ([\w \.%]+)">
 			<Atom>
 				<Rel>discount</Rel>
 				<Var>customer</Var>

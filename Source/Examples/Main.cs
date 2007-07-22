@@ -11,15 +11,21 @@ namespace NxDSL.Examples {
 
 	public class MainClass {
 		public static void Main(string[] args) {
-			string dslFile = "../../../../Rulefiles/discount.nxdsl";
-
+			ProcessRuleBase(new DslAdapter("../../../../Rulefiles/discount.nxdsl"));
+			
+			Console.WriteLine();
+			
+			ProcessRuleBase(new DslAdapter("../../../../Rulefiles/remise.nxdsl", DslAdapter.GrammarLanguages.FR));
+		}
+		
+		private static void ProcessRuleBase(DslAdapter adapter) {
 			IEImpl ie = new IEImpl();
-			ie.LoadRuleBase(new DslAdapter(dslFile));
+			ie.LoadRuleBase(adapter);
 			ie.Process();
 			
 			for(IEnumerator<Fact> e = ie.Facts; e.MoveNext();) {
 				Console.WriteLine(e.Current);
-			}
+			}			
 		}
 	}
 }

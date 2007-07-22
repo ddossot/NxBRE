@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NxDSL-Defs caseSensitive="false">
+	
+	<AtomPatterns>
+		<AtomPattern regex="Le taux de remise sur n'importe quel produit est n'importe quoi">
+			<Atom>
+				<Rel>remise</Rel>
+				<Var>client</Var>
+				<Var>produit</Var>
+				<Var>taux</Var>
+			</Atom>
+		</AtomPattern>
+		<AtomPattern regex="Le client est en catégorie ([\w ]+)">
+			<Atom>
+				<Rel>{0}</Rel>
+				<Var>client</Var>
+			</Atom>
+		</AtomPattern>
+		<AtomPattern regex="Le produit est de type ([\w ]+)">
+			<Atom>
+				<Rel>{0}</Rel>
+				<Var>produit</Var>
+			</Atom>
+		</AtomPattern>
+		<AtomPattern regex="([\w ]+) est un produit ([\w ]+)">
+			<Atom>
+				<Rel>{1}</Rel>
+				<Ind>{0}</Ind>
+			</Atom>
+		</AtomPattern>
+		<AtomPattern regex="La remise pour ce produit pour ce client est de ([\w \.%]+)">
+			<Atom>
+				<Rel>remise</Rel>
+				<Var>client</Var>
+				<Var>produit</Var>
+				<Ind>{0}</Ind>
+			</Atom>
+		</AtomPattern>
+		<AtomPattern regex="Le client a dépensé ([\w ]+) durant ([\w ']+)">
+			<Atom>
+				<Rel>dépense</Rel>
+				<Var>client</Var>
+				<Ind>{0}</Ind>
+				<Ind>{1}</Ind>
+			</Atom>
+		</AtomPattern>
+		<AtomPattern regex="([\w ]+) a dépensé ([\w ]+) durant ([\w ']+)">
+			<Atom>
+				<Rel>dépense</Rel>
+				<Ind>{0}</Ind>
+				<Ind>{1}</Ind>
+				<Ind>{2}</Ind>
+			</Atom>
+		</AtomPattern>
+	</AtomPatterns>
+
+</NxDSL-Defs>

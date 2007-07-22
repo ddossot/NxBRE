@@ -1,0 +1,36 @@
+base_de_règles "Règles de taux de remise"
+
+règle "Remise pour les produits standLe proards"
+si
+	Le client est en catégorie premium
+	et
+	Le produit est de type standard
+alors déduis
+	La remise pour ce produit pour ce client est de 5.0 %
+
+règle "Remise pour les produits de luxe"
+si
+	Le client est en catégorie premium
+	et
+	Le produit est de type standard
+alors déduis
+	La remise pour ce produit pour ce client est de 7.5 %
+
+règle "Détection des clients premium"
+si
+	Le client a dépensé plus de 5000 EUR durant l'année précédente
+alors déduis
+	Le client est en catégorie premium
+
+requête "Liste toutes les remises"
+	Le taux de remise sur n'importe quel produit est n'importe quoi
+
+fait
+	Peter Miller a dépensé plus de 5000 EUR durant l'année précédente
+
+fait
+	Porsche est un produit luxueux
+
+fait
+	Honda est un produit standard
+

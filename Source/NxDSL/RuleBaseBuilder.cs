@@ -4,8 +4,7 @@ namespace NxDSL {
 	using System.Text;
 	using System.Security;
 	
-	//FIXME make internal
-	public class RuleBaseBuilder {
+	internal class RuleBaseBuilder {
 		private string label;
 		
 		private readonly Definitions definitions;
@@ -77,8 +76,13 @@ namespace NxDSL {
 				throw new DslException("A fact must contain one level of statements.");
 			}
 			
-			//FIXME handle label
-			facts.AppendLine(definitions.GetResolvedContent(statements[0].text));
+			string atom = definitions.GetResolvedContent(statements[0].text);
+			
+			if (label != null) {
+				atom = atom.Replace("<Atom>", "<Atom><oid><Ind>" + SecurityElement.Escape(label) + "</Ind></oid>");
+			}
+			
+			facts.AppendLine(atom);
 			
 			PurgeAccumulators();
 		}

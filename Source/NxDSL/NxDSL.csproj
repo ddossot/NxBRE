@@ -42,6 +42,8 @@
     <Compile Include="DslException.cs" />
     <Compile Include="InferenceRules_ENLexer.cs" />
     <Compile Include="InferenceRules_ENParser.cs" />
+    <Compile Include="InferenceRules_FRLexer.cs" />
+    <Compile Include="InferenceRules_FRParser.cs" />
     <Compile Include="RuleBaseBuilder.cs" />
   </ItemGroup>
 </Project>

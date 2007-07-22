@@ -1,25 +1,25 @@
-grammar InferenceRules_EN;
+grammar InferenceRules_FR;
 
 options {
 language=CSharp;
 }
 
 tokens {
-	RULEBASE='rulebase';
-	FACT='fact';
-	QUERY='query';
-	RULE='rule';
-	PRIORITY='priority';
-	PRECONDITION='precondition';
+	RULEBASE='base_de_règles';
+	FACT='fait';
+	QUERY='requête';
+	RULE='règle';
+	PRIORITY='priorité';
+	PRECONDITION='précondition';
 	MUTEX='mutex';
-	IF='if';
-	THEN='then';
-	DEDUCT='deduct';
-	FORGET='forget';
-	COUNT='count';
-	MODIFY='modify';
-	AND='and';
-	OR='or';
+	IF='si';
+	THEN='alors';
+	DEDUCT='déduis';
+	FORGET='oublis';
+	COUNT='compte';
+	MODIFY='modifie';
+	AND='et';
+	OR='ou';
 }
 
 @header {
