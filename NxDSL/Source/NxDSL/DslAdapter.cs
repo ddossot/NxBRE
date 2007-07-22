@@ -1,6 +1,7 @@
 namespace NxDSL {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Text;
 	using System.IO;
 	
@@ -13,25 +14,45 @@ namespace NxDSL {
 	/// <remarks>Only READ is supported!</remarks>
 	/// <author>David Dossot</author>
 	public class DslAdapter : IRuleBaseAdapter	{
+		public enum GrammarLanguages {EN, FR};
+		
 		private readonly IRuleBaseAdapter adapter;
-			
-		public DslAdapter(string dslFile) {
-			string definitionFile = dslFile + ".defs";
-			
-			Definitions definitions = new Definitions(definitionFile);
-			
-			InferenceRules_ENParser ipr = new InferenceRules_ENParser(
-											new CommonTokenStream(
-												new InferenceRules_ENLexer(
-													new ANTLRFileStream(dslFile))));
-			
-			ipr.rbb = new RuleBaseBuilder(new Definitions(definitionFile));
-			
-			ipr.rulebase();
-			
-			adapter = new RuleML09NafDatalogAdapter(new MemoryStream(new UTF8Encoding().GetBytes(ipr.rbb.RuleML)), FileAccess.Read);
+		
+		public DslAdapter(string dslFile):this(dslFile, dslFile + ".defs", GrammarLanguages.EN) {
 		}
-				
+			
+		public DslAdapter(string dslFile, GrammarLanguages grammarLanguage):this(dslFile, dslFile + ".defs", grammarLanguage) {
+		}
+			
+		public DslAdapter(string dslFile, string definitionFile):this(dslFile, definitionFile, GrammarLanguages.EN) {
+		}
+			
+		public DslAdapter(string dslFile, string definitionFile, GrammarLanguages grammarLanguage) {
+			RuleBaseBuilder rbb = new RuleBaseBuilder(new Definitions(definitionFile));
+			
+			string ruleml = null;
+			
+			if (grammarLanguage == GrammarLanguages.EN) {
+				InferenceRules_ENParser ipr = new InferenceRules_ENParser(
+												new CommonTokenStream(
+													new InferenceRules_ENLexer(
+														new ANTLRFileStream(dslFile))));
+				ipr.rbb = rbb;
+				ipr.rulebase();
+				ruleml = ipr.rbb.RuleML;
+			} else if (grammarLanguage == GrammarLanguages.FR) {
+				InferenceRules_FRParser ipr = new InferenceRules_FRParser(
+												new CommonTokenStream(
+													new InferenceRules_FRLexer(
+														new ANTLRFileStream(dslFile))));
+				ipr.rbb = rbb;
+				ipr.rulebase();
+				ruleml = ipr.rbb.RuleML;
+			}
+			
+			adapter = new RuleML09NafDatalogAdapter(new MemoryStream(new UTF8Encoding().GetBytes(ruleml)), FileAccess.Read);
+		}
+		
 		public IBinder Binder {
 			set {
 				adapter.Binder = value;

@@ -1,4 +1,4 @@
-// $ANTLR 3.0 C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g 2007-07-21 20:47:09
+// $ANTLR 3.0 C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g 2007-07-21 21:02:45
 
 using NxDSL;
 
@@ -11,7 +11,7 @@ using Stack 		= Antlr.Runtime.Collections.StackList;
 
 
 
-internal class InferenceRules_ENParser : Parser 
+internal class InferenceRules_FRParser : Parser 
 {
     public static readonly string[] tokenNames = new string[] 
 	{
@@ -66,7 +66,7 @@ internal class InferenceRules_ENParser : Parser
     public const int FACT = 5;
     
     
-        public InferenceRules_ENParser(ITokenStream input) 
+        public InferenceRules_FRParser(ITokenStream input) 
     		: base(input)
     	{
     		InitializeCyclicDFAs();
@@ -80,7 +80,7 @@ internal class InferenceRules_ENParser : Parser
 
     override public string GrammarFileName
 	{
-		get { return "C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g"; }
+		get { return "C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g"; }
 	}
 
     
@@ -94,7 +94,7 @@ internal class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start rulebase
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:42:1: rulebase : RULEBASE SPACE QUOTE words QUOTE ( rule | query | fact | ignored )* EOF ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:42:1: rulebase : RULEBASE SPACE QUOTE words QUOTE ( rule | query | fact | ignored )* EOF ;
     public void rulebase() // throws RecognitionException [1]
     {   
         words_return words1 = null;
@@ -102,8 +102,8 @@ internal class InferenceRules_ENParser : Parser
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:43:4: ( RULEBASE SPACE QUOTE words QUOTE ( rule | query | fact | ignored )* EOF )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:43:4: RULEBASE SPACE QUOTE words QUOTE ( rule | query | fact | ignored )* EOF
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:43:4: ( RULEBASE SPACE QUOTE words QUOTE ( rule | query | fact | ignored )* EOF )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:43:4: RULEBASE SPACE QUOTE words QUOTE ( rule | query | fact | ignored )* EOF
             {
             	Match(input,RULEBASE,FOLLOW_RULEBASE_in_rulebase138); 
             	Match(input,SPACE,FOLLOW_SPACE_in_rulebase140); 
@@ -113,7 +113,7 @@ internal class InferenceRules_ENParser : Parser
             	followingStackPointer_--;
 
             	Match(input,QUOTE,FOLLOW_QUOTE_in_rulebase146); 
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:43:37: ( rule | query | fact | ignored )*
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:43:37: ( rule | query | fact | ignored )*
             	do 
             	{
             	    int alt1 = 5;
@@ -147,7 +147,7 @@ internal class InferenceRules_ENParser : Parser
             	    switch (alt1) 
             		{
             			case 1 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:43:38: rule
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:43:38: rule
             			    {
             			    	PushFollow(FOLLOW_rule_in_rulebase149);
             			    	rule();
@@ -157,7 +157,7 @@ internal class InferenceRules_ENParser : Parser
             			    }
             			    break;
             			case 2 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:43:45: query
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:43:45: query
             			    {
             			    	PushFollow(FOLLOW_query_in_rulebase153);
             			    	query();
@@ -167,7 +167,7 @@ internal class InferenceRules_ENParser : Parser
             			    }
             			    break;
             			case 3 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:43:53: fact
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:43:53: fact
             			    {
             			    	PushFollow(FOLLOW_fact_in_rulebase157);
             			    	fact();
@@ -177,7 +177,7 @@ internal class InferenceRules_ENParser : Parser
             			    }
             			    break;
             			case 4 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:43:60: ignored
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:43:60: ignored
             			    {
             			    	PushFollow(FOLLOW_ignored_in_rulebase161);
             			    	ignored();
@@ -215,7 +215,7 @@ internal class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start fact
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:45:1: fact : FACT ( SPACE QUOTE words QUOTE )? NEWLINE statement ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:45:1: fact : FACT ( SPACE QUOTE words QUOTE )? NEWLINE statement ;
     public void fact() // throws RecognitionException [1]
     {   
         words_return words2 = null;
@@ -223,11 +223,11 @@ internal class InferenceRules_ENParser : Parser
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:45:8: ( FACT ( SPACE QUOTE words QUOTE )? NEWLINE statement )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:45:8: FACT ( SPACE QUOTE words QUOTE )? NEWLINE statement
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:45:8: ( FACT ( SPACE QUOTE words QUOTE )? NEWLINE statement )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:45:8: FACT ( SPACE QUOTE words QUOTE )? NEWLINE statement
             {
             	Match(input,FACT,FOLLOW_FACT_in_fact176); 
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:45:13: ( SPACE QUOTE words QUOTE )?
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:45:13: ( SPACE QUOTE words QUOTE )?
             	int alt2 = 2;
             	int LA2_0 = input.LA(1);
             	
@@ -238,7 +238,7 @@ internal class InferenceRules_ENParser : Parser
             	switch (alt2) 
             	{
             	    case 1 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:45:14: SPACE QUOTE words QUOTE
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:45:14: SPACE QUOTE words QUOTE
             	        {
             	        	Match(input,SPACE,FOLLOW_SPACE_in_fact179); 
             	        	Match(input,QUOTE,FOLLOW_QUOTE_in_fact181); 
@@ -285,7 +285,7 @@ internal class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start query
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:55:1: query : QUERY SPACE QUOTE words QUOTE NEWLINE condition ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:55:1: query : QUERY SPACE QUOTE words QUOTE NEWLINE condition ;
     public void query() // throws RecognitionException [1]
     {   
         words_return words3 = null;
@@ -293,8 +293,8 @@ internal class InferenceRules_ENParser : Parser
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:55:9: ( QUERY SPACE QUOTE words QUOTE NEWLINE condition )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:55:9: QUERY SPACE QUOTE words QUOTE NEWLINE condition
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:55:9: ( QUERY SPACE QUOTE words QUOTE NEWLINE condition )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:55:9: QUERY SPACE QUOTE words QUOTE NEWLINE condition
             {
             	Match(input,QUERY,FOLLOW_QUERY_in_query201); 
             	Match(input,SPACE,FOLLOW_SPACE_in_query203); 
@@ -328,7 +328,7 @@ internal class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start rule
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:57:1: rule : RULE SPACE QUOTE words QUOTE NEWLINE meta IF NEWLINE condition action ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:57:1: rule : RULE SPACE QUOTE words QUOTE NEWLINE meta IF NEWLINE condition action ;
     public void rule() // throws RecognitionException [1]
     {   
         words_return words4 = null;
@@ -336,8 +336,8 @@ internal class InferenceRules_ENParser : Parser
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:57:9: ( RULE SPACE QUOTE words QUOTE NEWLINE meta IF NEWLINE condition action )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:57:9: RULE SPACE QUOTE words QUOTE NEWLINE meta IF NEWLINE condition action
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:57:9: ( RULE SPACE QUOTE words QUOTE NEWLINE meta IF NEWLINE condition action )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:57:9: RULE SPACE QUOTE words QUOTE NEWLINE meta IF NEWLINE condition action
             {
             	Match(input,RULE,FOLLOW_RULE_in_rule224); 
             	Match(input,SPACE,FOLLOW_SPACE_in_rule226); 
@@ -381,15 +381,15 @@ internal class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start meta
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:59:1: meta : ( priority )? ( precondition )? ( mutex )* ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:59:1: meta : ( priority )? ( precondition )? ( mutex )* ;
     public void meta() // throws RecognitionException [1]
     {   
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:59:8: ( ( priority )? ( precondition )? ( mutex )* )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:59:8: ( priority )? ( precondition )? ( mutex )*
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:59:8: ( ( priority )? ( precondition )? ( mutex )* )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:59:8: ( priority )? ( precondition )? ( mutex )*
             {
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:59:8: ( priority )?
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:59:8: ( priority )?
             	int alt3 = 2;
             	int LA3_0 = input.LA(1);
             	
@@ -405,7 +405,7 @@ internal class InferenceRules_ENParser : Parser
             	switch (alt3) 
             	{
             	    case 1 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:59:8: priority
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:59:8: priority
             	        {
             	        	PushFollow(FOLLOW_priority_in_meta254);
             	        	priority();
@@ -417,7 +417,7 @@ internal class InferenceRules_ENParser : Parser
             	
             	}
 
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:59:18: ( precondition )?
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:59:18: ( precondition )?
             	int alt4 = 2;
             	int LA4_0 = input.LA(1);
             	
@@ -433,7 +433,7 @@ internal class InferenceRules_ENParser : Parser
             	switch (alt4) 
             	{
             	    case 1 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:59:18: precondition
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:59:18: precondition
             	        {
             	        	PushFollow(FOLLOW_precondition_in_meta257);
             	        	precondition();
@@ -445,7 +445,7 @@ internal class InferenceRules_ENParser : Parser
             	
             	}
 
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:59:32: ( mutex )*
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:59:32: ( mutex )*
             	do 
             	{
             	    int alt5 = 2;
@@ -460,7 +460,7 @@ internal class InferenceRules_ENParser : Parser
             	    switch (alt5) 
             		{
             			case 1 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:59:32: mutex
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:59:32: mutex
             			    {
             			    	PushFollow(FOLLOW_mutex_in_meta260);
             			    	mutex();
@@ -496,15 +496,15 @@ internal class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start priority
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:61:1: priority : TAB PRIORITY SPACE NUMERIC NEWLINE ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:61:1: priority : TAB PRIORITY SPACE NUMERIC NEWLINE ;
     public void priority() // throws RecognitionException [1]
     {   
         IToken NUMERIC5 = null;
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:62:4: ( TAB PRIORITY SPACE NUMERIC NEWLINE )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:62:4: TAB PRIORITY SPACE NUMERIC NEWLINE
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:62:4: ( TAB PRIORITY SPACE NUMERIC NEWLINE )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:62:4: TAB PRIORITY SPACE NUMERIC NEWLINE
             {
             	Match(input,TAB,FOLLOW_TAB_in_priority270); 
             	Match(input,PRIORITY,FOLLOW_PRIORITY_in_priority272); 
@@ -531,7 +531,7 @@ internal class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start precondition
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:64:1: precondition : TAB PRECONDITION SPACE QUOTE words QUOTE NEWLINE ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:64:1: precondition : TAB PRECONDITION SPACE QUOTE words QUOTE NEWLINE ;
     public void precondition() // throws RecognitionException [1]
     {   
         words_return words6 = null;
@@ -539,8 +539,8 @@ internal class InferenceRules_ENParser : Parser
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:65:4: ( TAB PRECONDITION SPACE QUOTE words QUOTE NEWLINE )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:65:4: TAB PRECONDITION SPACE QUOTE words QUOTE NEWLINE
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:65:4: ( TAB PRECONDITION SPACE QUOTE words QUOTE NEWLINE )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:65:4: TAB PRECONDITION SPACE QUOTE words QUOTE NEWLINE
             {
             	Match(input,TAB,FOLLOW_TAB_in_precondition289); 
             	Match(input,PRECONDITION,FOLLOW_PRECONDITION_in_precondition291); 
@@ -571,7 +571,7 @@ internal class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start mutex
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:67:1: mutex : TAB MUTEX SPACE QUOTE words QUOTE NEWLINE ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:67:1: mutex : TAB MUTEX SPACE QUOTE words QUOTE NEWLINE ;
     public void mutex() // throws RecognitionException [1]
     {   
         words_return words7 = null;
@@ -579,8 +579,8 @@ internal class InferenceRules_ENParser : Parser
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:67:9: ( TAB MUTEX SPACE QUOTE words QUOTE NEWLINE )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:67:9: TAB MUTEX SPACE QUOTE words QUOTE NEWLINE
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:67:9: ( TAB MUTEX SPACE QUOTE words QUOTE NEWLINE )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:67:9: TAB MUTEX SPACE QUOTE words QUOTE NEWLINE
             {
             	Match(input,TAB,FOLLOW_TAB_in_mutex311); 
             	Match(input,MUTEX,FOLLOW_MUTEX_in_mutex313); 
@@ -611,19 +611,19 @@ internal class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start condition
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:69:1: condition : statement ( logic statement )* ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:69:1: condition : statement ( logic statement )* ;
     public void condition() // throws RecognitionException [1]
     {   
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:70:4: ( statement ( logic statement )* )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:70:4: statement ( logic statement )*
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:70:4: ( statement ( logic statement )* )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:70:4: statement ( logic statement )*
             {
             	PushFollow(FOLLOW_statement_in_condition334);
             	statement();
             	followingStackPointer_--;
 
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:70:14: ( logic statement )*
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:70:14: ( logic statement )*
             	do 
             	{
             	    int alt6 = 2;
@@ -631,7 +631,7 @@ internal class InferenceRules_ENParser : Parser
             	    switch (alt6) 
             		{
             			case 1 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:70:15: logic statement
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:70:15: logic statement
             			    {
             			    	PushFollow(FOLLOW_logic_in_condition337);
             			    	logic();
@@ -671,7 +671,7 @@ internal class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start action
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:72:1: action : THEN SPACE verb NEWLINE statement ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:72:1: action : THEN SPACE verb NEWLINE statement ;
     public void action() // throws RecognitionException [1]
     {   
         string verb8 = null;
@@ -679,8 +679,8 @@ internal class InferenceRules_ENParser : Parser
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:72:10: ( THEN SPACE verb NEWLINE statement )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:72:10: THEN SPACE verb NEWLINE statement
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:72:10: ( THEN SPACE verb NEWLINE statement )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:72:10: THEN SPACE verb NEWLINE statement
             {
             	Match(input,THEN,FOLLOW_THEN_in_action349); 
             	Match(input,SPACE,FOLLOW_SPACE_in_action351); 
@@ -712,7 +712,7 @@ internal class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start statement
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:74:1: statement : indent words NEWLINE ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:74:1: statement : indent words NEWLINE ;
     public void statement() // throws RecognitionException [1]
     {   
         indent_return indent9 = null;
@@ -722,8 +722,8 @@ internal class InferenceRules_ENParser : Parser
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:75:4: ( indent words NEWLINE )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:75:4: indent words NEWLINE
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:75:4: ( indent words NEWLINE )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:75:4: indent words NEWLINE
             {
             	PushFollow(FOLLOW_indent_in_statement368);
             	indent9 = indent();
@@ -753,7 +753,7 @@ internal class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start logic
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:77:1: logic : indent booleanToken NEWLINE ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:77:1: logic : indent booleanToken NEWLINE ;
     public void logic() // throws RecognitionException [1]
     {   
         indent_return indent11 = null;
@@ -763,8 +763,8 @@ internal class InferenceRules_ENParser : Parser
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:77:9: ( indent booleanToken NEWLINE )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:77:9: indent booleanToken NEWLINE
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:77:9: ( indent booleanToken NEWLINE )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:77:9: indent booleanToken NEWLINE
             {
             	PushFollow(FOLLOW_indent_in_logic382);
             	indent11 = indent();
@@ -796,7 +796,7 @@ internal class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start verb
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:81:1: verb returns [string value] : ( DEDUCT | FORGET | COUNT | MODIFY ) ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:81:1: verb returns [string value] : ( DEDUCT | FORGET | COUNT | MODIFY ) ;
     public string verb() // throws RecognitionException [1]
     {   
 
@@ -804,10 +804,10 @@ internal class InferenceRules_ENParser : Parser
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:82:4: ( ( DEDUCT | FORGET | COUNT | MODIFY ) )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:82:4: ( DEDUCT | FORGET | COUNT | MODIFY )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:82:4: ( ( DEDUCT | FORGET | COUNT | MODIFY ) )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:82:4: ( DEDUCT | FORGET | COUNT | MODIFY )
             {
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:82:4: ( DEDUCT | FORGET | COUNT | MODIFY )
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:82:4: ( DEDUCT | FORGET | COUNT | MODIFY )
             	int alt7 = 4;
             	switch ( input.LA(1) ) 
             	{
@@ -841,7 +841,7 @@ internal class InferenceRules_ENParser : Parser
             	switch (alt7) 
             	{
             	    case 1 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:82:5: DEDUCT
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:82:5: DEDUCT
             	        {
             	        	Match(input,DEDUCT,FOLLOW_DEDUCT_in_verb403); 
             	        	 value =  "assert"; 
@@ -849,7 +849,7 @@ internal class InferenceRules_ENParser : Parser
             	        }
             	        break;
             	    case 2 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:83:5: FORGET
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:83:5: FORGET
             	        {
             	        	Match(input,FORGET,FOLLOW_FORGET_in_verb411); 
             	        	 value =  "retract"; 
@@ -857,7 +857,7 @@ internal class InferenceRules_ENParser : Parser
             	        }
             	        break;
             	    case 3 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:84:5: COUNT
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:84:5: COUNT
             	        {
             	        	Match(input,COUNT,FOLLOW_COUNT_in_verb419); 
             	        	 value =  "count"; 
@@ -865,7 +865,7 @@ internal class InferenceRules_ENParser : Parser
             	        }
             	        break;
             	    case 4 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:85:5: MODIFY
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:85:5: MODIFY
             	        {
             	        	Match(input,MODIFY,FOLLOW_MODIFY_in_verb427); 
             	        	 value =  "modify"; 
@@ -896,7 +896,7 @@ internal class InferenceRules_ENParser : Parser
     };
     
     // $ANTLR start words
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:87:1: words : word ( SPACE word )* ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:87:1: words : word ( SPACE word )* ;
     public words_return words() // throws RecognitionException [1]
     {   
         words_return retval = new words_return();
@@ -904,14 +904,14 @@ internal class InferenceRules_ENParser : Parser
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:87:9: ( word ( SPACE word )* )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:87:9: word ( SPACE word )*
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:87:9: ( word ( SPACE word )* )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:87:9: word ( SPACE word )*
             {
             	PushFollow(FOLLOW_word_in_words438);
             	word();
             	followingStackPointer_--;
 
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:87:14: ( SPACE word )*
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:87:14: ( SPACE word )*
             	do 
             	{
             	    int alt8 = 2;
@@ -926,7 +926,7 @@ internal class InferenceRules_ENParser : Parser
             	    switch (alt8) 
             		{
             			case 1 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:87:15: SPACE word
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:87:15: SPACE word
             			    {
             			    	Match(input,SPACE,FOLLOW_SPACE_in_words441); 
             			    	PushFollow(FOLLOW_word_in_words443);
@@ -965,15 +965,15 @@ internal class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start word
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:89:1: word : ( anyToken | CHAR | NUMERIC )+ ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:89:1: word : ( anyToken | CHAR | NUMERIC )+ ;
     public void word() // throws RecognitionException [1]
     {   
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:89:8: ( ( anyToken | CHAR | NUMERIC )+ )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:89:8: ( anyToken | CHAR | NUMERIC )+
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:89:8: ( ( anyToken | CHAR | NUMERIC )+ )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:89:8: ( anyToken | CHAR | NUMERIC )+
             {
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:89:8: ( anyToken | CHAR | NUMERIC )+
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:89:8: ( anyToken | CHAR | NUMERIC )+
             	int cnt9 = 0;
             	do 
             	{
@@ -1015,7 +1015,7 @@ internal class InferenceRules_ENParser : Parser
             	    switch (alt9) 
             		{
             			case 1 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:89:9: anyToken
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:89:9: anyToken
             			    {
             			    	PushFollow(FOLLOW_anyToken_in_word454);
             			    	anyToken();
@@ -1025,14 +1025,14 @@ internal class InferenceRules_ENParser : Parser
             			    }
             			    break;
             			case 2 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:89:20: CHAR
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:89:20: CHAR
             			    {
             			    	Match(input,CHAR,FOLLOW_CHAR_in_word458); 
             			    
             			    }
             			    break;
             			case 3 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:89:27: NUMERIC
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:89:27: NUMERIC
             			    {
             			    	Match(input,NUMERIC,FOLLOW_NUMERIC_in_word462); 
             			    
@@ -1069,15 +1069,15 @@ internal class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start ignored
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:91:1: ignored : ( TAB | SPACE )* NEWLINE ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:91:1: ignored : ( TAB | SPACE )* NEWLINE ;
     public void ignored() // throws RecognitionException [1]
     {   
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:91:11: ( ( TAB | SPACE )* NEWLINE )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:91:11: ( TAB | SPACE )* NEWLINE
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:91:11: ( ( TAB | SPACE )* NEWLINE )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:91:11: ( TAB | SPACE )* NEWLINE
             {
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:91:11: ( TAB | SPACE )*
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:91:11: ( TAB | SPACE )*
             	do 
             	{
             	    int alt10 = 2;
@@ -1092,7 +1092,7 @@ internal class InferenceRules_ENParser : Parser
             	    switch (alt10) 
             		{
             			case 1 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:
             			    {
             			    	if ( input.LA(1) == SPACE || input.LA(1) == TAB ) 
             			    	{
@@ -1140,7 +1140,7 @@ internal class InferenceRules_ENParser : Parser
     };
     
     // $ANTLR start indent
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:1: indent : ( TAB )+ ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:93:1: indent : ( TAB )+ ;
     public indent_return indent() // throws RecognitionException [1]
     {   
         indent_return retval = new indent_return();
@@ -1148,10 +1148,10 @@ internal class InferenceRules_ENParser : Parser
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:10: ( ( TAB )+ )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:10: ( TAB )+
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:93:10: ( ( TAB )+ )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:93:10: ( TAB )+
             {
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:10: ( TAB )+
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:93:10: ( TAB )+
             	int cnt11 = 0;
             	do 
             	{
@@ -1167,7 +1167,7 @@ internal class InferenceRules_ENParser : Parser
             	    switch (alt11) 
             		{
             			case 1 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:10: TAB
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:93:10: TAB
             			    {
             			    	Match(input,TAB,FOLLOW_TAB_in_indent489); 
             			    
@@ -1206,15 +1206,15 @@ internal class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start anyToken
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:95:1: anyToken : ( RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | IF | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken ) ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:95:1: anyToken : ( RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | IF | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken ) ;
     public void anyToken() // throws RecognitionException [1]
     {   
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:4: ( ( RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | IF | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken ) )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:4: ( RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | IF | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:96:4: ( ( RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | IF | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken ) )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:96:4: ( RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | IF | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken )
             {
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:4: ( RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | IF | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken )
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:96:4: ( RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | IF | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken )
             	int alt12 = 14;
             	switch ( input.LA(1) ) 
             	{
@@ -1299,98 +1299,98 @@ internal class InferenceRules_ENParser : Parser
             	switch (alt12) 
             	{
             	    case 1 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:5: RULEBASE
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:96:5: RULEBASE
             	        {
             	        	Match(input,RULEBASE,FOLLOW_RULEBASE_in_anyToken500); 
             	        
             	        }
             	        break;
             	    case 2 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:16: FACT
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:96:16: FACT
             	        {
             	        	Match(input,FACT,FOLLOW_FACT_in_anyToken504); 
             	        
             	        }
             	        break;
             	    case 3 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:23: QUERY
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:96:23: QUERY
             	        {
             	        	Match(input,QUERY,FOLLOW_QUERY_in_anyToken508); 
             	        
             	        }
             	        break;
             	    case 4 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:31: RULE
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:96:31: RULE
             	        {
             	        	Match(input,RULE,FOLLOW_RULE_in_anyToken512); 
             	        
             	        }
             	        break;
             	    case 5 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:38: PRIORITY
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:96:38: PRIORITY
             	        {
             	        	Match(input,PRIORITY,FOLLOW_PRIORITY_in_anyToken516); 
             	        
             	        }
             	        break;
             	    case 6 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:49: PRECONDITION
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:96:49: PRECONDITION
             	        {
             	        	Match(input,PRECONDITION,FOLLOW_PRECONDITION_in_anyToken520); 
             	        
             	        }
             	        break;
             	    case 7 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:64: MUTEX
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:96:64: MUTEX
             	        {
             	        	Match(input,MUTEX,FOLLOW_MUTEX_in_anyToken524); 
             	        
             	        }
             	        break;
             	    case 8 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:72: IF
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:96:72: IF
             	        {
             	        	Match(input,IF,FOLLOW_IF_in_anyToken528); 
             	        
             	        }
             	        break;
             	    case 9 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:77: THEN
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:96:77: THEN
             	        {
             	        	Match(input,THEN,FOLLOW_THEN_in_anyToken532); 
             	        
             	        }
             	        break;
             	    case 10 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:84: DEDUCT
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:96:84: DEDUCT
             	        {
             	        	Match(input,DEDUCT,FOLLOW_DEDUCT_in_anyToken536); 
             	        
             	        }
             	        break;
             	    case 11 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:93: FORGET
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:96:93: FORGET
             	        {
             	        	Match(input,FORGET,FOLLOW_FORGET_in_anyToken540); 
             	        
             	        }
             	        break;
             	    case 12 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:102: COUNT
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:96:102: COUNT
             	        {
             	        	Match(input,COUNT,FOLLOW_COUNT_in_anyToken544); 
             	        
             	        }
             	        break;
             	    case 13 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:110: MODIFY
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:96:110: MODIFY
             	        {
             	        	Match(input,MODIFY,FOLLOW_MODIFY_in_anyToken548); 
             	        
             	        }
             	        break;
             	    case 14 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:119: booleanToken
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:96:119: booleanToken
             	        {
             	        	PushFollow(FOLLOW_booleanToken_in_anyToken552);
             	        	booleanToken();
@@ -1420,7 +1420,7 @@ internal class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start booleanToken
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:98:1: booleanToken returns [string value] : ( AND | OR ) ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:98:1: booleanToken returns [string value] : ( AND | OR ) ;
     public string booleanToken() // throws RecognitionException [1]
     {   
 
@@ -1428,10 +1428,10 @@ internal class InferenceRules_ENParser : Parser
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:99:4: ( ( AND | OR ) )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:99:4: ( AND | OR )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:99:4: ( ( AND | OR ) )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:99:4: ( AND | OR )
             {
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:99:4: ( AND | OR )
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:99:4: ( AND | OR )
             	int alt13 = 2;
             	int LA13_0 = input.LA(1);
             	
@@ -1453,7 +1453,7 @@ internal class InferenceRules_ENParser : Parser
             	switch (alt13) 
             	{
             	    case 1 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:99:6: AND
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:99:6: AND
             	        {
             	        	Match(input,AND,FOLLOW_AND_in_booleanToken567); 
             	        	 value =  "And"; 
@@ -1461,7 +1461,7 @@ internal class InferenceRules_ENParser : Parser
             	        }
             	        break;
             	    case 2 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:100:5: OR
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_FR.g:100:5: OR
             	        {
             	        	Match(input,OR,FOLLOW_OR_in_booleanToken575); 
             	        	 value =  "Or"; 

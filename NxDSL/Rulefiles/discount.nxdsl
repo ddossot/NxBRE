@@ -6,7 +6,7 @@ if
 	and
 	The product is a regular product
 then deduct
-	The discount on this product for the customer is 5.0 percent
+	The discount on this product for the customer is 5.0 %
 
 rule "Discount for luxury products"
 if
@@ -14,7 +14,7 @@ if
 	and
 	The product is a luxury product
 then deduct
-	The discount on this product for the customer is 7.5 percent
+	The discount on this product for the customer is 7.5 %
 
 rule "Rate premium customers"
 if
