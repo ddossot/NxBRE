@@ -19,33 +19,40 @@ namespace NxDSL.GUI
 			Application.Run(new MainForm());
 		}
 		
-		public MainForm()
-		{
-			// The InitializeComponent() call is required for Windows Forms designer support.
+		public MainForm() {
 			InitializeComponent();
 			
-			string dslFile = "../../../../Rulefiles/discount.nxdsl"; // FIXME open a file dialog
-			string definitionFile = dslFile + ".defs";
+			OpenFileDialog openFileDialog = new OpenFileDialog();
+			openFileDialog.Filter = "NxDSL files|*.nxdsl";
+			openFileDialog.Title = "Load DSL File";
 			
-			Definitions definitions = new Definitions(definitionFile);
-			
-			HtmlBuilderTokenSource hbts =
-						new HtmlBuilderTokenSource(
-							new InferenceRules_ENLexer(
-								new ANTLRFileStream(dslFile)),
-							definitions);
-			
-			InferenceRules_ENParser ipr = new InferenceRules_ENParser(new CommonTokenStream(hbts));
-			
-			ipr.rbb = new RuleBaseBuilder(definitions);
-			
-			try {
-				ipr.rulebase();
-			} catch(Exception re) {
-				hbts.PrependToHtml("<font color='#FF0000'><b>" + re.Message + "</b></font><br/><br/>");
+			if (DialogResult.OK == openFileDialog.ShowDialog(this)) {
+				string dslFile = openFileDialog.FileName;
+				string definitionFile = dslFile + ".defs";
+				
+				Definitions definitions = new Definitions(definitionFile);
+				
+				HtmlBuilderTokenSource hbts =
+							new HtmlBuilderTokenSource(
+								new InferenceRules_ENLexer(
+									new ANTLRFileStream(dslFile)),
+								definitions);
+				
+				InferenceRules_ENParser ipr = new InferenceRules_ENParser(new CommonTokenStream(hbts));
+				
+				ipr.rbb = new RuleBaseBuilder(definitions);
+				
+				try {
+					ipr.rulebase();
+				} catch(Exception re) {
+					hbts.PrependToHtml("<font color='#FF0000'><b>" + re.Message + "</b></font><br/><br/>");
+				}
+				
+				this.Html = hbts.Html;
+			} else {
+				this.Html = "Next time, select a DSL file!";
 			}
-			
-			this.Html = hbts.Html;
+
 		}
 	}
 }

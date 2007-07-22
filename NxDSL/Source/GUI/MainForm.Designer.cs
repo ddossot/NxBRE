@@ -55,7 +55,7 @@ namespace NxDSL.GUI
 			this.ClientSize = new System.Drawing.Size(821, 566);
 			this.Controls.Add(this.webBrowser1);
 			this.Name = "MainForm";
-			this.Text = "GUI";
+			this.Text = "NxBRE - DSL GUI";
 			this.ResumeLayout(false);
 		}
 		private System.Windows.Forms.WebBrowser webBrowser1;
