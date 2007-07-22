@@ -1,6 +1,6 @@
 base_de_règles "Règles de taux de remise"
 
-règle "Remise pour les produits standLe proards"
+règle "Remise pour les produits standards"
 si
 	Le client est en catégorie premium
 	et
