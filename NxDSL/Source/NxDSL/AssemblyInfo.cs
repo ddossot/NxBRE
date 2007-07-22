@@ -15,3 +15,5 @@ using System.Runtime.InteropServices;
 
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(false)]
+
+[assembly: InternalsVisibleTo("NxDSL-GUI")]

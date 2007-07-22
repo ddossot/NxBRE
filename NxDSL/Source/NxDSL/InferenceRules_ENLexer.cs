@@ -1,4 +1,4 @@
-// $ANTLR 3.0 C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g 2007-07-21 12:18:02
+// $ANTLR 3.0 C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g 2007-07-21 17:51:33
 
 
 
@@ -388,10 +388,10 @@ public class InferenceRules_ENLexer : Lexer
         try 
     	{
             int _type = NUMERIC;
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:98:11: ( ( '0' .. '9' )+ )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:98:11: ( '0' .. '9' )+
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:102:11: ( ( '0' .. '9' )+ )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:102:11: ( '0' .. '9' )+
             {
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:98:11: ( '0' .. '9' )+
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:102:11: ( '0' .. '9' )+
             	int cnt1 = 0;
             	do 
             	{
@@ -407,7 +407,7 @@ public class InferenceRules_ENLexer : Lexer
             	    switch (alt1) 
             		{
             			case 1 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:98:12: '0' .. '9'
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:102:12: '0' .. '9'
             			    {
             			    	MatchRange('0','9'); 
             			    
@@ -443,10 +443,10 @@ public class InferenceRules_ENLexer : Lexer
         try 
     	{
             int _type = CHAR;
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:99:8: ( ( '!' | '\\u0023' .. '\\u002F' | '\\u003A' .. '\\u00FF' )+ )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:99:8: ( '!' | '\\u0023' .. '\\u002F' | '\\u003A' .. '\\u00FF' )+
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:103:8: ( ( '!' | '\\u0023' .. '\\u002F' | '\\u003A' .. '\\u00FF' )+ )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:103:8: ( '!' | '\\u0023' .. '\\u002F' | '\\u003A' .. '\\u00FF' )+
             {
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:99:8: ( '!' | '\\u0023' .. '\\u002F' | '\\u003A' .. '\\u00FF' )+
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:103:8: ( '!' | '\\u0023' .. '\\u002F' | '\\u003A' .. '\\u00FF' )+
             	int cnt2 = 0;
             	do 
             	{
@@ -509,10 +509,10 @@ public class InferenceRules_ENLexer : Lexer
         try 
     	{
             int _type = NEWLINE;
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:100:11: ( ( ( '\\r' )? '\\n' )+ )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:100:11: ( ( '\\r' )? '\\n' )+
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:104:11: ( ( ( '\\r' )? '\\n' )+ )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:104:11: ( ( '\\r' )? '\\n' )+
             {
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:100:11: ( ( '\\r' )? '\\n' )+
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:104:11: ( ( '\\r' )? '\\n' )+
             	int cnt4 = 0;
             	do 
             	{
@@ -528,9 +528,9 @@ public class InferenceRules_ENLexer : Lexer
             	    switch (alt4) 
             		{
             			case 1 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:100:12: ( '\\r' )? '\\n'
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:104:12: ( '\\r' )? '\\n'
             			    {
-            			    	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:100:12: ( '\\r' )?
+            			    	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:104:12: ( '\\r' )?
             			    	int alt3 = 2;
             			    	int LA3_0 = input.LA(1);
             			    	
@@ -541,7 +541,7 @@ public class InferenceRules_ENLexer : Lexer
             			    	switch (alt3) 
             			    	{
             			    	    case 1 :
-            			    	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:100:12: '\\r'
+            			    	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:104:12: '\\r'
             			    	        {
             			    	        	Match('\r'); 
             			    	        
@@ -584,10 +584,10 @@ public class InferenceRules_ENLexer : Lexer
         try 
     	{
             int _type = SPACE;
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:101:9: ( ( ' ' )+ )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:101:9: ( ' ' )+
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:105:9: ( ( ' ' )+ )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:105:9: ( ' ' )+
             {
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:101:9: ( ' ' )+
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:105:9: ( ' ' )+
             	int cnt5 = 0;
             	do 
             	{
@@ -603,7 +603,7 @@ public class InferenceRules_ENLexer : Lexer
             	    switch (alt5) 
             		{
             			case 1 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:101:9: ' '
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:105:9: ' '
             			    {
             			    	Match(' '); 
             			    
@@ -639,8 +639,8 @@ public class InferenceRules_ENLexer : Lexer
         try 
     	{
             int _type = TAB;
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:102:7: ( '\\t' )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:102:7: '\\t'
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:106:7: ( '\\t' )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:106:7: '\\t'
             {
             	Match('\t'); 
             
@@ -660,8 +660,8 @@ public class InferenceRules_ENLexer : Lexer
         try 
     	{
             int _type = QUOTE;
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:103:9: ( '\"' )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:103:9: '\"'
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:107:9: ( '\"' )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:107:9: '\"'
             {
             	Match('\"'); 
             

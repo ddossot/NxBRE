@@ -1,6 +1,6 @@
-// $ANTLR 3.0 C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g 2007-07-21 12:18:02
+// $ANTLR 3.0 C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g 2007-07-21 17:51:33
 
-using System.Collections.Generic;
+using NxDSL;
 
 
 using System;
@@ -84,16 +84,17 @@ public class InferenceRules_ENParser : Parser
 	}
 
     
-    IDictionary<int, string> logicBlocks = new Dictionary<int, string>();
+    
+    public RuleBaseBuilder rbb;
     
     public override void ReportError(RecognitionException re) {
-      throw new NxDSL.DslException(re);
+      throw new DslException(re);
     }
 
 
     
     // $ANTLR start rulebase
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:41:1: rulebase : RULEBASE SPACE QUOTE words QUOTE ( rule | query | fact | ignored )* EOF ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:42:1: rulebase : RULEBASE SPACE QUOTE words QUOTE ( rule | query | fact | ignored )* EOF ;
     public void rulebase() // throws RecognitionException [1]
     {   
         words_return words1 = null;
@@ -101,8 +102,8 @@ public class InferenceRules_ENParser : Parser
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:42:4: ( RULEBASE SPACE QUOTE words QUOTE ( rule | query | fact | ignored )* EOF )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:42:4: RULEBASE SPACE QUOTE words QUOTE ( rule | query | fact | ignored )* EOF
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:43:4: ( RULEBASE SPACE QUOTE words QUOTE ( rule | query | fact | ignored )* EOF )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:43:4: RULEBASE SPACE QUOTE words QUOTE ( rule | query | fact | ignored )* EOF
             {
             	Match(input,RULEBASE,FOLLOW_RULEBASE_in_rulebase138); 
             	Match(input,SPACE,FOLLOW_SPACE_in_rulebase140); 
@@ -112,7 +113,7 @@ public class InferenceRules_ENParser : Parser
             	followingStackPointer_--;
 
             	Match(input,QUOTE,FOLLOW_QUOTE_in_rulebase146); 
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:42:37: ( rule | query | fact | ignored )*
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:43:37: ( rule | query | fact | ignored )*
             	do 
             	{
             	    int alt1 = 5;
@@ -146,7 +147,7 @@ public class InferenceRules_ENParser : Parser
             	    switch (alt1) 
             		{
             			case 1 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:42:38: rule
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:43:38: rule
             			    {
             			    	PushFollow(FOLLOW_rule_in_rulebase149);
             			    	rule();
@@ -156,7 +157,7 @@ public class InferenceRules_ENParser : Parser
             			    }
             			    break;
             			case 2 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:42:45: query
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:43:45: query
             			    {
             			    	PushFollow(FOLLOW_query_in_rulebase153);
             			    	query();
@@ -166,7 +167,7 @@ public class InferenceRules_ENParser : Parser
             			    }
             			    break;
             			case 3 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:42:53: fact
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:43:53: fact
             			    {
             			    	PushFollow(FOLLOW_fact_in_rulebase157);
             			    	fact();
@@ -176,7 +177,7 @@ public class InferenceRules_ENParser : Parser
             			    }
             			    break;
             			case 4 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:42:60: ignored
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:43:60: ignored
             			    {
             			    	PushFollow(FOLLOW_ignored_in_rulebase161);
             			    	ignored();
@@ -195,7 +196,7 @@ public class InferenceRules_ENParser : Parser
             		;	// Stops C# compiler whinging that label 'loop1' has no statements
 
             	Match(input,EOF,FOLLOW_EOF_in_rulebase165); 
-            	Console.WriteLine("rulebase label: "+input.ToString(words1.start,words1.stop));
+            	 rbb.Label = input.ToString(words1.start,words1.stop);
             
             }
     
@@ -214,16 +215,19 @@ public class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start fact
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:44:1: fact : FACT ( SPACE QUOTE words QUOTE )? NEWLINE statement ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:45:1: fact : FACT ( SPACE QUOTE words QUOTE )? NEWLINE statement ;
     public void fact() // throws RecognitionException [1]
     {   
+        words_return words2 = null;
+        
+    
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:44:8: ( FACT ( SPACE QUOTE words QUOTE )? NEWLINE statement )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:44:8: FACT ( SPACE QUOTE words QUOTE )? NEWLINE statement
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:45:8: ( FACT ( SPACE QUOTE words QUOTE )? NEWLINE statement )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:45:8: FACT ( SPACE QUOTE words QUOTE )? NEWLINE statement
             {
             	Match(input,FACT,FOLLOW_FACT_in_fact176); 
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:44:13: ( SPACE QUOTE words QUOTE )?
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:45:13: ( SPACE QUOTE words QUOTE )?
             	int alt2 = 2;
             	int LA2_0 = input.LA(1);
             	
@@ -234,12 +238,12 @@ public class InferenceRules_ENParser : Parser
             	switch (alt2) 
             	{
             	    case 1 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:44:14: SPACE QUOTE words QUOTE
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:45:14: SPACE QUOTE words QUOTE
             	        {
             	        	Match(input,SPACE,FOLLOW_SPACE_in_fact179); 
             	        	Match(input,QUOTE,FOLLOW_QUOTE_in_fact181); 
             	        	PushFollow(FOLLOW_words_in_fact183);
-            	        	words();
+            	        	words2 = words();
             	        	followingStackPointer_--;
 
             	        	Match(input,QUOTE,FOLLOW_QUOTE_in_fact185); 
@@ -254,6 +258,15 @@ public class InferenceRules_ENParser : Parser
             	statement();
             	followingStackPointer_--;
 
+            	
+            				// fix this as soon as I know how to test for the nullity of words
+            				try {
+            					rbb.AddFact(input.ToString(words2.start,words2.stop));
+            				}
+            				catch(NullReferenceException) {
+            					rbb.AddFact(null);
+            				}		
+            			
             
             }
     
@@ -272,27 +285,31 @@ public class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start query
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:46:1: query : QUERY SPACE QUOTE words QUOTE NEWLINE condition ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:55:1: query : QUERY SPACE QUOTE words QUOTE NEWLINE condition ;
     public void query() // throws RecognitionException [1]
     {   
+        words_return words3 = null;
+        
+    
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:46:9: ( QUERY SPACE QUOTE words QUOTE NEWLINE condition )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:46:9: QUERY SPACE QUOTE words QUOTE NEWLINE condition
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:55:9: ( QUERY SPACE QUOTE words QUOTE NEWLINE condition )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:55:9: QUERY SPACE QUOTE words QUOTE NEWLINE condition
             {
-            	Match(input,QUERY,FOLLOW_QUERY_in_query199); 
-            	Match(input,SPACE,FOLLOW_SPACE_in_query201); 
-            	Match(input,QUOTE,FOLLOW_QUOTE_in_query203); 
-            	PushFollow(FOLLOW_words_in_query205);
-            	words();
+            	Match(input,QUERY,FOLLOW_QUERY_in_query201); 
+            	Match(input,SPACE,FOLLOW_SPACE_in_query203); 
+            	Match(input,QUOTE,FOLLOW_QUOTE_in_query205); 
+            	PushFollow(FOLLOW_words_in_query207);
+            	words3 = words();
             	followingStackPointer_--;
 
-            	Match(input,QUOTE,FOLLOW_QUOTE_in_query207); 
-            	Match(input,NEWLINE,FOLLOW_NEWLINE_in_query209); 
-            	PushFollow(FOLLOW_condition_in_query211);
+            	Match(input,QUOTE,FOLLOW_QUOTE_in_query209); 
+            	Match(input,NEWLINE,FOLLOW_NEWLINE_in_query211); 
+            	PushFollow(FOLLOW_condition_in_query213);
             	condition();
             	followingStackPointer_--;
 
+            	 rbb.AddQuery(input.ToString(words3.start,words3.stop)); 
             
             }
     
@@ -311,41 +328,41 @@ public class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start rule
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:48:1: rule : RULE SPACE QUOTE words QUOTE NEWLINE meta IF NEWLINE condition action ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:57:1: rule : RULE SPACE QUOTE words QUOTE NEWLINE meta IF NEWLINE condition action ;
     public void rule() // throws RecognitionException [1]
     {   
-        words_return words2 = null;
+        words_return words4 = null;
         
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:48:9: ( RULE SPACE QUOTE words QUOTE NEWLINE meta IF NEWLINE condition action )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:48:9: RULE SPACE QUOTE words QUOTE NEWLINE meta IF NEWLINE condition action
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:57:9: ( RULE SPACE QUOTE words QUOTE NEWLINE meta IF NEWLINE condition action )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:57:9: RULE SPACE QUOTE words QUOTE NEWLINE meta IF NEWLINE condition action
             {
-            	Match(input,RULE,FOLLOW_RULE_in_rule220); 
-            	Match(input,SPACE,FOLLOW_SPACE_in_rule222); 
-            	Match(input,QUOTE,FOLLOW_QUOTE_in_rule224); 
-            	PushFollow(FOLLOW_words_in_rule226);
-            	words2 = words();
+            	Match(input,RULE,FOLLOW_RULE_in_rule224); 
+            	Match(input,SPACE,FOLLOW_SPACE_in_rule226); 
+            	Match(input,QUOTE,FOLLOW_QUOTE_in_rule228); 
+            	PushFollow(FOLLOW_words_in_rule230);
+            	words4 = words();
             	followingStackPointer_--;
 
-            	Match(input,QUOTE,FOLLOW_QUOTE_in_rule228); 
-            	Match(input,NEWLINE,FOLLOW_NEWLINE_in_rule230); 
-            	PushFollow(FOLLOW_meta_in_rule232);
+            	Match(input,QUOTE,FOLLOW_QUOTE_in_rule232); 
+            	Match(input,NEWLINE,FOLLOW_NEWLINE_in_rule234); 
+            	PushFollow(FOLLOW_meta_in_rule236);
             	meta();
             	followingStackPointer_--;
 
-            	Match(input,IF,FOLLOW_IF_in_rule234); 
-            	Match(input,NEWLINE,FOLLOW_NEWLINE_in_rule236); 
-            	PushFollow(FOLLOW_condition_in_rule238);
+            	Match(input,IF,FOLLOW_IF_in_rule238); 
+            	Match(input,NEWLINE,FOLLOW_NEWLINE_in_rule240); 
+            	PushFollow(FOLLOW_condition_in_rule242);
             	condition();
             	followingStackPointer_--;
 
-            	PushFollow(FOLLOW_action_in_rule240);
+            	PushFollow(FOLLOW_action_in_rule244);
             	action();
             	followingStackPointer_--;
 
-            	Console.WriteLine("rule label: "+input.ToString(words2.start,words2.stop));
+            	 rbb.AddImplies(input.ToString(words4.start,words4.stop)); 
             
             }
     
@@ -364,15 +381,15 @@ public class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start meta
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:50:1: meta : ( priority )? ( precondition )? ( mutex )* ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:59:1: meta : ( priority )? ( precondition )? ( mutex )* ;
     public void meta() // throws RecognitionException [1]
     {   
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:50:8: ( ( priority )? ( precondition )? ( mutex )* )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:50:8: ( priority )? ( precondition )? ( mutex )*
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:59:8: ( ( priority )? ( precondition )? ( mutex )* )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:59:8: ( priority )? ( precondition )? ( mutex )*
             {
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:50:8: ( priority )?
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:59:8: ( priority )?
             	int alt3 = 2;
             	int LA3_0 = input.LA(1);
             	
@@ -388,9 +405,9 @@ public class InferenceRules_ENParser : Parser
             	switch (alt3) 
             	{
             	    case 1 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:50:8: priority
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:59:8: priority
             	        {
-            	        	PushFollow(FOLLOW_priority_in_meta250);
+            	        	PushFollow(FOLLOW_priority_in_meta254);
             	        	priority();
             	        	followingStackPointer_--;
 
@@ -400,7 +417,7 @@ public class InferenceRules_ENParser : Parser
             	
             	}
 
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:50:18: ( precondition )?
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:59:18: ( precondition )?
             	int alt4 = 2;
             	int LA4_0 = input.LA(1);
             	
@@ -416,9 +433,9 @@ public class InferenceRules_ENParser : Parser
             	switch (alt4) 
             	{
             	    case 1 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:50:18: precondition
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:59:18: precondition
             	        {
-            	        	PushFollow(FOLLOW_precondition_in_meta253);
+            	        	PushFollow(FOLLOW_precondition_in_meta257);
             	        	precondition();
             	        	followingStackPointer_--;
 
@@ -428,7 +445,7 @@ public class InferenceRules_ENParser : Parser
             	
             	}
 
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:50:32: ( mutex )*
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:59:32: ( mutex )*
             	do 
             	{
             	    int alt5 = 2;
@@ -443,9 +460,9 @@ public class InferenceRules_ENParser : Parser
             	    switch (alt5) 
             		{
             			case 1 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:50:32: mutex
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:59:32: mutex
             			    {
-            			    	PushFollow(FOLLOW_mutex_in_meta256);
+            			    	PushFollow(FOLLOW_mutex_in_meta260);
             			    	mutex();
             			    	followingStackPointer_--;
 
@@ -479,23 +496,23 @@ public class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start priority
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:52:1: priority : TAB PRIORITY SPACE NUMERIC NEWLINE ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:61:1: priority : TAB PRIORITY SPACE NUMERIC NEWLINE ;
     public void priority() // throws RecognitionException [1]
     {   
-        IToken NUMERIC3 = null;
+        IToken NUMERIC5 = null;
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:53:4: ( TAB PRIORITY SPACE NUMERIC NEWLINE )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:53:4: TAB PRIORITY SPACE NUMERIC NEWLINE
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:62:4: ( TAB PRIORITY SPACE NUMERIC NEWLINE )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:62:4: TAB PRIORITY SPACE NUMERIC NEWLINE
             {
-            	Match(input,TAB,FOLLOW_TAB_in_priority266); 
-            	Match(input,PRIORITY,FOLLOW_PRIORITY_in_priority268); 
-            	Match(input,SPACE,FOLLOW_SPACE_in_priority270); 
-            	NUMERIC3 = (IToken)input.LT(1);
-            	Match(input,NUMERIC,FOLLOW_NUMERIC_in_priority272); 
-            	Match(input,NEWLINE,FOLLOW_NEWLINE_in_priority274); 
-            	Console.WriteLine("priority: "+NUMERIC3.Text);
+            	Match(input,TAB,FOLLOW_TAB_in_priority270); 
+            	Match(input,PRIORITY,FOLLOW_PRIORITY_in_priority272); 
+            	Match(input,SPACE,FOLLOW_SPACE_in_priority274); 
+            	NUMERIC5 = (IToken)input.LT(1);
+            	Match(input,NUMERIC,FOLLOW_NUMERIC_in_priority276); 
+            	Match(input,NEWLINE,FOLLOW_NEWLINE_in_priority278); 
+            	 rbb.CurrentImplicationData.priority=NUMERIC5.Text; 
             
             }
     
@@ -514,28 +531,28 @@ public class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start precondition
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:55:1: precondition : TAB PRECONDITION SPACE QUOTE words QUOTE NEWLINE ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:64:1: precondition : TAB PRECONDITION SPACE QUOTE words QUOTE NEWLINE ;
     public void precondition() // throws RecognitionException [1]
     {   
-        words_return words4 = null;
+        words_return words6 = null;
         
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:56:4: ( TAB PRECONDITION SPACE QUOTE words QUOTE NEWLINE )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:56:4: TAB PRECONDITION SPACE QUOTE words QUOTE NEWLINE
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:65:4: ( TAB PRECONDITION SPACE QUOTE words QUOTE NEWLINE )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:65:4: TAB PRECONDITION SPACE QUOTE words QUOTE NEWLINE
             {
-            	Match(input,TAB,FOLLOW_TAB_in_precondition285); 
-            	Match(input,PRECONDITION,FOLLOW_PRECONDITION_in_precondition287); 
-            	Match(input,SPACE,FOLLOW_SPACE_in_precondition289); 
-            	Match(input,QUOTE,FOLLOW_QUOTE_in_precondition291); 
-            	PushFollow(FOLLOW_words_in_precondition293);
-            	words4 = words();
+            	Match(input,TAB,FOLLOW_TAB_in_precondition289); 
+            	Match(input,PRECONDITION,FOLLOW_PRECONDITION_in_precondition291); 
+            	Match(input,SPACE,FOLLOW_SPACE_in_precondition293); 
+            	Match(input,QUOTE,FOLLOW_QUOTE_in_precondition295); 
+            	PushFollow(FOLLOW_words_in_precondition297);
+            	words6 = words();
             	followingStackPointer_--;
 
-            	Match(input,QUOTE,FOLLOW_QUOTE_in_precondition295); 
-            	Match(input,NEWLINE,FOLLOW_NEWLINE_in_precondition297); 
-            	Console.WriteLine("precondition: "+input.ToString(words4.start,words4.stop));
+            	Match(input,QUOTE,FOLLOW_QUOTE_in_precondition299); 
+            	Match(input,NEWLINE,FOLLOW_NEWLINE_in_precondition301); 
+            	 rbb.CurrentImplicationData.precondition=input.ToString(words6.start,words6.stop); 
             
             }
     
@@ -554,28 +571,28 @@ public class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start mutex
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:58:1: mutex : TAB MUTEX SPACE QUOTE words QUOTE NEWLINE ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:67:1: mutex : TAB MUTEX SPACE QUOTE words QUOTE NEWLINE ;
     public void mutex() // throws RecognitionException [1]
     {   
-        words_return words5 = null;
+        words_return words7 = null;
         
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:58:9: ( TAB MUTEX SPACE QUOTE words QUOTE NEWLINE )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:58:9: TAB MUTEX SPACE QUOTE words QUOTE NEWLINE
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:67:9: ( TAB MUTEX SPACE QUOTE words QUOTE NEWLINE )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:67:9: TAB MUTEX SPACE QUOTE words QUOTE NEWLINE
             {
-            	Match(input,TAB,FOLLOW_TAB_in_mutex307); 
-            	Match(input,MUTEX,FOLLOW_MUTEX_in_mutex309); 
-            	Match(input,SPACE,FOLLOW_SPACE_in_mutex311); 
-            	Match(input,QUOTE,FOLLOW_QUOTE_in_mutex313); 
-            	PushFollow(FOLLOW_words_in_mutex315);
-            	words5 = words();
+            	Match(input,TAB,FOLLOW_TAB_in_mutex311); 
+            	Match(input,MUTEX,FOLLOW_MUTEX_in_mutex313); 
+            	Match(input,SPACE,FOLLOW_SPACE_in_mutex315); 
+            	Match(input,QUOTE,FOLLOW_QUOTE_in_mutex317); 
+            	PushFollow(FOLLOW_words_in_mutex319);
+            	words7 = words();
             	followingStackPointer_--;
 
-            	Match(input,QUOTE,FOLLOW_QUOTE_in_mutex317); 
-            	Match(input,NEWLINE,FOLLOW_NEWLINE_in_mutex319); 
-            	Console.WriteLine("mutex: "+input.ToString(words5.start,words5.stop));
+            	Match(input,QUOTE,FOLLOW_QUOTE_in_mutex321); 
+            	Match(input,NEWLINE,FOLLOW_NEWLINE_in_mutex323); 
+            	 rbb.CurrentImplicationData.mutex=input.ToString(words7.start,words7.stop); 
             
             }
     
@@ -594,19 +611,19 @@ public class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start condition
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:60:1: condition : statement ( logic statement )* ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:69:1: condition : statement ( logic statement )* ;
     public void condition() // throws RecognitionException [1]
     {   
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:61:4: ( statement ( logic statement )* )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:61:4: statement ( logic statement )*
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:70:4: ( statement ( logic statement )* )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:70:4: statement ( logic statement )*
             {
-            	PushFollow(FOLLOW_statement_in_condition330);
+            	PushFollow(FOLLOW_statement_in_condition334);
             	statement();
             	followingStackPointer_--;
 
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:61:14: ( logic statement )*
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:70:14: ( logic statement )*
             	do 
             	{
             	    int alt6 = 2;
@@ -614,13 +631,13 @@ public class InferenceRules_ENParser : Parser
             	    switch (alt6) 
             		{
             			case 1 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:61:15: logic statement
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:70:15: logic statement
             			    {
-            			    	PushFollow(FOLLOW_logic_in_condition333);
+            			    	PushFollow(FOLLOW_logic_in_condition337);
             			    	logic();
             			    	followingStackPointer_--;
 
-            			    	PushFollow(FOLLOW_statement_in_condition335);
+            			    	PushFollow(FOLLOW_statement_in_condition339);
             			    	statement();
             			    	followingStackPointer_--;
 
@@ -654,67 +671,29 @@ public class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start action
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:63:1: action : THEN SPACE ( DEDUCT | FORGET | COUNT | MODIFY )+ NEWLINE statement ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:72:1: action : THEN SPACE verb NEWLINE statement ;
     public void action() // throws RecognitionException [1]
     {   
+        string verb8 = null;
+        
+    
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:63:10: ( THEN SPACE ( DEDUCT | FORGET | COUNT | MODIFY )+ NEWLINE statement )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:63:10: THEN SPACE ( DEDUCT | FORGET | COUNT | MODIFY )+ NEWLINE statement
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:72:10: ( THEN SPACE verb NEWLINE statement )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:72:10: THEN SPACE verb NEWLINE statement
             {
-            	Match(input,THEN,FOLLOW_THEN_in_action345); 
-            	Match(input,SPACE,FOLLOW_SPACE_in_action347); 
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:63:21: ( DEDUCT | FORGET | COUNT | MODIFY )+
-            	int cnt7 = 0;
-            	do 
-            	{
-            	    int alt7 = 2;
-            	    int LA7_0 = input.LA(1);
-            	    
-            	    if ( ((LA7_0 >= DEDUCT && LA7_0 <= MODIFY)) )
-            	    {
-            	        alt7 = 1;
-            	    }
-            	    
-            	
-            	    switch (alt7) 
-            		{
-            			case 1 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:
-            			    {
-            			    	if ( (input.LA(1) >= DEDUCT && input.LA(1) <= MODIFY) ) 
-            			    	{
-            			    	    input.Consume();
-            			    	    errorRecovery = false;
-            			    	}
-            			    	else 
-            			    	{
-            			    	    MismatchedSetException mse =
-            			    	        new MismatchedSetException(null,input);
-            			    	    RecoverFromMismatchedSet(input,mse,FOLLOW_set_in_action349);    throw mse;
-            			    	}
+            	Match(input,THEN,FOLLOW_THEN_in_action349); 
+            	Match(input,SPACE,FOLLOW_SPACE_in_action351); 
+            	PushFollow(FOLLOW_verb_in_action353);
+            	verb8 = verb();
+            	followingStackPointer_--;
 
-            			    
-            			    }
-            			    break;
-            	
-            			default:
-            			    if ( cnt7 >= 1 ) goto loop7;
-            		            EarlyExitException eee =
-            		                new EarlyExitException(7, input);
-            		            throw eee;
-            	    }
-            	    cnt7++;
-            	} while (true);
-            	
-            	loop7:
-            		;	// Stops C# compiler whinging that label 'loop7' has no statements
-
-            	Match(input,NEWLINE,FOLLOW_NEWLINE_in_action366); 
-            	PushFollow(FOLLOW_statement_in_action368);
+            	Match(input,NEWLINE,FOLLOW_NEWLINE_in_action355); 
+            	PushFollow(FOLLOW_statement_in_action357);
             	statement();
             	followingStackPointer_--;
 
+            	 rbb.CurrentImplicationData.action=verb8; ;
             
             }
     
@@ -733,29 +712,29 @@ public class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start statement
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:65:1: statement : indent words NEWLINE ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:74:1: statement : indent words NEWLINE ;
     public void statement() // throws RecognitionException [1]
     {   
-        words_return words6 = null;
+        indent_return indent9 = null;
 
-        indent_return indent7 = null;
+        words_return words10 = null;
         
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:66:4: ( indent words NEWLINE )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:66:4: indent words NEWLINE
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:75:4: ( indent words NEWLINE )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:75:4: indent words NEWLINE
             {
-            	PushFollow(FOLLOW_indent_in_statement377);
-            	indent7 = indent();
+            	PushFollow(FOLLOW_indent_in_statement368);
+            	indent9 = indent();
             	followingStackPointer_--;
 
-            	PushFollow(FOLLOW_words_in_statement379);
-            	words6 = words();
+            	PushFollow(FOLLOW_words_in_statement370);
+            	words10 = words();
             	followingStackPointer_--;
 
-            	Match(input,NEWLINE,FOLLOW_NEWLINE_in_statement381); 
-            	Console.WriteLine("depth of: '"+input.ToString(words6.start,words6.stop)+"' is: "+input.ToString(indent7.start,indent7.stop).Length);
+            	Match(input,NEWLINE,FOLLOW_NEWLINE_in_statement372); 
+            	 rbb.AddStatement(input.ToString(indent9.start,indent9.stop).Length, input.ToString(words10.start,words10.stop)); 
             
             }
     
@@ -774,42 +753,30 @@ public class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start logic
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:68:1: logic : indent booleanToken NEWLINE ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:77:1: logic : indent booleanToken NEWLINE ;
     public void logic() // throws RecognitionException [1]
     {   
-        indent_return indent8 = null;
+        indent_return indent11 = null;
 
-        booleanToken_return booleanToken9 = null;
+        string booleanToken12 = null;
         
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:68:9: ( indent booleanToken NEWLINE )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:68:9: indent booleanToken NEWLINE
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:77:9: ( indent booleanToken NEWLINE )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:77:9: indent booleanToken NEWLINE
             {
-            	PushFollow(FOLLOW_indent_in_logic391);
-            	indent8 = indent();
+            	PushFollow(FOLLOW_indent_in_logic382);
+            	indent11 = indent();
             	followingStackPointer_--;
 
-            	PushFollow(FOLLOW_booleanToken_in_logic393);
-            	booleanToken9 = booleanToken();
+            	PushFollow(FOLLOW_booleanToken_in_logic384);
+            	booleanToken12 = booleanToken();
             	followingStackPointer_--;
 
-            	Match(input,NEWLINE,FOLLOW_NEWLINE_in_logic395); 
+            	Match(input,NEWLINE,FOLLOW_NEWLINE_in_logic386); 
             	
-            				int depth = input.ToString(indent8.start,indent8.stop).Length;
-            				string newOperator = input.ToString(booleanToken9.start,booleanToken9.stop);
-            				
-            				Console.WriteLine("depth of op.: '{0}' is: {1}", newOperator, depth);
-            				
-            				string existingOperator;
-            				
-            				if (logicBlocks.TryGetValue(depth, out existingOperator)) {
-            					if (!newOperator.Equals(existingOperator)) throw new Exception("Operator mismatch at depth: " + depth);
-            				}
-            				else {
-            					logicBlocks.Add(depth, newOperator);
-            				}			
+            				rbb.AddLogicBlock(input.ToString(indent11.start,indent11.stop).Length, booleanToken12);
             			
             
             }
@@ -827,12 +794,109 @@ public class InferenceRules_ENParser : Parser
     }
     // $ANTLR end logic
 
+    
+    // $ANTLR start verb
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:81:1: verb returns [string value] : ( DEDUCT | FORGET | COUNT | MODIFY ) ;
+    public string verb() // throws RecognitionException [1]
+    {   
+
+        string value = null;
+    
+        try 
+    	{
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:82:4: ( ( DEDUCT | FORGET | COUNT | MODIFY ) )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:82:4: ( DEDUCT | FORGET | COUNT | MODIFY )
+            {
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:82:4: ( DEDUCT | FORGET | COUNT | MODIFY )
+            	int alt7 = 4;
+            	switch ( input.LA(1) ) 
+            	{
+            	case DEDUCT:
+            		{
+            	    alt7 = 1;
+            	    }
+            	    break;
+            	case FORGET:
+            		{
+            	    alt7 = 2;
+            	    }
+            	    break;
+            	case COUNT:
+            		{
+            	    alt7 = 3;
+            	    }
+            	    break;
+            	case MODIFY:
+            		{
+            	    alt7 = 4;
+            	    }
+            	    break;
+            		default:
+            		    NoViableAltException nvae_d7s0 =
+            		        new NoViableAltException("82:4: ( DEDUCT | FORGET | COUNT | MODIFY )", 7, 0, input);
+            	
+            		    throw nvae_d7s0;
+            	}
+            	
+            	switch (alt7) 
+            	{
+            	    case 1 :
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:82:5: DEDUCT
+            	        {
+            	        	Match(input,DEDUCT,FOLLOW_DEDUCT_in_verb403); 
+            	        	 value =  "assert"; 
+            	        
+            	        }
+            	        break;
+            	    case 2 :
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:83:5: FORGET
+            	        {
+            	        	Match(input,FORGET,FOLLOW_FORGET_in_verb411); 
+            	        	 value =  "retract"; 
+            	        
+            	        }
+            	        break;
+            	    case 3 :
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:84:5: COUNT
+            	        {
+            	        	Match(input,COUNT,FOLLOW_COUNT_in_verb419); 
+            	        	 value =  "count"; 
+            	        
+            	        }
+            	        break;
+            	    case 4 :
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:85:5: MODIFY
+            	        {
+            	        	Match(input,MODIFY,FOLLOW_MODIFY_in_verb427); 
+            	        	 value =  "modify"; 
+            	        
+            	        }
+            	        break;
+            	
+            	}
+
+            
+            }
+    
+        }
+        catch (RecognitionException re) 
+    	{
+            ReportError(re);
+            Recover(input,re);
+        }
+        finally 
+    	{
+        }
+        return value;
+    }
+    // $ANTLR end verb
+
     public class words_return : ParserRuleReturnScope 
     {
     };
     
     // $ANTLR start words
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:84:1: words : word ( SPACE word )* ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:87:1: words : word ( SPACE word )* ;
     public words_return words() // throws RecognitionException [1]
     {   
         words_return retval = new words_return();
@@ -840,14 +904,14 @@ public class InferenceRules_ENParser : Parser
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:84:9: ( word ( SPACE word )* )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:84:9: word ( SPACE word )*
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:87:9: ( word ( SPACE word )* )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:87:9: word ( SPACE word )*
             {
-            	PushFollow(FOLLOW_word_in_words405);
+            	PushFollow(FOLLOW_word_in_words438);
             	word();
             	followingStackPointer_--;
 
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:84:14: ( SPACE word )*
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:87:14: ( SPACE word )*
             	do 
             	{
             	    int alt8 = 2;
@@ -862,10 +926,10 @@ public class InferenceRules_ENParser : Parser
             	    switch (alt8) 
             		{
             			case 1 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:84:15: SPACE word
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:87:15: SPACE word
             			    {
-            			    	Match(input,SPACE,FOLLOW_SPACE_in_words408); 
-            			    	PushFollow(FOLLOW_word_in_words410);
+            			    	Match(input,SPACE,FOLLOW_SPACE_in_words441); 
+            			    	PushFollow(FOLLOW_word_in_words443);
             			    	word();
             			    	followingStackPointer_--;
 
@@ -901,15 +965,15 @@ public class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start word
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:86:1: word : ( anyToken | CHAR | NUMERIC )+ ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:89:1: word : ( anyToken | CHAR | NUMERIC )+ ;
     public void word() // throws RecognitionException [1]
     {   
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:86:8: ( ( anyToken | CHAR | NUMERIC )+ )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:86:8: ( anyToken | CHAR | NUMERIC )+
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:89:8: ( ( anyToken | CHAR | NUMERIC )+ )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:89:8: ( anyToken | CHAR | NUMERIC )+
             {
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:86:8: ( anyToken | CHAR | NUMERIC )+
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:89:8: ( anyToken | CHAR | NUMERIC )+
             	int cnt9 = 0;
             	do 
             	{
@@ -951,9 +1015,9 @@ public class InferenceRules_ENParser : Parser
             	    switch (alt9) 
             		{
             			case 1 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:86:9: anyToken
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:89:9: anyToken
             			    {
-            			    	PushFollow(FOLLOW_anyToken_in_word421);
+            			    	PushFollow(FOLLOW_anyToken_in_word454);
             			    	anyToken();
             			    	followingStackPointer_--;
 
@@ -961,16 +1025,16 @@ public class InferenceRules_ENParser : Parser
             			    }
             			    break;
             			case 2 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:86:20: CHAR
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:89:20: CHAR
             			    {
-            			    	Match(input,CHAR,FOLLOW_CHAR_in_word425); 
+            			    	Match(input,CHAR,FOLLOW_CHAR_in_word458); 
             			    
             			    }
             			    break;
             			case 3 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:86:27: NUMERIC
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:89:27: NUMERIC
             			    {
-            			    	Match(input,NUMERIC,FOLLOW_NUMERIC_in_word429); 
+            			    	Match(input,NUMERIC,FOLLOW_NUMERIC_in_word462); 
             			    
             			    }
             			    break;
@@ -1005,15 +1069,15 @@ public class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start ignored
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:88:1: ignored : ( TAB | SPACE )* NEWLINE ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:91:1: ignored : ( TAB | SPACE )* NEWLINE ;
     public void ignored() // throws RecognitionException [1]
     {   
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:88:11: ( ( TAB | SPACE )* NEWLINE )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:88:11: ( TAB | SPACE )* NEWLINE
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:91:11: ( ( TAB | SPACE )* NEWLINE )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:91:11: ( TAB | SPACE )* NEWLINE
             {
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:88:11: ( TAB | SPACE )*
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:91:11: ( TAB | SPACE )*
             	do 
             	{
             	    int alt10 = 2;
@@ -1039,7 +1103,7 @@ public class InferenceRules_ENParser : Parser
             			    	{
             			    	    MismatchedSetException mse =
             			    	        new MismatchedSetException(null,input);
-            			    	    RecoverFromMismatchedSet(input,mse,FOLLOW_set_in_ignored439);    throw mse;
+            			    	    RecoverFromMismatchedSet(input,mse,FOLLOW_set_in_ignored472);    throw mse;
             			    	}
 
             			    
@@ -1054,7 +1118,7 @@ public class InferenceRules_ENParser : Parser
             	loop10:
             		;	// Stops C# compiler whinging that label 'loop10' has no statements
 
-            	Match(input,NEWLINE,FOLLOW_NEWLINE_in_ignored448); 
+            	Match(input,NEWLINE,FOLLOW_NEWLINE_in_ignored481); 
             
             }
     
@@ -1076,7 +1140,7 @@ public class InferenceRules_ENParser : Parser
     };
     
     // $ANTLR start indent
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:90:1: indent : ( TAB )+ ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:1: indent : ( TAB )+ ;
     public indent_return indent() // throws RecognitionException [1]
     {   
         indent_return retval = new indent_return();
@@ -1084,10 +1148,10 @@ public class InferenceRules_ENParser : Parser
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:90:10: ( ( TAB )+ )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:90:10: ( TAB )+
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:10: ( ( TAB )+ )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:10: ( TAB )+
             {
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:90:10: ( TAB )+
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:10: ( TAB )+
             	int cnt11 = 0;
             	do 
             	{
@@ -1103,9 +1167,9 @@ public class InferenceRules_ENParser : Parser
             	    switch (alt11) 
             		{
             			case 1 :
-            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:90:10: TAB
+            			    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:10: TAB
             			    {
-            			    	Match(input,TAB,FOLLOW_TAB_in_indent456); 
+            			    	Match(input,TAB,FOLLOW_TAB_in_indent489); 
             			    
             			    }
             			    break;
@@ -1142,15 +1206,15 @@ public class InferenceRules_ENParser : Parser
 
     
     // $ANTLR start anyToken
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:92:1: anyToken : ( RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | IF | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken ) ;
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:95:1: anyToken : ( RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | IF | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken ) ;
     public void anyToken() // throws RecognitionException [1]
     {   
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:4: ( ( RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | IF | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken ) )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:4: ( RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | IF | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:4: ( ( RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | IF | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken ) )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:4: ( RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | IF | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken )
             {
-            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:4: ( RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | IF | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken )
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:4: ( RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | IF | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken )
             	int alt12 = 14;
             	switch ( input.LA(1) ) 
             	{
@@ -1227,7 +1291,7 @@ public class InferenceRules_ENParser : Parser
             	    break;
             		default:
             		    NoViableAltException nvae_d12s0 =
-            		        new NoViableAltException("93:4: ( RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | IF | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken )", 12, 0, input);
+            		        new NoViableAltException("96:4: ( RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | IF | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken )", 12, 0, input);
             	
             		    throw nvae_d12s0;
             	}
@@ -1235,100 +1299,100 @@ public class InferenceRules_ENParser : Parser
             	switch (alt12) 
             	{
             	    case 1 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:5: RULEBASE
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:5: RULEBASE
             	        {
-            	        	Match(input,RULEBASE,FOLLOW_RULEBASE_in_anyToken467); 
+            	        	Match(input,RULEBASE,FOLLOW_RULEBASE_in_anyToken500); 
             	        
             	        }
             	        break;
             	    case 2 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:16: FACT
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:16: FACT
             	        {
-            	        	Match(input,FACT,FOLLOW_FACT_in_anyToken471); 
+            	        	Match(input,FACT,FOLLOW_FACT_in_anyToken504); 
             	        
             	        }
             	        break;
             	    case 3 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:23: QUERY
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:23: QUERY
             	        {
-            	        	Match(input,QUERY,FOLLOW_QUERY_in_anyToken475); 
+            	        	Match(input,QUERY,FOLLOW_QUERY_in_anyToken508); 
             	        
             	        }
             	        break;
             	    case 4 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:31: RULE
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:31: RULE
             	        {
-            	        	Match(input,RULE,FOLLOW_RULE_in_anyToken479); 
+            	        	Match(input,RULE,FOLLOW_RULE_in_anyToken512); 
             	        
             	        }
             	        break;
             	    case 5 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:38: PRIORITY
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:38: PRIORITY
             	        {
-            	        	Match(input,PRIORITY,FOLLOW_PRIORITY_in_anyToken483); 
+            	        	Match(input,PRIORITY,FOLLOW_PRIORITY_in_anyToken516); 
             	        
             	        }
             	        break;
             	    case 6 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:49: PRECONDITION
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:49: PRECONDITION
             	        {
-            	        	Match(input,PRECONDITION,FOLLOW_PRECONDITION_in_anyToken487); 
+            	        	Match(input,PRECONDITION,FOLLOW_PRECONDITION_in_anyToken520); 
             	        
             	        }
             	        break;
             	    case 7 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:64: MUTEX
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:64: MUTEX
             	        {
-            	        	Match(input,MUTEX,FOLLOW_MUTEX_in_anyToken491); 
+            	        	Match(input,MUTEX,FOLLOW_MUTEX_in_anyToken524); 
             	        
             	        }
             	        break;
             	    case 8 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:72: IF
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:72: IF
             	        {
-            	        	Match(input,IF,FOLLOW_IF_in_anyToken495); 
+            	        	Match(input,IF,FOLLOW_IF_in_anyToken528); 
             	        
             	        }
             	        break;
             	    case 9 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:77: THEN
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:77: THEN
             	        {
-            	        	Match(input,THEN,FOLLOW_THEN_in_anyToken499); 
+            	        	Match(input,THEN,FOLLOW_THEN_in_anyToken532); 
             	        
             	        }
             	        break;
             	    case 10 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:84: DEDUCT
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:84: DEDUCT
             	        {
-            	        	Match(input,DEDUCT,FOLLOW_DEDUCT_in_anyToken503); 
+            	        	Match(input,DEDUCT,FOLLOW_DEDUCT_in_anyToken536); 
             	        
             	        }
             	        break;
             	    case 11 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:93: FORGET
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:93: FORGET
             	        {
-            	        	Match(input,FORGET,FOLLOW_FORGET_in_anyToken507); 
+            	        	Match(input,FORGET,FOLLOW_FORGET_in_anyToken540); 
             	        
             	        }
             	        break;
             	    case 12 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:102: COUNT
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:102: COUNT
             	        {
-            	        	Match(input,COUNT,FOLLOW_COUNT_in_anyToken511); 
+            	        	Match(input,COUNT,FOLLOW_COUNT_in_anyToken544); 
             	        
             	        }
             	        break;
             	    case 13 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:110: MODIFY
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:110: MODIFY
             	        {
-            	        	Match(input,MODIFY,FOLLOW_MODIFY_in_anyToken515); 
+            	        	Match(input,MODIFY,FOLLOW_MODIFY_in_anyToken548); 
             	        
             	        }
             	        break;
             	    case 14 :
-            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:93:119: booleanToken
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:119: booleanToken
             	        {
-            	        	PushFollow(FOLLOW_booleanToken_in_anyToken519);
+            	        	PushFollow(FOLLOW_booleanToken_in_anyToken552);
             	        	booleanToken();
             	        	followingStackPointer_--;
 
@@ -1354,38 +1418,61 @@ public class InferenceRules_ENParser : Parser
     }
     // $ANTLR end anyToken
 
-    public class booleanToken_return : ParserRuleReturnScope 
-    {
-    };
     
     // $ANTLR start booleanToken
-    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:95:1: booleanToken : ( AND | OR ) ;
-    public booleanToken_return booleanToken() // throws RecognitionException [1]
+    // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:98:1: booleanToken returns [string value] : ( AND | OR ) ;
+    public string booleanToken() // throws RecognitionException [1]
     {   
-        booleanToken_return retval = new booleanToken_return();
-        retval.start = input.LT(1);
+
+        string value = null;
     
         try 
     	{
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:4: ( ( AND | OR ) )
-            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:96:4: ( AND | OR )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:99:4: ( ( AND | OR ) )
+            // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:99:4: ( AND | OR )
             {
-            	if ( (input.LA(1) >= AND && input.LA(1) <= OR) ) 
+            	// C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:99:4: ( AND | OR )
+            	int alt13 = 2;
+            	int LA13_0 = input.LA(1);
+            	
+            	if ( (LA13_0 == AND) )
             	{
-            	    input.Consume();
-            	    errorRecovery = false;
+            	    alt13 = 1;
+            	}
+            	else if ( (LA13_0 == OR) )
+            	{
+            	    alt13 = 2;
             	}
             	else 
             	{
-            	    MismatchedSetException mse =
-            	        new MismatchedSetException(null,input);
-            	    RecoverFromMismatchedSet(input,mse,FOLLOW_set_in_booleanToken529);    throw mse;
+            	    NoViableAltException nvae_d13s0 =
+            	        new NoViableAltException("99:4: ( AND | OR )", 13, 0, input);
+            	
+            	    throw nvae_d13s0;
+            	}
+            	switch (alt13) 
+            	{
+            	    case 1 :
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:99:6: AND
+            	        {
+            	        	Match(input,AND,FOLLOW_AND_in_booleanToken567); 
+            	        	 value =  "And"; 
+            	        
+            	        }
+            	        break;
+            	    case 2 :
+            	        // C:\\Documents and Settings\\David Dossot\\My Documents\\NxBRE\\SVN\\trunk\\NxDSL\\Source\\Grammars\\InferenceRules_EN.g:100:5: OR
+            	        {
+            	        	Match(input,OR,FOLLOW_OR_in_booleanToken575); 
+            	        	 value =  "Or"; 
+            	        
+            	        }
+            	        break;
+            	
             	}
 
             
             }
-    
-            retval.stop = input.LT(-1);
     
         }
         catch (RecognitionException re) 
@@ -1396,7 +1483,7 @@ public class InferenceRules_ENParser : Parser
         finally 
     	{
         }
-        return retval;
+        return value;
     }
     // $ANTLR end booleanToken
 
@@ -1429,16 +1516,16 @@ public class InferenceRules_ENParser : Parser
     static readonly short[] dfa6_transition_null = null;
 
     static readonly short[] dfa6_transition0 = {
-    	3, 3, 1, -1, 1, 2
+    	1, 1, 1, -1, -1, -1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 2
     	};
     static readonly short[] dfa6_transition1 = {
-    	1, 1, 1, -1, -1, -1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 2
+    	3, 3, 1, -1, 1, 2
     	};
     
     static readonly short[][] DFA6_transition = {
-    	dfa6_transition1,
-    	dfa6_transition_null,
     	dfa6_transition0,
+    	dfa6_transition_null,
+    	dfa6_transition1,
     	dfa6_transition_null
         };
     
@@ -1459,7 +1546,7 @@ public class InferenceRules_ENParser : Parser
     
         override public string Description
         {
-            get { return "()* loopback of 61:14: ( logic statement )*"; }
+            get { return "()* loopback of 70:14: ( logic statement )*"; }
         }
     
     }
@@ -1483,83 +1570,88 @@ public class InferenceRules_ENParser : Parser
     public static readonly BitSet FOLLOW_QUOTE_in_fact185 = new BitSet(new ulong[]{0x0000000000200000UL});
     public static readonly BitSet FOLLOW_NEWLINE_in_fact189 = new BitSet(new ulong[]{0x0000000000400000UL});
     public static readonly BitSet FOLLOW_statement_in_fact191 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_QUERY_in_query199 = new BitSet(new ulong[]{0x0000000000080000UL});
-    public static readonly BitSet FOLLOW_SPACE_in_query201 = new BitSet(new ulong[]{0x0000000000100000UL});
-    public static readonly BitSet FOLLOW_QUOTE_in_query203 = new BitSet(new ulong[]{0x000000000187FFF0UL});
-    public static readonly BitSet FOLLOW_words_in_query205 = new BitSet(new ulong[]{0x0000000000100000UL});
-    public static readonly BitSet FOLLOW_QUOTE_in_query207 = new BitSet(new ulong[]{0x0000000000200000UL});
-    public static readonly BitSet FOLLOW_NEWLINE_in_query209 = new BitSet(new ulong[]{0x0000000000400000UL});
-    public static readonly BitSet FOLLOW_condition_in_query211 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_RULE_in_rule220 = new BitSet(new ulong[]{0x0000000000080000UL});
-    public static readonly BitSet FOLLOW_SPACE_in_rule222 = new BitSet(new ulong[]{0x0000000000100000UL});
-    public static readonly BitSet FOLLOW_QUOTE_in_rule224 = new BitSet(new ulong[]{0x000000000187FFF0UL});
-    public static readonly BitSet FOLLOW_words_in_rule226 = new BitSet(new ulong[]{0x0000000000100000UL});
-    public static readonly BitSet FOLLOW_QUOTE_in_rule228 = new BitSet(new ulong[]{0x0000000000200000UL});
-    public static readonly BitSet FOLLOW_NEWLINE_in_rule230 = new BitSet(new ulong[]{0x0000000000400800UL});
-    public static readonly BitSet FOLLOW_meta_in_rule232 = new BitSet(new ulong[]{0x0000000000000800UL});
-    public static readonly BitSet FOLLOW_IF_in_rule234 = new BitSet(new ulong[]{0x0000000000200000UL});
-    public static readonly BitSet FOLLOW_NEWLINE_in_rule236 = new BitSet(new ulong[]{0x0000000000400000UL});
-    public static readonly BitSet FOLLOW_condition_in_rule238 = new BitSet(new ulong[]{0x0000000000001000UL});
-    public static readonly BitSet FOLLOW_action_in_rule240 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_priority_in_meta250 = new BitSet(new ulong[]{0x0000000000400002UL});
-    public static readonly BitSet FOLLOW_precondition_in_meta253 = new BitSet(new ulong[]{0x0000000000400002UL});
-    public static readonly BitSet FOLLOW_mutex_in_meta256 = new BitSet(new ulong[]{0x0000000000400002UL});
-    public static readonly BitSet FOLLOW_TAB_in_priority266 = new BitSet(new ulong[]{0x0000000000000100UL});
-    public static readonly BitSet FOLLOW_PRIORITY_in_priority268 = new BitSet(new ulong[]{0x0000000000080000UL});
-    public static readonly BitSet FOLLOW_SPACE_in_priority270 = new BitSet(new ulong[]{0x0000000000800000UL});
-    public static readonly BitSet FOLLOW_NUMERIC_in_priority272 = new BitSet(new ulong[]{0x0000000000200000UL});
-    public static readonly BitSet FOLLOW_NEWLINE_in_priority274 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_TAB_in_precondition285 = new BitSet(new ulong[]{0x0000000000000200UL});
-    public static readonly BitSet FOLLOW_PRECONDITION_in_precondition287 = new BitSet(new ulong[]{0x0000000000080000UL});
-    public static readonly BitSet FOLLOW_SPACE_in_precondition289 = new BitSet(new ulong[]{0x0000000000100000UL});
-    public static readonly BitSet FOLLOW_QUOTE_in_precondition291 = new BitSet(new ulong[]{0x000000000187FFF0UL});
-    public static readonly BitSet FOLLOW_words_in_precondition293 = new BitSet(new ulong[]{0x0000000000100000UL});
-    public static readonly BitSet FOLLOW_QUOTE_in_precondition295 = new BitSet(new ulong[]{0x0000000000200000UL});
-    public static readonly BitSet FOLLOW_NEWLINE_in_precondition297 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_TAB_in_mutex307 = new BitSet(new ulong[]{0x0000000000000400UL});
-    public static readonly BitSet FOLLOW_MUTEX_in_mutex309 = new BitSet(new ulong[]{0x0000000000080000UL});
-    public static readonly BitSet FOLLOW_SPACE_in_mutex311 = new BitSet(new ulong[]{0x0000000000100000UL});
-    public static readonly BitSet FOLLOW_QUOTE_in_mutex313 = new BitSet(new ulong[]{0x000000000187FFF0UL});
-    public static readonly BitSet FOLLOW_words_in_mutex315 = new BitSet(new ulong[]{0x0000000000100000UL});
-    public static readonly BitSet FOLLOW_QUOTE_in_mutex317 = new BitSet(new ulong[]{0x0000000000200000UL});
-    public static readonly BitSet FOLLOW_NEWLINE_in_mutex319 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_statement_in_condition330 = new BitSet(new ulong[]{0x0000000000400002UL});
-    public static readonly BitSet FOLLOW_logic_in_condition333 = new BitSet(new ulong[]{0x0000000000400000UL});
-    public static readonly BitSet FOLLOW_statement_in_condition335 = new BitSet(new ulong[]{0x0000000000400002UL});
-    public static readonly BitSet FOLLOW_THEN_in_action345 = new BitSet(new ulong[]{0x0000000000080000UL});
-    public static readonly BitSet FOLLOW_SPACE_in_action347 = new BitSet(new ulong[]{0x000000000001E000UL});
-    public static readonly BitSet FOLLOW_set_in_action349 = new BitSet(new ulong[]{0x000000000021E000UL});
-    public static readonly BitSet FOLLOW_NEWLINE_in_action366 = new BitSet(new ulong[]{0x0000000000400000UL});
-    public static readonly BitSet FOLLOW_statement_in_action368 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_indent_in_statement377 = new BitSet(new ulong[]{0x000000000187FFF0UL});
-    public static readonly BitSet FOLLOW_words_in_statement379 = new BitSet(new ulong[]{0x0000000000200000UL});
-    public static readonly BitSet FOLLOW_NEWLINE_in_statement381 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_indent_in_logic391 = new BitSet(new ulong[]{0x0000000000060000UL});
-    public static readonly BitSet FOLLOW_booleanToken_in_logic393 = new BitSet(new ulong[]{0x0000000000200000UL});
-    public static readonly BitSet FOLLOW_NEWLINE_in_logic395 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_word_in_words405 = new BitSet(new ulong[]{0x0000000000080002UL});
-    public static readonly BitSet FOLLOW_SPACE_in_words408 = new BitSet(new ulong[]{0x000000000187FFF0UL});
-    public static readonly BitSet FOLLOW_word_in_words410 = new BitSet(new ulong[]{0x0000000000080002UL});
-    public static readonly BitSet FOLLOW_anyToken_in_word421 = new BitSet(new ulong[]{0x000000000187FFF2UL});
-    public static readonly BitSet FOLLOW_CHAR_in_word425 = new BitSet(new ulong[]{0x000000000187FFF2UL});
-    public static readonly BitSet FOLLOW_NUMERIC_in_word429 = new BitSet(new ulong[]{0x000000000187FFF2UL});
-    public static readonly BitSet FOLLOW_set_in_ignored439 = new BitSet(new ulong[]{0x0000000000680000UL});
-    public static readonly BitSet FOLLOW_NEWLINE_in_ignored448 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_TAB_in_indent456 = new BitSet(new ulong[]{0x0000000000400002UL});
-    public static readonly BitSet FOLLOW_RULEBASE_in_anyToken467 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_FACT_in_anyToken471 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_QUERY_in_anyToken475 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_RULE_in_anyToken479 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_PRIORITY_in_anyToken483 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_PRECONDITION_in_anyToken487 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_MUTEX_in_anyToken491 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_IF_in_anyToken495 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_THEN_in_anyToken499 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_DEDUCT_in_anyToken503 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_FORGET_in_anyToken507 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_COUNT_in_anyToken511 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_MODIFY_in_anyToken515 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_booleanToken_in_anyToken519 = new BitSet(new ulong[]{0x0000000000000002UL});
-    public static readonly BitSet FOLLOW_set_in_booleanToken529 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_QUERY_in_query201 = new BitSet(new ulong[]{0x0000000000080000UL});
+    public static readonly BitSet FOLLOW_SPACE_in_query203 = new BitSet(new ulong[]{0x0000000000100000UL});
+    public static readonly BitSet FOLLOW_QUOTE_in_query205 = new BitSet(new ulong[]{0x000000000187FFF0UL});
+    public static readonly BitSet FOLLOW_words_in_query207 = new BitSet(new ulong[]{0x0000000000100000UL});
+    public static readonly BitSet FOLLOW_QUOTE_in_query209 = new BitSet(new ulong[]{0x0000000000200000UL});
+    public static readonly BitSet FOLLOW_NEWLINE_in_query211 = new BitSet(new ulong[]{0x0000000000400000UL});
+    public static readonly BitSet FOLLOW_condition_in_query213 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_RULE_in_rule224 = new BitSet(new ulong[]{0x0000000000080000UL});
+    public static readonly BitSet FOLLOW_SPACE_in_rule226 = new BitSet(new ulong[]{0x0000000000100000UL});
+    public static readonly BitSet FOLLOW_QUOTE_in_rule228 = new BitSet(new ulong[]{0x000000000187FFF0UL});
+    public static readonly BitSet FOLLOW_words_in_rule230 = new BitSet(new ulong[]{0x0000000000100000UL});
+    public static readonly BitSet FOLLOW_QUOTE_in_rule232 = new BitSet(new ulong[]{0x0000000000200000UL});
+    public static readonly BitSet FOLLOW_NEWLINE_in_rule234 = new BitSet(new ulong[]{0x0000000000400800UL});
+    public static readonly BitSet FOLLOW_meta_in_rule236 = new BitSet(new ulong[]{0x0000000000000800UL});
+    public static readonly BitSet FOLLOW_IF_in_rule238 = new BitSet(new ulong[]{0x0000000000200000UL});
+    public static readonly BitSet FOLLOW_NEWLINE_in_rule240 = new BitSet(new ulong[]{0x0000000000400000UL});
+    public static readonly BitSet FOLLOW_condition_in_rule242 = new BitSet(new ulong[]{0x0000000000001000UL});
+    public static readonly BitSet FOLLOW_action_in_rule244 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_priority_in_meta254 = new BitSet(new ulong[]{0x0000000000400002UL});
+    public static readonly BitSet FOLLOW_precondition_in_meta257 = new BitSet(new ulong[]{0x0000000000400002UL});
+    public static readonly BitSet FOLLOW_mutex_in_meta260 = new BitSet(new ulong[]{0x0000000000400002UL});
+    public static readonly BitSet FOLLOW_TAB_in_priority270 = new BitSet(new ulong[]{0x0000000000000100UL});
+    public static readonly BitSet FOLLOW_PRIORITY_in_priority272 = new BitSet(new ulong[]{0x0000000000080000UL});
+    public static readonly BitSet FOLLOW_SPACE_in_priority274 = new BitSet(new ulong[]{0x0000000000800000UL});
+    public static readonly BitSet FOLLOW_NUMERIC_in_priority276 = new BitSet(new ulong[]{0x0000000000200000UL});
+    public static readonly BitSet FOLLOW_NEWLINE_in_priority278 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_TAB_in_precondition289 = new BitSet(new ulong[]{0x0000000000000200UL});
+    public static readonly BitSet FOLLOW_PRECONDITION_in_precondition291 = new BitSet(new ulong[]{0x0000000000080000UL});
+    public static readonly BitSet FOLLOW_SPACE_in_precondition293 = new BitSet(new ulong[]{0x0000000000100000UL});
+    public static readonly BitSet FOLLOW_QUOTE_in_precondition295 = new BitSet(new ulong[]{0x000000000187FFF0UL});
+    public static readonly BitSet FOLLOW_words_in_precondition297 = new BitSet(new ulong[]{0x0000000000100000UL});
+    public static readonly BitSet FOLLOW_QUOTE_in_precondition299 = new BitSet(new ulong[]{0x0000000000200000UL});
+    public static readonly BitSet FOLLOW_NEWLINE_in_precondition301 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_TAB_in_mutex311 = new BitSet(new ulong[]{0x0000000000000400UL});
+    public static readonly BitSet FOLLOW_MUTEX_in_mutex313 = new BitSet(new ulong[]{0x0000000000080000UL});
+    public static readonly BitSet FOLLOW_SPACE_in_mutex315 = new BitSet(new ulong[]{0x0000000000100000UL});
+    public static readonly BitSet FOLLOW_QUOTE_in_mutex317 = new BitSet(new ulong[]{0x000000000187FFF0UL});
+    public static readonly BitSet FOLLOW_words_in_mutex319 = new BitSet(new ulong[]{0x0000000000100000UL});
+    public static readonly BitSet FOLLOW_QUOTE_in_mutex321 = new BitSet(new ulong[]{0x0000000000200000UL});
+    public static readonly BitSet FOLLOW_NEWLINE_in_mutex323 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_statement_in_condition334 = new BitSet(new ulong[]{0x0000000000400002UL});
+    public static readonly BitSet FOLLOW_logic_in_condition337 = new BitSet(new ulong[]{0x0000000000400000UL});
+    public static readonly BitSet FOLLOW_statement_in_condition339 = new BitSet(new ulong[]{0x0000000000400002UL});
+    public static readonly BitSet FOLLOW_THEN_in_action349 = new BitSet(new ulong[]{0x0000000000080000UL});
+    public static readonly BitSet FOLLOW_SPACE_in_action351 = new BitSet(new ulong[]{0x000000000001E000UL});
+    public static readonly BitSet FOLLOW_verb_in_action353 = new BitSet(new ulong[]{0x0000000000200000UL});
+    public static readonly BitSet FOLLOW_NEWLINE_in_action355 = new BitSet(new ulong[]{0x0000000000400000UL});
+    public static readonly BitSet FOLLOW_statement_in_action357 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_indent_in_statement368 = new BitSet(new ulong[]{0x000000000187FFF0UL});
+    public static readonly BitSet FOLLOW_words_in_statement370 = new BitSet(new ulong[]{0x0000000000200000UL});
+    public static readonly BitSet FOLLOW_NEWLINE_in_statement372 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_indent_in_logic382 = new BitSet(new ulong[]{0x0000000000060000UL});
+    public static readonly BitSet FOLLOW_booleanToken_in_logic384 = new BitSet(new ulong[]{0x0000000000200000UL});
+    public static readonly BitSet FOLLOW_NEWLINE_in_logic386 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_DEDUCT_in_verb403 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_FORGET_in_verb411 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_COUNT_in_verb419 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_MODIFY_in_verb427 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_word_in_words438 = new BitSet(new ulong[]{0x0000000000080002UL});
+    public static readonly BitSet FOLLOW_SPACE_in_words441 = new BitSet(new ulong[]{0x000000000187FFF0UL});
+    public static readonly BitSet FOLLOW_word_in_words443 = new BitSet(new ulong[]{0x0000000000080002UL});
+    public static readonly BitSet FOLLOW_anyToken_in_word454 = new BitSet(new ulong[]{0x000000000187FFF2UL});
+    public static readonly BitSet FOLLOW_CHAR_in_word458 = new BitSet(new ulong[]{0x000000000187FFF2UL});
+    public static readonly BitSet FOLLOW_NUMERIC_in_word462 = new BitSet(new ulong[]{0x000000000187FFF2UL});
+    public static readonly BitSet FOLLOW_set_in_ignored472 = new BitSet(new ulong[]{0x0000000000680000UL});
+    public static readonly BitSet FOLLOW_NEWLINE_in_ignored481 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_TAB_in_indent489 = new BitSet(new ulong[]{0x0000000000400002UL});
+    public static readonly BitSet FOLLOW_RULEBASE_in_anyToken500 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_FACT_in_anyToken504 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_QUERY_in_anyToken508 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_RULE_in_anyToken512 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_PRIORITY_in_anyToken516 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_PRECONDITION_in_anyToken520 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_MUTEX_in_anyToken524 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_IF_in_anyToken528 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_THEN_in_anyToken532 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_DEDUCT_in_anyToken536 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_FORGET_in_anyToken540 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_COUNT_in_anyToken544 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_MODIFY_in_anyToken548 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_booleanToken_in_anyToken552 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_AND_in_booleanToken567 = new BitSet(new ulong[]{0x0000000000000002UL});
+    public static readonly BitSet FOLLOW_OR_in_booleanToken575 = new BitSet(new ulong[]{0x0000000000000002UL});
 
 }

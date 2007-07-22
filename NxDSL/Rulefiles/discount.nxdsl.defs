@@ -10,46 +10,46 @@
 				<Var>amount</Var>
 			</Atom>
 		</AtomPattern>
-		<AtomPattern regex="The customer is rated (?'rating'[\w ]+)">
+		<AtomPattern regex="The customer is rated ([\w ]+)">
 			<Atom>
-				<Rel>${rating}</Rel>
+				<Rel>{0}</Rel>
 				<Var>customer</Var>
 			</Atom>
 		</AtomPattern>
-		<AtomPattern regex="The product is a (?'type'[\w ]+) product">
+		<AtomPattern regex="The product is a ([\w ]+) product">
 			<Atom>
-				<Rel>${type}</Rel>
+				<Rel>{0}</Rel>
 				<Var>product</Var>
 			</Atom>
 		</AtomPattern>
-		<AtomPattern regex="(?'product'[\w ]+) is a (?'type'[\w ]+) product">
+		<AtomPattern regex="([\w ]+) is a ([\w ]+) product">
 			<Atom>
-				<Rel>${type}</Rel>
-				<Ind>${product}</Ind>
+				<Rel>{1}</Rel>
+				<Ind>{0}</Ind>
 			</Atom>
 		</AtomPattern>
-		<AtomPattern regex="The discount on this product for the customer is (?'discount'[\w \.]+)">
+		<AtomPattern regex="The discount on this product for the customer is ([\w \.]+)">
 			<Atom>
 				<Rel>discount</Rel>
 				<Var>customer</Var>
 				<Var>product</Var>
-				<Ind>${discount}</Ind>
+				<Ind>{0}</Ind>
 			</Atom>
 		</AtomPattern>
-		<AtomPattern regex="The customer has spent (?'amount'[\w ]+) during (?'period'[\w ]+)">
+		<AtomPattern regex="The customer has spent ([\w ]+) during ([\w ]+)">
 			<Atom>
 				<Rel>spending</Rel>
 				<Var>customer</Var>
-				<Ind>${amount}</Ind>
-				<Ind>${period}</Ind>
+				<Ind>{0}</Ind>
+				<Ind>{1}</Ind>
 			</Atom>
 		</AtomPattern>
-		<AtomPattern regex="(?'customer'[\w ]+) has spent (?'amount'[\w ]+) during (?'period'[\w ]+)">
+		<AtomPattern regex="([\w ]+) has spent ([\w ]+) during ([\w ]+)">
 			<Atom>
 				<Rel>spending</Rel>
-				<Ind>${customer}</Ind>
-				<Ind>${amount}</Ind>
-				<Ind>${period}</Ind>
+				<Ind>{0}</Ind>
+				<Ind>{1}</Ind>
+				<Ind>{2}</Ind>
 			</Atom>
 		</AtomPattern>
 	</AtomPatterns>
