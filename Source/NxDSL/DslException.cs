@@ -7,6 +7,9 @@ namespace NxDSL {
 		public DslException(RecognitionException re):base(BuildMessage(re)) {
 		}
 		
+		public DslException(string message):base(message) {
+		}
+		
 		private static string BuildMessage(RecognitionException re) {
 			return "Can not parse rule file: syntax error on line " + re.Line
 					+ ", column " + re.CharPositionInLine

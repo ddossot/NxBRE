@@ -9,9 +9,6 @@ using Antlr.Runtime;
 
 namespace NxDSL.GUI
 {
-	/// <summary>
-	/// Description of MainForm.
-	/// </summary>
 	public partial class MainForm : Form
 	{
 		[STAThread]
@@ -27,15 +24,20 @@ namespace NxDSL.GUI
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			InitializeComponent();
 			
-			Definitions definitions = new Definitions("../../../../Rulefiles/discount.nxdsl.defs");
+			string dslFile = "../../../../Rulefiles/discount.nxdsl"; // FIXME open a file dialog
+			string definitionFile = dslFile + ".defs";
+			
+			Definitions definitions = new Definitions(definitionFile);
 			
 			HtmlBuilderTokenSource hbts =
 						new HtmlBuilderTokenSource(
 							new InferenceRules_ENLexer(
-								new ANTLRFileStream("../../../../Rulefiles/discount.nxdsl")),
+								new ANTLRFileStream(dslFile)),
 							definitions);
 			
 			InferenceRules_ENParser ipr = new InferenceRules_ENParser(new CommonTokenStream(hbts));
+			
+			ipr.rbb = new RuleBaseBuilder(definitions);
 			
 			try {
 				ipr.rulebase();

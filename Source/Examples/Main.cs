@@ -4,20 +4,21 @@ namespace NxDSL.Examples {
 	
 	using NxDSL;
 	
+	using NxBRE.InferenceEngine;
+	using NxBRE.InferenceEngine.Rules;
+	
 	using Antlr.Runtime;
 
 	public class MainClass {
-		public static void Main(string[] args)
-		{
+		public static void Main(string[] args) {
+			string dslFile = "../../../../Rulefiles/discount.nxdsl";
+
+			IEImpl ie = new IEImpl();
+			ie.LoadRuleBase(new DslAdapter(dslFile));
+			ie.Process();
 			
-			InferenceRules_ENParser ipr = new InferenceRules_ENParser(
-								new CommonTokenStream(
-									new InferenceRules_ENLexer(
-										new ANTLRFileStream("../../../../Rulefiles/discount.nxdsl"))));
-			try {
-				ipr.rulebase();
-			} catch(DslException de) {
-				Console.WriteLine(de.Message);
+			for(IEnumerator<Fact> e = ie.Facts; e.MoveNext();) {
+				Console.WriteLine(e.Current);
 			}
 		}
 	}

@@ -6,7 +6,7 @@ namespace NxDSL.GUI {
 	
 	using Antlr.Runtime;
 	
-	public class HtmlBuilderTokenSource : ITokenSource	{
+	internal class HtmlBuilderTokenSource : ITokenSource	{
 		
 		private readonly ITokenSource source;
 		
@@ -34,7 +34,7 @@ namespace NxDSL.GUI {
 					
 				htmlFinalized = true;
 				
-				return htmlBuffer.Insert(0, "<html><body><font face='courier' color='#000000'>").Append("</font></body></html>").ToString();
+				return htmlBuffer.Insert(0, "<html><body><font face='courier' color='#000000' size='2'>").Append("</font></body></html>").ToString();
 			}
 		}
 		

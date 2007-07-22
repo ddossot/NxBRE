@@ -27,6 +27,10 @@
       <HintPath>..\..\Dependencies\Antlr3.Runtime.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="NxBRE">
+      <HintPath>..\..\..\..\tags\nxbre-3_0_0\Source\bin\Release\NxBRE.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -34,8 +38,10 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Definitions.cs" />
+    <Compile Include="DslAdapter.cs" />
     <Compile Include="DslException.cs" />
     <Compile Include="InferenceRules_ENLexer.cs" />
     <Compile Include="InferenceRules_ENParser.cs" />
+    <Compile Include="RuleBaseBuilder.cs" />
   </ItemGroup>
 </Project>

@@ -4,8 +4,8 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>GUI</RootNamespace>
-    <AssemblyName>GUI</AssemblyName>
+    <RootNamespace>NxDSL.GUI</RootNamespace>
+    <AssemblyName>NxDSL-GUI</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -25,6 +25,10 @@
   <ItemGroup>
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\..\Dependencies\Antlr3.Runtime.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="NxBRE">
+      <HintPath>..\..\..\..\tags\nxbre-3_0_0\Source\bin\Release\NxBRE.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System" />

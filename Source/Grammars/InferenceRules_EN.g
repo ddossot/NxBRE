@@ -23,7 +23,7 @@ tokens {
 }
 
 @header {
-using System.Collections.Generic;
+using NxDSL;
 }
 
 @lexer::header {
@@ -31,55 +31,58 @@ using System.Collections.Generic;
 }
 
 @members {
-IDictionary<int, string> logicBlocks = new Dictionary<int, string>();
+
+public RuleBaseBuilder rbb;
 
 public override void ReportError(RecognitionException re) {
-  throw new NxDSL.DslException(re);
+  throw new DslException(re);
 }
 }
 
 rulebase 
-	:	RULEBASE SPACE QUOTE words QUOTE (rule | query | fact | ignored)* EOF {Console.WriteLine("rulebase label: "+$words.text);};
+	:	RULEBASE SPACE QUOTE words QUOTE (rule | query | fact | ignored)* EOF { rbb.Label = $words.text;};
 	
-fact	:	FACT (SPACE QUOTE words QUOTE)? NEWLINE statement;
+fact	:	FACT (SPACE QUOTE words QUOTE)? NEWLINE statement {
+			// fix this as soon as I know how to test for the nullity of words
+			try {
+				rbb.AddFact($words.text);
+			}
+			catch(NullReferenceException) {
+				rbb.AddFact(null);
+			}		
+		};
 
-query	:	QUERY SPACE QUOTE words QUOTE NEWLINE condition;
+query	:	QUERY SPACE QUOTE words QUOTE NEWLINE condition { rbb.AddQuery($words.text); };
 
-rule 	:	RULE SPACE QUOTE words QUOTE NEWLINE meta IF NEWLINE condition action {Console.WriteLine("rule label: "+$words.text);};
+rule 	:	RULE SPACE QUOTE words QUOTE NEWLINE meta IF NEWLINE condition action { rbb.AddImplies($words.text); };
 
 meta	:	priority? precondition? mutex*;
 
 priority
-	:	TAB PRIORITY SPACE NUMERIC NEWLINE {Console.WriteLine("priority: "+$NUMERIC.text);};
+	:	TAB PRIORITY SPACE NUMERIC NEWLINE { rbb.CurrentImplicationData.priority=$NUMERIC.text; };
 
 precondition
-	:	TAB PRECONDITION SPACE QUOTE words QUOTE NEWLINE {Console.WriteLine("precondition: "+$words.text);};
+	:	TAB PRECONDITION SPACE QUOTE words QUOTE NEWLINE { rbb.CurrentImplicationData.precondition=$words.text; };
 
-mutex	:	TAB MUTEX SPACE QUOTE words QUOTE NEWLINE {Console.WriteLine("mutex: "+$words.text);};
+mutex	:	TAB MUTEX SPACE QUOTE words QUOTE NEWLINE { rbb.CurrentImplicationData.mutex=$words.text; };
 
 condition
 	:	statement (logic statement)*;
 
-action	:	THEN SPACE (DEDUCT | FORGET | COUNT | MODIFY)+ NEWLINE statement;
+action	:	THEN SPACE verb NEWLINE statement { rbb.CurrentImplicationData.action=$verb.value; ;};
 
 statement
-	:	indent words NEWLINE {Console.WriteLine("depth of: '"+$words.text+"' is: "+$indent.text.Length);};
+	:	indent words NEWLINE { rbb.AddStatement($indent.text.Length, $words.text); };
 
 logic	:	indent booleanToken NEWLINE {
-			int depth = $indent.text.Length;
-			string newOperator = $booleanToken.text;
-			
-			Console.WriteLine("depth of op.: '{0}' is: {1}", newOperator, depth);
-			
-			string existingOperator;
-			
-			if (logicBlocks.TryGetValue(depth, out existingOperator)) {
-				if (!newOperator.Equals(existingOperator)) throw new Exception("Operator mismatch at depth: " + depth);
-			}
-			else {
-				logicBlocks.Add(depth, newOperator);
-			}			
+			rbb.AddLogicBlock($indent.text.Length, $booleanToken.value);
 		};
+		
+verb returns[string value]
+	:	(DEDUCT { $value = "assert"; }
+		| FORGET { $value = "retract"; }
+		| COUNT { $value = "count"; }
+		| MODIFY { $value = "modify"; });
 
 words	:	word (SPACE word)*;
 
@@ -92,8 +95,9 @@ indent	:	TAB+;
 anyToken
 	:	(RULEBASE | FACT | QUERY | RULE | PRIORITY | PRECONDITION | MUTEX | IF | THEN | DEDUCT | FORGET | COUNT | MODIFY | booleanToken);
 
-booleanToken
-	:	(AND | OR);
+booleanToken returns[string value]
+	:	( AND { $value = "And"; }
+		| OR  { $value = "Or"; });
 
 NUMERIC	:	('0'..'9')+;
 CHAR	:	('!' | '\u0023'..'\u002F' | '\u003A'..'\u00FF')+;
