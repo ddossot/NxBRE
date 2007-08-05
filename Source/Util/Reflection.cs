@@ -50,13 +50,16 @@ namespace NxBRE.Util
 		/// <param name="type">The type to cast to</param>
 		/// <returns>A properly casted object, unless an exception occurs.</returns>
 		public static object CastValue(object valueObject, Type type) {
-			if (type == typeof(System.Exception))
+			if (type == typeof(System.Exception)) {
 				return new System.Exception((string)valueObject);
+			}
 			// fix to bug 1474032 provided by Brian Matthews
-			else if (type.IsEnum)
+			else if (type.IsEnum) {
 				return Enum.Parse(type, valueObject.ToString(), false);
-			else
+			}
+			else {
 				return Convert.ChangeType(valueObject, type, CULTURE_INFO);
+			}
 		}
 
 		/// <summary>
@@ -70,8 +73,12 @@ namespace NxBRE.Util
 			    (pair.Second.GetType().GetInterface("System.IConvertible", false) != null)) {
 				// if they are both convertible, convert to the strongest type (non string)
 				// or arbitrary cast the second to the first
-			  if (pair.First is System.String) pair.First = CastValue(pair.First, pair.Second.GetType());
-			  else pair.Second = CastValue(pair.Second, pair.First.GetType());
+				if (pair.First is System.String) {
+					pair.First = CastValue(pair.First, pair.Second.GetType());
+				}
+				else {
+					pair.Second = CastValue(pair.Second, pair.First.GetType());
+				}
 			}
 		}
 		
@@ -109,8 +116,11 @@ namespace NxBRE.Util
 			if (argValues == null) argValues = new object[0];
 			Type toInstantiate = GetRuntimeType(type);
 			ConstructorInfo ci = toInstantiate.GetConstructor(GetArgumentTypes(argValues));
-			if (ci == null)
+			
+			if (ci == null) {
 				throw new TargetException("No matching constructor found on "+type);
+			}
+			
 			return ci.Invoke(argValues);
 		}
 		
@@ -140,9 +150,13 @@ namespace NxBRE.Util
 						fi.SetValue(target, argValues[0]);
 						return null;
 					}
-					else throw new TargetException(nbOfProvidedArgs+" argument(s) provided for field "+target+"."+name+" when 1 expected");
+					else { 
+						throw new TargetException(nbOfProvidedArgs+" argument(s) provided for field "+target+"."+name+" when 1 expected");
+					}
 				}
-				else return fi.GetValue(target);
+				else {
+					return fi.GetValue(target);
+				}
 			}
 	
 			// Check if it is a property name
@@ -189,7 +203,9 @@ namespace NxBRE.Util
 			if (mi == null)	{
 				try {
 					mi = type.GetMethod(name);
-				} catch(AmbiguousMatchException) {}
+				} catch(AmbiguousMatchException) {
+					// IGNORED
+				}
 			}
 			
 			// if something has been found
@@ -213,17 +229,27 @@ namespace NxBRE.Util
 		
 		private static Type GetRuntimeType(string type) {
 			Type runtimeType = Type.GetType(type, true);
-			if (runtimeType == null) throw new TargetException("Can not find class type "+type);
-			return runtimeType;			
+			
+			if (runtimeType == null) {
+				throw new TargetException("Can not find class type "+type);
+			}
+			return {
+				runtimeType;
+			}
 		}
 		
 		private static Type[] GetArgumentTypes(object[] arguments) {
 			ArrayList argumentTypes = new ArrayList();
-			for(int i=0;i<arguments.Length;i++)
-				if (arguments[i] != null)
+			
+			for(int i=0;i<arguments.Length;i++) {
+				if (arguments[i] != null) {
 					argumentTypes.Add(arguments[i].GetType());
-				else
+				}
+				else {
 					argumentTypes.Add(typeof(Object));
+				}
+			}
+			
 			return (Type[])argumentTypes.ToArray(typeof(Type));
 		}	
 	}
