@@ -233,8 +233,8 @@ namespace NxBRE.Util
 			if (runtimeType == null) {
 				throw new TargetException("Can not find class type "+type);
 			}
-			return {
-				runtimeType;
+			else  {
+				return runtimeType;
 			}
 		}
 		
