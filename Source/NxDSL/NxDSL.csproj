@@ -28,7 +28,7 @@
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="NxBRE">
-      <HintPath>..\..\..\..\tags\nxbre-3_0_0\Source\bin\Release\NxBRE.dll</HintPath>
+      <HintPath>..\..\..\..\tags\nxbre-3_1_0\Source\bin\Debug\NxBRE.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System" />
