@@ -182,17 +182,39 @@ namespace NxBRE.Test.InferenceEngine {
 		}
 		
 		[Test]
-		public void DiscountLabelized() {
+		public void RuleBaseProperties() {
 			ie.LoadRuleBase(new RuleML08DatalogAdapter(ruleFilesFolder + "discount_lab.ruleml", FileAccess.Read));
 			Assert.AreEqual("forward", ie.Direction, "Direction");
 			Assert.AreEqual("Discount Knowledge Base", ie.Label, "Label");
+			
 			Assert.AreEqual(3, ie.FactsCount, "Facts Count");
+			Assert.AreEqual(ie.FactsCount, GetEnumeratorSize(ie.Facts), "Facts Enumerator");
+			
 			Assert.AreEqual(1, ie.QueriesCount, "Queries Count");
+			Assert.AreEqual(ie.QueriesCount, GetEnumeratorSize(ie.Queries), "Queries Enumerator");
 			IList<string> queryLabels = ie.QueryLabels;
 			Assert.AreEqual(1, queryLabels.Count, "Query Labels");
+			
 			Assert.AreEqual(3, ie.ImplicationsCount, "Implications Count");
+			Assert.AreEqual(ie.ImplicationsCount, GetEnumeratorSize(ie.Implications), "Implications Enumerator");
+		}
+		
+		private int GetEnumeratorSize(IEnumerator e) {
+			int count = 0;
+			
+			while (e.MoveNext()) {
+				count++;
+			}
+			
+			return count;
+		}
+		
+		[Test]
+		public void DiscountLabelized() {
+			ie.LoadRuleBase(new RuleML08DatalogAdapter(ruleFilesFolder + "discount_lab.ruleml", FileAccess.Read));
 
 			ie.NewWorkingMemory(WorkingMemoryTypes.Isolated);
+
 			Process();
 			Assert.AreEqual(3, deducted, "(1) Deducted, Isolated");
 			qrs = ie.RunQuery("Calculated Discounts");
