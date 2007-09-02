@@ -1,4 +1,4 @@
-NxBRE Inference Engine Console README v1.3.0
+NxBRE Inference Engine Console README v1.3.1
 ============================================
 
 Author       : David Dossot (david@dossot.net)
@@ -20,9 +20,13 @@ Any contribution to this sub-project is welcome!
 
 ## RELEASE NOTES ##
 
+v.1.3.1
+
+  * Migrated to NxBRE 3.1.0
+
 v.1.3.0
 
-  * Migrated to .NET 2 / NxBRE 3
+  * Migrated to .NET 2 / NxBRE 3.0.0
 
   * Added support of VB.NET Binder files (*.vcb)
 
