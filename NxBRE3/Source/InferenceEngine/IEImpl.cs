@@ -599,16 +599,6 @@ namespace NxBRE.InferenceEngine {
 		}
 		
 		/// <summary>
-		/// Gets the number of implications in the current rulebase.
-		/// </summary>
-		public int ImplicationsCount {
-			get {
-				CheckInitialized();				
-				return IB.Count;
-			}
-		}
-		
-		/// <summary>
 		/// Gets the number of facts in the current working memory.
 		/// </summary>
 		public int FactsCount {
@@ -676,8 +666,13 @@ namespace NxBRE.InferenceEngine {
 		/// <returns>True if the Fact has been retracted from the FactBase, otherwise False.</returns>
 		public bool Retract(string factLabel) {
 			Fact fact = GetFact(factLabel);
-			if (fact != null) return WM.FB.Retract(fact);
-			else return false;
+			
+			if (fact != null) {
+				return WM.FB.Retract(fact);
+			}
+			else {
+				return false;
+			}
 		}
 		
 		/// <summary>
@@ -711,8 +706,13 @@ namespace NxBRE.InferenceEngine {
 		/// <returns>True if <term>currentFact</term> has been retracted from the FactBase, otherwise False ; this whether <term>newFact</term> already exists in the factbase, or not.</returns>
 		public bool Modify(string currentFactLabel, Fact newFact) {
 			Fact currentFact = GetFact(currentFactLabel);
-			if (currentFact != null) return WM.FB.Modify(currentFact, newFact);
-			else return false;
+			
+			if (currentFact != null) {
+				return WM.FB.Modify(currentFact, newFact);
+			}
+			else {
+				return false;
+			}
 		}
 
 		/// <summary>
@@ -726,6 +726,18 @@ namespace NxBRE.InferenceEngine {
 		}
 		
 		/// <summary>
+		/// Gets an enumeration of the queries in the current rulebase.
+		/// </summary>
+		/// <returns>An IEnumerator on the queries in the current rulebase.</returns>
+		/// <remarks>Do not try to alter the queries from this enumemration: unexpected results might occur if you do so.</remarks>
+		public IEnumerator<Query> Queries {
+			get {
+				CheckInitialized();
+				return QB.GetEnumerator();
+			}
+		}
+		
+		/// <summary>
 		/// Gets the labels of the queries in the current rulebase.
 		/// </summary>
 		public IList<string> QueryLabels {
@@ -733,7 +745,11 @@ namespace NxBRE.InferenceEngine {
 				CheckInitialized();				
 				string[] result = new string[QueriesCount];
 				int i = 0;
-				foreach(Query query in QB) result[i++] = query.Label;
+				
+				foreach(Query query in QB) {
+					result[i++] = query.Label;
+				}
+				
 				return new ReadOnlyCollection<string>(result);
 			}
 		}
@@ -749,7 +765,10 @@ namespace NxBRE.InferenceEngine {
 		/// <returns>An <code>IList&lt;IList&lt;Fact>></code> containing the results found.</returns>
 		public IList<IList<Fact>> RunQuery(Query query) {
 			CheckInitialized();
-			if (query == null) throw new BREException("Query is null or not found.");
+			if (query == null) {
+				throw new BREException("Query is null or not found.");
+			}
+			
 			return WM.FB.RunQuery(query);
 		}
 		
@@ -770,6 +789,28 @@ namespace NxBRE.InferenceEngine {
 		/// <returns>An <code>IList&lt;IList&lt;Fact>></code> containing the results found.</returns>
 		public IList<IList<Fact>> RunQuery(string queryLabel) {
 			return RunQuery(QB.Get(queryLabel));
+		}
+		
+		/// <summary>
+		/// Gets the number of implications in the current rulebase.
+		/// </summary>
+		public int ImplicationsCount {
+			get {
+				CheckInitialized();				
+				return IB.Count;
+			}
+		}
+		
+		/// <summary>
+		/// Gets an enumeration of the implications in the current rulebase.
+		/// </summary>
+		/// <returns>An IEnumerator on the implications in the current rulebase.</returns>
+		/// <remarks>Do not try to alter the implications from this enumemration: unexpected results might occur if you do so.</remarks>
+		public IEnumerator<Implication> Implications {
+			get {
+				CheckInitialized();
+				return IB.GetEnumerator();
+			}
 		}
 
 		// Private methods ---------------------------------------------------------

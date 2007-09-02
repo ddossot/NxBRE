@@ -1,7 +1,6 @@
-NxBRE README v3.1.0Beta2
-========================
+NxBRE README v3.1.0
+===================
 
-Date         : XX-XXX-200X
 URL          : http://nxbre.org
 EMail        : contact@nxbre.org
 License      : LGPL
@@ -91,6 +90,8 @@ v3.1.0
   * Improved adapter load method to allow sharing (feature request 1710153).
 
   * Added event context to allow discovering the facts and implication at the origin of the event (feature request 1657420).
+
+  * Added properties to get an enumeration of the queries and implications in the engine (feature request 1786544).
 
 
 

@@ -178,7 +178,6 @@ namespace NxBRE.InferenceEngine
 		/// </remarks>
 		void Process();
 		
-		
 		/// <summary>
 		/// Process the selected rules on the current working memory and stops
 		/// infering when no new Fact is deducted or retracted.
@@ -217,13 +216,9 @@ namespace NxBRE.InferenceEngine
 		void Process(IDictionary businessObjects, RuleTypes ruleType);
 		
 		/// <summary>
-		/// Gets the number of implications in the current rulebase.
-		/// </summary>
-		int ImplicationsCount { get; }
-		
-		/// <summary>
 		/// Gets the number of facts in the current working memory.
 		/// </summary>
+		/// <returns>The number of facts in the current working memory.</returns>
 		int FactsCount { get; }
 		
 		/// <summary>
@@ -296,11 +291,20 @@ namespace NxBRE.InferenceEngine
 		/// <summary>
 		/// Gets the number of queries in the current rulebase.
 		/// </summary>
+		/// <returns>The number of queries in the current rulebase.</returns>
 		int QueriesCount { get; }
+		
+		/// <summary>
+		/// Gets an enumeration of the queries in the current rulebase.
+		/// </summary>
+		/// <returns>An IEnumerator on the queries in the current rulebase.</returns>
+		/// <remarks>Do not try to alter the queries from this enumemration: unexpected results might occur if you do so.</remarks>
+		IEnumerator<Query> Queries { get; }
 		
 		/// <summary>
 		/// Gets the labels of the queries in the current rulebase.
 		/// </summary>
+		/// <returns>An <code>IList&lt;string></code> containing the labels of all the queries in the current rulebase.</returns>
 		IList<string> QueryLabels { get; }
 		
 		/// <summary>
@@ -328,5 +332,18 @@ namespace NxBRE.InferenceEngine
 		/// <param name="queryLabel">The label of the Query to run.</param>
 		/// <returns>An <code>IList&lt;IList&lt;Fact>></code> containing the results found.</returns>
 		IList<IList<Fact>> RunQuery(string queryLabel);
+		
+		/// <summary>
+		/// Gets the number of implications in the current rulebase.
+		/// </summary>
+		/// <returns>The number of implications in the current rulebase.</returns>
+		int ImplicationsCount { get; }
+		
+		/// <summary>
+		/// Gets an enumeration of the implications in the current rulebase.
+		/// </summary>
+		/// <returns>An IEnumerator on the implications in the current rulebase.</returns>
+		/// <remarks>Do not try to alter the implications from this enumemration: unexpected results might occur if you do so.</remarks>
+		IEnumerator<Implication> Implications { get; }
 	}
 }
