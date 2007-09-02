@@ -1,6 +1,6 @@
-﻿<project schemaVersion="1.2">
+﻿<project schemaVersion="1.4.0.2">
     <assemblies>
-        <assembly assemblyPath=".\bin\Debug\NxBRE.dll" xmlCommentsPath=".\bin\Debug\NxBRE.dll.xml" />
+        <assembly assemblyPath=".\bin\Debug\NxBRE.dll" xmlCommentsPath=".\bin\Debug\NxBRE.xml" commentsOnly="False" />
     </assemblies>
     <namespaceSummaries>
         <namespaceSummaryItem name="" isDocumented="False" />
@@ -8,11 +8,11 @@
         <namespaceSummaryItem name="NxBRE.FlowEngine" isDocumented="True" />
         <namespaceSummaryItem name="NxBRE.FlowEngine.Core" isDocumented="True" />
         <namespaceSummaryItem name="NxBRE.FlowEngine.Factories" isDocumented="True" />
-        <namespaceSummaryItem name="NxBRE.FlowEngine.IO" isDocumented="False" />
+        <namespaceSummaryItem name="NxBRE.FlowEngine.IO" isDocumented="True" />
         <namespaceSummaryItem name="NxBRE.FlowEngine.Rules" isDocumented="True" />
         <namespaceSummaryItem name="NxBRE.InferenceEngine" isDocumented="True" />
         <namespaceSummaryItem name="NxBRE.InferenceEngine.Core" isDocumented="True" />
-        <namespaceSummaryItem name="NxBRE.InferenceEngine.IO" isDocumented="False" />
+        <namespaceSummaryItem name="NxBRE.InferenceEngine.IO" isDocumented="True" />
         <namespaceSummaryItem name="NxBRE.InferenceEngine.IO.Hrf086" isDocumented="False" />
         <namespaceSummaryItem name="NxBRE.InferenceEngine.Registry" isDocumented="True" />
         <namespaceSummaryItem name="NxBRE.InferenceEngine.Rules" isDocumented="True" />
@@ -21,31 +21,36 @@
         <namespaceSummaryItem name="NxBRE.Test.InferenceEngine" isDocumented="False" />
         <namespaceSummaryItem name="NxBRE.Util" isDocumented="True" />
     </namespaceSummaries>
-    <contentPlacement>AboveNamespaces</contentPlacement>
-    <dependencies>
-        <dependencyItem depPath="GAC:nunit.framework, Version=2.2.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
-    </dependencies>
-    <projectSummary>NxBRE - .NET Business Rules Engine</projectSummary>
-    <sandcastlePath>R:\Program Files\Sandcastle\</sandcastlePath>
-    <hhcPath>R:\Program Files\HTML Help Workshop\</hhcPath>
-    <hxcompPath />
-    <outputPath>.\Help\</outputPath>
-    <helpFileFormat>HtmlHelp1x</helpFileFormat>
-    <cleanIntermediates>True</cleanIntermediates>
-    <purgeDuplicateTopics>True</purgeDuplicateTopics>
-    <binaryTOC>True</binaryTOC>
-    <includeFavorites>False</includeFavorites>
-    <preliminary>False</preliminary>
-    <rootNSContainer>False</rootNSContainer>
-    <helpTitle>NxBRE v3.0.0 - API Documentation</helpTitle>
-    <htmlHelpName>NxBRE-API-3_0_0</htmlHelpName>
-    <language>en-US</language>
-    <copyrightHref />
-    <copyrightText>Copyright (C) 2003-2006 David Dossot et al.</copyrightText>
-    <feedbackEMailAddress>contact@nxbre.org</feedbackEMailAddress>
-    <headerText>NxBRE v3.0.0 - API Documentation</headerText>
-    <projectLinks>Local</projectLinks>
-    <sdkLinks>Msdn</sdkLinks>
-    <documentAttributes>False</documentAttributes>
-    <documentInternals>False</documentInternals>
+    <ProjectSummary>NxBRE - .NET Business Rules Engine</ProjectSummary>
+    <MissingTags>AutoDocumentCtors</MissingTags>
+    <VisibleItems>InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected</VisibleItems>
+    <HtmlHelp1xCompilerPath path="..\..\..\..\..\..\..\..\Program Files\HTML Help Workshop\" />
+    <HtmlHelp2xCompilerPath path="" />
+    <OutputPath>.\Help\</OutputPath>
+    <SandcastlePath path="..\..\..\..\..\..\..\..\Program Files\Sandcastle\" />
+    <WorkingPath path="" />
+    <CleanIntermediates>True</CleanIntermediates>
+    <HelpFileFormat>HtmlHelp1x</HelpFileFormat>
+    <PurgeDuplicateTopics>True</PurgeDuplicateTopics>
+    <CppCommentsFixup>False</CppCommentsFixup>
+    <FrameworkVersion>2.0.50727</FrameworkVersion>
+    <BinaryTOC>True</BinaryTOC>
+    <IncludeFavorites>False</IncludeFavorites>
+    <Preliminary>False</Preliminary>
+    <RootNamespaceContainer>False</RootNamespaceContainer>
+    <RootNamespaceTitle />
+    <HelpTitle>NxBRE v3.1.0 - API Documentation</HelpTitle>
+    <HtmlHelpName>NxBRE-API-3_1_0</HtmlHelpName>
+    <Language>en-US</Language>
+    <CopyrightHref />
+    <CopyrightText>Copyright (C) 2003-2007 David Dossot et al.</CopyrightText>
+    <FeedbackEMailAddress>contact@nxbre.org</FeedbackEMailAddress>
+    <HeaderText>NxBRE v3.1.0 - API Documentation</HeaderText>
+    <FooterText />
+    <ProjectLinkType>Local</ProjectLinkType>
+    <SdkLinkType>Msdn</SdkLinkType>
+    <PresentationStyle>Prototype</PresentationStyle>
+    <NamingMethod>Guid</NamingMethod>
+    <SyntaxFilters>Standard</SyntaxFilters>
+    <ContentPlacement>AboveNamespaces</ContentPlacement>
 </project>
