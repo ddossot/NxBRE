@@ -43,9 +43,9 @@ namespace NxBRE.InferenceEngine.Rules {
 		}
 
 		/// <summary>
-		/// The atoms in the current group, and all the subgroups.
+		/// A list of all the atoms in the current group and all the subgroups, explored recursively.
 		/// </summary>
-		internal IList<Atom> AllAtoms {
+		public IList<Atom> AllAtoms {
 			get {
 				return allAtoms;
 			}

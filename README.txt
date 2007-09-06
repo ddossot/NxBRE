@@ -65,6 +65,14 @@ All static calls on NxBRE helpers and utilities, either from FlowEngine rules or
 
 ## RELEASE NOTES ##
 
+v3.1.1
+
+ Inference Engine
+
+  * Made "AllAtoms" property public in "AtomGroup" class (feature request 1788291).
+
+
+
 v3.1.0
 
  General
