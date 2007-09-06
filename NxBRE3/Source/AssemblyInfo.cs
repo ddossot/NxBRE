@@ -10,6 +10,6 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCopyright("Copyright (C) 2003-2007 David Dossot et al.")]
 [assembly: AssemblyTrademark("NxBRE is distributed under the GNU LESSER GENERAL PUBLIC LICENSE.")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("3.1.0.*")]
+[assembly: AssemblyVersion("3.1.1.*")]
 [assembly: CLSCompliant(true)]
 [assembly: InternalsVisibleTo("NxBRE-UnitTest")]

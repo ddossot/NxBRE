@@ -66,6 +66,12 @@ namespace NxBRE.InferenceEngine.Core {
 			return null;
 		}
 		
+		/// <summary>
+		/// Lists all the implications that are children of the provided one on the basis of pre-condition relationship ;
+		/// ie all the implications that will fire only if the passed one is positive.
+		/// </summary>
+		/// <param name="parentImplication">The parent of pre-conditioned implications.</param>
+		/// <returns>The list of pre-conditioned implications.</returns>
 		public IList<Implication> GetPreconditionChildren(Implication parentImplication) {
 			IList<Implication> result = new List<Implication>();
 			
