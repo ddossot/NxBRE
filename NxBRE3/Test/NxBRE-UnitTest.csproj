@@ -38,6 +38,7 @@
     <Compile Include="InferenceEngine\AbstractTestEngine.cs" />
     <Compile Include="InferenceEngine\TestAdapter.cs" />
     <Compile Include="InferenceEngine\TestBinder.cs" />
+    <Compile Include="InferenceEngine\TestCompositeAdapter.cs" />
     <Compile Include="InferenceEngine\TestCore.cs" />
     <Compile Include="InferenceEngine\TestEngineCoreFeaturesHRF.cs" />
     <Compile Include="InferenceEngine\TestEngineCoreFeaturesRuleML086.cs" />
