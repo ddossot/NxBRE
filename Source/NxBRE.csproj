@@ -89,6 +89,7 @@
     <Compile Include="InferenceEngine\IEventContext.cs" />
     <Compile Include="InferenceEngine\IInferenceEngine.cs" />
     <Compile Include="InferenceEngine\IntegrityException.cs" />
+    <Compile Include="InferenceEngine\IO\CompositeRuleBaseAdapter.cs" />
     <Compile Include="InferenceEngine\NewFactEvent.cs" />
     <Compile Include="InferenceEngine\Core\AbstractChainManager.cs" />
     <Compile Include="InferenceEngine\Core\AbstractWorkingMemory.cs" />
