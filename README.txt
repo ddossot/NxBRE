@@ -69,6 +69,8 @@ v3.1.1
 
  Inference Engine
 
+  * Added a CompositeRuleBaseAdapter that allows merging several rulebases in one (contributed by Amitay Dolbo).
+
   * Made "AllAtoms" property public in "AtomGroup" class (feature request 1788291).
 
 
