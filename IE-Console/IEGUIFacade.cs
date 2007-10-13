@@ -6,6 +6,8 @@ namespace NxBRE.InferenceEngine.Console {
 	using System.Reflection;
 	using System.Text;
 	
+	using System.Windows.Forms;
+	
 	using NxBRE.InferenceEngine;
 	using NxBRE.InferenceEngine.IO;
 	using NxBRE.InferenceEngine.Rules;
@@ -188,9 +190,13 @@ namespace NxBRE.InferenceEngine.Console {
 				case ".vdx":
 					string[] selectedPages = mf.PromptForVisioPageNameSelection(Visio2003Adapter.GetPageNames(uri));
 					if (selectedPages != null) {
-						//TODO: find a way to prompt for strictness
 						if (onlyFacts) ie.LoadFacts(new Visio2003Adapter(uri, FileAccess.Read, selectedPages));
-						else ie.LoadRuleBase(new Visio2003Adapter(uri, FileAccess.Read, true, selectedPages));
+						else ie.LoadRuleBase(new Visio2003Adapter(uri, FileAccess.Read, (DialogResult.Yes == MessageBox.Show(mf,
+																	                "Is your Visio rule base using strict syntax?",
+																	                "Visio strictness",
+																	                MessageBoxButtons.YesNo,
+																	                MessageBoxIcon.Question,
+					                                        MessageBoxDefaultButton.Button2)), selectedPages));
 					}
 					break;
 				

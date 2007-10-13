@@ -20,6 +20,10 @@ Any contribution to this sub-project is welcome!
 
 ## RELEASE NOTES ##
 
+v.1.3.2
+
+  * Prompt user for strictness when loading a Visio rulebase (feature request 1812990).
+
 v.1.3.1
 
   * Migrated to NxBRE 3.1.0
