@@ -89,13 +89,19 @@ namespace NxBRE.InferenceEngine.Rules {
 				// if arguments have been passed in the formula signature, pass them to the binder as
 				// a special entry in the arguments IDictionary (this approach has been preferred to modifying the
 				// Compute method signature which would have broken this compatibility
-				if (formulaSignature.Arguments.Count > 0) arguments.Add(typeof(Parameter), formulaSignature.Arguments);
-				
-				return bob.Compute(formulaSignature.Name, arguments);
+				if (formulaSignature.Arguments.Count > 0) {
+					// patch to BUG 1815223 submitted by Amitay Dolbo
+					Hashtable formulaArguments = new Hashtable(arguments);
+					formulaArguments.Add(typeof(Parameter), formulaSignature.Arguments);
+					return bob.Compute(formulaSignature.Name, formulaArguments);
+				}
+				else {
+					return bob.Compute(formulaSignature.Name, arguments);
+				}
 			}
-			else
+			else {
 				throw new BREException("Formula evaluation mode not supported: " + resolutionType);
-
+			}
 		}
 	}
 }

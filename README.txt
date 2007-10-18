@@ -73,6 +73,8 @@ v3.1.1
 
   * Made "AllAtoms" property public in "AtomGroup" class (feature request 1788291).
 
+  * Implied Atom with multiple formulas with arguments now work (bug 1815223)
+
 
 
 v3.1.0
