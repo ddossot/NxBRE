@@ -253,18 +253,19 @@ namespace NxBRE.Test.InferenceEngine {
 		}
 		
 		private void RunTestBoundFormulas(IBinder binder, IRuleBaseAdapter rba) {
-			// regression test for RFE 1504353
-	    IInferenceEngine ie = new IEImpl(binder);
-      ie.LoadRuleBase(rba);
-      
-      Assert.IsTrue(ie.Assert(new Fact("operandA", new Individual(23))));
-      Assert.IsTrue(ie.Assert(new Fact("operandB", new Individual(7))));
-      
-      ie.Process();
-    
-      Assert.AreEqual(4, ie.FactsCount);
-      Assert.IsTrue(ie.FactExists(new Fact("resultA-B", new Individual(16))), "resultA-B is wrong");
-      Assert.IsTrue(ie.FactExists(new Fact("resultB-A", new Individual(-16))), "resultB-A is wrong");
+			// regression test for RFE 1504353 and BUG 1815223
+		    IInferenceEngine ie = new IEImpl(binder);
+			ie.LoadRuleBase(rba);
+			
+			Assert.IsTrue(ie.Assert(new Fact("operandA", new Individual(23))));
+			Assert.IsTrue(ie.Assert(new Fact("operandB", new Individual(7))));
+			
+			ie.Process();
+			
+			Assert.AreEqual(5, ie.FactsCount);
+			Assert.IsTrue(ie.FactExists(new Fact("resultA-B", new Individual(16))), "resultA-B is wrong");
+			Assert.IsTrue(ie.FactExists(new Fact("resultB-A", new Individual(-16))), "resultB-A is wrong");
+			Assert.IsTrue(ie.FactExists(new Fact("resultBoth", new Individual(16), new Individual(-16))), "resultBoth is wrong");
 		}
 		
 	}

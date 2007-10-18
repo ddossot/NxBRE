@@ -47,5 +47,27 @@
 				<Ind uri="nxbre://binder">subtract(valueB,valueA)</Ind>
 			</Atom>
 		</Implies>
+				<Implies>
+			<oid>
+				<Ind>Both</Ind>
+			</oid>
+			<And>
+				<Atom>
+					<Rel>operandA</Rel>
+					<Var>valueA</Var>
+				</Atom>
+				<Atom>
+					<Rel>operandB</Rel>
+					<Var>valueB</Var>
+				</Atom>
+			</And>
+			<Atom>
+				<op>
+					<Rel>resultBoth</Rel>
+				</op>
+				<Ind uri="nxbre://binder">subtract(valueA,valueB)</Ind>
+				<Ind uri="nxbre://binder">subtract(valueB,valueA)</Ind>
+			</Atom>
+		</Implies>
 	</Assert>
 </RuleML>
