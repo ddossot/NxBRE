@@ -25,7 +25,9 @@ namespace NxBRE.Test.InferenceEngine {
 		
 		[Test]
 		public void BasicEngineChecks() {
-			foreach(string engineID in registry.EngineIDs) Assert.IsNotEmpty(registry.GetEngine(engineID).Label);
+			foreach(string engineID in registry.EngineIDs) {
+				Assert.IsNotEmpty(registry.GetEngine(engineID).Label);
+			}
 		}
 
 	}

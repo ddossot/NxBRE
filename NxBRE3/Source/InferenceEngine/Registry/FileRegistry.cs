@@ -275,13 +275,18 @@ namespace NxBRE.InferenceEngine.Registry {
 		/// <param name="fullFileName">The complete name of the file that has been somehow altered.</param>
 		/// <param name="fileName">The name of the registry file that has been somehow altered.</param>
 		private void OnRegistryFileEvent(String fullFileName, String fileName) {
-			foreach(CachedEngine cachedEngine in fileIndex[fileName]) {
-				// we check if the file is available for reading, if not we ponder until it is.
-				WaitUntilFileCanBeRead(fullFileName);
-				
-				// we use a lock to prevent two threads from reloading the same engine at the same time
-				lock(cachedEngine) {
-					cachedEngine.LoadRules();
+			// FR-1817201 ensure file is under registry control before waiting for it
+			IList<CachedEngine> cachedEngines;
+			
+			if (fileIndex.TryGetValue(fileName, out cachedEngines)) {
+				foreach(CachedEngine cachedEngine in cachedEngines) {
+					// we check if the file is available for reading, if not we ponder until it is.
+					WaitUntilFileCanBeRead(fullFileName);
+					
+					// we use a lock to prevent two threads from reloading the same engine at the same time
+					lock(cachedEngine) {
+						cachedEngine.LoadRules();
+					}
 				}
 			}
 		}
