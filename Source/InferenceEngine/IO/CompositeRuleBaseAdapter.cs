@@ -9,28 +9,52 @@ namespace NxBRE.InferenceEngine.IO
     /// An inference engine Rulebase Adapter made of a composition of other RuleBase Adapters.
     /// The Adapter exposes the merged collections of the Facts, Implications and queries from the contained  adapters.
     /// </summary>
+    /// <remarks>The merging itself is done "just in time", on the different IList getters, to 
+    /// preserve the same behaviour of the different adapters, and allow working with a Binder, which is set from the inference engine
+    /// implementation before loading the facts, implications, etc.</remarks>
     /// <author>Amitay Dobo</author>
     public class CompositeRuleBaseAdapter : IExtendedRuleBaseAdapter
     {
         private IList<IRuleBaseAdapter> m_Adapters;
-        private IList<Query> m_Queries;
-        private IList<Implication> m_Implications;
-        private IList<Fact> m_Facts;
         private string m_Direction;
         private string m_Label;
         private IBinder m_Binder;
         private bool m_Disposed;
 
-        //IExtendedRuleBaseAdapter
-        IList<Fact> m_Assertions;
-        IList<Fact> m_Retractions;
-        IList<Equivalent> m_Equivalents;
-        IList<Query> m_IntegrityQueries;
-
-
+        private enum AdapterListType
+        {
+            Fact,
+            Query,
+            Implication,
+            Assertion,
+            Retraction,
+            Equivalent,
+            IntegrityQuery
+        }
 
         /// <summary>
-        /// Instanate a new Composite Rulebase adapter. The RuleBaseAdapter are composed from the supplied adapters at this stage.
+        /// Instantiate a new Composite Rulebase adapter. The RuleBaseAdapter are composed from the supplied adapters at this stage.
+        /// </summary>
+        /// <example>
+        ///             CompositeRuleBaseAdapter = new CompositeRuleBaseAdapter("Test", "forward", null,
+        ///            new RuleML09NafDatalogAdapter(@"D:\Dev\nxbre-3_1_0\Examples\QMRuleTest\RuleMLMerchantExample.xml", System.IO.FileAccess.Read),
+        ///            new RuleML09NafDatalogAdapter(@"D:\Dev\nxbre-3_1_0\Examples\QMRuleTest\SimpleRuleFile.xml", System.IO.FileAccess.Read)
+        ///            );
+        /// </example>
+        /// <param name="label">Label for the rulebase</param>
+        /// <param name="direction">Rulebase direction ("forward" or "backward")</param>
+        /// <param name="binder">The binder to use for loading the rulebases, or null.</param>
+        /// <param name="adapters">Instances of adapters to compose the adapter from</param>
+        public CompositeRuleBaseAdapter(string label, string direction, IBinder binder ,params IRuleBaseAdapter[] adapters)
+        {
+            this.Binder = binder;
+            Label = label;
+            Direction = direction;
+            m_Adapters = new List<IRuleBaseAdapter>(adapters);
+        }
+
+        /// <summary>
+        /// Instantiate a new Composite Rulebase adapter. The RuleBaseAdapter are composed from the supplied adapters at this stage.
         /// </summary>
         /// <example>
         ///             CompositeRuleBaseAdapter = new CompositeRuleBaseAdapter("Test", "forward",
@@ -39,87 +63,86 @@ namespace NxBRE.InferenceEngine.IO
         ///            );
         /// </example>
         /// <param name="label">Label for the rulebase</param>
-        /// <param name="direction">rulebase direction ("forward" or "backward")</param>
+        /// <param name="direction">Rulebase direction ("forward" or "backward")</param>
         /// <param name="adapters">Instances of adapters to compose the adapter from</param>
-        public CompositeRuleBaseAdapter(string label, string direction, params IRuleBaseAdapter[] adapters)
+        public CompositeRuleBaseAdapter(string label, string direction, params IRuleBaseAdapter[] adapters):this(label, direction, null, adapters)
         {
-            Label = label;
-            Direction = direction;
-            m_Adapters = new List<IRuleBaseAdapter>(adapters);
-            MergeAdapters(m_Adapters);
+        	// NOOP
         }
-
-
 
         /// <summary>
-        /// Perform the merge of for all the adapters
+        /// A generic function for merging a list from the different adapters.
         /// </summary>
-        /// <param name="adapters"></param>
-        protected void MergeAdapters(IList<IRuleBaseAdapter> adapters)
+        /// <typeparam name="T"></typeparam>
+        /// <param name="listType"></param>
+        /// <returns></returns>
+        private IList<T> GetMergedList<T>(AdapterListType listType)
         {
-            int numberOfFacts = 0;
-            int numberOfQueries = 0;
-            int numberOfImplications = 0;
-            int numberOfAssertions = 0;
-            int numberOfRetrations = 0;
-            int numberOfIntegrityQueries = 0;
-            int numberOfEquivalents = 0;
 
-            //Get the combined count of the different lists to allocate lists
-            foreach (IRuleBaseAdapter adapter in adapters)
-            {
-                numberOfFacts += adapter.Facts.Count;
-                numberOfImplications += adapter.Facts.Count;
-                numberOfQueries += adapter.Queries.Count;
-                //get the count of extended adapter lists
-                if (adapter is IExtendedRuleBaseAdapter)
+                int numberOfItems = 0;
+
+                //Get the combined count of the different lists to allocate list capacity
+                foreach (IRuleBaseAdapter adapter in m_Adapters)
                 {
-                    IExtendedRuleBaseAdapter extendedAdapter = (IExtendedRuleBaseAdapter)adapter;
-                    numberOfAssertions += extendedAdapter.Assertions.Count;
-                    numberOfRetrations += extendedAdapter.Retractions.Count;
-                    numberOfIntegrityQueries += extendedAdapter.IntegrityQueries.Count;
-                    numberOfEquivalents += extendedAdapter.Equivalents.Count;
+                    adapter.Binder = m_Binder;
+                    numberOfItems += GetAdaptersList<T>(adapter, listType).Count;
                 }
-            }
 
-            //create the merged lists
-            List<Fact> mergedFacts = new List<Fact>(numberOfFacts);
-            List<Implication> mergedImplications = new List<Implication>(numberOfImplications);
-            List<Query> mergedQueries = new List<Query>(numberOfQueries);
+                //create the merged lists
+                List<T> mergedFacts = new List<T>(numberOfItems);
 
-            List<Fact> mergedAssertions = new List<Fact>(numberOfAssertions);
-            List<Fact> mergedRetractions = new List<Fact>(numberOfRetrations);
-            List<Equivalent> mergedEquivalents = new List<Equivalent>(numberOfEquivalents);
-            List<Query> mergedIntegrityQueries = new List<Query>(numberOfIntegrityQueries);
-
-
-            //for each adapter merge the lists
-            foreach (IRuleBaseAdapter adapter in adapters)
-            {
-                mergedFacts.AddRange(adapter.Facts);
-                mergedImplications.AddRange(adapter.Implications);
-                mergedQueries.AddRange(adapter.Queries);
-                //merge extended adapter lists if it is one
-                if (adapter is IExtendedRuleBaseAdapter)
+                //for each adapter merge the lists
+                foreach (IRuleBaseAdapter adapter in m_Adapters)
                 {
-                    IExtendedRuleBaseAdapter extendedAdapter = (IExtendedRuleBaseAdapter)adapter;
-                    mergedAssertions.AddRange(extendedAdapter.Assertions);
-                    mergedRetractions.AddRange(extendedAdapter.Retractions);
-                    mergedEquivalents.AddRange(extendedAdapter.Equivalents);
-                    mergedIntegrityQueries.AddRange(extendedAdapter.IntegrityQueries);
+                    mergedFacts.AddRange(GetAdaptersList<T>(adapter, listType));
                 }
-            }
 
-            //Assign the merged lists
-            Facts = mergedFacts;
-            Queries = mergedQueries;
-            Implications = mergedImplications;
-            Assertions = mergedAssertions;
-            IntegrityQueries = mergedIntegrityQueries;
-            Equivalents = mergedEquivalents;
-            Retractions = mergedRetractions;
+                //Assign the merged lists
+                return mergedFacts.AsReadOnly();
 
         }
+
+        /// <summary>
+        /// Get a specific list type from an adapter.
+        /// </summary>
+        /// <typeparam name="T">Type of the list to return</typeparam>
+        /// <param name="adapter">adapter to return the list from</param>
+        /// <param name="listType"></param>
+        /// <returns></returns>
+        private IList<T> GetAdaptersList<T>(IRuleBaseAdapter adapter, AdapterListType listType)
+        {
+            switch (listType)
+            {
+                case AdapterListType.Fact:
+                    return (IList<T>)adapter.Facts;
+                case AdapterListType.Implication:
+                    return (IList<T>)adapter.Implications;
+                case AdapterListType.Query:
+                    return (IList<T>)adapter.Queries;
+
+            }
+
+            IExtendedRuleBaseAdapter extendedAdapter = adapter as IExtendedRuleBaseAdapter;
+            if (adapter != null)
+            {
+                switch (listType)
+                {
+                    case AdapterListType.Retraction:
+                        return (IList<T>)extendedAdapter.Retractions;
+                    case AdapterListType.IntegrityQuery:
+                        return (IList<T>)extendedAdapter.IntegrityQueries;
+                    case AdapterListType.Equivalent:
+                        return (IList<T>)extendedAdapter.Equivalents;
+                    case AdapterListType.Assertion:
+                        return (IList<T>)extendedAdapter.Assertions;
+                }
+            }
+
+            return new List<T>(0);
+        }
+
+
+
 
 
 
@@ -130,8 +153,8 @@ namespace NxBRE.InferenceEngine.IO
         /// </summary>
         public IList<Query> Queries
         {
-            get { return m_Queries; }
-            set { m_Queries = value; }
+            get { return GetMergedList<Query>(AdapterListType.Query); }
+            set { throw new NotImplementedException("Composite Adapter is read only."); }
         }
 
         /// <summary>
@@ -139,8 +162,8 @@ namespace NxBRE.InferenceEngine.IO
         /// </summary>
         public IList<Implication> Implications
         {
-            get { return m_Implications; }
-            set { m_Implications = value; }
+            get { return GetMergedList<Implication>(AdapterListType.Implication); }
+            set { throw new NotImplementedException("Composite Adapter is read only."); }
         }
 
         #endregion
@@ -170,8 +193,8 @@ namespace NxBRE.InferenceEngine.IO
         /// </summary>
         public IList<Fact> Facts
         {
-            get { return m_Facts; }
-            set { m_Facts = value; }
+            get { return GetMergedList<Fact>(AdapterListType.Fact); }
+            set { throw new NotImplementedException("Composite Adapter is read only."); }
         }
 
         /// <summary>
@@ -194,8 +217,8 @@ namespace NxBRE.InferenceEngine.IO
         /// </remarks>
         public IList<Fact> Assertions
         {
-            get { return m_Assertions; }
-            set { m_Assertions = value; }
+            get { return GetMergedList<Fact>(AdapterListType.Assertion); }
+            set { throw new NotImplementedException("Composite Adapter is read only."); }
         }
 
         /// <summary>
@@ -203,8 +226,8 @@ namespace NxBRE.InferenceEngine.IO
         /// </summary>
         public IList<Fact> Retractions
         {
-            get { return m_Retractions; }
-            set { m_Retractions = value; }
+            get { return GetMergedList<Fact>(AdapterListType.Retraction); }
+            set { throw new NotImplementedException("Composite Adapter is read only."); }
         }
 
         /// <summary>
@@ -212,8 +235,8 @@ namespace NxBRE.InferenceEngine.IO
         /// </summary>
         public IList<Equivalent> Equivalents
         {
-            get { return m_Equivalents; }
-            set { m_Equivalents = value; }
+            get { return GetMergedList<Equivalent>(AdapterListType.Equivalent); }
+            set { throw new NotImplementedException("Composite Adapter is read only."); }
         }
 
         /// <summary>
@@ -221,10 +244,10 @@ namespace NxBRE.InferenceEngine.IO
         /// </summary>
         public IList<Query> IntegrityQueries
         {
-            get { return m_IntegrityQueries; }
-            set { m_IntegrityQueries = value; }
+            get { return GetMergedList<Query>(AdapterListType.IntegrityQuery); }
+            set { throw new NotImplementedException("Composite Adapter is read only."); }
         }
-
+        
         #endregion
 
 
