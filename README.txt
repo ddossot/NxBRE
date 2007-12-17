@@ -1,4 +1,4 @@
-NxBRE README v3.1.0
+NxBRE README v3.1.1
 ===================
 
 URL          : http://nxbre.org
@@ -76,6 +76,8 @@ v3.1.1
   * Implied Atom with multiple formulas with arguments now work (bug 1815223).
 
   * Strengthened FileRegistry so it ignores unprocessable file system events (feature request 1817201).
+
+  * Strengthened HRF adapter to better detect syntax errors (bug 1850255).
 
 
 

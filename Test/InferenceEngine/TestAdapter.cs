@@ -382,5 +382,12 @@ namespace NxBRE.Test.InferenceEngine {
 			Assert.AreEqual(6, ie.FactsCount, "Fact assertion and deduction should have happened");
 		}
 		
+		[Test]
+		[ExpectedException(typeof(InvalidDataException))]
+		public void HRFWithSyntaxError() {
+			// regression test for bug 1850255
+			new HRF086Adapter(new MemoryStream(Encoding.ASCII.GetBytes("#DIRECTION_FORWARD\n\rfoo(bar);")), FileAccess.Read);
+		}
+		
 	}
 }
