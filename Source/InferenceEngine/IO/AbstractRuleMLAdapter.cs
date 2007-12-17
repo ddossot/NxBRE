@@ -171,29 +171,49 @@ namespace NxBRE.InferenceEngine.IO {
 		///<remarks>in case of any failure, this will throw enough exceptions for the user to
 		/// understand what is going wrong.</remarks>
 		protected virtual void Init(Stream streamRuleML, string uriRuleML, FileAccess mode) {
-			if (AdapterState == State.Disposed)
+			if (AdapterState == State.Disposed) {
 				throw new BREException("A disposed adapter can not accept new operations");
+			}
 			else if (AdapterState == State.NonInitialized) {
 				if (mode == FileAccess.Read) {
-					if (streamRuleML != null) reader = new XmlTextReader(streamRuleML);
-					else reader = new XmlTextReader(uriRuleML);
+					XmlReaderSettings settings = new XmlReaderSettings();
+					settings.ProhibitDtd = false;
+					settings.CloseInput = true;
 					
-					navigator = new XPathDocument(GetXmlValidatingReader(DatalogSchema)).CreateNavigator();
+					if (streamRuleML != null) {
+						reader = XmlReader.Create(streamRuleML, settings);
+					} else {
+						reader = XmlReader.Create(uriRuleML, settings);
+					}
 					
-					nsmgr = new XmlNamespaceManager(navigator.NameTable);
-					nsmgr.AddNamespace("dl", DatalogNamespaceURL);
-			
-					ValidateRulebase();
+					try {
+						navigator = new XPathDocument(GetXmlValidatingReader(DatalogSchema)).CreateNavigator();
+						nsmgr = new XmlNamespaceManager(navigator.NameTable);
+						nsmgr.AddNamespace("dl", DatalogNamespaceURL);
+						ValidateRulebase();
+					} catch(Exception e) {
+						// Fix for bug 1850290: release file on error
+						if (reader != null) {
+							reader.Close();
+						}
+						throw e;
+					}
 					
 					AdapterState = State.Read;
 				}
 				else {
-					if (streamRuleML != null)
-						writer = new XmlTextWriter(streamRuleML, Encoding.UTF8);
-					else
-						writer = new XmlTextWriter(uriRuleML, Encoding.UTF8);
+					XmlWriterSettings settings = new XmlWriterSettings();
+					settings.Encoding = Encoding.UTF8;
+					settings.Indent = true;
+					settings.CloseOutput = true;
+						
+					if (streamRuleML != null) {
+						writer = XmlWriter.Create(streamRuleML, settings);
+					}
+					else {
+						writer = XmlWriter.Create(uriRuleML, settings);
+					}
 					
-					writer.Formatting = Formatting.Indented;
 					document = new XmlDocument();
 					CreateDocumentElement();
 					Document.InsertBefore(Document.CreateXmlDeclaration("1.0", "utf-8", "no"), Document.DocumentElement);
@@ -201,8 +221,9 @@ namespace NxBRE.InferenceEngine.IO {
 					AdapterState = State.Write;
 				}
 			}
-			else
+			else {
 				throw new BREException("A RuleML adapter can not be initialized several times.");
+			}
 		}
 		
 		
@@ -263,7 +284,7 @@ namespace NxBRE.InferenceEngine.IO {
 		// ---------------- Attributes, properties and methods related to XML parsing ------------------
 		
 		private XmlReader reader = null;
-		private XmlTextWriter writer = null;
+		private XmlWriter writer = null;
 		private XmlNamespaceManager nsmgr;
 		private XPathNavigator navigator;
 		private XmlDocument document;
@@ -274,7 +295,7 @@ namespace NxBRE.InferenceEngine.IO {
 			}
 		}
 		
-		protected XmlTextWriter Writer {
+		protected XmlWriter Writer {
 			get {
 				return writer;
 			}

@@ -79,6 +79,8 @@ v3.1.1
 
   * Strengthened HRF adapter to better detect syntax errors (bug 1850255).
 
+  * Ensured RuleML adapters close the underlying input stream in case of error to release the resource (bug 1850290).
+
 
 
 v3.1.0
