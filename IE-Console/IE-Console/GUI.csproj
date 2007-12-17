@@ -36,7 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NxBRE">
-      <HintPath>..\..\..\tags\nxbre-3_1_0\Source\bin\Debug\NxBRE.dll</HintPath>
+      <HintPath>..\..\NxBRE3\Source\bin\Debug\NxBRE.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System" />

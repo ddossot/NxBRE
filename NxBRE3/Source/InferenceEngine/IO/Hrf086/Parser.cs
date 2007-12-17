@@ -392,6 +392,12 @@ namespace NxBRE.InferenceEngine.IO.Hrf086
 		
 			Expect(6);
 			arg(out name, out isThereVar);
+			
+			if (name == String.Empty) {
+				SynErr(6);
+				throw new InvalidDataException("Bad HRF syntax: impossible to locate atom members!");
+			}
+			
 			if (isThereVar)
 			{
 				atomInXml = atomInXml + "<var>" +  name + "</var>"; 

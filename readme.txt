@@ -6,7 +6,7 @@ NxBRE2
 
 NxBRE3
 ------
-  Not-ascending compatible with NxBRE2
+  Not backwards compatible with NxBRE2
 
   For .NET 2.x
   Developed on SharpDevelop 2.x
