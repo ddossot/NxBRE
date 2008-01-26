@@ -65,6 +65,14 @@ All static calls on NxBRE helpers and utilities, either from FlowEngine rules or
 
 ## RELEASE NOTES ##
 
+v3.2.0
+
+ Inference Engine
+
+  * Added a configuration parameter to allow the addition of extra DLLs in the on-the-fly compilation context (feature request 1873414).
+
+
+
 v3.1.1
 
  Inference Engine

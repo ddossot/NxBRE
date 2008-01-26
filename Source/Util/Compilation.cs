@@ -5,6 +5,7 @@ namespace NxBRE.Util
 
 	using System;
 	using System.Collections;
+	using System.Diagnostics;
 	using System.IO;
 	using System.CodeDom.Compiler;
 	using System.Reflection;
@@ -289,7 +290,7 @@ namespace NxBRE.Util
 			compilerParameters.TreatWarningsAsErrors = false;
 			compilerParameters.CompilerOptions = compilerOptions;
 			
-			// Chuck Cross has vastly improved the loading of NxBRE ddl reference mechanism
+			// Chuck Cross has vastly improved the loading of NxBRE DLL reference mechanism
 			bool nxbreAssemblyLoaded = false;
 			
 			// Add all implicitly referenced assemblies
@@ -303,9 +304,20 @@ namespace NxBRE.Util
 				}
 			}
 			
-			// Add NxBRE dll reference only if not already added through implicit references.
-			if (!nxbreAssemblyLoaded && ((ReferenceLinkMode == ReferenceLinkModes.NxBRE) || (ReferenceLinkMode == ReferenceLinkModes.Full)))
+			// Add NxBRE DLL reference only if not already added through implicit references.
+			if (!nxbreAssemblyLoaded &&
+			    ((ReferenceLinkMode == ReferenceLinkModes.NxBRE) || (ReferenceLinkMode == ReferenceLinkModes.Full))) {
+				
 				AddReferencedAssembly(compilerParameters, NxBREAssemblyLocation);
+			}
+			
+			// Add any extra DLL listed in the application configuration
+			String extraReferences = Parameter.GetString("extraReferences");
+			if (extraReferences != null) {
+				foreach(String dllToReference in extraReferences.Split(';')) {
+					AddReferencedAssembly(compilerParameters, dllToReference);
+				}
+			}
 		
 			CompilerResults cr;
 			
@@ -351,8 +363,16 @@ namespace NxBRE.Util
 				    && (!compilerParameters.ReferencedAssemblies.Contains(assemblyLocation)))
 					compilerParameters.ReferencedAssemblies.Add(assemblyLocation);
 			}
-			catch {
-				// Ignore any error
+			catch(Exception e) {
+				// Log and ignore any error
+				if (Logger.IsUtilInformation)
+					Logger.UtilSource.TraceEvent(TraceEventType.Information,
+	                                               0,
+	                                               "Error when adding a reference to: '"
+	                                               	+ assemblyLocation
+	                                               	+ "' (Exception message: "
+	                                               	+ e.Message
+	                                               	+ ")");
 			}
 		}
 		
@@ -393,10 +413,12 @@ namespace NxBRE.Util
 											cr.NativeCompilerReturnValue.ToString() +
 											";\n";
 			
-	    // If errors occurred during compilation, output the compiler output and errors.
-	    foreach(CompilerError ce in cr.Errors)
-	    	if (!(ce.IsWarning))
-	    		errors += ("CompilerError::" + ce.ToString() + ";\n");
+		    // If errors occurred during compilation, output the compiler output and errors.
+		    foreach(CompilerError ce in cr.Errors) {
+		    	if (!(ce.IsWarning)) {
+		    		errors += ("CompilerError::" + ce.ToString() + ";\n");
+		    	}
+		    }
 
 			return errors;
 		}
