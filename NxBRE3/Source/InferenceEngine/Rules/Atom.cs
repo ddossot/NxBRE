@@ -16,6 +16,7 @@ namespace NxBRE.InferenceEngine.Rules {
 	/// <author>David Dossot</author>
 	public class Atom:ICloneable {
 		private readonly bool negative;
+		private readonly string label;
 		private readonly string type;
 		private readonly IPredicate[] predicates;
 		private readonly string signature;
@@ -28,6 +29,15 @@ namespace NxBRE.InferenceEngine.Rules {
 		private readonly bool hasFunction;
 		private readonly bool hasIndividual;
 		private readonly bool onlyVariables;
+		
+		/// <summary>
+		/// The Label of the Fact.
+		/// </summary>
+		public string Label {
+			get {
+				return label;
+			}
+		}
 		
 		/// <summary>
 		/// Negative fact.
@@ -153,8 +163,19 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <param name="type">The relation type of the Atom.</param>
 		/// <param name="members">Array of predicates associated in the Atom.</param>
 		/// <remarks>This is the principal constructor for Atom and descendant objects.</remarks>
-		public Atom(bool negative, string type, params IPredicate[] members) {
+		public Atom(bool negative, string type, params IPredicate[] members):this(negative, null, type, members) {}
+		
+		/// <summary>
+		/// Instantiates a new Atom.
+		/// </summary>
+		/// <param name="negative">Negative Atom.</param>
+		/// <param name="label">The Label of the new Fact.</param>
+		/// <param name="type">The relation type of the Atom.</param>
+		/// <param name="members">Array of predicates associated in the Atom.</param>
+		/// <remarks>This is the principal constructor for Atom and descendant objects.</remarks>
+		internal Atom(bool negative, string label, string type, params IPredicate[] members) {
 			this.negative = negative;
+			this.label = (label == String.Empty)?null:label;
 			this.type = type;
 			
 			// load the predicates, extracting the slot names if any
@@ -201,20 +222,15 @@ namespace NxBRE.InferenceEngine.Rules {
 			signature = type + predicates.Length;
 		}
 		
-		/// <summary>
-		/// Protected constructor used for cloning purpose.
-		/// </summary>
-		/// <param name="source">The atom to use as a template.</param>
-		/// <param name="members">The members to use instead of the ones in the source, or null if the ones of the source must be used.</param>
-		protected Atom(Atom source, IPredicate[] members):this(source.negative, source.type, members)	{
+		protected Atom(string label, Atom source, IPredicate[] members):this(source.negative, label, source.type, members)	{
 			this.slotNames = source.slotNames;
 		}
+
+		protected Atom(Atom source, IPredicate[] members):this(source.Label, source, members) {}
 		
-		/// <summary>
-		/// Protected constructor used for cloning purpose.
-		/// </summary>
-		/// <param name="source"></param>
-		protected Atom(Atom source):this(source, (IPredicate[])source.predicates.Clone()) {}
+		protected Atom(string label, Atom source):this(label, source, (IPredicate[])source.predicates.Clone()) {}
+		
+		protected Atom(Atom source):this(source.Label, source) {}
 
 		/// <summary>
 		/// Returns a cloned Atom, of same type and containing a clone of the array of predicates.

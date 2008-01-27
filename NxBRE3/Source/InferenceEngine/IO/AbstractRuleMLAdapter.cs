@@ -376,7 +376,8 @@ namespace NxBRE.InferenceEngine.IO {
 			List<Query> result = new List<Query>();
 			
 			XPathNodeIterator queries = Navigator.Select(QueryElementXPath);
-			while(queries.MoveNext())	result.Add(GetQuery(queries.Current));
+			
+			while(queries.MoveNext()) result.Add(GetQuery(queries.Current));
 			
 			return result;
 		}
@@ -418,12 +419,12 @@ namespace NxBRE.InferenceEngine.IO {
 
 				// instantiate new implication
 				result.Add(new Implication(ip.label,
-								                    ip.priority,
-								                    ip.mutex,
-								                    ip.precondition,
-								                    GetAtom(head_atom.Current, false, true, false),
-								                    query.AtomGroup,
-								                    action));
+						                   ip.priority,
+						                   ip.mutex,
+						                   ip.precondition,
+						                   GetAtom(head_atom.Current, false, true, false),
+						                   query.AtomGroup,
+						                   action));
 			}
 			
 			return result;
@@ -442,23 +443,28 @@ namespace NxBRE.InferenceEngine.IO {
 			RelationResolution relationResolution = AnalyzeRelationResolution(rel.Current);
 			
 			if ((relationResolution.type == AtomFunction.RelationResolutionType.NxBRE) ||
-			    (relationResolution.type == AtomFunction.RelationResolutionType.Binder))
+			    (relationResolution.type == AtomFunction.RelationResolutionType.Binder)) {
+				
 				return new AtomFunction(relationResolution.type,
 				                        negative,
 				                        Binder,
 				                        relationResolution.atomRelation,
 					          	  				predicatesArray);
-			
-			else if (relationResolution.type == AtomFunction.RelationResolutionType.Expression)
+			}
+			else if (relationResolution.type == AtomFunction.RelationResolutionType.Expression) {
+				
 				return new AtomFunction(relationResolution.type,
 				                        negative,
 				                        new ExpressionRelater(relationResolution.atomRelation, predicatesArray),
 				                        relationResolution.atomRelation,
-					          	  				predicatesArray);
-			else
+				                        predicatesArray);
+			}
+			else {
 				return new Atom(negative,
+				                GetString(atom, RelativeLabelXPath),
 	              				relationResolution.atomRelation,
 	          	  				predicatesArray);
+			}
 		}
 		
 				

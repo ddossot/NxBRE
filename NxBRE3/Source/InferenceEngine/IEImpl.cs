@@ -1120,15 +1120,15 @@ namespace NxBRE.InferenceEngine {
 			return implicationResultsCount;
 		}
 
-		private Fact BuildFact(Atom targetAtom, IList<FactBase.PositiveMatchResult> processResult) {
-			Atom factBuilder = FactBase.Populate(targetAtom, processResult, true);
+		private Fact BuildFact(Atom templateAtom, IList<FactBase.PositiveMatchResult> processResult) {
+			Atom factBuilder = FactBase.Populate(templateAtom, processResult, true);
 			
 			if (!factBuilder.IsFact) {
 				if (strictImplication)
 					throw new BREException("Strict implication rejected the assertion of incompletely resolved fact: " + factBuilder);
 			}
 			else {
-				return new Fact(factBuilder);
+				return new Fact(templateAtom.Label, factBuilder);
 			}
 			
 			return null;

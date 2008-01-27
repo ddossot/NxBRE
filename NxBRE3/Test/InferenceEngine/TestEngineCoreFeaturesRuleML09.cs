@@ -561,34 +561,34 @@ namespace NxBRE.Test.InferenceEngine {
 			
 			Assert.IsTrue(ie.Assert(new Fact("CheckProductInfo", new Individual("true"))), "Asserted trigger fact");
 			
-	  	ie.NewWorkingMemory(WorkingMemoryTypes.Isolated);
+			ie.NewWorkingMemory(WorkingMemoryTypes.Isolated);
 			Process();
 			Assert.AreEqual(0, deducted, "(1) Deducted");
 			
 			deductionsToCheck = new string[] {"NotAllCategoriesCovered{true}"};
-	  	NewFactEvent henf = new NewFactEvent(HandleExpectedNewFact);
-	  	ie.NewFactHandler += henf;
-	  	
-	  	ie.NewWorkingMemory(WorkingMemoryTypes.Isolated);
-	  	Assert.IsTrue(ie.Retract("Honda Regular"), "(2) Retracted Regular");
+			NewFactEvent henf = new NewFactEvent(HandleExpectedNewFact);
+			ie.NewFactHandler += henf;
+			
+			ie.NewWorkingMemory(WorkingMemoryTypes.Isolated);
+			Assert.IsTrue(ie.Retract("Honda Regular"), "(2) Retracted Regular");
 			Process();
 			Assert.IsFalse(wrongDeduction, "(2) Wrong deduction");
 			Assert.AreEqual(1, deducted, "(2) Deducted");
 			
-	  	ie.NewWorkingMemory(WorkingMemoryTypes.Isolated);
-	  	Assert.IsTrue(ie.Retract("Porsche Luxury"), "(3) Retracted Luxury");
+			ie.NewWorkingMemory(WorkingMemoryTypes.Isolated);
+			Assert.IsTrue(ie.Retract("Porsche Luxury"), "(3) Retracted Luxury");
 			Process();
 			Assert.IsFalse(wrongDeduction, "(3) Wrong deduction");
 			Assert.AreEqual(1, deducted, "(3) Deducted");
 			
-	  	ie.NewWorkingMemory(WorkingMemoryTypes.Isolated);
-	  	Assert.IsTrue(ie.Retract("Honda Regular"), "(4) Retracted Regular");
-	  	Assert.IsTrue(ie.Retract("Porsche Luxury"), "(4) Retracted Luxury");
+			ie.NewWorkingMemory(WorkingMemoryTypes.Isolated);
+			Assert.IsTrue(ie.Retract("Honda Regular"), "(4) Retracted Regular");
+			Assert.IsTrue(ie.Retract("Porsche Luxury"), "(4) Retracted Luxury");
 			Process();
 			Assert.IsFalse(wrongDeduction, "(4) Wrong deduction");
 			Assert.AreEqual(1, deducted, "(4) Deducted");
 			
-	  	ie.NewFactHandler -= henf;
+			ie.NewFactHandler -= henf;
 		}
 		
 		[Test]
@@ -1130,7 +1130,7 @@ namespace NxBRE.Test.InferenceEngine {
 
 		[Test]
 		public virtual void SlotContributeNamedValues() {
-			// regression test for RFE 1483072
+			// regression test for FR 1483072
 			ie.LoadRuleBase(NewTestAdapter());
 			
 			Assert.IsTrue(ie.Assert(new Fact("Slot-Threshold-Check", new Individual("PASS"), new Individual(50))), "Asserted passing fact");
@@ -1140,7 +1140,7 @@ namespace NxBRE.Test.InferenceEngine {
 	  		NewFactEvent henf = new NewFactEvent(HandleExpectedNewFact);
 	  		ie.NewFactHandler += henf;
 	  	
-	  	//logThreshold = LogEventImpl.DEBUG;
+	  		//logThreshold = LogEventImpl.DEBUG;
 			Process();
 
 			Assert.AreEqual(1, deducted, "(1) Deducted");
@@ -1156,6 +1156,28 @@ namespace NxBRE.Test.InferenceEngine {
 			Assert.IsFalse(wrongDeduction, "(2) Wrong deduction");
 			
 			ie.NewFactHandler -= henf;
-		}		
+		}
+		
+		[Test]
+		public virtual void LabeledFactDeduction() {
+			// feature request 1798783
+			ie.LoadRuleBase(NewTestAdapter());
+			
+			Assert.IsTrue(ie.Assert(new Fact("TriggerLabeledFact", new Individual("FOO"))), "Asserted passing fact");
+			
+			deductionsToCheck = new string[] {"LabeledFact{FOO}"};
+	  		NewFactEvent henf = new NewFactEvent(HandleExpectedNewFact);
+	  		ie.NewFactHandler += henf;
+	  	
+			Process();
+
+			Assert.AreEqual(1, deducted, "(1) Deducted");
+			Assert.IsFalse(wrongDeduction, "(1) Wrong deduction");
+			
+			Fact labeledFact = ie.GetFact("Deducted Fact Label");
+			Assert.IsNotNull(labeledFact, "Located labeled fact");
+			Assert.AreEqual(deductionsToCheck[0], labeledFact.ToString());
+		}
+		
 	}
 }

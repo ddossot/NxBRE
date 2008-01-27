@@ -29,6 +29,7 @@ namespace NxBRE.Test.InferenceEngine {
 		public override void ExpressionIndividualEvaluation(){}
 		public override void WrongMultipleFactInDataTables_Bug_1252700() {}
 		public override void AndBlockContainingOnlyOrBlocks() {}
+		public override void LabeledFactDeduction() {}
 	}
 	
 }

@@ -395,75 +395,75 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="evaluateFormulas"></param>
 		/// <returns></returns>
 		public static Atom Populate(Atom targetAtom, IList<PositiveMatchResult> resultStack, bool evaluateFormulas) {
-	  	IPredicate[] members = (IPredicate[])targetAtom.Members.Clone();
-	  	
-	  	// populate the variable elements with predicate values coming
-	  	// from the query part of the implication
-	  	foreach(PositiveMatchResult pmr in resultStack)
-	  		if (!(pmr.Fact is FactBase.NegativeFact))
-	  			RulesUtil.Populate(pmr.Fact, pmr.Source, members);
-
-	  	// if there are formulas in the atom, resolve these expressions, passing
-	  	// the variable values as arguments
-	  	if ((evaluateFormulas) && (targetAtom.HasFormula)) {
-	  			// formulas must be evaluated and the results placed in individual predicates
-		  		IDictionary arguments = new Hashtable();
-		  		
-		  		foreach(PositiveMatchResult pmr in resultStack) {
-		  			if (!(pmr.Fact is FactBase.NegativeFact)) {
-			  			for(int i=0; i<pmr.Source.Members.Length; i++) {
-			  				object sourcePredicateKey = null;
-		  					
-		  					if (pmr.Source.Members[i] is Variable) {
-			  					sourcePredicateKey = pmr.Source.Members[i].Value;
-	    					}
-			  				else if (pmr.Source.SlotNames[i] != String.Empty) {
-		  						sourcePredicateKey = pmr.Source.SlotNames[i];
-		  					}
-			  				
-			  				if ((sourcePredicateKey != null) && (!arguments.Contains(sourcePredicateKey)))
-			  					arguments.Add(sourcePredicateKey, pmr.Fact.Members[i].Value);
-			  				
-		  				}
-	  				}
-		  		}
+		  	IPredicate[] members = (IPredicate[])targetAtom.Members.Clone();
 		  	
-		  		for(int i=0; i<members.Length; i++) {
-		  			if (members[i] is Formula) {
-     					try {
-					      members[i] = new Individual(((Formula)members[i]).Evaluate(arguments));
-     					}
-     					catch (Exception ex) {
-		  					// Chuck Cross added try/catch block with addtional info in new thrown exception
-		  					StringBuilder sb = new StringBuilder("Error evaluating formula ")
-		  																				.Append(members[i])
-		  																				.Append(" in atom: ")
-		  																				.Append(targetAtom.Type)
-		  																				.Append(".\r\n  Arguments:");
-      					
-		  					foreach(DictionaryEntry entry in arguments) {
-      						sb.Append("   ")
-      							.Append(entry.Key.ToString());
-      						
-      						if (entry.Value != null) {
-      							sb.Append("[")
-      								.Append(entry.Value.GetType().ToString())
-      								.Append("] = ")
-      								.Append(entry.Value.ToString());
-      						}
-      						else sb.Append("[Null]");
-      						
-      						sb.Append("\r\n");
-		  					}
-      					
-      					throw new BREException(sb.ToString(), ex);
+		  	// populate the variable elements with predicate values coming
+		  	// from the query part of the implication
+		  	foreach(PositiveMatchResult pmr in resultStack)
+		  		if (!(pmr.Fact is FactBase.NegativeFact))
+		  			RulesUtil.Populate(pmr.Fact, pmr.Source, members);
+	
+		  	// if there are formulas in the atom, resolve these expressions, passing
+		  	// the variable values as arguments
+		  	if ((evaluateFormulas) && (targetAtom.HasFormula)) {
+		  			// formulas must be evaluated and the results placed in individual predicates
+			  		IDictionary arguments = new Hashtable();
+			  		
+			  		foreach(PositiveMatchResult pmr in resultStack) {
+			  			if (!(pmr.Fact is FactBase.NegativeFact)) {
+				  			for(int i=0; i<pmr.Source.Members.Length; i++) {
+				  				object sourcePredicateKey = null;
+			  					
+			  					if (pmr.Source.Members[i] is Variable) {
+				  					sourcePredicateKey = pmr.Source.Members[i].Value;
+		    					}
+				  				else if (pmr.Source.SlotNames[i] != String.Empty) {
+			  						sourcePredicateKey = pmr.Source.SlotNames[i];
+			  					}
+				  				
+				  				if ((sourcePredicateKey != null) && (!arguments.Contains(sourcePredicateKey)))
+				  					arguments.Add(sourcePredicateKey, pmr.Fact.Members[i].Value);
+				  				
+			  				}
+		  				}
+			  		}
+			  	
+			  		for(int i=0; i<members.Length; i++) {
+			  			if (members[i] is Formula) {
+	     					try {
+						      members[i] = new Individual(((Formula)members[i]).Evaluate(arguments));
+	     					}
+	     					catch (Exception ex) {
+			  					// Chuck Cross added try/catch block with addtional info in new thrown exception
+			  					StringBuilder sb = new StringBuilder("Error evaluating formula ")
+			  																				.Append(members[i])
+			  																				.Append(" in atom: ")
+			  																				.Append(targetAtom.Type)
+			  																				.Append(".\r\n  Arguments:");
+	      					
+			  					foreach(DictionaryEntry entry in arguments) {
+	      						sb.Append("   ")
+	      							.Append(entry.Key.ToString());
+	      						
+	      						if (entry.Value != null) {
+	      							sb.Append("[")
+	      								.Append(entry.Value.GetType().ToString())
+	      								.Append("] = ")
+	      								.Append(entry.Value.ToString());
+	      						}
+	      						else sb.Append("[Null]");
+	      						
+	      						sb.Append("\r\n");
+			  					}
+	      					
+	      					throw new BREException(sb.ToString(), ex);
 							}
-		  			}
-		  		}
-	  	}
-	  	
-	  	// clone the target with new members, because atom is immutable
-	  	return targetAtom.CloneWithNewMembers(members);
+			  			}
+			  		}
+		  	}
+		  	
+		  	// clone the target with new members, because atom is immutable
+		  	return targetAtom.CloneWithNewMembers(members);
 		}
 
 		/// <summary>

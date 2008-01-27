@@ -1680,6 +1680,30 @@
             </Atom>
           </head>
         </Implies>
+				<Implies>
+					<oid>
+						<Ind>Test Labeled Deducted Fact</Ind>
+					</oid>
+					<body>
+						<Atom>
+							<op>
+								<Rel>TriggerLabeledFact</Rel>
+							</op>
+							<Var>Whatever</Var>
+						</Atom>
+					</body>
+					<head>
+						<Atom>
+							<oid>
+								<Ind>Deducted Fact Label</Ind>
+							</oid>
+							<op>
+								<Rel>LabeledFact</Rel>
+							</op>
+							<Var>Whatever</Var>
+						</Atom>
+					</head>
+				</Implies>
         <!--Equivalents-->
         <Equivalent>
           <Atom>
