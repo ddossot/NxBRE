@@ -473,7 +473,7 @@ namespace NxBRE.InferenceEngine.IO {
 		protected override void WriteAtom(XmlElement target, Atom atom, bool inFact) {
 			XmlElement eAtom = eAtom = Document.CreateElement("Atom", DatalogNamespaceURL);
 			
-			if (atom is Fact) WriteLabel(eAtom, ((Fact)atom).Label);
+			if (atom.Label != null) WriteLabel(eAtom, atom.Label);
 			
 			XmlElement rel = Document.CreateElement("Rel", DatalogNamespaceURL);
 			rel.InnerText = atom.Type;

@@ -69,6 +69,8 @@ v3.2.0
 
  Inference Engine
 
+  * Added support for labeled fact atoms from the rule base (feature request 1798783).
+
   * Added a configuration parameter to allow the addition of extra DLLs in the on-the-fly compilation context (feature request 1873414).
 
 

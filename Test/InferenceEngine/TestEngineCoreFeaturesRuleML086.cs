@@ -23,7 +23,7 @@ namespace NxBRE.Test.InferenceEngine {
 		public override void SlotSupport() {}
 		public override void DataInBodySupport() {}
 		public override void SlotContributeNamedValues() {}
-		
+		public override void LabeledFactDeduction() {}
 	}
 	
 }

@@ -12,16 +12,6 @@ namespace NxBRE.InferenceEngine.Rules {
 	/// </summary>
 	/// <author>David Dossot</author>
 	public class Fact:Atom {
-		private readonly string label;
-		
-		/// <summary>
-		/// The Label of the Fact.
-		/// </summary>
-		public string Label {
-			get {
-				return label;
-			}
-		}	
 
 		/// <summary>
 		/// Instantiates a new anonymous (not labelled) Fact based on a Type and an array of predicates.
@@ -36,11 +26,8 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <param name="label">The Label of the new Fact.</param>
 		/// <param name="type">The Type of the new Fact.</param>
 		/// <param name="members">The Array of predicates that the Fact will contain.</param>
-		public Fact(string label, string type, params IPredicate[] members):base(false, type, members) {
+		public Fact(string label, string type, params IPredicate[] members):base(false, label, type, members) {
 			if (!IsFact) throw new BREException("Can not create Facts on Queries: " + ToString());
-
-			if ((label != null) && (label == String.Empty)) this.label = null;
-			else this.label = label;
 		}
 		
 		/// <summary>
@@ -54,14 +41,9 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// </summary>
 		/// <param name="label">The Label of the new Fact.</param>
 		/// <param name="atom">The Atom that the Fact will be built on.</param>
-		public Fact(string label, Atom atom):base(atom) {
-			if ((label != null) && (label == String.Empty)) this.label = null;
-			else this.label = label;
-		}
+		public Fact(string label, Atom atom):base(label, atom) {}
 		
-		private Fact(Fact source, IPredicate[] members):base(source, members) {
-			this.label = source.label;
-		}
+		private Fact(Fact source, IPredicate[] members):base(source.Label, source, members) {}
 
 		/// <summary>
 		/// Returns a cloned Fact, of same label, type and containing a clone of the array of predicates.
