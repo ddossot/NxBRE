@@ -44,6 +44,7 @@
     <Compile Include="FlowEngine\BRERuleException.cs" />
     <Compile Include="FlowEngine\BRERuleFactory.cs" />
     <Compile Include="FlowEngine\BRERuleFatalException.cs" />
+    <Compile Include="FlowEngine\Core\BackwardChainer.cs" />
     <Compile Include="FlowEngine\IBREDispatcher.cs" />
     <Compile Include="FlowEngine\IBREOperator.cs" />
     <Compile Include="FlowEngine\IBRERuleContext.cs" />
