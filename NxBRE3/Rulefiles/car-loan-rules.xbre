@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+		Rule Policy Car Loan - Marco Ensing
+
+-->
+<xBusinessRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="xBusinessRules.xsd">
+
+	<Set id="rule9">
+		<Logic>
+			<If>
+				<And>
+					<IsTrue valueId="IsCebEmployee"/>
+					<GreaterThan leftId="TotalIncome" rightId="10000i">
+						<Integer id="10000i" value="10000"/>
+					</GreaterThan>
+				</And>
+				<Do>
+					<Boolean id="IncomeCriteriaOk" value="true"/>
+				</Do>
+			</If>
+		</Logic>
+	</Set>
+	
+		<Set id="rule10">
+		<Logic>
+			<If>
+				<And>
+					<IsFalse valueId="IsCebEmployee"/>
+					<GreaterThan leftId="TotalIncome" rightId="15000i">
+						<Integer id="15000i" value="15000"/>
+					</GreaterThan>
+				</And>
+				<Do>
+					<Boolean id="IncomeCriteriaOk" value="true"/>
+				</Do>
+			</If>
+		</Logic>
+	</Set>
+
+</xBusinessRules>
