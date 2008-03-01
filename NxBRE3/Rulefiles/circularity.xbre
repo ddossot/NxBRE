@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+		Circularity detection
+
+-->
+<xBusinessRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="xBusinessRules.xsd">
+	
+	<Set id="ruleA">
+		<Logic>
+			<If>
+				<And>
+					<IsTrue valueId="A"/>
+				</And>
+				<Do>
+					<True id="B"/>
+				</Do>
+			</If>
+		</Logic>
+	</Set>
+	
+	<Set id="ruleB">
+		<Logic>
+			<If>
+				<And>
+					<IsTrue valueId="B"/>
+				</And>
+				<Do>
+					<True id="C"/>
+				</Do>
+			</If>
+		</Logic>
+	</Set>	
+	<Set id="ruleC">
+		<Logic>
+			<If>
+				<And>
+					<IsTrue valueId="C"/>
+				</And>
+				<Do>
+					<True id="A"/>
+				</Do>
+			</If>
+		</Logic>
+	</Set>
+</xBusinessRules>

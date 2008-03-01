@@ -5,7 +5,28 @@
 
 -->
 <xBusinessRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="xBusinessRules.xsd">
-
+	
+	<Set id="rule7">
+		<Logic>
+			<If>
+				<And>
+					<Not>
+						<IsAsserted valueId="RatioOfMonthlyInstallmentsToTotalIncome"/>
+					</Not>
+					<GreaterThan leftId="TotalIncome" rightId="0i">
+						<Integer id="0i" value="0"/>
+					</GreaterThan>
+				</And>
+				<Do>
+					<ObjectLookup id="TestMultiply" type="NxBRE.Util.Maths" member="Divide">
+						<Argument valueId="MonthlyInstallments" />
+						<Argument valueId="TotalIncome" />
+					</ObjectLookup>
+				</Do>
+			</If>
+		</Logic>
+	</Set>
+	
 	<Set id="rule9">
 		<Logic>
 			<If>
@@ -16,13 +37,13 @@
 					</GreaterThan>
 				</And>
 				<Do>
-					<Boolean id="IncomeCriteriaOk" value="true"/>
+					<True id="IncomeCriteriaOk"/>
 				</Do>
 			</If>
 		</Logic>
 	</Set>
 	
-		<Set id="rule10">
+	<Set id="rule10">
 		<Logic>
 			<If>
 				<And>
@@ -32,10 +53,24 @@
 					</GreaterThan>
 				</And>
 				<Do>
-					<Boolean id="IncomeCriteriaOk" value="true"/>
+					<True id="IncomeCriteriaOk"/>
 				</Do>
 			</If>
 		</Logic>
 	</Set>
-
+	
+	<Set id="rule11">
+		<Logic>
+			<If>
+				<And>
+					<LessThan leftId="RatioOfMonthlyInstallmentsToTotalIncome" rightId="0.33d">
+						<Decimal id="0.33d" value="0.333333"/>
+					</LessThan>
+				</And>
+				<Do>
+					<True id="ApproveCarLoan"/>
+				</Do>
+			</If>
+		</Logic>
+	</Set>
 </xBusinessRules>
