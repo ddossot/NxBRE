@@ -14,14 +14,17 @@
 	public class TestBackwardChainer {
 		private IFlowEngine flowEngine;
 		private BackwardChainer backwardChainer;
+		private string ruleFilesFolder;
+		
+		[TestFixtureSetUp]
+		public void InitializeFixture() {
+			ruleFilesFolder = Parameter.GetString("unittest.ruleml.inputfolder");
+		}
 		
 		[SetUp]
 		public void InitializeChainer() {
-			string ruleFilesFolder = Parameter.GetString("unittest.ruleml.inputfolder");
-			
 			flowEngine = new BREImpl();
 			flowEngine.Init(new XBusinessRulesFileDriver(ruleFilesFolder + "/car-loan-rules.xbre"));
-			
 			backwardChainer = new BackwardChainer(flowEngine);
 		}
 		
@@ -31,6 +34,17 @@
 			flowEngine = new BREImpl();
 			flowEngine.Init(new XBusinessRulesFileDriver(Parameter.GetString("unittest.inputfile")));
 			backwardChainer = new BackwardChainer(flowEngine);
+		}
+		
+		[Test]
+		public void CircularityDetection() {
+			flowEngine = new BREImpl();
+			flowEngine.Init(new XBusinessRulesFileDriver(ruleFilesFolder + "/circularity.xbre"));
+			backwardChainer = new BackwardChainer(flowEngine);
+			
+			Stack<string> resolutionPath = new Stack<string>();
+			Assert.IsNull(backwardChainer.Resolve("A", resolutionPath));
+			Assert.IsTrue(resolutionPath.Contains("{Circularity}"));
 		}
 		
 		[Test]
@@ -132,7 +146,6 @@
 			Stack<string> resolutionPath = new Stack<string>();
 			flowEngine.RuleContext.SetObject("TotalIncome", -1);
 			Assert.IsNull(backwardChainer.Resolve("ApproveCarLoan", resolutionPath), "not enough base facts for rule 11");
-			Console.WriteLine(Misc.IListToString<string>(new List<string>(resolutionPath)));
 		}
 		
 	}
