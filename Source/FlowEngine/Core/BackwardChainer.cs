@@ -2,53 +2,137 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Xml.XPath;
+	
+	using NxBRE;
 
 	/// <summary>
 	/// TODO Description of BackwardChainer.
-	/// Schedules processing of sets based on a desired outcome (i.e. the id of context object that must be asserted).
 	/// </summary>
 	internal sealed class BackwardChainer {
 		private readonly IFlowEngine flowEngine;
 		
+		internal readonly IDictionary<string, IList<string>> setIdsFromTargetObjectId;
+		
+		internal readonly IDictionary<string, IList<string>> sourceObjectIdsFromSetId;
+		
+		// TODO test for circularity
+		// TODO add caching on get methods
+		// TODO check detection of retract constructs
+		
 		public BackwardChainer(IFlowEngine flowEngine) {
 			this.flowEngine = flowEngine;
+			this.setIdsFromTargetObjectId = new Dictionary<string, IList<string>>();
+			this.sourceObjectIdsFromSetId = new Dictionary<string, IList<string>>();
 			
-			// TODO ensure the loaded rules are backwards chainable (no rules outside of sets for ex., no delegates?)
+			ValidateXmlDocumentRules();
 		}
 		
-		public object Resolve(string id) {
-			// FIXME implement process all the scheduled sets until the sought id is found in context
+		/// <summary>
+		/// Executes set processing of sets based on a desired outcome (i.e. the id of context object that must be asserted).
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		public object Resolve(string targetObjectId) {
+			return Resolve(targetObjectId, new Stack<string>());
+		}
+		
+		internal object Resolve(string targetObjectId, Stack<string> resolutionPath) {
+			resolutionPath.Push("?" + targetObjectId);
+			
+			// return immediately if already in context
+			if (flowEngine.RuleContext.ResultsMap.Contains(targetObjectId)) {
+				resolutionPath.Push("{RuleContext}");
+				return flowEngine.RuleContext.GetObject(targetObjectId);
+			}
+			
+			// breadth first exploration
+			// process all the sets that could produce the sought targetObjectId
+			foreach(string setId in GetSetIdsFromTargetObjectId(targetObjectId)) {
+				resolutionPath.Push("{Set:" + setId + "}");
+				
+				if ((flowEngine.Process(setId)) && (flowEngine.RuleContext.ResultsMap.Contains(targetObjectId))) {
+					return flowEngine.RuleContext.GetObject(targetObjectId);
+				}
+				
+				resolutionPath.Pop();
+			}
+			
+			foreach(string setId in GetSetIdsFromTargetObjectId(targetObjectId)) {
+				// do not resolve a set that is already in the stack
+				if (!resolutionPath.Contains("{Set:" + setId + "}")) {
+					resolutionPath.Push("{Set:" + setId + "}");
+					
+					foreach(string objectId in GetSourceObjectIdsFromSetId(setId)) {
+						Resolve(objectId, resolutionPath);
+					}
+					
+					if ((flowEngine.Process(setId)) && (flowEngine.RuleContext.ResultsMap.Contains(targetObjectId))) {
+						return flowEngine.RuleContext.GetObject(targetObjectId);
+					}
+					
+					resolutionPath.Pop();
+				}
+			}
+			
+			// FIXME resolutionPath.Pop(); ?
 			return null;
 		}
 		
-		internal IList<string> GetSetIdsFromTargetObjectId(string id) {
-			IList<string> ids = new List<string>();
-			
-			XPathNodeIterator setIdAttributes = flowEngine.XmlDocumentRules.CreateNavigator().Select("//Set[.//Logic//Do//Rule[@id='"
-			                                                                                         + id
-			                                                                                         + "']/@id | .//Logic//Else//Rule[@id='"
-			                                                                                         + id
-			                                                                                         + "']]/@id");
-			while(setIdAttributes.MoveNext()) {
-				ids.Add(setIdAttributes.Current.Value);
+		/// <summary>
+		/// Ensures rules are backward chainable.
+		/// </summary>
+		/// <param name="xmlRules"></param>
+		internal void ValidateXmlDocumentRules() {
+			// ensures all rules are in sets
+			if (flowEngine.XmlDocumentRules.CreateNavigator().Select("//Rule[not(ancestor::Set) and not(starts-with(@id,'#'))] | //Retract[not(ancestor::Set)]").Count != 0) {
+				throw new BREException("All rules must be defined in Sets to be backward chainable!");
 			}
-			
-			return ids;
 		}
 		
-		internal IList<string> GetSourceObjectIdsFromSetId(string id) {
-			IList<string> ids = new List<string>();
+		internal IList<string> GetSetIdsFromTargetObjectId(string objectId) {
+			IList<string> setIds;
 			
-			XPathNodeIterator setIdAttributes = flowEngine.XmlDocumentRules.CreateNavigator().Select("//Set[@id='"
-			                                                                                         + id
-			                                                                                         + "']//Condition/Compare/@leftId | //Set[@id='"
-			                                                                                         + id
-			                                                                                         + "']//Condition/Compare/@rightId");
-			while(setIdAttributes.MoveNext()) {
-				ids.Add(setIdAttributes.Current.Value);
+			if (setIdsFromTargetObjectId.TryGetValue(objectId, out setIds)) {
+				return setIds;
 			}
+			else {
+				setIds = new List<string>();
 			
-			return ids;
+				XPathNodeIterator setIdAttributes = flowEngine.XmlDocumentRules.CreateNavigator().Select("//Set[.//Rule[@id='"
+				                                                                                         + objectId
+				                                                                                         + "']/@id | .//Retract[@id='"
+				                                                                                         + objectId
+				                                                                                         + "']]/@id");
+				while(setIdAttributes.MoveNext()) {
+					setIds.Add(setIdAttributes.Current.Value);
+				}
+				
+				setIdsFromTargetObjectId.Add(objectId, setIds);
+				return setIds;
+			}
+		}
+		
+		internal IList<string> GetSourceObjectIdsFromSetId(string setId) {
+			IList<string> objectIds;
+			
+			if (sourceObjectIdsFromSetId.TryGetValue(setId, out objectIds)) {
+				return objectIds;
+			}
+			else {
+				objectIds = new List<string>();
+				
+				XPathNodeIterator setIdAttributes = flowEngine.XmlDocumentRules.CreateNavigator().Select("//Set[@id='"
+				                                                                                         + setId
+				                                                                                         + "']//Condition/Compare/@leftId | //Set[@id='"
+				                                                                                         + setId
+				                                                                                         + "']//Condition/Compare/@rightId");
+				while(setIdAttributes.MoveNext()) {
+					objectIds.Add(setIdAttributes.Current.Value);
+				}
+				
+				sourceObjectIdsFromSetId.Add(setId, objectIds);
+				return objectIds;
+			}
 		}
 		
 	}
