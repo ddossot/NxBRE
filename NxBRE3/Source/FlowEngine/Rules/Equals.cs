@@ -11,6 +11,8 @@ namespace NxBRE.FlowEngine.Rules
 	/// </author>
 	public sealed class Equals : IBREOperator
 	{
+		//TODO refactor to use common comparison abstract class
+		
 		/// <summary>Defines whether an operator is able to deal with empty operands</summary>
 		/// <returns>False for the current operator</returns>
 		public bool AcceptsNulls {

@@ -11,6 +11,8 @@ namespace NxBRE.FlowEngine.Rules
 	/// </author>
 	public sealed class GreaterThan : IBREOperator, IInitializable
 	{
+		//TODO refactor & extract comparison abstract class
+		
 		/// <summary>Defines whether an operator is ablt to deal with empty operands</summary>
 		/// <returns>False for the current operator</returns>
 		public bool AcceptsNulls {
@@ -67,11 +69,12 @@ namespace NxBRE.FlowEngine.Rules
 			
 			if ((aObj is IComparable) && (aCompareTo is IComparable))
 			{
-				if (((IComparable) aObj).CompareTo(aCompareTo) > 0)
-				{
-					return true;
+				if ((! aCompareTo.GetType().IsInstanceOfType(aObj)) 
+				    || (! aCompareTo.GetType().IsSubclassOf(aObj.GetType()))) {
+					aCompareTo = Convert.ChangeType(aCompareTo, aObj.GetType());
 				}
-				return false;
+				
+				return (((IComparable) aObj).CompareTo(aCompareTo) > 0);
 			}
 			else
 			{

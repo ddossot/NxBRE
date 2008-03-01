@@ -11,6 +11,8 @@ namespace NxBRE.FlowEngine.Rules
 	/// </author>
 	public sealed class LessThan : IBREOperator, IInitializable
 	{
+		//TODO refactor to use common comparison abstract class
+		
 		/// <summary>Defines whether an operator is ablt to deal with empty operands</summary>
 		/// <returns>False for the current operator</returns>
 		public bool AcceptsNulls {
