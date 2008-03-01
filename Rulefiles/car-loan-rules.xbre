@@ -18,7 +18,7 @@
 					</GreaterThan>
 				</And>
 				<Do>
-					<ObjectLookup id="TestMultiply" type="NxBRE.Util.Maths" member="Divide">
+					<ObjectLookup id="RatioOfMonthlyInstallmentsToTotalIncome" type="NxBRE.Util.Maths" member="Divide">
 						<Argument valueId="MonthlyInstallments" />
 						<Argument valueId="TotalIncome" />
 					</ObjectLookup>
@@ -64,7 +64,7 @@
 			<If>
 				<And>
 					<LessThan leftId="RatioOfMonthlyInstallmentsToTotalIncome" rightId="0.33d">
-						<Decimal id="0.33d" value="0.333333"/>
+						<Double id="0.33d" value="0.333333"/>
 					</LessThan>
 				</And>
 				<Do>

@@ -33,7 +33,7 @@
 			return Resolve(targetObjectId, new Stack<string>());
 		}
 		
-		// TODO test resolution 2 levels
+		// FIXME resolve errors when argument not in context
 		internal object Resolve(string targetObjectId, Stack<string> resolutionPath) {
 			resolutionPath.Push("?" + targetObjectId);
 			
@@ -48,6 +48,7 @@
 			foreach(string setId in GetSetIdsFromTargetObjectId(targetObjectId)) {
 				resolutionPath.Push("{Set:" + setId + "}");
 				
+				//TODO extract method
 				if ((flowEngine.Process(setId)) && (flowEngine.RuleContext.ResultsMap.Contains(targetObjectId))) {
 					return flowEngine.RuleContext.GetObject(targetObjectId);
 				}

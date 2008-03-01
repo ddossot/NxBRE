@@ -38,11 +38,16 @@ namespace NxBRE.FlowEngine.Rules
 		public bool ExecuteComparison(IBRERuleContext aBRC, IDictionary aMap, object aObj, object aCompareTo)
 		{
 			try {
-				if ((aObj.GetType().IsInstanceOfType(aCompareTo)) 
-					|| (aObj.GetType().IsSubclassOf(aCompareTo.GetType())))
+				if ((aObj == null) || (aCompareTo == null)) {
+					return false;
+				}
+				else if ((aObj.GetType().IsInstanceOfType(aCompareTo)) 
+				    || (aObj.GetType().IsSubclassOf(aCompareTo.GetType()))) {
 						return true;
-				else
-						return false;
+				}
+				else {
+					return false;
+				}
 			}
 			catch(System.Exception e) {
 				if (Logger.IsFlowEngineWarning)

@@ -148,5 +148,14 @@
 			Assert.IsNull(backwardChainer.Resolve("ApproveCarLoan", resolutionPath), "not enough base facts for rule 11");
 		}
 		
+		[Test]
+		public void TwoLevelProcessingWithOutcome() {
+			Stack<string> resolutionPath = new Stack<string>();
+			flowEngine.RuleContext.SetObject("TotalIncome", 100.0);
+			flowEngine.RuleContext.SetObject("MonthlyInstallments", 10.0);
+			Assert.IsTrue((bool)backwardChainer.Resolve("ApproveCarLoan", resolutionPath));
+			Assert.AreEqual("({RuleContext},?0.33d,{Set:rule7},?RatioOfMonthlyInstallmentsToTotalIncome,{Set:rule11},?ApproveCarLoan)",
+			                Misc.IListToString<string>(new List<string>(resolutionPath)));
+		}		
 	}
 }
