@@ -15,10 +15,6 @@
 		
 		internal readonly IDictionary<string, IList<string>> sourceObjectIdsFromSetId;
 		
-		// TODO test for circularity
-		// TODO add caching on get methods
-		// TODO check detection of retract constructs
-		
 		public BackwardChainer(IFlowEngine flowEngine) {
 			this.flowEngine = flowEngine;
 			this.setIdsFromTargetObjectId = new Dictionary<string, IList<string>>();
@@ -32,10 +28,12 @@
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
+		// TODO test this
 		public object Resolve(string targetObjectId) {
 			return Resolve(targetObjectId, new Stack<string>());
 		}
 		
+		// TODO test resolution 2 levels
 		internal object Resolve(string targetObjectId, Stack<string> resolutionPath) {
 			resolutionPath.Push("?" + targetObjectId);
 			
@@ -66,15 +64,17 @@
 						Resolve(objectId, resolutionPath);
 					}
 					
+					//TODO extract method
 					if ((flowEngine.Process(setId)) && (flowEngine.RuleContext.ResultsMap.Contains(targetObjectId))) {
 						return flowEngine.RuleContext.GetObject(targetObjectId);
 					}
 					
 					resolutionPath.Pop();
+				} else {
+					resolutionPath.Push("{Circularity}");
 				}
 			}
 			
-			// FIXME resolutionPath.Pop(); ?
 			return null;
 		}
 		
