@@ -69,6 +69,7 @@
     <Compile Include="FlowEngine\IO\BusinessRulesFileDriver.cs" />
     <Compile Include="FlowEngine\IO\IRulesDriver.cs" />
     <Compile Include="FlowEngine\IO\XBusinessRulesFileDriver.cs" />
+    <Compile Include="FlowEngine\Rules\AbstractComparisonOperator.cs" />
     <Compile Include="FlowEngine\Rules\GreaterThan.cs" />
     <Compile Include="FlowEngine\Rules\GreaterThanEqualTo.cs" />
     <Compile Include="FlowEngine\Rules\Increment.cs" />
