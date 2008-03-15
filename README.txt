@@ -1,4 +1,4 @@
-NxBRE README v3.1.1
+NxBRE README v3.2.0
 ===================
 
 URL          : http://nxbre.org
@@ -66,6 +66,10 @@ All static calls on NxBRE helpers and utilities, either from FlowEngine rules or
 ## RELEASE NOTES ##
 
 v3.2.0
+
+ Flow Engine
+
+  * Added backward chaining behavior (feature request 1915027).
 
  Inference Engine
 
