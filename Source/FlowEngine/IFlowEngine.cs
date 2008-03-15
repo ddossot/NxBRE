@@ -74,6 +74,21 @@ namespace NxBRE.FlowEngine
 			/// </returns>
 			bool Process(string setId);
 			
+			/// <summary>
+			/// Schedule the execution of sets to try to create the passed object ID in the rule context (backward chaining). 
+			/// </summary>
+			/// <param name="objectId">The ID to resolve.</param>
+			/// <returns>The value of the object ID to resolve, or null if the resolution was not possible.</returns>
+			object Resolve(string objectId);
+			
+			/// <summary>
+			/// Schedule the execution of sets to try to create the passed object ID in the rule context (backward chaining). 
+			/// </summary>
+			/// <param name="objectId">The ID to resolve.</param>
+			/// <param name="defaultValue">The value to return if the ID was not resolvable.</param>
+			/// <returns>The value of the object ID to resolve, or defaultValue if the resolution was not possible.</returns>
+			object Resolve(string objectId, object defaultValue);
+			
 			/// <summary> Violently stop the BRE 
 			/// </summary>
 			void Stop();

@@ -154,8 +154,126 @@
 			flowEngine.RuleContext.SetObject("TotalIncome", 100.0);
 			flowEngine.RuleContext.SetObject("MonthlyInstallments", 10.0);
 			Assert.IsTrue((bool)backwardChainer.Resolve("ApproveCarLoan", resolutionPath));
-			Assert.AreEqual("({RuleContext},?0.33d,{Set:rule7},?RatioOfMonthlyInstallmentsToTotalIncome,{Set:rule11},?ApproveCarLoan)",
-			                Misc.IListToString<string>(new List<string>(resolutionPath)));
-		}		
+			Assert.IsTrue(CheckFirstSetIs(resolutionPath, "rule11"), "Deducting Set should have been: rule11");
+		}
+		
+		[Test]
+		public void NLevelProcessingWithOutcome() {
+			Stack<string> resolutionPath = new Stack<string>();
+			flowEngine.RuleContext.SetObject("TotalIncome", 11000.0);
+			flowEngine.RuleContext.SetObject("MonthlyInstallments", 5500.0);
+			flowEngine.RuleContext.SetObject("AgeOfApplicant", 27);
+			flowEngine.RuleContext.SetObject("IsCebEmployee", true);
+			flowEngine.RuleContext.SetObject("ApplicantIsWorking", true);
+			flowEngine.RuleContext.SetObject("TimeAtCurrentJob", 13);
+			flowEngine.RuleContext.SetObject("CitizenshipOfApplicant", "Dutch");
+			
+			Assert.IsTrue((bool) backwardChainer.Resolve("ApproveCarLoan", resolutionPath));
+			Assert.IsTrue(CheckFirstSetIs(resolutionPath, "rule6"), "Deducting Set should have been: rule6");
+		}
+		
+		[Test]
+		public void PositiveResolution() {
+			flowEngine.RuleContext.SetObject("TotalIncome", 11000.0);
+			flowEngine.RuleContext.SetObject("MonthlyInstallments", 5500.0);
+			flowEngine.RuleContext.SetObject("AgeOfApplicant", 27);
+			flowEngine.RuleContext.SetObject("IsCebEmployee", true);
+			flowEngine.RuleContext.SetObject("ApplicantIsWorking", true);
+			flowEngine.RuleContext.SetObject("TimeAtCurrentJob", 13);
+			flowEngine.RuleContext.SetObject("CitizenshipOfApplicant", "Dutch");
+			Assert.IsTrue((bool) backwardChainer.Resolve("ApproveCarLoan"));
+		}
+		
+		[Test]
+		public void NegativeResolutions() {
+			IFlowEngine transientFlowEngine = (IFlowEngine) flowEngine.Clone();
+			transientFlowEngine.RuleContext.SetObject("TotalIncome", 11000.0);
+			transientFlowEngine.RuleContext.SetObject("MonthlyInstallments", 5500.0);
+			transientFlowEngine.RuleContext.SetObject("AgeOfApplicant", 27);
+			transientFlowEngine.RuleContext.SetObject("IsCebEmployee", true);
+			transientFlowEngine.RuleContext.SetObject("ApplicantIsWorking", true);
+			transientFlowEngine.RuleContext.SetObject("TimeAtCurrentJob", 13);
+			transientFlowEngine.RuleContext.SetObject("CitizenshipOfApplicant", "French");
+			Assert.IsNull(backwardChainer.Resolve("ApproveCarLoan"));
+			
+			transientFlowEngine = (IFlowEngine) flowEngine.Clone();
+			transientFlowEngine.RuleContext.SetObject("TotalIncome", 11000.0);
+			transientFlowEngine.RuleContext.SetObject("MonthlyInstallments", 5500.0);
+			transientFlowEngine.RuleContext.SetObject("AgeOfApplicant", 27);
+			transientFlowEngine.RuleContext.SetObject("IsCebEmployee", true);
+			transientFlowEngine.RuleContext.SetObject("ApplicantIsWorking", true);
+			transientFlowEngine.RuleContext.SetObject("TimeAtCurrentJob", 10);
+			transientFlowEngine.RuleContext.SetObject("CitizenshipOfApplicant", "Dutch");
+			Assert.IsNull(backwardChainer.Resolve("ApproveCarLoan"));
+			
+			transientFlowEngine = (IFlowEngine) flowEngine.Clone();
+			transientFlowEngine.RuleContext.SetObject("TotalIncome", 11000.0);
+			transientFlowEngine.RuleContext.SetObject("MonthlyInstallments", 5500.0);
+			transientFlowEngine.RuleContext.SetObject("AgeOfApplicant", 27);
+			transientFlowEngine.RuleContext.SetObject("IsCebEmployee", false);
+			transientFlowEngine.RuleContext.SetObject("ApplicantIsWorking", true);
+			transientFlowEngine.RuleContext.SetObject("TimeAtCurrentJob", 15);
+			transientFlowEngine.RuleContext.SetObject("CitizenshipOfApplicant", "Dutch");
+			Assert.IsNull(backwardChainer.Resolve("ApproveCarLoan"));
+		}
+		
+		[Test]
+		public void FlowEnginePositiveResolutionNoDefault() {
+			flowEngine.RuleContext.SetObject("TotalIncome", 11000.0);
+			flowEngine.RuleContext.SetObject("MonthlyInstallments", 5500.0);
+			flowEngine.RuleContext.SetObject("AgeOfApplicant", 27);
+			flowEngine.RuleContext.SetObject("IsCebEmployee", true);
+			flowEngine.RuleContext.SetObject("ApplicantIsWorking", true);
+			flowEngine.RuleContext.SetObject("TimeAtCurrentJob", 13);
+			flowEngine.RuleContext.SetObject("CitizenshipOfApplicant", "Dutch");
+			Assert.IsTrue((bool) flowEngine.Resolve("ApproveCarLoan"));
+		}
+		
+		[Test]
+		public void FlowEnginePositiveResolutionDefault() {
+			flowEngine.RuleContext.SetObject("TotalIncome", 11000.0);
+			flowEngine.RuleContext.SetObject("MonthlyInstallments", 5500.0);
+			flowEngine.RuleContext.SetObject("AgeOfApplicant", 27);
+			flowEngine.RuleContext.SetObject("IsCebEmployee", true);
+			flowEngine.RuleContext.SetObject("ApplicantIsWorking", true);
+			flowEngine.RuleContext.SetObject("TimeAtCurrentJob", 13);
+			flowEngine.RuleContext.SetObject("CitizenshipOfApplicant", "Dutch");
+			Assert.IsTrue((bool) flowEngine.Resolve("ApproveCarLoan", true));
+		}
+		
+		[Test]
+		public void FlowEngineNegativeResolutionNoDefault() {
+			flowEngine.RuleContext.SetObject("TotalIncome", 11000.0);
+			flowEngine.RuleContext.SetObject("MonthlyInstallments", 5500.0);
+			flowEngine.RuleContext.SetObject("AgeOfApplicant", 27);
+			flowEngine.RuleContext.SetObject("IsCebEmployee", true);
+			flowEngine.RuleContext.SetObject("ApplicantIsWorking", true);
+			flowEngine.RuleContext.SetObject("TimeAtCurrentJob", 13);
+			flowEngine.RuleContext.SetObject("CitizenshipOfApplicant", "French");
+			Assert.IsNull(flowEngine.Resolve("ApproveCarLoan"));
+		}
+		
+		[Test]
+		public void FlowEngineNegativeResolutionDefault() {
+			flowEngine.RuleContext.SetObject("TotalIncome", 11000.0);
+			flowEngine.RuleContext.SetObject("MonthlyInstallments", 5500.0);
+			flowEngine.RuleContext.SetObject("AgeOfApplicant", 27);
+			flowEngine.RuleContext.SetObject("IsCebEmployee", true);
+			flowEngine.RuleContext.SetObject("ApplicantIsWorking", true);
+			flowEngine.RuleContext.SetObject("TimeAtCurrentJob", 13);
+			flowEngine.RuleContext.SetObject("CitizenshipOfApplicant", "French");
+			Assert.IsFalse((bool) flowEngine.Resolve("ApproveCarLoan", false));
+		}
+		
+		private bool CheckFirstSetIs(Stack<string> resolutionPath, string setId) {
+			foreach(string s in resolutionPath) {
+				if (s.StartsWith("{Set:")) {
+					return s.Equals("{Set:" + setId + "}");
+				}
+			}
+			
+			return false;
+		}
+		
 	}
 }

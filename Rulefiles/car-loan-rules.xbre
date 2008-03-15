@@ -6,6 +6,29 @@
 -->
 <xBusinessRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="xBusinessRules.xsd">
 	
+	<Set id="rule6">
+		<Logic>
+			<If>
+				<And>
+					<LessThan leftId="RatioOfMonthlyInstallmentsToTotalIncome" rightId="0.6d">
+						<Double id="0.6d" value="0.6"/>
+					</LessThan>
+					<IsTrue valueId="IncomeCriteriaOk"/>
+					<GreaterThan leftId="AgeOfApplicant" rightId="25i">
+						<Integer id="25i" value="25"/>
+					</GreaterThan>
+					<IsTrue valueId="EmploymentCriteriaOk"/>
+					<Equals leftId="CitizenshipOfApplicant" rightId="Dutch">
+						<String id="Dutch" value="Dutch"/>
+					</Equals>
+				</And>
+				<Do>
+					<True id="ApproveCarLoan"/>
+				</Do>
+			</If>
+		</Logic>
+	</Set>
+
 	<Set id="rule7">
 		<Logic>
 			<If>
@@ -22,6 +45,22 @@
 						<Argument valueId="MonthlyInstallments" />
 						<Argument valueId="TotalIncome" />
 					</ObjectLookup>
+				</Do>
+			</If>
+		</Logic>
+	</Set>
+	
+	<Set id="rule8">
+		<Logic>
+			<If>
+				<And>
+					<IsTrue valueId="ApplicantIsWorking"/>
+					<GreaterThan leftId="TimeAtCurrentJob" rightId="12i">
+						<Integer id="12i" value="12"/>
+					</GreaterThan>
+				</And>
+				<Do>
+					<True id="EmploymentCriteriaOk"/>
 				</Do>
 			</If>
 		</Logic>

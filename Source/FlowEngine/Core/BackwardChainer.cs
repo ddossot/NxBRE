@@ -6,7 +6,7 @@
 	using NxBRE;
 
 	/// <summary>
-	/// TODO Description of BackwardChainer.
+	/// A scheduler that processes Sets based on a desired outcome object ID in the RuleContext.
 	/// </summary>
 	internal sealed class BackwardChainer {
 		private readonly IFlowEngine flowEngine;
@@ -27,13 +27,11 @@
 		/// Executes set processing of sets based on a desired outcome (i.e. the id of context object that must be asserted).
 		/// </summary>
 		/// <param name="id"></param>
-		/// <returns></returns>
-		// TODO test this
+		/// <returns>the resolved object or null if it is not found</returns>
 		public object Resolve(string targetObjectId) {
 			return Resolve(targetObjectId, new Stack<string>());
 		}
 		
-		// FIXME resolve errors when argument not in context
 		internal object Resolve(string targetObjectId, Stack<string> resolutionPath) {
 			resolutionPath.Push("?" + targetObjectId);
 			
@@ -43,12 +41,19 @@
 				return flowEngine.RuleContext.GetObject(targetObjectId);
 			}
 			
-			// breadth first exploration
-			// process all the sets that could produce the sought targetObjectId
+			object result = ExploreBreadth(targetObjectId, resolutionPath);
+			
+			if (result == null) {
+				result = ExplorePrecursors(targetObjectId, resolutionPath);
+			}
+			
+			return result;
+		}
+		
+		private object ExploreBreadth(string targetObjectId, Stack<string> resolutionPath) {
 			foreach(string setId in GetSetIdsFromTargetObjectId(targetObjectId)) {
 				resolutionPath.Push("{Set:" + setId + "}");
 				
-				//TODO extract method
 				if ((flowEngine.Process(setId)) && (flowEngine.RuleContext.ResultsMap.Contains(targetObjectId))) {
 					return flowEngine.RuleContext.GetObject(targetObjectId);
 				}
@@ -56,6 +61,10 @@
 				resolutionPath.Pop();
 			}
 			
+			return null;
+		}
+		
+		private object ExplorePrecursors(string targetObjectId, Stack<string> resolutionPath) {
 			foreach(string setId in GetSetIdsFromTargetObjectId(targetObjectId)) {
 				// do not resolve a set that is already in the stack
 				if (!resolutionPath.Contains("{Set:" + setId + "}")) {
@@ -65,7 +74,6 @@
 						Resolve(objectId, resolutionPath);
 					}
 					
-					//TODO extract method
 					if ((flowEngine.Process(setId)) && (flowEngine.RuleContext.ResultsMap.Contains(targetObjectId))) {
 						return flowEngine.RuleContext.GetObject(targetObjectId);
 					}
