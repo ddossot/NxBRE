@@ -5,7 +5,7 @@
 	public abstract class AbstractComparisonOperator : IInitializable {
 		public bool AcceptsNulls {
 			get {
-				return false;
+				return true;
 			}
 		}
 		
@@ -23,9 +23,10 @@
 		protected abstract bool AnalyzeCompared(int compare);
 		
 		public bool ExecuteComparison(IBRERuleContext ruleContext, IDictionary arguments, object left, object right) {
-			Init(arguments);
-			
-			if ((left is IComparable) && (right is IComparable)) {
+			if ((left == null) || (right == null)) {
+				return defaultValue;	
+			}
+			else if ((left is IComparable) && (right is IComparable)) {
 				if ((! right.GetType().IsInstanceOfType(left)) || (! right.GetType().IsSubclassOf(left.GetType()))) {
 					right = Convert.ChangeType(right, left.GetType());
 				}

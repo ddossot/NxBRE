@@ -12,14 +12,17 @@ namespace NxBRE.FlowEngine.Rules
 		/// <summary>Defines whether an operator is able to deal with empty operands</summary>
 		public bool AcceptsNulls {
 			get {
-				return false;
+				return true;
 			}
 		}
 
 		/// <summary> Checks the two objects to see if they are equal
 		/// </summary>
 		public bool ExecuteComparison(IBRERuleContext aBRC, IDictionary aMap, object aObj, object aCompareTo) {
-			if ((aObj is IComparable) && (aCompareTo is IComparable)) {
+			if ((aObj == null) || (aCompareTo == null)) {
+				return false;
+			}
+			else if ((aObj is IComparable) && (aCompareTo is IComparable)) {
 				return ((IComparable) aObj).CompareTo(aCompareTo) == 0;
 			}
 			else {

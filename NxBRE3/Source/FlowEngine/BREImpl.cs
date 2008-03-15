@@ -186,6 +186,8 @@ namespace NxBRE.FlowEngine
 		private XPathDocument xmlDocument = null;
 		private IRulesDriver rulesDriver = null;
 		
+		private BackwardChainer backwardChainer = null;
+		
 		public event DispatchRuleResult ResultHandlers;
 		
 		/// <summary> Returns or Sets the RuleContext in it's current state.
@@ -423,6 +425,30 @@ namespace NxBRE.FlowEngine
 		/// <summary> Violently stop the BRE </summary>
 		public void Stop() {
 			running = false;
+		}
+		
+		/// <summary>
+		/// Schedule the execution of sets to try to create the passed object ID in the rule context (backward chaining). 
+		/// </summary>
+		/// <param name="objectId">The ID to resolve.</param>
+		/// <returns>The value of the object ID to resolve, or null if the resolution was not possible.</returns>
+		public object Resolve(string objectId) {
+			if (backwardChainer == null) {
+				backwardChainer = new BackwardChainer(this);
+			}
+			
+			return backwardChainer.Resolve(objectId);
+		}
+		
+		/// <summary>
+		/// Schedule the execution of sets to try to create the passed object ID in the rule context (backward chaining). 
+		/// </summary>
+		/// <param name="objectId">The ID to resolve.</param>
+		/// <param name="defaultValue">The value to return if the ID was not resolvable.</param>
+		/// <returns>The value of the object ID to resolve, or defaultValue if the resolution was not possible.</returns>
+		public object Resolve(string objectId, object defaultValue) {
+			object result = Resolve(objectId);
+			return result==null?defaultValue:result;
 		}
 
 		/// <summary> This method preloads all defined factories with the XML document.
@@ -946,7 +972,7 @@ namespace NxBRE.FlowEngine
 		private void  ProcessRuleNode(XPathNavigator aNode, Hashtable aMap)
 		{
 			DoRule(aNode.GetAttribute(RULE_ATTRS.ID, String.Empty),
-			       aNode.GetAttribute(RULE_ATTRS.ID, String.Empty),
+			       aNode.GetAttribute(RULE_ATTRS.STEP, String.Empty),
 			       aMap);
 		}
 		
