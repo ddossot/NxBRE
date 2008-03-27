@@ -133,9 +133,14 @@ namespace NxBRE.Util
 			
 			int posLastSame = arguments.Length;
 			for(int i=arguments.Length-2;i>=0;i--) {
-				Type t = arguments[i].GetType();
-				if (arguments[i].GetType() == arguments[i+1].GetType()) posLastSame = i;
-				else break;
+				if ((arguments[i] != null) &&
+				    (arguments[i+1] != null) &&
+				    (arguments[i].GetType() == arguments[i+1].GetType())) {
+					posLastSame = i;
+				}
+				else {
+					break;
+				}
 			}
 			if (posLastSame != arguments.Length) {
 				// create a new Array and copy the non grouped arguments
