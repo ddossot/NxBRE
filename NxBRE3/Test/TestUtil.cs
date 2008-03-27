@@ -219,5 +219,58 @@ namespace NxBRE.Test
 			Assert.AreEqual(@"^-?\d+(\.\d{2})?$", result.Second);
 		}
 		
+		[Test]
+		public void GroupFinalNoNullValues() {
+			// Regression test for bug 1926553
+			object[] args = new object[]{"foo", 1, 2, 3};
+			object[] result = Parameter.GroupFinal(args);
+			
+			Assert.AreEqual(2, result.Length);
+			Assert.AreEqual(args[0], result[0]);
+			Assert.IsTrue(result[1] is int[]);
+			Assert.AreEqual(3, ((int[])result[1]).Length);
+		}
+		
+		[Test]
+		public void GroupFinalWithMiddleNullValue() {
+			// Regression test for bug 1926553 
+			object[] args = new object[]{"foo", null, 1, 2, 3};
+			object[] result = Parameter.GroupFinal(args);
+			
+			Assert.AreEqual(3, result.Length);
+			Assert.AreEqual(args[0], result[0]);
+			Assert.IsNull(result[1]);
+			Assert.IsTrue(result[2] is int[]);
+			Assert.AreEqual(3, ((int[])result[2]).Length);			
+		}
+		
+		[Test]
+		public void GroupFinalWithBeginNullValue() {
+			// Regression test for bug 1926553 
+			object[] args = new object[]{null, "foo", 1, 2, 3};
+			object[] result = Parameter.GroupFinal(args);
+			
+			Assert.AreEqual(3, result.Length);
+			Assert.IsNull(result[0]);
+			Assert.AreEqual(args[1], result[1]);
+			Assert.IsTrue(result[2] is int[]);
+			Assert.AreEqual(3, ((int[])result[2]).Length);			
+		}		
+		
+		[Test]
+		public void GroupFinalWithEndNullValue() {
+			// Regression test for bug 1926553 
+			object[] args = new object[]{"foo", 1, 2, 3, null};
+			
+			Assert.AreEqual(args, Parameter.GroupFinal(args));
+		}
+				
+		[Test]
+		public void GroupFinalWithEndNullValues() {
+			// Regression test for bug 1926553 
+			object[] args = new object[]{"foo", null, null, null};
+			
+			Assert.AreEqual(args, Parameter.GroupFinal(args));
+		}	
 	}
 }
