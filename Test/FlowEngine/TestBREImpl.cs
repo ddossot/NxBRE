@@ -24,7 +24,7 @@ namespace NxBRE.Test.FlowEngine
 		private const int EXPECTED_WHILE = 39;
 		private const int EXPECTED_GLOBALS = 13;
 		private const int RULE_TESTS = 3;
-		private const int LOGIC_TESTS = 24;
+		private const int LOGIC_TESTS = 25;
 		
 		private const string ASSERTED_HELLO_VALUE = "world";
 		private static int[] ARRAY = {1,3,5,7,11};
@@ -94,6 +94,7 @@ namespace NxBRE.Test.FlowEngine
 			private void HandleEvent(TraceEventType eventType, params object[] data) {
 				if (eventType == TraceEventType.Error) {
 					exceptionCount++;
+					Console.Error.WriteLine(Misc.ArrayToString(data));
 					
 					// Try to catch a dynamically generated exception
 					if ((data.Length == 1) && (data[0] is System.Exception) && (((System.Exception)data[0]).Message == ASSERTED_HELLO_VALUE))
@@ -101,13 +102,14 @@ namespace NxBRE.Test.FlowEngine
 				}
 				else if (eventType == TraceEventType.Critical) {
 					exceptionCount++;
+					Console.Error.WriteLine(Misc.ArrayToString(data));
 				
 					// Stop rule processing on fatal exceptions
 					bre.Stop();
 				}
 				else if ((eventType == TraceEventType.Information) && (data.Length == 1) && (data[0].ToString() == ASSERTED_HELLO_VALUE)) {
-					Console.Error.WriteLine(eventType);
 					foundDynamicLog = true;
+					Console.Out.WriteLine(Misc.ArrayToString(data));
 				}
 			}
 			
@@ -358,6 +360,12 @@ namespace NxBRE.Test.FlowEngine
 			
 			Assert.AreEqual(row["col1"], GetObject("TestRowSet_Col1"), "RowSet.Get");
 			Assert.AreEqual(1969, row["col2"], "RowSet.Set");
+			
+			Assert.IsTrue(GetObject("TryParseResult") is object[]);
+			object[] tryParseResult = (object[]) GetObject("TryParseResult");
+			Assert.AreEqual(2, tryParseResult.Length);
+			Assert.AreEqual(true, tryParseResult[0]);
+			Assert.AreEqual(12345, tryParseResult[1]);
 		}
 		
 		[Test]

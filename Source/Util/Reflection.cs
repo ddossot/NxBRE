@@ -2,6 +2,7 @@ namespace NxBRE.Util
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Reflection;
 	
@@ -224,8 +225,61 @@ namespace NxBRE.Util
 			}
 			
 			// nothing found
-			throw new TargetException("Can not find member "+type.FullName+"."+name);
+			return CallMethodWithByRefParametersOrThrow(type,
+			                                            target,
+			                                            name,
+			                                            argValues,
+														new TargetException("Can not find member " + type.FullName
+													                          + "." + name
+													                          + Misc.ArrayToString(types)
+													                          + " for values "
+													                          + Misc.ArrayToString(argValues)));
 		}
+		
+		private static object CallMethodWithByRefParametersOrThrow(Type type, object target, string methodName, object[] args, TargetException te) {
+	        MethodInfo[] mis = type.GetMethods();
+				
+			foreach(MethodInfo mi in mis) {
+				ParameterInfo[] parameters = mi.GetParameters();
+				
+				if ((mi.Name.Equals(methodName)) && (parameters.Length == args.Length)) {
+					bool allMatch = true;
+					IList<int> byRefArgIndices = new List<int>();
+					
+					for(int i=0; i<parameters.Length; i++) {
+						Type rawParameterType = parameters[i].ParameterType;
+						Type parameterType = rawParameterType.IsByRef?rawParameterType.GetElementType():rawParameterType;
+						
+						if (!(parameterType.IsAssignableFrom(args[i].GetType()))) {
+							allMatch = false;
+							break;
+						} else if (rawParameterType.IsByRef) {
+							byRefArgIndices.Add(i);
+						}
+					}
+				
+					if (allMatch) {
+						object invocationResult = mi.Invoke(target, args);
+						
+						if (byRefArgIndices.Count == 0) {
+							return invocationResult;
+						}
+						else {
+							object[] result = new object[1 + byRefArgIndices.Count];
+							result[0] = invocationResult;
+							
+							for(int i=0; i<byRefArgIndices.Count; i++) {
+								result[1+i] = args[byRefArgIndices[i]];
+							}
+							
+							return result;
+						}
+					}
+				}
+			}
+	        
+	        throw te;
+	    }
 		
 		private static Type GetRuntimeType(string type) {
 			Type runtimeType = Type.GetType(type, true);
