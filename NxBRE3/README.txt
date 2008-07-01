@@ -16,6 +16,8 @@ v3.2.0
 
  Flow Engine
 
+  * Added support for "out" parameters in ObjectLookup (feature request 2007266).
+
   * Added backward chaining behavior (feature request 1915027).
 
  Inference Engine

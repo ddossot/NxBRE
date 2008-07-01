@@ -5,7 +5,7 @@
 
 -->
 <xBusinessRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="xBusinessRules.xsd">
-	<!-- 
+<!--
 		These rules will execute, no matter what.
 		Their values will be used in the business logic below
 		
@@ -726,6 +726,57 @@
 	<Set id="REFLECTION">
 		<Log msg="REFLECTION running" level="5"/>
 		<True id="REFLECTION"/>
+		
+		<!--
+			Tests	: Method with ByRef parameters Test
+			Notes	: When calling a method that contains byref, the outcome is stored in an array whose first member is the method invocation result
+			        and subsequent members are the value of the out arguments in the order the appear in the method call
+			Result: A list whose first member is True (return value of TryParse) and second member is the integer value parsed from the String (out parameter).
+		-->
+		<ObjectLookup id="TryParseResult" type="System.Int32" member="TryParse">
+			<Argument value="12345"/>
+			<Argument value="-1" type="Integer"/>
+		</ObjectLookup>
+		<!-- Let's play with the outcome of the TryParse -->
+		<Logic>
+			<If>
+				<And>
+					<IsTrue valueId="TryParseSuccess">
+						<!-- Extract the result of the call to TryParse -->
+						<ObjectLookup id="TryParseSuccess" type="NxBRE.Util.DataAccess" member="GetArrayColumnValue">
+							<Argument valueId="TryParseResult"/>
+							<Argument value="0" type="Integer"/>
+						</ObjectLookup>
+					</IsTrue>
+				</And>
+				<Do>
+					<Logic>
+						<If>
+							<And>
+								<Equals leftId="TryParseValue" rightId="12345i">
+									<!-- Extract the value of the first (and only) out parameter of the invocation to TryParse -->
+									<ObjectLookup id="TryParseValue" type="NxBRE.Util.DataAccess" member="GetArrayColumnValue">
+										<Argument valueId="TryParseResult"/>
+										<Argument value="1" type="Integer"/>
+									</ObjectLookup>
+									<Integer id="12345i" value="12345"/>
+								</Equals>
+							</And>
+							<Do>
+								<True id="LT25"/>
+							</Do>
+						</If>
+						<Else>
+							<ThrowFatalException value="LT25"/>
+						</Else>
+					</Logic>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="LT25"/>
+			</Else>
+		</Logic>
+		
 		<!--
 			Tests	: IsNull Test
 			Notes	: InstanceOf returns false if the tested value is null

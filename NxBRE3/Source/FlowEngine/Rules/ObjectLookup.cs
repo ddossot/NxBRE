@@ -54,29 +54,33 @@ namespace NxBRE.FlowEngine.Rules
 		/// <returns> The value cast to the specified type
 		/// 
 		/// </returns>
-		public object ExecuteRule(IBRERuleContext aBrc, IDictionary aMap, object aStep)
-		{
+		public object ExecuteRule(IBRERuleContext ruleContext, IDictionary arguments, object step) {
 			bool staticCall = false;
-			if (!aMap.Contains(OBJECTID))
-			{
-				if (!aMap.Contains(TYPE))
+			
+			if (!arguments.Contains(OBJECTID)) {
+				if (!arguments.Contains(TYPE)) {
 					throw new BRERuleException("Parameter 'Type' or 'ObjectId' not found");
-				else staticCall = true;
+				}
+				else {
+					staticCall = true;
+				}
 			}
-			if (!aMap.Contains(MEMBER))
-			{
+			
+			if (!arguments.Contains(MEMBER)) {
 				throw new BRERuleException("Parameter 'Member' not found");
 			}
-			else
-			{
-				if (staticCall)
-					return Reflection.ClassCall((string)aMap[TYPE],
-						                           (string)aMap[MEMBER],
-						                           GetArguments(aMap));
-				else
-					return Reflection.ObjectCall(aBrc.GetResult(aMap[OBJECTID]).Result,
-						                           (string)aMap[MEMBER],
-						                           GetArguments(aMap));
+			
+			else {
+				if (staticCall) {
+					return Reflection.ClassCall((string)arguments[TYPE],
+						                           (string)arguments[MEMBER],
+						                           GetArguments(arguments));
+				}
+				else {
+					return Reflection.ObjectCall(ruleContext.GetResult(arguments[OBJECTID]).Result,
+						                           (string)arguments[MEMBER],
+						                           GetArguments(arguments));
+				}
 			}
 		}
 			
