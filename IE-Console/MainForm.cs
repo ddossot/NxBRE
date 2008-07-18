@@ -400,60 +400,61 @@ namespace NxBRE.InferenceEngine.Console {
 		/// not be able to load this method if it was changed manually.
 		/// </summary>
 		private void InitializeComponent() {
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
+			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.textBoxConsole = new System.Windows.Forms.TextBox();
 			this.menuItemVerbositySilent = new System.Windows.Forms.MenuItem();
-			this.mainMenu = new System.Windows.Forms.MainMenu();
-			this.menuItemFacts = new System.Windows.Forms.MenuItem();
+			this.mainMenu = new System.Windows.Forms.MainMenu(this.components);
 			this.menuItemFile = new System.Windows.Forms.MenuItem();
-			this.menuItemWMGlobal = new System.Windows.Forms.MenuItem();
-			this.menuItemLoadRuleBase = new System.Windows.Forms.MenuItem();
-			this.menuItemListAssemblies = new System.Windows.Forms.MenuItem();
-			this.menuItemExit = new System.Windows.Forms.MenuItem();
-			this.menuItemWMIsolatedEmpty = new System.Windows.Forms.MenuItem();
-			this.menuItemVerbosityLow = new System.Windows.Forms.MenuItem();
-			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-			this.menuItemWM = new System.Windows.Forms.MenuItem();
-			this.menuItemShowDeletions = new System.Windows.Forms.MenuItem();
-			this.menuItemSave = new System.Windows.Forms.MenuItem();
-			this.menuItemSaveFacts = new System.Windows.Forms.MenuItem();
-			this.menuItemSaveRuleBase = new System.Windows.Forms.MenuItem();
 			this.menuItemLoad = new System.Windows.Forms.MenuItem();
+			this.menuItemLoadRuleBase = new System.Windows.Forms.MenuItem();
+			this.menuItemLoadFacts = new System.Windows.Forms.MenuItem();
+			this.menuItemSave = new System.Windows.Forms.MenuItem();
+			this.menuItemSaveRuleBase = new System.Windows.Forms.MenuItem();
+			this.menuItemSaveFacts = new System.Windows.Forms.MenuItem();
+			this.menuItemExit = new System.Windows.Forms.MenuItem();
 			this.menuItemEngine = new System.Windows.Forms.MenuItem();
-			this.menuItemVerbosityMedium = new System.Windows.Forms.MenuItem();
-			this.menuItemConsole = new System.Windows.Forms.MenuItem();
-			this.menuItemProcess = new System.Windows.Forms.MenuItem();
-			this.menuItemShowDeductions = new System.Windows.Forms.MenuItem();
+			this.menuItemWM = new System.Windows.Forms.MenuItem();
+			this.menuItemWMGlobal = new System.Windows.Forms.MenuItem();
+			this.menuItemWMIsolated = new System.Windows.Forms.MenuItem();
+			this.menuItemWMIsolatedEmpty = new System.Windows.Forms.MenuItem();
 			this.menuItemWMCommit = new System.Windows.Forms.MenuItem();
-			this.menuItemAssert = new System.Windows.Forms.MenuItem();
-			this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-			this.statusBar = new System.Windows.Forms.StatusBar();
+			this.menuItemProcess = new System.Windows.Forms.MenuItem();
+			this.menuItemRunQuery = new System.Windows.Forms.MenuItem();
+			this.menuItemStatus = new System.Windows.Forms.MenuItem();
 			this.menuItemFactsTools = new System.Windows.Forms.MenuItem();
+			this.menuItemAssert = new System.Windows.Forms.MenuItem();
+			this.menuItemRetract = new System.Windows.Forms.MenuItem();
+			this.menuItemFacts = new System.Windows.Forms.MenuItem();
+			this.menuItemConsole = new System.Windows.Forms.MenuItem();
+			this.menuItemConsoleClear = new System.Windows.Forms.MenuItem();
+			this.menuItemShowDeductions = new System.Windows.Forms.MenuItem();
+			this.menuItemShowDeletions = new System.Windows.Forms.MenuItem();
 			this.menuItemShowModifications = new System.Windows.Forms.MenuItem();
 			this.menuItemVerbosity = new System.Windows.Forms.MenuItem();
-			this.menuItemRunQuery = new System.Windows.Forms.MenuItem();
+			this.menuItemVerbosityLow = new System.Windows.Forms.MenuItem();
+			this.menuItemVerbosityMedium = new System.Windows.Forms.MenuItem();
 			this.menuItemVerbosityHigh = new System.Windows.Forms.MenuItem();
-			this.menuItemWMIsolated = new System.Windows.Forms.MenuItem();
 			this.menuItemSystem = new System.Windows.Forms.MenuItem();
-			this.menuItemStatus = new System.Windows.Forms.MenuItem();
-			this.menuItemLoadFacts = new System.Windows.Forms.MenuItem();
-			this.menuItemConsoleClear = new System.Windows.Forms.MenuItem();
-			this.menuItemRetract = new System.Windows.Forms.MenuItem();
+			this.menuItemListAssemblies = new System.Windows.Forms.MenuItem();
+			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+			this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+			this.statusBar = new System.Windows.Forms.StatusBar();
 			this.SuspendLayout();
 			// 
 			// textBoxConsole
 			// 
 			this.textBoxConsole.BackColor = System.Drawing.SystemColors.Info;
 			this.textBoxConsole.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textBoxConsole.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.textBoxConsole.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.textBoxConsole.Location = new System.Drawing.Point(0, 0);
 			this.textBoxConsole.Multiline = true;
 			this.textBoxConsole.Name = "textBoxConsole";
 			this.textBoxConsole.ReadOnly = true;
+			this.textBoxConsole.ShortcutsEnabled = true;
 			this.textBoxConsole.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBoxConsole.Size = new System.Drawing.Size(816, 482);
+			this.textBoxConsole.Size = new System.Drawing.Size(816, 542);
 			this.textBoxConsole.TabIndex = 1;
-			this.textBoxConsole.Text = "";
 			// 
 			// menuItemVerbositySilent
 			// 
@@ -465,33 +466,27 @@ namespace NxBRE.InferenceEngine.Console {
 			// mainMenu
 			// 
 			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-						this.menuItemFile,
-						this.menuItemEngine,
-						this.menuItemConsole,
-						this.menuItemSystem});
-			// 
-			// menuItemFacts
-			// 
-			this.menuItemFacts.Index = 2;
-			this.menuItemFacts.Shortcut = System.Windows.Forms.Shortcut.CtrlL;
-			this.menuItemFacts.Text = "List";
-			this.menuItemFacts.Click += new System.EventHandler(this.MenuItemFactsClick);
+									this.menuItemFile,
+									this.menuItemEngine,
+									this.menuItemConsole,
+									this.menuItemSystem});
 			// 
 			// menuItemFile
 			// 
 			this.menuItemFile.Index = 0;
 			this.menuItemFile.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-						this.menuItemLoad,
-						this.menuItemSave,
-						this.menuItemExit});
+									this.menuItemLoad,
+									this.menuItemSave,
+									this.menuItemExit});
 			this.menuItemFile.Text = "File";
 			// 
-			// menuItemWMGlobal
+			// menuItemLoad
 			// 
-			this.menuItemWMGlobal.Index = 0;
-			this.menuItemWMGlobal.Shortcut = System.Windows.Forms.Shortcut.CtrlG;
-			this.menuItemWMGlobal.Text = "New Global";
-			this.menuItemWMGlobal.Click += new System.EventHandler(this.MenuItemWMGlobalClick);
+			this.menuItemLoad.Index = 0;
+			this.menuItemLoad.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+									this.menuItemLoadRuleBase,
+									this.menuItemLoadFacts});
+			this.menuItemLoad.Text = "Load";
 			// 
 			// menuItemLoadRuleBase
 			// 
@@ -500,69 +495,22 @@ namespace NxBRE.InferenceEngine.Console {
 			this.menuItemLoadRuleBase.Text = "RuleBase";
 			this.menuItemLoadRuleBase.Click += new System.EventHandler(this.MenuItemLoadRuleBaseClick);
 			// 
-			// menuItemListAssemblies
+			// menuItemLoadFacts
 			// 
-			this.menuItemListAssemblies.Index = 0;
-			this.menuItemListAssemblies.Text = "List assemblies";
-			this.menuItemListAssemblies.Click += new System.EventHandler(this.MenuItemListAssembliesClick);
-			// 
-			// menuItemExit
-			// 
-			this.menuItemExit.Index = 2;
-			this.menuItemExit.Shortcut = System.Windows.Forms.Shortcut.CtrlF4;
-			this.menuItemExit.Text = "Exit";
-			this.menuItemExit.Click += new System.EventHandler(this.MenuItemExitClick);
-			// 
-			// menuItemWMIsolatedEmpty
-			// 
-			this.menuItemWMIsolatedEmpty.Index = 2;
-			this.menuItemWMIsolatedEmpty.Shortcut = System.Windows.Forms.Shortcut.CtrlE;
-			this.menuItemWMIsolatedEmpty.Text = "New Isolated Empty";
-			this.menuItemWMIsolatedEmpty.Click += new System.EventHandler(this.MenuItemWMIsolatedEmptyClick);
-			// 
-			// menuItemVerbosityLow
-			// 
-			this.menuItemVerbosityLow.Index = 1;
-			this.menuItemVerbosityLow.RadioCheck = true;
-			this.menuItemVerbosityLow.Text = "Low";
-			this.menuItemVerbosityLow.Click += new System.EventHandler(this.MenuItemVerbosityLowClick);
-			// 
-			// openFileDialog
-			// 
-			this.openFileDialog.Filter = "RuleML files|*.ruleml|Visio files|*.vdx|Human Readable files|*.hrf";
-			// 
-			// menuItemWM
-			// 
-			this.menuItemWM.Index = 0;
-			this.menuItemWM.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-						this.menuItemWMGlobal,
-						this.menuItemWMIsolated,
-						this.menuItemWMIsolatedEmpty,
-						this.menuItemWMCommit});
-			this.menuItemWM.Text = "Working Memory";
-			// 
-			// menuItemShowDeletions
-			// 
-			this.menuItemShowDeletions.Checked = true;
-			this.menuItemShowDeletions.Index = 2;
-			this.menuItemShowDeletions.Text = "Show deletions";
-			this.menuItemShowDeletions.Click += new System.EventHandler(this.MenuItemShowDeletionsClick);
+			this.menuItemLoadFacts.Enabled = false;
+			this.menuItemLoadFacts.Index = 1;
+			this.menuItemLoadFacts.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftO;
+			this.menuItemLoadFacts.Text = "Facts";
+			this.menuItemLoadFacts.Click += new System.EventHandler(this.MenuItemLoadFactsClick);
 			// 
 			// menuItemSave
 			// 
 			this.menuItemSave.Enabled = false;
 			this.menuItemSave.Index = 1;
 			this.menuItemSave.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-						this.menuItemSaveRuleBase,
-						this.menuItemSaveFacts});
+									this.menuItemSaveRuleBase,
+									this.menuItemSaveFacts});
 			this.menuItemSave.Text = "Save";
-			// 
-			// menuItemSaveFacts
-			// 
-			this.menuItemSaveFacts.Index = 1;
-			this.menuItemSaveFacts.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftS;
-			this.menuItemSaveFacts.Text = "Facts";
-			this.menuItemSaveFacts.Click += new System.EventHandler(this.MenuItemSaveFactsClick);
 			// 
 			// menuItemSaveRuleBase
 			// 
@@ -571,42 +519,67 @@ namespace NxBRE.InferenceEngine.Console {
 			this.menuItemSaveRuleBase.Text = "RuleBase";
 			this.menuItemSaveRuleBase.Click += new System.EventHandler(this.MenuItemSaveRuleBaseClick);
 			// 
-			// menuItemLoad
+			// menuItemSaveFacts
 			// 
-			this.menuItemLoad.Index = 0;
-			this.menuItemLoad.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-						this.menuItemLoadRuleBase,
-						this.menuItemLoadFacts});
-			this.menuItemLoad.Text = "Load";
+			this.menuItemSaveFacts.Index = 1;
+			this.menuItemSaveFacts.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftS;
+			this.menuItemSaveFacts.Text = "Facts";
+			this.menuItemSaveFacts.Click += new System.EventHandler(this.MenuItemSaveFactsClick);
+			// 
+			// menuItemExit
+			// 
+			this.menuItemExit.Index = 2;
+			this.menuItemExit.Shortcut = System.Windows.Forms.Shortcut.CtrlF4;
+			this.menuItemExit.Text = "Exit";
+			this.menuItemExit.Click += new System.EventHandler(this.MenuItemExitClick);
 			// 
 			// menuItemEngine
 			// 
 			this.menuItemEngine.Index = 1;
 			this.menuItemEngine.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-						this.menuItemWM,
-						this.menuItemProcess,
-						this.menuItemRunQuery,
-						this.menuItemStatus,
-						this.menuItemFactsTools});
+									this.menuItemWM,
+									this.menuItemProcess,
+									this.menuItemRunQuery,
+									this.menuItemStatus,
+									this.menuItemFactsTools});
 			this.menuItemEngine.Text = "Engine";
 			// 
-			// menuItemVerbosityMedium
+			// menuItemWM
 			// 
-			this.menuItemVerbosityMedium.Index = 2;
-			this.menuItemVerbosityMedium.RadioCheck = true;
-			this.menuItemVerbosityMedium.Text = "Medium";
-			this.menuItemVerbosityMedium.Click += new System.EventHandler(this.MenuItemVerbosityMediumClick);
+			this.menuItemWM.Index = 0;
+			this.menuItemWM.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+									this.menuItemWMGlobal,
+									this.menuItemWMIsolated,
+									this.menuItemWMIsolatedEmpty,
+									this.menuItemWMCommit});
+			this.menuItemWM.Text = "Working Memory";
 			// 
-			// menuItemConsole
+			// menuItemWMGlobal
 			// 
-			this.menuItemConsole.Index = 2;
-			this.menuItemConsole.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-						this.menuItemConsoleClear,
-						this.menuItemShowDeductions,
-						this.menuItemShowDeletions,
-						this.menuItemShowModifications,
-						this.menuItemVerbosity});
-			this.menuItemConsole.Text = "Console";
+			this.menuItemWMGlobal.Index = 0;
+			this.menuItemWMGlobal.Shortcut = System.Windows.Forms.Shortcut.CtrlG;
+			this.menuItemWMGlobal.Text = "New Global";
+			this.menuItemWMGlobal.Click += new System.EventHandler(this.MenuItemWMGlobalClick);
+			// 
+			// menuItemWMIsolated
+			// 
+			this.menuItemWMIsolated.Index = 1;
+			this.menuItemWMIsolated.Shortcut = System.Windows.Forms.Shortcut.CtrlI;
+			this.menuItemWMIsolated.Text = "New Isolated";
+			this.menuItemWMIsolated.Click += new System.EventHandler(this.MenuItemWMIsolatedClick);
+			// 
+			// menuItemWMIsolatedEmpty
+			// 
+			this.menuItemWMIsolatedEmpty.Index = 2;
+			this.menuItemWMIsolatedEmpty.Shortcut = System.Windows.Forms.Shortcut.CtrlM;
+			this.menuItemWMIsolatedEmpty.Text = "New Isolated Empty";
+			this.menuItemWMIsolatedEmpty.Click += new System.EventHandler(this.MenuItemWMIsolatedEmptyClick);
+			// 
+			// menuItemWMCommit
+			// 
+			this.menuItemWMCommit.Index = 3;
+			this.menuItemWMCommit.Text = "Commit";
+			this.menuItemWMCommit.Click += new System.EventHandler(this.MenuItemWMCommitClick);
 			// 
 			// menuItemProcess
 			// 
@@ -615,18 +588,28 @@ namespace NxBRE.InferenceEngine.Console {
 			this.menuItemProcess.Text = "Process";
 			this.menuItemProcess.Click += new System.EventHandler(this.MenuItemProcessClick);
 			// 
-			// menuItemShowDeductions
+			// menuItemRunQuery
 			// 
-			this.menuItemShowDeductions.Checked = true;
-			this.menuItemShowDeductions.Index = 1;
-			this.menuItemShowDeductions.Text = "Show deductions";
-			this.menuItemShowDeductions.Click += new System.EventHandler(this.MenuItemShowDeductionsClick);
+			this.menuItemRunQuery.Index = 2;
+			this.menuItemRunQuery.Shortcut = System.Windows.Forms.Shortcut.F6;
+			this.menuItemRunQuery.Text = "Run query";
+			this.menuItemRunQuery.Click += new System.EventHandler(this.MenuItemRunQueryClick);
 			// 
-			// menuItemWMCommit
+			// menuItemStatus
 			// 
-			this.menuItemWMCommit.Index = 3;
-			this.menuItemWMCommit.Text = "Commit";
-			this.menuItemWMCommit.Click += new System.EventHandler(this.MenuItemWMCommitClick);
+			this.menuItemStatus.Index = 3;
+			this.menuItemStatus.Shortcut = System.Windows.Forms.Shortcut.CtrlD;
+			this.menuItemStatus.Text = "Dump status";
+			this.menuItemStatus.Click += new System.EventHandler(this.MenuItemStatusClick);
+			// 
+			// menuItemFactsTools
+			// 
+			this.menuItemFactsTools.Index = 4;
+			this.menuItemFactsTools.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+									this.menuItemAssert,
+									this.menuItemRetract,
+									this.menuItemFacts});
+			this.menuItemFactsTools.Text = "Facts";
 			// 
 			// menuItemAssert
 			// 
@@ -635,26 +618,51 @@ namespace NxBRE.InferenceEngine.Console {
 			this.menuItemAssert.Text = "Assert";
 			this.menuItemAssert.Click += new System.EventHandler(this.MenuItemAssertClick);
 			// 
-			// saveFileDialog
+			// menuItemRetract
 			// 
-			this.saveFileDialog.Filter = "RuleML files|*.ruleml|Human Readable files|*.hrf";
+			this.menuItemRetract.Index = 1;
+			this.menuItemRetract.Shortcut = System.Windows.Forms.Shortcut.CtrlR;
+			this.menuItemRetract.Text = "Retract";
+			this.menuItemRetract.Click += new System.EventHandler(this.MenuItemRetractClick);
 			// 
-			// statusBar
+			// menuItemFacts
 			// 
-			this.statusBar.Location = new System.Drawing.Point(0, 482);
-			this.statusBar.Name = "statusBar";
-			this.statusBar.Size = new System.Drawing.Size(816, 22);
-			this.statusBar.TabIndex = 0;
-			this.statusBar.Text = "Loading...";
+			this.menuItemFacts.Index = 2;
+			this.menuItemFacts.Shortcut = System.Windows.Forms.Shortcut.CtrlF;
+			this.menuItemFacts.Text = "List";
+			this.menuItemFacts.Click += new System.EventHandler(this.MenuItemFactsClick);
 			// 
-			// menuItemFactsTools
+			// menuItemConsole
 			// 
-			this.menuItemFactsTools.Index = 4;
-			this.menuItemFactsTools.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-						this.menuItemAssert,
-						this.menuItemRetract,
-						this.menuItemFacts});
-			this.menuItemFactsTools.Text = "Facts";
+			this.menuItemConsole.Index = 2;
+			this.menuItemConsole.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+									this.menuItemConsoleClear,
+									this.menuItemShowDeductions,
+									this.menuItemShowDeletions,
+									this.menuItemShowModifications,
+									this.menuItemVerbosity});
+			this.menuItemConsole.Text = "Console";
+			// 
+			// menuItemConsoleClear
+			// 
+			this.menuItemConsoleClear.Index = 0;
+			this.menuItemConsoleClear.Shortcut = System.Windows.Forms.Shortcut.F12;
+			this.menuItemConsoleClear.Text = "Clear";
+			this.menuItemConsoleClear.Click += new System.EventHandler(this.MenuItemConsoleClearClick);
+			// 
+			// menuItemShowDeductions
+			// 
+			this.menuItemShowDeductions.Checked = true;
+			this.menuItemShowDeductions.Index = 1;
+			this.menuItemShowDeductions.Text = "Show deductions";
+			this.menuItemShowDeductions.Click += new System.EventHandler(this.MenuItemShowDeductionsClick);
+			// 
+			// menuItemShowDeletions
+			// 
+			this.menuItemShowDeletions.Checked = true;
+			this.menuItemShowDeletions.Index = 2;
+			this.menuItemShowDeletions.Text = "Show deletions";
+			this.menuItemShowDeletions.Click += new System.EventHandler(this.MenuItemShowDeletionsClick);
 			// 
 			// menuItemShowModifications
 			// 
@@ -667,18 +675,25 @@ namespace NxBRE.InferenceEngine.Console {
 			// 
 			this.menuItemVerbosity.Index = 4;
 			this.menuItemVerbosity.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-						this.menuItemVerbositySilent,
-						this.menuItemVerbosityLow,
-						this.menuItemVerbosityMedium,
-						this.menuItemVerbosityHigh});
+									this.menuItemVerbositySilent,
+									this.menuItemVerbosityLow,
+									this.menuItemVerbosityMedium,
+									this.menuItemVerbosityHigh});
 			this.menuItemVerbosity.Text = "Engine verbosity";
 			// 
-			// menuItemRunQuery
+			// menuItemVerbosityLow
 			// 
-			this.menuItemRunQuery.Index = 2;
-			this.menuItemRunQuery.Shortcut = System.Windows.Forms.Shortcut.F6;
-			this.menuItemRunQuery.Text = "Run query";
-			this.menuItemRunQuery.Click += new System.EventHandler(this.MenuItemRunQueryClick);
+			this.menuItemVerbosityLow.Index = 1;
+			this.menuItemVerbosityLow.RadioCheck = true;
+			this.menuItemVerbosityLow.Text = "Low";
+			this.menuItemVerbosityLow.Click += new System.EventHandler(this.MenuItemVerbosityLowClick);
+			// 
+			// menuItemVerbosityMedium
+			// 
+			this.menuItemVerbosityMedium.Index = 2;
+			this.menuItemVerbosityMedium.RadioCheck = true;
+			this.menuItemVerbosityMedium.Text = "Medium";
+			this.menuItemVerbosityMedium.Click += new System.EventHandler(this.MenuItemVerbosityMediumClick);
 			// 
 			// menuItemVerbosityHigh
 			// 
@@ -687,53 +702,39 @@ namespace NxBRE.InferenceEngine.Console {
 			this.menuItemVerbosityHigh.Text = "High";
 			this.menuItemVerbosityHigh.Click += new System.EventHandler(this.MenuItemVerbosityHighClick);
 			// 
-			// menuItemWMIsolated
-			// 
-			this.menuItemWMIsolated.Index = 1;
-			this.menuItemWMIsolated.Shortcut = System.Windows.Forms.Shortcut.CtrlI;
-			this.menuItemWMIsolated.Text = "New Isolated";
-			this.menuItemWMIsolated.Click += new System.EventHandler(this.MenuItemWMIsolatedClick);
-			// 
 			// menuItemSystem
 			// 
 			this.menuItemSystem.Index = 3;
 			this.menuItemSystem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-						this.menuItemListAssemblies});
+									this.menuItemListAssemblies});
 			this.menuItemSystem.Text = "System";
 			// 
-			// menuItemStatus
+			// menuItemListAssemblies
 			// 
-			this.menuItemStatus.Index = 3;
-			this.menuItemStatus.Shortcut = System.Windows.Forms.Shortcut.CtrlD;
-			this.menuItemStatus.Text = "Dump status";
-			this.menuItemStatus.Click += new System.EventHandler(this.MenuItemStatusClick);
+			this.menuItemListAssemblies.Index = 0;
+			this.menuItemListAssemblies.Text = "List assemblies";
+			this.menuItemListAssemblies.Click += new System.EventHandler(this.MenuItemListAssembliesClick);
 			// 
-			// menuItemLoadFacts
+			// openFileDialog
 			// 
-			this.menuItemLoadFacts.Enabled = false;
-			this.menuItemLoadFacts.Index = 1;
-			this.menuItemLoadFacts.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftO;
-			this.menuItemLoadFacts.Text = "Facts";
-			this.menuItemLoadFacts.Click += new System.EventHandler(this.MenuItemLoadFactsClick);
+			this.openFileDialog.Filter = "RuleML files|*.ruleml|Visio files|*.vdx|Human Readable files|*.hrf";
 			// 
-			// menuItemConsoleClear
+			// saveFileDialog
 			// 
-			this.menuItemConsoleClear.Index = 0;
-			this.menuItemConsoleClear.Shortcut = System.Windows.Forms.Shortcut.F12;
-			this.menuItemConsoleClear.Text = "Clear";
-			this.menuItemConsoleClear.Click += new System.EventHandler(this.MenuItemConsoleClearClick);
+			this.saveFileDialog.Filter = "RuleML files|*.ruleml|Human Readable files|*.hrf";
 			// 
-			// menuItemRetract
+			// statusBar
 			// 
-			this.menuItemRetract.Index = 1;
-			this.menuItemRetract.Shortcut = System.Windows.Forms.Shortcut.CtrlR;
-			this.menuItemRetract.Text = "Retract";
-			this.menuItemRetract.Click += new System.EventHandler(this.MenuItemRetractClick);
+			this.statusBar.Location = new System.Drawing.Point(0, 542);
+			this.statusBar.Name = "statusBar";
+			this.statusBar.Size = new System.Drawing.Size(816, 19);
+			this.statusBar.TabIndex = 0;
+			this.statusBar.Text = "Loading...";
 			// 
 			// MainForm
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
-			this.ClientSize = new System.Drawing.Size(816, 504);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(816, 561);
 			this.Controls.Add(this.textBoxConsole);
 			this.Controls.Add(this.statusBar);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -742,7 +743,9 @@ namespace NxBRE.InferenceEngine.Console {
 			this.Text = "NxBRE - Inference Engine Console";
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.MainFormClosing);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 		}
+		private System.ComponentModel.IContainer components;
 		#endregion
 		void MenuItemExitClick(object sender, System.EventArgs e)
 		{
@@ -869,7 +872,7 @@ namespace NxBRE.InferenceEngine.Console {
 		{
 			menuItemShowModifications.Checked = !menuItemShowModifications .Checked;
 		}
-	
+
 	}
 	
 }
