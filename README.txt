@@ -20,6 +20,8 @@ v3.2.0
 
   * Added backward chaining behavior (feature request 1915027).
 
+  * Improved adapter load method to allow sharing (bug 2012966).
+
  Inference Engine
 
   * Added support for labeled fact atoms from the rule base (feature request 1798783).

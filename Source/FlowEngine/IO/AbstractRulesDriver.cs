@@ -51,7 +51,9 @@ namespace NxBRE.FlowEngine.IO {
 		}
 		
 		protected XmlReader GetXmlInputReader(string sourceURI, string xsdResourceName) {
-			return GetXmlInputReader(new XmlTextReader(sourceURI), xsdResourceName);
+			// manually open the file so that we can specify share permissions
+			Stream sourceStream = new FileStream(sourceURI, FileMode.Open, FileAccess.Read , FileShare.ReadWrite); 
+			return GetXmlInputReader(sourceStream, xsdResourceName);
 		}
 		
 		protected XmlReader GetXmlInputReader(Stream sourceStream, string xsdResourceName) {
