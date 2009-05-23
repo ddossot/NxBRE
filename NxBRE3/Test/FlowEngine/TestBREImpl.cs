@@ -5,6 +5,7 @@ namespace NxBRE.Test.FlowEngine
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Xml.Schema;
 
@@ -276,7 +277,7 @@ namespace NxBRE.Test.FlowEngine
 		}
 
 		[Test]
-		public void Primitives() {
+		public void PrimitiveAssertions() {
 			Assert.AreEqual((Byte) 8, GetObject("8b"), "Byte");
 			
 			Assert.AreEqual(new DateTime(2003, 12, 25), GetObject("xmas2003"), "Date");
@@ -302,6 +303,11 @@ namespace NxBRE.Test.FlowEngine
 			Assert.IsFalse((Boolean)GetObject("STORED_FALSE"), "Boolean(STORED_FALSE)");
 		
 			Assert.AreEqual(ASSERTED_HELLO_VALUE, GetObject("hello"), "String");
+		}
+		
+		[Test]
+		public void GenericTypeAssertions() {
+			Assert.IsInstanceOfType(typeof(Dictionary<string,string>), GetObject("dictionaryStringString"), "Dictionary");
 		}
 		
 		[Test]
