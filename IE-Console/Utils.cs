@@ -57,6 +57,7 @@ namespace NxBRE.InferenceEngine.Console {
 				}
 				rkNxBRE.SetValue("LastCCBClassName", up.lastBinderClassName);
 				rkNxBRE.SetValue("LastHRFFact", up.lastHRFFact);
+                rkNxBRE.SetValue("LastHRFQuery", up.lastHRFQuery);
 			} catch(Exception) { // it is not a required feature, so if it does, let it pass away!
 			}
 		}
@@ -71,6 +72,7 @@ namespace NxBRE.InferenceEngine.Console {
 				if (rkNxBRE != null) {
 					up.lastBinderClassName = (string)rkNxBRE.GetValue("LastCCBClassName", String.Empty);
 					up.lastHRFFact = (string)rkNxBRE.GetValue("LastHRFFact", String.Empty);
+                    up.lastHRFQuery = (string)rkNxBRE.GetValue("LastHRFQuery", String.Empty);
 				}
 			} catch(Exception) { // it is not a required feature, so if it does, let it pass away!
 			}

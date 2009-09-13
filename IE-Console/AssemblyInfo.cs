@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 [assembly:AssemblyConfiguration("")]
 [assembly:AssemblyCompany("AgilePartner S.A.")]
 [assembly:AssemblyProduct("NxBRE Inference Engine Console")]
-[assembly:AssemblyCopyright("Copyright (C) 2003-2007 David Dossot et al.")]
+[assembly:AssemblyCopyright("Copyright (C) 2003-2009 David Dossot et al.")]
 [assembly:AssemblyTrademark("NxBRE is distributed under the GNU LESSER GENERAL PUBLIC LICENSE.")]
 [assembly:AssemblyCulture("")]
 [assembly:AssemblyVersion("1.3.2.*")]
