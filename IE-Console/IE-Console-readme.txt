@@ -1,4 +1,4 @@
-NxBRE Inference Engine Console README v1.3.1
+NxBRE Inference Engine Console README v1.3.2
 ============================================
 
 Author       : David Dossot (david@dossot.net)
@@ -23,6 +23,8 @@ Any contribution to this sub-project is welcome!
 v.1.3.2
 
   * Prompt user for strictness when loading a Visio rulebase (feature request 1812990).
+
+  * Support custom queries in HRF format (contributed by Martin Wickett).
 
 v.1.3.1
 

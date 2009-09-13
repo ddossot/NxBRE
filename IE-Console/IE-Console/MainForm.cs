@@ -32,6 +32,7 @@ namespace NxBRE.InferenceEngine.Console {
 		private System.Windows.Forms.MenuItem menuItemWMIsolated;
 		private System.Windows.Forms.MenuItem menuItemVerbosityHigh;
 		private System.Windows.Forms.MenuItem menuItemRunQuery;
+        private System.Windows.Forms.MenuItem menuItemRunCustomQuery;
 		private System.Windows.Forms.MenuItem menuItemVerbosity;
 		private System.Windows.Forms.MenuItem menuItemShowModifications;
 		private System.Windows.Forms.MenuItem menuItemFactsTools;
@@ -65,7 +66,7 @@ namespace NxBRE.InferenceEngine.Console {
 		
 		private enum ActionType {Exit, LoadRuleBase, ClearConsole, DumpStatus, VerbositySilent,
 														 VerbosityLow, VerbosityMedium, VerbosityHigh, LoadFacts, Process,
-														 RunQuery, DumpFacts, WMGlobal, WMIsolated, WMIsolatedEmpty, WMCommit,
+														 RunQuery, RunCustomQuery, DumpFacts, WMGlobal, WMIsolated, WMIsolatedEmpty, WMCommit,
 														 ListAssemblies, SaveRuleBase, SaveFacts, AssertFact, RetractFact};
 		
 		private IEGUIFacade iegf;
@@ -217,6 +218,25 @@ namespace NxBRE.InferenceEngine.Console {
 					}
 					else Status(String.Empty);
 					break;
+
+                case ActionType.RunCustomQuery:
+                    try
+                    {
+                        string queryResult = iegf.PromptQueryOperation(this);
+
+                        if (queryResult != String.Empty)
+                        {
+                            ConsoleOut(queryResult);
+                            ConsoleOut(String.Empty);
+                            Status("Custom Query executed");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        ConsoleOut(e.Message);
+                        ConsoleOut(String.Empty);
+                    }
+                    break;
 				
 				case ActionType.WMGlobal:
 					iegf.WMType = WorkingMemoryTypes.Global;
@@ -333,11 +353,13 @@ namespace NxBRE.InferenceEngine.Console {
 			menuItemProcess.Enabled = iegf.HasImplications;
 			menuItemAssert.Enabled = iegf.HasImplications;
 			menuItemRunQuery.Enabled = iegf.HasQueries;
+            menuItemRunCustomQuery.Enabled = iegf.HasFacts;
 			menuItemStatus.Enabled = iegf.Valid;
 			menuItemFacts.Enabled = iegf.HasFacts;
 			menuItemRetract.Enabled = iegf.HasFacts;
 			menuItemEngine.Enabled = menuItemProcess.Enabled |
 															 menuItemRunQuery.Enabled |
+                                                             menuItemRunCustomQuery.Enabled |
 															 menuItemStatus.Enabled |
 															 menuItemFacts.Enabled;
 			
@@ -421,6 +443,7 @@ namespace NxBRE.InferenceEngine.Console {
 			this.menuItemWMCommit = new System.Windows.Forms.MenuItem();
 			this.menuItemProcess = new System.Windows.Forms.MenuItem();
 			this.menuItemRunQuery = new System.Windows.Forms.MenuItem();
+            this.menuItemRunCustomQuery = new System.Windows.Forms.MenuItem();
 			this.menuItemStatus = new System.Windows.Forms.MenuItem();
 			this.menuItemFactsTools = new System.Windows.Forms.MenuItem();
 			this.menuItemAssert = new System.Windows.Forms.MenuItem();
@@ -540,6 +563,7 @@ namespace NxBRE.InferenceEngine.Console {
 									this.menuItemWM,
 									this.menuItemProcess,
 									this.menuItemRunQuery,
+                                    this.menuItemRunCustomQuery,
 									this.menuItemStatus,
 									this.menuItemFactsTools});
 			this.menuItemEngine.Text = "Engine";
@@ -594,17 +618,24 @@ namespace NxBRE.InferenceEngine.Console {
 			this.menuItemRunQuery.Shortcut = System.Windows.Forms.Shortcut.F6;
 			this.menuItemRunQuery.Text = "Run query";
 			this.menuItemRunQuery.Click += new System.EventHandler(this.MenuItemRunQueryClick);
+            // 
+            // menuItemRunCustomQuery
+            // 
+            this.menuItemRunCustomQuery.Index = 3;
+            this.menuItemRunCustomQuery.Shortcut = System.Windows.Forms.Shortcut.F7;
+            this.menuItemRunCustomQuery.Text = "Run custom query";
+            this.menuItemRunCustomQuery.Click += new System.EventHandler(this.MenuItemRunCustomQueryClick);
 			// 
 			// menuItemStatus
 			// 
-			this.menuItemStatus.Index = 3;
+			this.menuItemStatus.Index = 4;
 			this.menuItemStatus.Shortcut = System.Windows.Forms.Shortcut.CtrlD;
 			this.menuItemStatus.Text = "Dump status";
 			this.menuItemStatus.Click += new System.EventHandler(this.MenuItemStatusClick);
 			// 
 			// menuItemFactsTools
 			// 
-			this.menuItemFactsTools.Index = 4;
+			this.menuItemFactsTools.Index = 5;
 			this.menuItemFactsTools.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 									this.menuItemAssert,
 									this.menuItemRetract,
@@ -817,6 +848,11 @@ namespace NxBRE.InferenceEngine.Console {
 		{
 			Action(ActionType.RunQuery);
 		}
+
+        void MenuItemRunCustomQueryClick(object sender, System.EventArgs e)
+        {
+            Action(ActionType.RunCustomQuery);
+        }
 		
 		void MenuItemWMGlobalClick(object sender, System.EventArgs e)
 		{

@@ -15,6 +15,7 @@ namespace NxBRE.InferenceEngine.Console {
 	public struct UserPreferences {
 		public string lastBinderClassName;
 		public string lastHRFFact;
+        public string lastHRFQuery;
 	}
 	
 	/// <summary>
@@ -128,6 +129,35 @@ namespace NxBRE.InferenceEngine.Console {
 			
 			return String.Empty;
 		}
+
+        public string PromptQueryOperation(MainForm mf)
+        {
+                up.lastHRFQuery = mf.PromptForString("Custom Query",
+	                                        "Enter a query in Human Readable Format (ASCII):",
+	                                     	  up.lastHRFQuery);
+
+                if (up.lastHRFQuery != string.Empty)
+                {
+                    if (!up.lastHRFQuery.EndsWith(";")) up.lastHRFQuery += ";";
+
+                    using (HRF086Adapter hrfa =
+                        new HRF086Adapter(new MemoryStream(
+                                                Encoding.ASCII.GetBytes("#DIRECTION_FORWARD\n\r[custom query]\n\r" + up.lastHRFQuery)),
+                                                FileAccess.Read))
+                    {
+                        if (hrfa.Queries.Count == 1)
+                        {
+                            return getResultsAsString(ie.RunQuery(hrfa.Queries[0]));
+                        }
+                        else
+                        {
+                            throw new ApplicationException("custom query text must contain exactly one query");
+                        }
+                    }
+                }
+                
+            return string.Empty;
+        }
 		
 		public void LoadRuleBase(MainForm mf, string uri, bool onlyFacts) {
 			IBinder binder = null;
@@ -235,16 +265,21 @@ namespace NxBRE.InferenceEngine.Console {
 		}
 		
 		public string RunQuery(int queryIndex) {
-			IList<IList<Fact>> qrs = ie.RunQuery(queryIndex);
-			string result = "Query results:|";
-			int i = 0;
-			foreach(IList<Fact> facts in qrs) {
-				i++;
-				result += (" #" + i + ":|");
-				foreach(Fact fact in facts) result += ("  " + fact.ToString() + "|");
-			}
-			return result;
+            return getResultsAsString(ie.RunQuery(queryIndex));
 		}
+
+        private string getResultsAsString(IList<IList<Fact>> qrs)
+        {
+            string result = "Query results:|";
+            int i = 0;
+            foreach (IList<Fact> facts in qrs)
+            {
+                i++;
+                result += (" #" + i + ":|");
+                foreach (Fact fact in facts) result += ("  " + fact.ToString() + "|");
+            }
+            return result;
+        }
 	}
 	
 }
