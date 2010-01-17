@@ -41,13 +41,25 @@ namespace NxBRE.FlowEngine.Rules
 			}
 			else
 			{
+				string type = (string)aMap[TYPE];
+				
 				if (!aMap.Contains(VALUE))
 				{
 					ObjectLookup ol = new ObjectLookup();
 					object[] arguments = ol.GetArguments(aMap);
-					return Reflection.ClassNew((string)aMap[TYPE], arguments);
+					return CreateValue(type, arguments);
 				}
-				return Reflection.CastValue(aMap[VALUE], (string)aMap[TYPE]);
+				
+				return Reflection.CastValue(aMap[VALUE], type);
+			}
+		}
+		
+		private object CreateValue(string type, object[] arguments) {
+			if (type == "System.String" && arguments.Length == 0) {
+				// special case for bug 2933080
+				return String.Empty;
+			} else {
+				return Reflection.ClassNew(type, arguments);
 			}
 		}
 		

@@ -693,6 +693,30 @@
 			</Else>
 		</Logic>
 		<!--
+			Tests	: Asserting empty strings is possible
+			Notes	: Covers bug 2933080
+			Result	: Should be TRUE
+		-->
+		<ObjectLookup id="EMPTY_STRING" member="Empty" type="System.String"/>
+		<Logic>
+			<If>
+				<And>
+					<Equals leftId="EMPTY_STRING" rightId="EMPTY_STRING_FROM_ASSERT">
+						<Assert id="EMPTY_STRING_FROM_ASSERT" type="String" value=""/>
+				  </Equals>
+					<Equals leftId="EMPTY_STRING" rightId="EMPTY_STRING_FROM_STRING">
+						<String id="EMPTY_STRING_FROM_STRING" value=""/>
+				  </Equals>
+				</And>
+				<Do>
+					<True id="LT26"/>
+				</Do>
+			</If>
+			<Else>
+				<ThrowFatalException value="LT26"/>
+			</Else>
+		</Logic>
+		<!--
 			Tests	: Static rule set invocation
 			Result	: Should process all global rules and the ones in the set named REFLECTION
 			Notes	: None
