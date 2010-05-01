@@ -396,7 +396,7 @@ namespace NxBRE.Test.InferenceEngine {
 
 		[Test]
 		public void ChocolateBoxFEB() {
-      InitIE(new FlowEngineBinder(ruleFilesFolder + "chocolatebox.ruleml.xbre",
+      		InitIE(new FlowEngineBinder(ruleFilesFolder + "chocolatebox.ruleml.xbre",
 			                       			BindingTypes.BeforeAfter));
 			
 			PerformChocolateBoxTwiddling(new RuleML09NafDatalogAdapter(ruleFilesFolder + "chocolatebox.ruleml",
@@ -413,6 +413,22 @@ namespace NxBRE.Test.InferenceEngine {
 			Assert.AreEqual(2, modified, "Modified");
 			
 			Assert.AreEqual("Chocolate_Box_Weight{MyBox,2.5}", ie.GetFact("Total Weight").ToString(), "Total Weight OK");
+		}
+
+		[Test]
+		public void SecuritySandboxViolation() {
+			ie.LoadRuleBase(new RuleML091NafDatalogAdapter(ruleFilesFolder + "sandbox-violation.ruleml",
+			                                               FileAccess.Read),
+			                true);
+			
+			try {
+				ie.RunQuery("Security Sandbox Violation");
+				Assert.Fail("An exception should have been thrown!");
+			} catch(BREException e) {
+				Assert.IsInstanceOfType(typeof(System.Security.SecurityException),
+				                        e.InnerException,
+				                        "A SecurityException was expected");
+			}
 		}
 
 	}

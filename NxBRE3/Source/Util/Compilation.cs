@@ -38,12 +38,21 @@ namespace NxBRE.Util
 	public abstract class Compilation {
 		private static string nxbreAssemblyLocation = String.Empty;
 		private const string NXBRE_DLL = "NxBRE.dll";
+		private const string SECURITY_RESTRICTION = "[System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.PermitOnly)]";
 		
 		private static ReferenceLinkModes referenceLinkMode = (ReferenceLinkModes) Parameter.GetEnum("referenceLinkMode", typeof(ReferenceLinkModes), ReferenceLinkModes.Full);
 		
 		private static bool generateInMemoryAssembly = Parameter.Get<bool>("generateInMemoryAssembly", true);
 		
 		private static string compilerOptions = Parameter.Get<string>("compilerOptions", "");
+		
+		private static bool securitySandbox = Parameter.Get<bool>("securitySandbox", false);
+		
+		private static string SecurityAttribute {
+			get {
+				return securitySandbox ? SECURITY_RESTRICTION : String.Empty;
+			}
+		}
 		
 		private Compilation() {}
 		
@@ -118,14 +127,23 @@ namespace NxBRE.Util
 		/// <param name="expression">The C# expression to evaluate.</param>
 		/// <returns>An object produced by the expression.</returns>
 		public static object Evaluate(string expression) {
-			string code = "class Evaluator:NxBRE.Util.IEvaluator { public object Run() {return ("
+			return NewEvaluator(expression).Run();
+		}
+
+		/// <summary>
+		/// Instantiates a new evaluator that takes no argument.
+		/// </summary>
+		/// <param name="expression">The C# expression to compile.</param>
+		/// <returns>The compiled evaluator.</returns>
+		public static IEvaluator NewEvaluator(string expression) {
+			string code = "class Evaluator:NxBRE.Util.IEvaluator { " + SecurityAttribute + " public object Run() {return ("
 										+ PrepareExpression(expression)
 										+ ");}}";
 			
-			return ((IEvaluator)LoadCSClass("Evaluator", code, true)).Run();
-			
+			return (IEvaluator) LoadCSClass("Evaluator", code, true);
 		}
 
+		
 		/// <summary>
 		/// Performs an immediate evaluation of an expression that takes lists for parameter names and values.
 		/// </summary>
@@ -150,7 +168,7 @@ namespace NxBRE.Util
 		/// <param name="values">The list of values.</param>
 		/// <returns>The compiled evaluator.</returns>
 		public static IListEvaluator NewEvaluator(string expression, string placeHolderRegexpPattern, IList variableNames, IList values) {
-			string code = "class Evaluator:NxBRE.Util.IListEvaluator { public object Run(System.Collections.IList values) {return ("
+			string code = "class Evaluator:NxBRE.Util.IListEvaluator { " + SecurityAttribute + " public object Run(System.Collections.IList values) {return ("
 										+ Regex.Replace(PrepareExpression(expression), placeHolderRegexpPattern, new MatchEvaluator(new ListVariableReplacer(variableNames, values).ReplaceListVariable))
 										+ ");}}";
 			
@@ -206,7 +224,7 @@ namespace NxBRE.Util
 		/// <param name="arguments">The key/value pairs of arguments.</param>
 		/// <returns>The compiled evaluator.</returns>
 		public static IDictionaryEvaluator NewEvaluator(string expression, string placeHolderRegexpPattern, string numericArgumentPattern, IDictionary arguments) {
-			string code = "class Evaluator:NxBRE.Util.IDictionaryEvaluator { public object Run(System.Collections.IDictionary values) {return ("
+			string code = "class Evaluator:NxBRE.Util.IDictionaryEvaluator { " + SecurityAttribute + " public object Run(System.Collections.IDictionary values) {return ("
 				+ Regex.Replace(PrepareExpression(expression), placeHolderRegexpPattern, new MatchEvaluator(new DictionaryVariableReplacer(arguments, numericArgumentPattern).ReplaceDictionaryVariable))
 										+ ");}}";
 			

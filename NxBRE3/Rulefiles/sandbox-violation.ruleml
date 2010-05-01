@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<RuleML xmlns="http://www.ruleml.org/0.91/xsd" xsi:schemaLocation="http://www.ruleml.org/0.91/xsd ruleml-0_91-nafdatalog.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<oid>
+		<Ind>NxBRE RuleML 0.91 NafDatalog Security Sandbox Violation Test File</Ind>
+	</oid>
+	<Query>
+		<oid>
+			<Ind>Security Sandbox Violation</Ind>
+		</oid>
+		<And>
+			<Atom>
+				<op>
+					<Rel>File</Rel>
+				</op>
+				<Var>FileName</Var>
+			</Atom>
+			<Atom>
+				<op>
+					<Rel uri="nxbre://expression">System.IO.File.ReadAllBytes({var:FileName})</Rel>
+				</op>
+				<Var>FileName</Var>
+			</Atom>
+		</And>
+	</Query>
+	<Assert>
+		<Atom>
+			<op>
+				<Rel>File</Rel>
+			</op>
+			<Data xsi:type="xs:string">C:\\WINDOWS\\notepad.exe</Data>
+		</Atom>
+	</Assert>
+</RuleML>
