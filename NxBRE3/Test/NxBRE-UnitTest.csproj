@@ -53,6 +53,7 @@
     <Compile Include="InferenceEngine\TestEngineRuleML09MultiSyntax.cs" />
     <Compile Include="InferenceEngine\TestEventContext.cs" />
     <Compile Include="InferenceEngine\TestFileRegistry.cs" />
+    <Compile Include="InferenceEngine\TestQueryResultsExporter.cs" />
     <Compile Include="InferenceEngine\TestTypedFacts.cs" />
     <Compile Include="TestCompilation.cs" />
     <Compile Include="TestDataSet.cs" />
