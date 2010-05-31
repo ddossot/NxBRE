@@ -18,10 +18,10 @@
 		
 		public static void ExportResults(IList<IList<Fact>> results, IFactBaseAdapter factBaseAdapter, string factBaseLabel) {
 			if (factBaseAdapter == null) {
-				throw new ApplicationException("A non-null fact base adapter must be provided");
+				throw new ArgumentNullException("A non-null fact base adapter must be provided");
 			}
 			if (factBaseLabel == null) {
-				throw new ApplicationException("A non-null fact base label must be provided");
+				throw new ArgumentNullException("A non-null fact base label must be provided");
 			}
 			
 			List<Fact> flattenedResults = new List<Fact>();
