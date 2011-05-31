@@ -766,9 +766,8 @@ namespace NxBRE.InferenceEngine {
 		public IList<IList<Fact>> RunQuery(Query query) {
 			CheckInitialized();
 			if (query == null) {
-				throw new BREException("Query is null or not found.");
+				throw new BREException("Query is null!");
 			}
-			
 			return WM.FB.RunQuery(query);
 		}
 		
@@ -788,7 +787,11 @@ namespace NxBRE.InferenceEngine {
 		/// <param name="queryLabel">The label of the Query to run.</param>
 		/// <returns>An <code>IList&lt;IList&lt;Fact>></code> containing the results found.</returns>
 		public IList<IList<Fact>> RunQuery(string queryLabel) {
-			return RunQuery(QB.Get(queryLabel));
+			Query query = QB.Get(queryLabel);
+			if (query == null) {
+				throw new BREException("No query found for label: " + queryLabel);
+			}
+			return RunQuery(query);
 		}
 		
 		/// <summary>
@@ -1112,6 +1115,11 @@ namespace NxBRE.InferenceEngine {
 						}
 				  }
 				}
+			}
+			else if (implication.Action == ImplicationAction.None)
+			{
+				if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "No Action Implication '" + implication.Label + "' matched: " + processResults.Count);
+				implicationResultsCount = processResults.Count;
 			}
 			else {
 				throw new BREException("Implication action not supported: " + implication.Action);

@@ -1,5 +1,11 @@
-NxBRE README v3.2.0
-===================
+
+ _______         _______________________________
+ \      \ ___  __\______   \______   \_   _____/
+ /   |   \\  \/  /|    |  _/|       _/|    __)_ 
+/    |    \>    < |    |   \|    |   \|        \
+\____|__  /__/\_ \|______  /|____|_  /_______  /
+        \/      \/       \/        \/        \/ 
+
 
 URL          : http://nxbre.org
 EMail        : contact@nxbre.org
@@ -7,6 +13,13 @@ License      : LGPL
 
 
 ## RELEASE NOTES ##
+
+v3.3.0
+
+ Inference Engine
+
+  * Added support for 'none' action Implication (feature request 3305959).
+
 
 v3.2.0
 

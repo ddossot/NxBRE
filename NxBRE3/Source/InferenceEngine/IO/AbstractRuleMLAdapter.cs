@@ -413,6 +413,9 @@ namespace NxBRE.InferenceEngine.IO {
 					case "modify":
 						action = ImplicationAction.Modify;
 						break;
+					case "none":
+						action = ImplicationAction.None;
+						break;
 					default:
 						throw new BREException("An Implication can not perform the action: " + ip.action);
 				}

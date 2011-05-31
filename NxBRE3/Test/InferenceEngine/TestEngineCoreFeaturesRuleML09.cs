@@ -124,12 +124,12 @@ namespace NxBRE.Test.InferenceEngine {
 			ParseResult();
 			Assert.IsFalse(wrongDeduction, "One Atom Var-less Deductions OK");
 			
-			deductionsToCheck = new string[] {"varless.value{A}", "varless.value{F}",
-																				"varless.value{A}", "varless.value{E}",
-																				"varless.value{E}", "varless.value{F}",
-																				"varless.value{E}", "varless.value{E}",
-																				"varless.value{F}", "varless.value{F}",
-																				"varless.value{F}", "varless.value{E}"};
+			deductionsToCheck = new string[] {	"varless.value{A}", "varless.value{F}",
+												"varless.value{A}", "varless.value{E}",
+												"varless.value{E}", "varless.value{F}",
+												"varless.value{E}", "varless.value{E}",
+												"varless.value{F}", "varless.value{F}",
+												"varless.value{F}", "varless.value{E}"};
 			qrs = ie.RunQuery("Two Atoms Var-less");
 			Assert.AreEqual(6, qrs.Count, "Two Atoms Var-less: Count");
 			ParseResult();
@@ -159,7 +159,6 @@ namespace NxBRE.Test.InferenceEngine {
 
 			ie.NewFactHandler -= honf;
 		}
-			
 	
 		[Test]
 		public void ImplicationLogicalSupport() {
@@ -170,23 +169,23 @@ namespace NxBRE.Test.InferenceEngine {
 			Assert.AreEqual(0, deducted, "(1) Deducted");
 			
 			deductionsToCheck = new string[] {"testAandB{probe}", "testBorC{probe}", "testBorC{other}"};
-	  	NewFactEvent henf = new NewFactEvent(HandleExpectedNewFact);
-	  	ie.NewFactHandler += henf;
+	  		NewFactEvent henf = new NewFactEvent(HandleExpectedNewFact);
+	  		ie.NewFactHandler += henf;
 			ie.Assert(new Fact("flag", new Individual("probe"), new Individual("andTestB")));
 			ie.Assert(new Fact("flag", new Individual("other"), new Individual("andTestC")));
 			Process();
 			Assert.AreEqual(3, deducted, "(2) Deducted");
 			Assert.IsFalse(wrongDeduction, "(2) Wrong deduction");
 
-	  	ie.NewFactHandler -= henf;
-	  	deductionsToCheck = null;
+	  		ie.NewFactHandler -= henf;
+	  		deductionsToCheck = null;
 		}
 		
 		[Test]
 		public void PrioritySupport() {
 			deductionsToCheck = new string[]{"higherImpl{probe}", "mediumImpl{probe}", "lowerImpl{probe}"};
-	  	NewFactEvent honf = new NewFactEvent(HandleOrderedNewFact);
-	  	ie.NewFactHandler += honf;
+	  		NewFactEvent honf = new NewFactEvent(HandleOrderedNewFact);
+	  		ie.NewFactHandler += honf;
 			
 			ie.LoadRuleBase(NewTestAdapter());
 			ie.Assert(new Fact("flag", new Individual("probe"), new Individual("testPriority")));
@@ -279,26 +278,26 @@ namespace NxBRE.Test.InferenceEngine {
 			// Account ID 1234 should not be valid
 			Account a1234 = new Account(1234, 25);
 			ie.Assert(new Fact("balance",
-			                   new Individual(a1234),
-			                   new Individual("actualValue"),
-			                   new Individual(a1234.Balance)));
+							   new Individual(a1234),
+							   new Individual("actualValue"),
+							   new Individual(a1234.Balance)));
 			
 			ie.Assert(new Fact("balance",
-			                   new Individual(a1234),
-			                   new Individual("expectedValue"),
-			                   new Individual(50)));
+							   new Individual(a1234),
+							   new Individual("expectedValue"),
+							   new Individual(50)));
 			
 			// Account ID 9876 should be valid
 			Account a9876 = new Account(9876, 50);
 			ie.Assert(new Fact("balance",
-			                   new Individual(a9876),
-			                   new Individual("actualValue"),
-			                   new Individual(a9876.Balance)));
+							   new Individual(a9876),
+							   new Individual("actualValue"),
+							   new Individual(a9876.Balance)));
 			
 			ie.Assert(new Fact("balance",
-			                   new Individual(a9876),
-			                   new Individual("expectedValue"),
-			                   new Individual(50)));
+							   new Individual(a9876),
+							   new Individual("expectedValue"),
+							   new Individual(50)));
 			
 			deductionsToCheck = new string[] {"isValid{ACCNT#9876 $50}", "isTwentyFive{ACCNT#1234 $25}"};
 	  	NewFactEvent henf = new NewFactEvent(HandleExpectedNewFact);
@@ -312,7 +311,7 @@ namespace NxBRE.Test.InferenceEngine {
 			Assert.AreEqual(2, deducted, "Deducted");
 			
 			qrs = ie.RunQuery(new Query(new AtomGroup(AtomGroup.LogicalOperator.And,
-			                                          new Atom("isValid", new Variable("account")))));
+													  new Atom("isValid", new Variable("account")))));
 			Assert.AreEqual(1, qrs.Count, "Query Size");
 			if (qrs.Count > 0) Assert.AreEqual(a9876, qrs[0][0].Members[0].Value, "Correct Result");
 		}
@@ -327,18 +326,18 @@ namespace NxBRE.Test.InferenceEngine {
 			
 			Account a50 = new Account(123, 50);
 			ie.Assert(new Fact("probe",
-			                   new Individual(a50),
-			                   new Individual(a50.Balance)));
+							   new Individual(a50),
+							   new Individual(a50.Balance)));
 
 			Account a100 = new Account(456, 100);
 			ie.Assert(new Fact("probe",
-			                   new Individual(a100),
-			                   new Individual(a100.Balance)));
+							   new Individual(a100),
+							   new Individual(a100.Balance)));
 
 			Account a200 = new Account(789, 200);
 			ie.Assert(new Fact("probe",
-			                   new Individual(a200),
-			                   new Individual(a200.Balance)));
+							   new Individual(a200),
+							   new Individual(a200.Balance)));
 			
 			qrs = ie.RunQuery("Operator e");
 			Assert.AreEqual(1, qrs.Count, "Operator e: Query Size");
@@ -366,12 +365,12 @@ namespace NxBRE.Test.InferenceEngine {
 			
 			if (supportRegex) {
 				ie.Assert(new Fact("matchesProbe",
-				                   new Individual("ok"),
-				                   new Individual("19.99")));
+								   new Individual("ok"),
+								   new Individual("19.99")));
 				
 				ie.Assert(new Fact("matchesProbe",
-				                   new Individual("ko"),
-				                   new Individual("100 USD")));
+								   new Individual("ko"),
+								   new Individual("100 USD")));
 	
 				qrs = ie.RunQuery("Operator matches");
 				Assert.AreEqual(1, qrs.Count, "Operator matches: Query Size");
@@ -384,27 +383,27 @@ namespace NxBRE.Test.InferenceEngine {
 			
 			Account a50 = new Account(123, 50);
 			ie.Assert(new Fact("id",
-			                   new Individual(a50),
-			                   new Individual(a50.Id)));
+							   new Individual(a50),
+							   new Individual(a50.Id)));
 			ie.Assert(new Fact("balance",
-			                   new Individual(a50),
-			                   new Individual(a50.Balance)));
+							   new Individual(a50),
+							   new Individual(a50.Balance)));
 
 			Account a100 = new Account(456, 100);
 			ie.Assert(new Fact("id",
-			                   new Individual(a100),
-			                   new Individual(a100.Id)));
+							   new Individual(a100),
+							   new Individual(a100.Id)));
 			ie.Assert(new Fact("balance",
-			                   new Individual(a100),
-			                   new Individual(a100.Balance)));
+							   new Individual(a100),
+							   new Individual(a100.Balance)));
 
 			Account a200 = new Account(789, 200);
 			ie.Assert(new Fact("id",
-			                   new Individual(a200),
-			                   new Individual(a200.Id)));
+							   new Individual(a200),
+							   new Individual(a200.Id)));
 			ie.Assert(new Fact("balance",
-			                   new Individual(a200),
-			                   new Individual(a200.Balance)));
+							   new Individual(a200),
+							   new Individual(a200.Balance)));
 			
 			deductionsToCheck = new string[] {"testAandForGorAandG{ACCNT#789 $200}",
 																				"testCorBandA{ACCNT#456 $100}", "testCorBandA{ACCNT#123 $50}",
@@ -498,6 +497,25 @@ namespace NxBRE.Test.InferenceEngine {
 			Fact factHondaLuxury = new Fact("luxury", new Individual("Honda"));
 			Assert.IsTrue(ie.FactExists(factHondaRegular), "Existing fact");
 			Assert.IsFalse(ie.FactExists(factHondaLuxury), "Non-existing fact");
+		}
+		
+		[Test]
+		public void NoActionImplication() {
+			ie.LoadRuleBase(NewTestAdapter());
+			
+			Fact triggerFact = new Fact("noopTrigger", new Individual("foo"));
+			ie.Assert(triggerFact);
+			Assert.IsTrue(ie.FactExists(triggerFact), "noopTrigger asserted");
+			Fact doNotAssertFact = new Fact("doNotAssert", new Individual("bar"));
+			Assert.IsFalse(ie.FactExists(doNotAssertFact), "doNotAssert is not in fact base");
+			Fact shouldAssertFact = new Fact("noopPreconditioned", new Individual("OK"));
+			Assert.IsFalse(ie.FactExists(shouldAssertFact), "shouldAssertFact is not in fact base");
+			
+			// this process should not assert a "doNotAssert" fact
+			Process();
+
+			Assert.IsFalse(ie.FactExists(doNotAssertFact), "doNotAssert is still not in fact base");
+			Assert.IsTrue(ie.FactExists(shouldAssertFact), "shouldAssertFact is in fact base");
 		}
 		
 		[Test]
@@ -678,14 +696,14 @@ namespace NxBRE.Test.InferenceEngine {
 
 			DateTime doy = DateTime.Now.AddDays(-1d);
 			Assert.IsTrue(ie.Assert(new Fact("Contract Details",
-			                                 new Individual("CoY"),
-			                                 new Individual(doy))),
-			              "Asserted 'CoY' Contract Details");
+											 new Individual("CoY"),
+											 new Individual(doy))),
+						  "Asserted 'CoY' Contract Details");
 
 			Assert.IsTrue(ie.Assert(new Fact("Contract Details",
-			                                 new Individual("CoT"),
-			                                 new Individual(DateTime.Now.AddDays(1d)))),
-			              "Asserted 'CoT' Contract Details");
+											 new Individual("CoT"),
+											 new Individual(DateTime.Now.AddDays(1d)))),
+						  "Asserted 'CoT' Contract Details");
 			
 			deductionsToCheck = new string[] {"Contract Details{CoY," + doy.ToString() + "}"};
 			qrs = ie.RunQuery("Expression in Atom Relation");
@@ -699,12 +717,12 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.LoadRuleBase(NewTestAdapter());
 			
 			Assert.IsTrue(ie.Assert(new Fact("talking",
-			                                 new Individual("The Duke"),
-			                                 new Individual("hello world"))), "Asserted The Duke Details");
+											 new Individual("The Duke"),
+											 new Individual("hello world"))), "Asserted The Duke Details");
 			
 			Assert.IsTrue(ie.Assert(new Fact("talking",
-			                                 new Individual("Bobby Bob"),
-			                                 new Individual("what the?"))), "Asserted Bobby Bob Details");
+											 new Individual("Bobby Bob"),
+											 new Individual("what the?"))), "Asserted Bobby Bob Details");
 			
 			deductionsToCheck = new string[] {"talking{The Duke,hello world}"};
 			qrs = ie.RunQuery("Expression in Individual Evaluation");
@@ -718,8 +736,8 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.LoadRuleBase(NewTestAdapter());
 			
 			Assert.IsTrue(ie.Assert(new Fact("modifyTrigger",
-			                                 new Individual("foo"),
-			                                 new Individual("bar"))), "Asserted trigger fact");
+											 new Individual("foo"),
+											 new Individual("bar"))), "Asserted trigger fact");
 			
 	  	ie.NewWorkingMemory(WorkingMemoryTypes.Isolated);
 			Process();
@@ -731,8 +749,8 @@ namespace NxBRE.Test.InferenceEngine {
 	  	ie.NewWorkingMemory(WorkingMemoryTypes.Isolated);
 	  	
 			Fact toModify = new Fact("modifyTarget",
-                               new Individual("bar"),
-                               new Individual("before"));
+							   new Individual("bar"),
+							   new Individual("before"));
 			
 			Assert.IsFalse(ie.FactExists(toModify), "(2) Target fact not present");
 			Assert.IsTrue(ie.Assert(toModify), "(2) Asserted target fact");
@@ -750,9 +768,9 @@ namespace NxBRE.Test.InferenceEngine {
 	  	
 	  	string label = "label of modifyTarget";
 			toModify = new Fact(label,
-                          "modifyTarget",
-                          new Individual("bar"),
-                          new Individual("before"));
+						  "modifyTarget",
+						  new Individual("bar"),
+						  new Individual("before"));
 			
 			Assert.IsFalse(ie.FactExists(toModify), "(3) Target fact not present");
 			Assert.IsFalse(ie.FactExists(label), "(3) Target fact label not present");
@@ -778,8 +796,8 @@ namespace NxBRE.Test.InferenceEngine {
 			int result = a+5*b;
 			
 			Assert.IsTrue(ie.Assert(new Fact("expressionAssertionTrigger",
-			                                 new Individual(a),
-			                                 new Individual(b))), "Asserted trigger fact");
+											 new Individual(a),
+											 new Individual(b))), "Asserted trigger fact");
 			
 			
 			deductionsToCheck = new string[] {"expressionAssertionResults{" + result + ",done}"};
@@ -793,7 +811,7 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.NewFactHandler -= henf;
 
 			qrs = ie.RunQuery(new Query(new AtomGroup(AtomGroup.LogicalOperator.And,
-			                                          new Atom("expressionAssertionResults", new Variable("result"), new Individual("done")))));
+													  new Atom("expressionAssertionResults", new Variable("result"), new Individual("done")))));
 			Assert.AreEqual(1, qrs.Count, "Query Size");
 			if (qrs.Count > 0) Assert.AreEqual(result, qrs[0][0].Members[0].Value, "Correct Typed Result");
 		}
@@ -814,9 +832,9 @@ namespace NxBRE.Test.InferenceEngine {
 			}
 			
 			Assert.IsTrue(ie.Assert(new Fact("Contract Details",
-			                                 new Individual(referenceA),
-			                                 new Individual(subscriptionDateA),
-			                                 new Individual(periodInMonthsA))), "Asserted 'A' Contract Details");
+											 new Individual(referenceA),
+											 new Individual(subscriptionDateA),
+											 new Individual(periodInMonthsA))), "Asserted 'A' Contract Details");
 	  	
 			String referenceB = "B9876";
 			DateTime subscriptionDateB = DateTime.Parse("1948/03/12");
@@ -828,9 +846,9 @@ namespace NxBRE.Test.InferenceEngine {
 			}
 			
 			Assert.IsTrue(ie.Assert(new Fact("Contract Details",
-			                                 new Individual(referenceB),
-			                                 new Individual(subscriptionDateB),
-			                                 new Individual(periodInMonthsB))), "Asserted 'B' Contract Details");
+											 new Individual(referenceB),
+											 new Individual(subscriptionDateB),
+											 new Individual(periodInMonthsB))), "Asserted 'B' Contract Details");
 	  	
 			Process();
 			Assert.AreEqual(0, deducted, "Deducted");
@@ -838,13 +856,13 @@ namespace NxBRE.Test.InferenceEngine {
 			Assert.AreEqual(expectedModifiedCount, modified, "Modified");
 			
 			qrs = ie.RunQuery(new Query(new AtomGroup(AtomGroup.LogicalOperator.And,
-			                                          new Atom("Contract Details", new Individual(referenceA), new Variable("Next Renewal Date"), new Variable("Period Months")))));
+													  new Atom("Contract Details", new Individual(referenceA), new Variable("Next Renewal Date"), new Variable("Period Months")))));
 			Assert.AreEqual(1, qrs.Count, "Query 'A' Size");
 			if (qrs.Count > 0)
 				Assert.AreEqual(nextRenewalDateA, qrs[0][0].Members[1].Value, "Correct Typed 'A' Result");
 			
 			qrs = ie.RunQuery(new Query(new AtomGroup(AtomGroup.LogicalOperator.And,
-			                                          new Atom("Contract Details", new Individual(referenceA), new Variable("Next Renewal Date"), new Variable("Period Months")))));
+													  new Atom("Contract Details", new Individual(referenceA), new Variable("Next Renewal Date"), new Variable("Period Months")))));
 			Assert.AreEqual(1, qrs.Count, "Query 'B' Size");
 			if (qrs.Count > 0)
 				Assert.AreEqual(nextRenewalDateA, qrs[0][0].Members[1].Value, "Correct Typed 'B' Result");
@@ -856,17 +874,17 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.LoadRuleBase(NewTestAdapter());
 		
 			Assert.IsTrue(ie.Assert(new Fact("ClientNum",
-			                                 new Individual("D16.0"),
-			                                 new Individual("1"),
-			                                 new Individual(366))), "Asserted ClientNum '1'");
+											 new Individual("D16.0"),
+											 new Individual("1"),
+											 new Individual(366))), "Asserted ClientNum '1'");
 		
 			Assert.IsTrue(ie.Assert(new Fact("ClientNum",
-			                                 new Individual("D16.0"),
-			                                 new Individual("2"),
-			                                 new Individual(10000))), "Asserted ClientNum '2'");
+											 new Individual("D16.0"),
+											 new Individual("2"),
+											 new Individual(10000))), "Asserted ClientNum '2'");
 	  	
 			Assert.IsTrue(ie.Assert(new Fact("SumD16.0",
-			                                 new Individual(0))), "Asserted SumD16.0");
+											 new Individual(0))), "Asserted SumD16.0");
 	  	
 			Process();
 			
@@ -880,12 +898,12 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.LoadRuleBase(NewTestAdapter());
 			
 			Assert.IsTrue(ie.Assert(new Fact("talking",
-			                                 new Individual("The Duke"),
-			                                 new Individual("hello world"))), "Asserted The Duke Details");
+											 new Individual("The Duke"),
+											 new Individual("hello world"))), "Asserted The Duke Details");
 			
 			Assert.IsTrue(ie.Assert(new Fact("talking",
-			                                 new Individual("Bobby Bob"),
-			                                 new Individual("what the?"))), "Asserted Bobby Bob Details");
+											 new Individual("Bobby Bob"),
+											 new Individual("what the?"))), "Asserted Bobby Bob Details");
 			
 			deductionsToCheck = new string[] {"education{The Duke,polite}"};
 	  	NewFactEvent henf = new NewFactEvent(HandleExpectedNewFact);
@@ -904,18 +922,18 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.LoadRuleBase(NewTestAdapter());
 			
 			Assert.IsTrue(ie.Assert(new Fact("naf-probe",
-			                                 new Individual(123),
-			                                 new Individual("bar"))), "Asserted naf-probe");
+											 new Individual(123),
+											 new Individual("bar"))), "Asserted naf-probe");
 			
 			Assert.IsTrue(ie.Assert(new Fact("naf-switch",
-			                                 new Individual(123),
-			                                 new Individual("pivot"),
-			                                 new Individual("baz"))), "Asserted first naf-switch");
+											 new Individual(123),
+											 new Individual("pivot"),
+											 new Individual("baz"))), "Asserted first naf-switch");
 			
 			Fact switchToKill = new Fact("naf-switch",
-	                                 new Individual(123),
-	                                 new Individual("pivot"),
-	                                 new Individual("foo"));
+									 new Individual(123),
+									 new Individual("pivot"),
+									 new Individual("foo"));
 			
 			Assert.IsTrue(ie.Assert(switchToKill), "Asserted second naf-switch");
 			
@@ -936,12 +954,12 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.LoadRuleBase(NewTestAdapter());
 			
 			Assert.IsTrue(ie.Assert(new Fact("dog",
-			                                 new Individual("foo"),
-			                                 new Individual("Black"))), "Asserted dog");
+											 new Individual("foo"),
+											 new Individual("Black"))), "Asserted dog");
 			
 			Assert.IsTrue(ie.Assert(new Fact("cat",
-			                                 new Individual("foo"),
-			                                 new Individual("Brown"))), "Asserted cat");
+											 new Individual("foo"),
+											 new Individual("Brown"))), "Asserted cat");
 			
 			deductionsToCheck = new string[] {"result{foo}"};
 	  	NewFactEvent henf = new NewFactEvent(HandleExpectedNewFact);
@@ -960,12 +978,12 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.LoadRuleBase(NewTestAdapter());
 			
 			Assert.IsTrue(ie.Assert(new Fact("trigger-atom-combination",
-			                                 new Individual(123),
-			                                 new Individual("bar"))), "Asserted first trigger-atom-combination");
+											 new Individual(123),
+											 new Individual("bar"))), "Asserted first trigger-atom-combination");
 			
 			Assert.IsTrue(ie.Assert(new Fact("trigger-atom-combination",
-			                                 new Individual(456),
-			                                 new Individual("bar"))), "Asserted second trigger-atom-combination");
+											 new Individual(456),
+											 new Individual("bar"))), "Asserted second trigger-atom-combination");
 			
 			Process();
 
@@ -977,15 +995,15 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.LoadRuleBase(NewTestAdapter());
 			
 			Assert.IsTrue(ie.Assert(new Fact("want to review",
-			                                 new Individual("fred"),
-			                                 new Individual("rule principles"))), "Asserted trigger fact");
+											 new Individual("fred"),
+											 new Individual("rule principles"))), "Asserted trigger fact");
 			
 			Process();
 
 			Assert.AreEqual(1, deducted, "Deducted");
 			
 			qrs = ie.RunQuery(new Query(new AtomGroup(AtomGroup.LogicalOperator.And,
-			                                          new Atom("may look at", new Variable("who"), new Variable("where")))));
+													  new Atom("may look at", new Variable("who"), new Variable("where")))));
 			Assert.AreEqual(1, qrs.Count, "Query 'B' Size");
 			
 			Fact result = qrs[0][0];
@@ -1004,8 +1022,8 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.LoadRuleBase(NewTestAdapter());
 			
 			Assert.IsTrue(ie.Assert(new Fact("belongs",
-			                                 new Individual("book"),
-			                                 new Individual("mary"))), "Asserted trigger fact");
+											 new Individual("book"),
+											 new Individual("mary"))), "Asserted trigger fact");
 			
 			ie.NewWorkingMemory(WorkingMemoryTypes.Isolated);
 			
@@ -1022,8 +1040,8 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.DisposeIsolatedMemory();
 			
 			Assert.IsTrue(ie.Assert(new Fact("bought",
-			                                 new Individual("mary"),
-			                                 new Individual("book"))), "Asserted naf blocker fact");
+											 new Individual("mary"),
+											 new Individual("book"))), "Asserted naf blocker fact");
 
 			Process();
 
@@ -1035,8 +1053,8 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.LoadRuleBase(NewTestAdapter());
 			
 			Assert.IsTrue(ie.Assert(new Fact("possess",
-			                                 new Individual("mary"),
-			                                 new Individual("book"))), "Asserted trigger fact");
+											 new Individual("mary"),
+											 new Individual("book"))), "Asserted trigger fact");
 			
 			deductionsToCheck = new string[] {"gift{mary,book}"};
 	  	NewFactEvent henf = new NewFactEvent(HandleExpectedNewFact);
@@ -1054,12 +1072,12 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.LoadRuleBase(NewTestAdapter());
 			
 			Assert.IsTrue(ie.Assert(new Fact("possess",
-			                                 new Individual("mary"),
-			                                 new Individual("book"))), "Asserted trigger fact");
+											 new Individual("mary"),
+											 new Individual("book"))), "Asserted trigger fact");
 			
 			Assert.IsTrue(ie.Assert(new Fact("sold",
-			                                 new Individual("book"),
-			                                 new Individual("mary"))), "Asserted naf blocker fact");
+											 new Individual("book"),
+											 new Individual("mary"))), "Asserted naf blocker fact");
 			
 			Process();
 
@@ -1102,7 +1120,7 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.NewFactHandler -= henf;
 			
 			qrs = ie.RunQuery(new Query(new AtomGroup(AtomGroup.LogicalOperator.And,
-			                                          new Atom("bonus", new Individual("Bobby"), new Variable("bonus amount")))));
+													  new Atom("bonus", new Individual("Bobby"), new Variable("bonus amount")))));
 			
 			Assert.AreEqual(1, qrs.Count, "Query Size");
 			

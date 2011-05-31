@@ -956,6 +956,48 @@
         </Implies>
         <Implies>
           <oid>
+            <Ind>label:No Action Implication;action:none;</Ind>
+          </oid>
+          <body>
+            <Atom>
+              <op>
+                <Rel>noopTrigger</Rel>
+              </op>
+              <Ind>foo</Ind>
+            </Atom>
+          </body>
+          <head>
+            <Atom>
+              <op>
+                <Rel>doNotAssert</Rel>
+              </op>
+              <Ind>bar</Ind>
+            </Atom>
+          </head>
+        </Implies>
+				<Implies>
+					<oid>
+						<Ind>label:No Action Implication Checker;precondition:No Action Implication;</Ind>
+					</oid>
+          <body>
+            <Atom>
+              <op>
+                <Rel>noopTrigger</Rel>
+              </op>
+              <Ind>foo</Ind>
+            </Atom>
+          </body>
+					<head>
+						<Atom>
+							<op>
+								<Rel>noopPreconditioned</Rel>
+							</op>
+							<Ind>OK</Ind>
+						</Atom>
+					</head>
+				</Implies>
+        <Implies>
+          <oid>
             <Ind>label:Retracting Implication;action:retract;</Ind>
           </oid>
           <body>

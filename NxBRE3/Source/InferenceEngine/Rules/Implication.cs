@@ -8,7 +8,7 @@ namespace NxBRE.InferenceEngine.Rules {
 	/// <summary>
 	/// The possibile implication actions.
 	/// </summary>
-	public enum ImplicationAction {Assert, Retract, Count, Modify};
+	public enum ImplicationAction {Assert, Retract, Count, Modify, None};
 	
 	/// <summary>
 	/// The remarkable implication priorities. Any value between in the [0-100] is valid.

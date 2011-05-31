@@ -160,6 +160,14 @@ flag{?object, triggeredZ}
 balance{?account, actualValue, 25}
 -> isTwentyFive{?account};
 
+[label:No Action Implication;action:none;]
+noopTrigger{foo}
+-> doNotAssert{bar};
+
+[label:No Action Implication Checker;precondition:No Action Implication;]
+noopTrigger{foo}
+-> noopPreconditioned{OK};
+
 [label:Retracting Implication;action:retract;]
 retractionTrigger{?target}
 -> toRetract{?target};

@@ -962,6 +962,48 @@
       </atom>
     </_body>
   </imp>
+	<imp>
+		<_rlab>
+			<ind>label:No Action Implication;action:none;</ind>
+		</_rlab>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>doNotAssert</rel>
+				</_opr>
+				<ind>bar</ind>
+			</atom>
+		</_head>
+		<_body>
+			<atom>
+				<_opr>
+					<rel>noopTrigger</rel>
+				</_opr>
+				<ind>foo</ind>
+			</atom>
+		</_body>
+	</imp>
+	<imp>
+		<_rlab>
+			<ind>label:No Action Implication Checker;precondition:No Action Implication;</ind>
+		</_rlab>
+		<_head>
+			<atom>
+				<_opr>
+					<rel>noopPreconditioned</rel>
+				</_opr>
+				<ind>OK</ind>
+			</atom>
+		</_head>
+		<_body>
+			<atom>
+				<_opr>
+					<rel>noopTrigger</rel>
+				</_opr>
+				<ind>foo</ind>
+			</atom>
+		</_body>
+	</imp>
   <imp>
     <_rlab>
       <ind>label:Retracting Implication;action:retract;</ind>
@@ -1261,7 +1303,7 @@
   </imp>
   <imp>
     <_rlab>
-      <ind>Atom Combination Bug 1346078</ind>
+      <ind>atom Combination Bug 1346078</ind>
     </_rlab>
     <_head>
       <atom>
