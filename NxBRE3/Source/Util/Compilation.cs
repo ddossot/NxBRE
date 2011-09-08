@@ -315,7 +315,8 @@ namespace NxBRE.Util
 			if ((ReferenceLinkMode == ReferenceLinkModes.CurrentDomain) || (ReferenceLinkMode == ReferenceLinkModes.Full)) {
 				foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) {
 					// do not add AssemblyBuilders (bug 1482753), thanks to Bob Brumfield
-					if (!(assembly is AssemblyBuilder)) {
+					// handle .NET4 dynamic assemblies correctly, thanks to Nich
+					 if (!(assembly is AssemblyBuilder) && (assembly.ManifestModule.GetType().Namespace != "System.Reflection.Emit")) {
 						AddReferencedAssembly(compilerParameters, assembly.Location);
 						if(assembly.ManifestModule.ScopeName.Equals(NXBRE_DLL)) nxbreAssemblyLoaded = true;
 					}
