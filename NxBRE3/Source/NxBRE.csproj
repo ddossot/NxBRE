@@ -1,4 +1,5 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <RootNamespace>NxBRE</RootNamespace>
@@ -15,6 +16,8 @@
     <FileAlignment>4096</FileAlignment>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -31,6 +34,17 @@
     <DebugSymbols>false</DebugSymbols>
     <DebugType>None</DebugType>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -174,6 +188,7 @@
     <Compile Include="InferenceEngine\IO\RuleML091NafDatalogAdapter.cs" />
     <EmbeddedResource Include="Resources\ruleml-0_91-nafdatalog.xsd" />
     <Compile Include="InferenceEngine\IO\AccumulatingExtendedRuleBaseAdapter.cs" />
+    <Compile Include="FlowEngine\BREProcessInterruptedException.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources" />
@@ -187,11 +202,20 @@
     <Folder Include="InferenceEngine\IO" />
     <Folder Include="InferenceEngine\Rules" />
     <Folder Include="InferenceEngine\IO\Hrf086" />
+    <Folder Include="InferenceEngine\Registry" />
     <Folder Include="Util" />
     <Content Include="NxBRE.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Folder Include="InferenceEngine\Registry" />
+    <Folder Include="FlowEngine\" />
+    <Folder Include="FlowEngine\" />
+    <Folder Include="FlowEngine\" />
+    <Folder Include="FlowEngine\" />
+    <Folder Include="InferenceEngine\" />
+    <Folder Include="InferenceEngine\" />
+    <Folder Include="InferenceEngine\" />
+    <Folder Include="InferenceEngine\IO\" />
+    <Folder Include="InferenceEngine\" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

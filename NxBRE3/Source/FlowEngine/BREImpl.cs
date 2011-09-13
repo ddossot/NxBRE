@@ -401,7 +401,7 @@ namespace NxBRE.FlowEngine
 				                                   0,
 				                                   "NxBRE v" + Reflection.NXBRE_VERSION + " Flow Engine Processing"
 				                                   					 + ((setId == null)?String.Empty:" Set: " + setId)
-																								     + ((wasRunning)?" (Re-entrant)":String.Empty));
+																	 + ((wasRunning)?" (Re-entrant)":String.Empty));
 			
 			if (ruleContext == null) {
 				if (Logger.IsFlowEngineCritical) Logger.FlowEngineSource.TraceEvent(TraceEventType.Critical, 0, "RuleContext is null");
@@ -410,13 +410,22 @@ namespace NxBRE.FlowEngine
 			
 			if (!running) running = true;
 
-			ProcessXML(GetXmlDocumentRules(), setId, null);
+			try {
+				ProcessXML(GetXmlDocumentRules(), setId, null);
+			} catch (BREProcessInterruptedException pie) {
+				Logger.FlowEngineSource.TraceEvent(TraceEventType.Information,
+				                                   0,
+				                                   "BRE Terminated" + pie.Message
+				                                   					+ ((setId == null)?String.Empty:" Set: " + setId)
+			            										    + ((wasRunning)?" (Re-entrant)":String.Empty));
+				return false;
+			}
 			
 			if (Logger.IsInferenceEngineInformation)
 				Logger.FlowEngineSource.TraceEvent(TraceEventType.Information,
 				                                   0,
 				                                   "BRE Finished" + ((setId == null)?String.Empty:" Set: " + setId)
-			            																				+ ((wasRunning)?" (Re-entrant)":String.Empty));
+			            										  + ((wasRunning)?" (Re-entrant)":String.Empty));
 			
 			if (!wasRunning) running=false;
 			return true;
@@ -523,9 +532,11 @@ namespace NxBRE.FlowEngine
 		/// </returns>
 		private object ProcessXML(XPathNavigator aNode, string aSetId, object aObj)
 		{
-			if ((aNode == null) || (!running)) return null;
+			if (!running) throw new BREProcessInterruptedException("Processing stopped in node: "+aNode);
+			if (aNode == null) return null;
 			
 			string nodeName = aNode.LocalName;
+			
 			if (Logger.IsFlowEngineVerbose) Logger.FlowEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Element Node: " + nodeName);
 
 			/*
