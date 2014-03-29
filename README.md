@@ -1,7 +1,12 @@
 NxBRE
 =====
 
-MIT Licence (c) 2003-2012 - David Dossot <david@dossot.net>
+MIT Licence (c) 2003-2014 - David Dossot <david@dossot.net>
+
+Wiki
+----
+
+http://sourceforge.net/apps/trac/nxbre
 
 
 NxBRE2
