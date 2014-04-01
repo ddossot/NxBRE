@@ -8,7 +8,7 @@ NxBRE README v2.5.3
 JxBRE Author : Sloan Seaman (sloan@sgi.net)
 Date         : 17-JUL-2006
 URL          : http://nxbre.org
-License      : LGPL
+License      : MIT
 
 
 
@@ -35,7 +35,8 @@ This refactoring will be the first step of NxBRE v3.0.
 
 NxBRE is the first open-source rule engine for the .NET platform and a lightweight Business Rule Engine (aka Rule-Based Engine) that offers two different approaches:
 
-    * the Flow Engine, which uses XML as a way to control process flow for an application in an external entity. It is basically a wrapper on C#, as it offers all its flow control commands (if/then/else, while, foreach), plus a context of business objects and results. It is a port of JxBRE v1.7.1 (SourceForge Project from Sloan Seaman) to .NET's Visual C#.
+    * the Flow Engine, which uses XML as a way to control process flow for an application in an external entity. It is basically a wrapper on C#, as it offers all its flow control commands (if/then/else, while, foreach), plus a context of business objects and results
+. It is a port of JxBRE v1.7.1 (SourceForge Project from Sloan Seaman) to .NET's Visual C#.
 
     * the Inference Engine, which is a forward-chaining (data driven) deduction engine and that supports concepts like Facts, Queries and Implications (as defined in RuleML 0.86 Datalog) and like Rule Priority, Mutual Exclusion and Precondition (as found in many commercial engines). It is designed in a way that encourages the separation of roles between the expert who designs the business rules and the programmer who binds them to the business object.
 
@@ -66,7 +67,8 @@ Anyway, thanks to user's feedback please note that:
 
  - the provided solution/project files are far from perfection (for example the type of assembly is not set to library),
 
- - the resources embedded in NxBRE.DLL are not referenced identically between IDEs. This is why an alternate config file to use when building with VS.NET has been provided. Simply rename NxBRE.dll.config.vsnet into NxBRE.dll.config.
+ - the resources embedded in NxBRE.DLL are not referenced identically between IDEs. This is why an alternate config file to use when building with VS.NET has been provided. Simply rename NxBRE.dll.config.vsnet
+ into NxBRE.dll.config.
 
 
 
@@ -255,7 +257,7 @@ v.2.2.1
 
   * Refactored the core of the engine (FactBase & Processor) to use the versatile DataTable object to obtain a rock-solid pattern matching implementation. 
 
-  * Added DispatchLog to the Inference Engine Façade available in the binder to allow custom messages logging.
+  * Added DispatchLog to the Inference Engine Faï¿½ade available in the binder to allow custom messages logging.
 
   * Debugged Naf error with retracted facts.
 
@@ -311,7 +313,8 @@ v.2.1
 
   * The boolean Running has been added to IBRE, in order to support the compiled rules flow engine.
 
-  * Brendan Ingram has contributed code for improving org.nxbre.ie.adapters.CSharpBinderFactory.
+  * Brendan Ingram has contributed code for improving org.nxbre.ie.adapters.CSharpBinderFactory
+.
 
 
   * The SharpDevelop Combine and Project files and *generated* Visual Studio Solution and Project files have been added to the archives in order to simplify importing NxBRE in these IDEs.

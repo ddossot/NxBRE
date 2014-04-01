@@ -1,4 +1,3 @@
-
  _______         _______________________________
  \      \ ___  __\______   \______   \_   _____/
  /   |   \\  \/  /|    |  _/|       _/|    __)_ 
@@ -9,7 +8,7 @@
 
 URL          : http://nxbre.org
 EMail        : contact@nxbre.org
-License      : LGPL
+License      : MIT
 
 
 ## RELEASE NOTES ##
