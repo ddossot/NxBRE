@@ -549,7 +549,7 @@ namespace NxBRE.InferenceEngine.Core {
 			
 			if (!valuedContent.TryGetValue(predicatePosition, out positionedContent)) {
 				// we use a HashSet to enforce fact unicity
-				positionedContent = new HashSet<Fact>();
+				positionedContent = new NxBRE.Util.HashSet<Fact>();
 				valuedContent.Add(predicatePosition, positionedContent);
 			}
 			
