@@ -6,7 +6,7 @@ MIT Licence (c) 2003-2014 - David Dossot <david@dossot.net>
 Wiki
 ----
 
-http://sourceforge.net/apps/trac/nxbre
+https://github.com/ddossot/NxBRE/wiki
 
 
 NxBRE2
