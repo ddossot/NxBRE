@@ -3,8 +3,8 @@ NxBRE
 
 MIT Licence (c) 2003-2014 - David Dossot <david@dossot.net>
 
-Wiki
-----
+Knowledge Base
+--------------
 
 https://github.com/ddossot/NxBRE/wiki
 
