@@ -43,8 +43,8 @@
             <property name="OutputTarget" value="HtmlHelp" />
             <property name="SkipNamespacesWithoutSummaries" value="True" />
             <property name="AssemblyVersionInfo" value="AssemblyVersion" />
-            <property name="CopyrightText" value="Copyright (C) 2003-2006 David Dossot et al." />
-            <property name="FeedbackEmailAddress" value="contact@nxbre.org" />
+            <property name="CopyrightText" value="Copyright (C) 2003-2014 David Dossot et al." />
+            <property name="FeedbackEmailAddress" value="david@dossot.net" />
             <property name="AutoPropertyBackerSummaries" value="True" />
             <property name="IncludeDefaultThreadSafety" value="False" />
             <property name="CleanIntermediates" value="True" />

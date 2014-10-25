@@ -7,7 +7,7 @@ NxBRE README v2.5.3
              : Stephane Joyeux
 JxBRE Author : Sloan Seaman (sloan@sgi.net)
 Date         : 17-JUL-2006
-URL          : http://nxbre.org
+URL          : http://nxbre.dossot.net
 License      : MIT
 
 
@@ -354,7 +354,7 @@ v.1.8.3
 
 v.1.8.2
 
-  * Repackaged net.ideaity.nxbre to org.nxbre (and bought domain name nxbre.org).
+  * Repackaged net.ideaity.nxbre to org.nxbre.
 
   * Moved BREFactories from org.nxbre.ri to org.nxbre.ri.factories.
 

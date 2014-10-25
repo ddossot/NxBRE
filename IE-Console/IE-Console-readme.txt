@@ -2,7 +2,7 @@ NxBRE Inference Engine Console README v1.3.2
 ============================================
 
 Author       : David Dossot (david@dossot.net)
-URL          : http://nxbre.org
+URL          : http://nxbre.dossot.net
 License      : MIT
 
 

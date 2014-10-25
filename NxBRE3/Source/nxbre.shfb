@@ -43,8 +43,8 @@
     <HtmlHelpName>NxBRE-API-3_2_0</HtmlHelpName>
     <Language>en-US</Language>
     <CopyrightHref />
-    <CopyrightText>Copyright (C) 2003-2009 David Dossot et al.</CopyrightText>
-    <FeedbackEMailAddress>contact@nxbre.org</FeedbackEMailAddress>
+    <CopyrightText>Copyright (C) 2003-2014 David Dossot et al.</CopyrightText>
+    <FeedbackEMailAddress>david@dossot.net</FeedbackEMailAddress>
     <HeaderText>NxBRE v3.2.0 - API Documentation</HeaderText>
     <FooterText />
     <ProjectLinkType>Local</ProjectLinkType>

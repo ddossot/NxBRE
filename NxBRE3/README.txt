@@ -6,8 +6,8 @@
         \/      \/       \/        \/        \/ 
 
 
-URL          : http://nxbre.org
-EMail        : contact@nxbre.org
+URL          : http://nxbre.dossot.net/
+EMail        : david@dossot.net
 License      : MIT
 
 
