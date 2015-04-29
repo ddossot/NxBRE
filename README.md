@@ -1,6 +1,8 @@
 NxBRE
 =====
 
+[![Build Status](https://travis-ci.org/ddossot/NxBRE.svg?branch=master)](https://travis-ci.org/ddossot/NxBRE)
+
 Web site, knowledge base: http://nxbre.dossot.net
 
 
