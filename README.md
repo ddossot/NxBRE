@@ -3,8 +3,6 @@ NxBRE
 
 Web site, knowledge base: http://nxbre.dossot.net
 
-MIT Licence (c) 2003-2014 - David Dossot <david@dossot.net>
-
 
 NxBRE2
 ------
@@ -49,3 +47,5 @@ To contribute a new feature or fix:
 - Then create a pull request towards this repo's master branch.
 
 Thank you for contributing!
+
+#### MIT Licence (c) 2003-2015 - David Dossot <david@dossot.net>
