@@ -1,13 +1,10 @@
 namespace NxBRE.InferenceEngine.IO {
-	using System;
-	using System.IO;
+    using System.IO;
 	using System.Xml;
-	using System.Xml.Schema;
-	using System.Xml.XPath;
-	using System.Xml.Xsl;
+    using System.Xml.Xsl;
 	
-	using NxBRE.InferenceEngine.IO.Hrf086;
-	using NxBRE.Util;
+	using Hrf086;
+	using Util;
 
 	///<summary>Adapter supporting NxBRE-IE Human Readable Format (HRF) version 0.86.
 	/// HRF is parsed and transformed to RuleML NafDatalog 0.86
@@ -30,18 +27,16 @@ namespace NxBRE.InferenceEngine.IO {
 		/// </summary>
 		public override void Dispose() {
 			base.Dispose();
-			
-			if (tempfileName != null) {
-				XslCompiledTransform xslt = Xml.GetCachedCompiledTransform("ruleml-nafdatalog-0_86-2hrf.xsl");
+
+		    if (tempfileName == null) return;
+		    var xslt = Xml.GetCachedCompiledTransform("ruleml-nafdatalog-0_86-2hrf.xsl");
 				
-				XmlTextReader reader = new XmlTextReader(tempfileName);
-				xslt.Transform(reader, new XsltArgumentList(), resultStream);
-				reader.Close();
+		    var reader = new XmlTextReader(tempfileName);
+		    xslt.Transform(reader, new XsltArgumentList(), resultStream);
+		    reader.Close();
 				
-				resultStream.Flush();
-				resultStream.Close();
-			}
-			
+		    resultStream.Flush();
+		    resultStream.Close();
 		}
 
 		// Protected/Private methods --------------------------------------------------------
@@ -50,13 +45,13 @@ namespace NxBRE.InferenceEngine.IO {
 			tempfileName = null;
 			
 			if (mode == FileAccess.Read) {
-				MemoryStream ms = new MemoryStream();
-				Scanner s = new Scanner();
+				var ms = new MemoryStream();
+				var s = new Scanner();
 				
 				if (streamHRF != null) s.Init(streamHRF);
 				else s.Init(uriHRF);
 				
-				Parser p = new Parser(s);
+				var p = new Parser(s);
 				p.Parse(ms);
 				
 				if (p.ParserErrors.List.Count >0)
@@ -68,8 +63,7 @@ namespace NxBRE.InferenceEngine.IO {
 				base.Init(ms, null, FileAccess.Read);
 			}
 			else {
-				if (streamHRF != null) resultStream = streamHRF;
-				else resultStream = new FileStream(uriHRF, FileMode.Create);
+				resultStream = streamHRF ?? new FileStream(uriHRF, FileMode.Create);
 					
 				tempfileName = Path.GetTempFileName();
 				base.Init(null, tempfileName, FileAccess.Write);

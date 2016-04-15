@@ -1,7 +1,6 @@
 namespace NxBRE.FlowEngine.Rules
 {
-	using System;
-	using System.Collections;
+    using System.Collections;
 
 	using NxBRE.FlowEngine;
 	using NxBRE.Util;
@@ -55,38 +54,33 @@ namespace NxBRE.FlowEngine.Rules
 		/// 
 		/// </returns>
 		public object ExecuteRule(IBRERuleContext ruleContext, IDictionary arguments, object step) {
-			bool staticCall = false;
+			var staticCall = false;
 			
-			if (!arguments.Contains(OBJECTID)) {
-				if (!arguments.Contains(TYPE)) {
+			if (!arguments.Contains(OBJECTID))
+			{
+			    if (!arguments.Contains(TYPE)) {
 					throw new BRERuleException("Parameter 'Type' or 'ObjectId' not found");
 				}
-				else {
-					staticCall = true;
-				}
+			    staticCall = true;
 			}
-			
-			if (!arguments.Contains(MEMBER)) {
+
+		    if (!arguments.Contains(MEMBER)) {
 				throw new BRERuleException("Parameter 'Member' not found");
 			}
-			
-			else {
-				if (staticCall) {
-					return Reflection.ClassCall((string)arguments[TYPE],
-						                           (string)arguments[MEMBER],
-						                           GetArguments(arguments));
-				}
-				else {
-					return Reflection.ObjectCall(ruleContext.GetResult(arguments[OBJECTID]).Result,
-						                           (string)arguments[MEMBER],
-						                           GetArguments(arguments));
-				}
-			}
+
+		    if (staticCall) {
+		        return Reflection.ClassCall((string)arguments[TYPE],
+		            (string)arguments[MEMBER],
+		            GetArguments(arguments));
+		    }
+		    return Reflection.ObjectCall(ruleContext.GetResult(arguments[OBJECTID]).Result,
+		        (string)arguments[MEMBER],
+		        GetArguments(arguments));
 		}
 			
 		public object[] GetArguments(IDictionary aMap) {
-			ArrayList arguments = new ArrayList();
-			int i=0;
+			var arguments = new ArrayList();
+			var i=0;
 			while (aMap.Contains(ARGUMENT + i)) {
 				arguments.Add(aMap[ARGUMENT + i]);
 				i++;

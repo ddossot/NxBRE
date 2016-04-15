@@ -1,0 +1,6 @@
+C:\Project\NxBRE\NxBRE3\Source\bin\Debug\NxBRE.dll.config
+C:\Project\NxBRE\NxBRE3\Source\bin\Debug\NxBRE.dll
+C:\Project\NxBRE\NxBRE3\Source\bin\Debug\NxBRE.pdb
+C:\Project\NxBRE\NxBRE3\Source\obj\Debug\NxBRE.dll
+C:\Project\NxBRE\NxBRE3\Source\obj\Debug\NxBRE.pdb
+C:\Project\NxBRE\NxBRE3\Source\obj\Debug\NxBRE.csprojResolveAssemblyReference.cache

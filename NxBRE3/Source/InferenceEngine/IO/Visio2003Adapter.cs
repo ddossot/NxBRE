@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections.Generic;
@@ -6,9 +8,9 @@ namespace NxBRE.InferenceEngine.IO {
 	using System.Xml.Xsl;
 	using System.Xml.XPath;
 
-	using NxBRE.InferenceEngine.Rules;
+	using Rules;
 	
-	using NxBRE.Util;
+	using Util;
 	
 	///<summary>Adapter supporting Visio 2003 DatadiagramML Format (VDX file).</summary>
 	/// <remarks>Only READ is supported!</remarks>
@@ -233,12 +235,12 @@ namespace NxBRE.InferenceEngine.IO {
 		private static IList<string> GetPageNames(XPathDocument xpDoc) {
 			IList<string> result = new List<string>();
 			
-			XPathNavigator navigator = xpDoc.CreateNavigator();
-			XmlNamespaceManager nsmgr = new XmlNamespaceManager(navigator.NameTable);
+			var navigator = xpDoc.CreateNavigator();
+			var nsmgr = new XmlNamespaceManager(navigator.NameTable);
 			nsmgr.AddNamespace("vdx", "http://schemas.microsoft.com/visio/2003/core");
-			XPathExpression xpe = navigator.Compile("vdx:VisioDocument/vdx:Pages/vdx:Page/@Name");
+			var xpe = navigator.Compile("vdx:VisioDocument/vdx:Pages/vdx:Page/@Name");
 			xpe.SetContext(nsmgr);
-			XPathNodeIterator pageNames = navigator.Select(xpe);
+			var pageNames = navigator.Select(xpe);
 			while(pageNames.MoveNext()) result.Add(pageNames.Current.Value);
 				
 			return result;
@@ -247,18 +249,17 @@ namespace NxBRE.InferenceEngine.IO {
 		private void Init(XPathDocument xpDoc, FileAccess mode, bool strict, params string[] pageNames) {
 			if (mode != FileAccess.Read) throw new IOException(mode.ToString() + " not supported");
 			
-			XsltArgumentList xslArgs = new XsltArgumentList();
+			var xslArgs = new XsltArgumentList();
 			
 			if (pageNames.Length > 0) {
-				string pageNameList = "|";
-				foreach(string pageName in pageNames) pageNameList += (pageName + "|");
-				xslArgs.AddParam("selected-pages", String.Empty, pageNameList);
+				var pageNameList = pageNames.Aggregate("|", (current, pageName) => current + (pageName + "|"));
+			    xslArgs.AddParam("selected-pages", String.Empty, pageNameList);
 			}
 			
 			xslArgs.AddParam("strict", String.Empty, strict?"true":"false");
-			XslCompiledTransform xslt = Xml.GetCachedCompiledTransform("visio2003toRuleML.xsl");
+			var xslt = Xml.GetCachedCompiledTransform("visio2003toRuleML.xsl");
 			
-			MemoryStream stream = new MemoryStream();
+			var stream = new MemoryStream();
 			xslt.Transform(xpDoc, xslArgs, stream);
 			stream.Seek(0, SeekOrigin.Begin);
 

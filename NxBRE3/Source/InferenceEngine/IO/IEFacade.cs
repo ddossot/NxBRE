@@ -2,12 +2,10 @@ namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.Diagnostics;
+	using InferenceEngine;
+	using Rules;
 	
-	using NxBRE.InferenceEngine;
-	using NxBRE.InferenceEngine.Rules;
-	
-	using NxBRE.Util;
+	using Util;
 	
 	/// <summary>
 	/// A facade of the Inference Engine of NxBRE for usage from the object binder.
@@ -135,16 +133,19 @@ namespace NxBRE.InferenceEngine.IO {
 		public Fact NewFact(string type, params object[] individuals) {
 			Fact newFact;
 			
-			if (individuals.Length == 0) {
-				newFact = new Fact(type);
-			}
-			else if (individuals.Length == 1) {
-				newFact = new Fact(type, new Individual(individuals[0]));
-			}
-			else {
-				Individual[] members = new Individual[individuals.Length];
-				for (int i=0; i<individuals.Length; i++) members[i] = new Individual(individuals[i]);
-				newFact = new Fact(type, members);
+			switch (individuals.Length)
+			{
+			    case 0:
+			        newFact = new Fact(type);
+			        break;
+			    case 1:
+			        newFact = new Fact(type, new Individual(individuals[0]));
+			        break;
+			    default:
+			        var members = new Individual[individuals.Length];
+			        for (int i=0; i<individuals.Length; i++) members[i] = new Individual(individuals[i]);
+			        newFact = new Fact(type, members);
+			        break;
 			}
 			
 			return newFact;

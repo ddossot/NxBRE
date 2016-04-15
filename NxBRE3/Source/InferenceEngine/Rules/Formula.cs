@@ -1,9 +1,8 @@
 namespace NxBRE.InferenceEngine.Rules {
-	using System;
-	using System.Collections;
+    using System.Collections;
 	
-	using NxBRE.InferenceEngine.IO;
-	using NxBRE.Util;
+	using IO;
+	using Util;
 	
 	/// <summary>
 	/// A Formula is a special predicate that represents an evaluation of a C# expression that produces a
@@ -75,33 +74,34 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// </summary>
 		/// <param name="arguments">The name/value pairs of arguments.</param>
 		/// <returns>An object representing the value of the Formula.</returns>
-		public object Evaluate(IDictionary arguments) {
-			if (resolutionType == FormulaResolutionType.NxBRE) {
-				if (evaluator == null) evaluator = Compilation.NewEvaluator(expression,
-				                                                            DEFAULT_EXPRESSION_PLACEHOLDER,
-				                                                            DEFAULT_NUMERIC_ARGUMENT_PATTERN,
-				                                                            arguments);
-				return evaluator.Run(arguments);
-			}
-			else if (resolutionType == FormulaResolutionType.Binder) {
-				if (formulaSignature == null) formulaSignature = Parameter.BuildFormulaSignature(expression);
+		public object Evaluate(IDictionary arguments)
+		{
+		    switch (resolutionType)
+		    {
+		        case FormulaResolutionType.NxBRE:
+		            if (evaluator == null) evaluator = Compilation.NewEvaluator(expression,
+		                DEFAULT_EXPRESSION_PLACEHOLDER,
+		                DEFAULT_NUMERIC_ARGUMENT_PATTERN,
+		                arguments);
+		            return evaluator.Run(arguments);
+		        case FormulaResolutionType.Binder:
+		            if (formulaSignature == null) formulaSignature = Parameter.BuildFormulaSignature(expression);
 				
-				// if arguments have been passed in the formula signature, pass them to the binder as
-				// a special entry in the arguments IDictionary (this approach has been preferred to modifying the
-				// Compute method signature which would have broken this compatibility
-				if (formulaSignature.Arguments.Count > 0) {
-					// patch to BUG 1815223 submitted by Amitay Dolbo
-					Hashtable formulaArguments = new Hashtable(arguments);
-					formulaArguments.Add(typeof(Parameter), formulaSignature.Arguments);
-					return bob.Compute(formulaSignature.Name, formulaArguments);
-				}
-				else {
-					return bob.Compute(formulaSignature.Name, arguments);
-				}
-			}
-			else {
-				throw new BREException("Formula evaluation mode not supported: " + resolutionType);
-			}
+		            // if arguments have been passed in the formula signature, pass them to the binder as
+		            // a special entry in the arguments IDictionary (this approach has been preferred to modifying the
+		            // Compute method signature which would have broken this compatibility
+		            if (formulaSignature.Arguments.Count > 0) {
+		                // patch to BUG 1815223 submitted by Amitay Dolbo
+		                Hashtable formulaArguments = new Hashtable(arguments);
+		                formulaArguments.Add(typeof(Parameter), formulaSignature.Arguments);
+		                return bob.Compute(formulaSignature.Name, formulaArguments);
+		            }
+		            else {
+		                return bob.Compute(formulaSignature.Name, arguments);
+		            }
+		        default:
+		            throw new BREException("Formula evaluation mode not supported: " + resolutionType);
+		    }
 		}
 	}
 }

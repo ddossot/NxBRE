@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+		targetNamespace="http://www.ruleml.org/0.86/xsd"
+		xmlns="http://www.ruleml.org/0.86/xsd"
+		xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			XML Schema for a Datalog RuleML sublanguage
+			File: datalog.xsd
+			Version: 0.86
+			Last Modification: 2004-06-23
+		</xs:documentation>
+	</xs:annotation>
+	
+	<!--
+		Datalog includes the following modules:
+		* toplevel
+		* desc
+		* clause
+		* boole
+		* atom
+		* role
+		* term
+
+		For details on each module, including what element and/or attribute declarations
+		they contain, please refer to them individually.
+	-->
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			Core RuleML elements module.
+			This is the XML Schema toplevel elements module for RuleML.
+			File: toplevel_module.xsd
+			Version: 0.86
+			Last Modification: 2004-06-23
+			
+			This module declares the following toplevel RuleML elements/attributes:
+			* rulebase
+			* @direction
+			* fact
+			* imp
+			* query
+			
+			The approach is modelled after that used in "Modularization of XHTML in XML Schema"
+			WD [http://www.w3.org/TR/xhtml-m12n-schema/], which will soon be integrated with
+			"Modularization of XHTML" (REC-xhtml-modularization-20010410)
+			[http://www.w3.org/TR/xhtml-modularization/].
+		</xs:documentation>
+	</xs:annotation>
+	
+	<!--
+		*** rulebase ***
+		content model:
+		(
+		  ( (_rbaselab, (fact | query | imp)* ) |
+		  ( (fact | query | imp)+, _rbaselab?) )?
+		)
+
+		A knowledge base of rules.
+
+		The 'rulebase' root element uses 'fact' assertions, 'query' tests, and 'imp' rules as
+		top-level elements. A rulebase may have an optional label, '_rbaselab', and/or a 'direction'
+		attribute which indicates the intended direction of imp inferencing.
+	-->
+	<xs:attributeGroup name="rulebase.attlist">
+		<xs:attributeGroup ref="direction.attrib"/>
+	</xs:attributeGroup>
+	<xs:group name="rulebase.content">
+		<xs:choice>
+			<xs:sequence>
+				<xs:element ref="_rbaselab"/>
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:element ref="fact"/>
+					<xs:element ref="query"/>
+					<xs:element ref="imp"/>
+				</xs:choice>
+			</xs:sequence>
+			<xs:sequence minOccurs="0">
+				<xs:choice minOccurs="1" maxOccurs="unbounded">
+					<xs:element ref="fact"/>
+					<xs:element ref="query"/>
+					<xs:element ref="imp"/>
+				</xs:choice>
+				<xs:element ref="_rbaselab" minOccurs="0"/>
+			</xs:sequence>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="rulebase.type">
+		<xs:group ref="rulebase.content" minOccurs="0"/>
+		<xs:attributeGroup ref="rulebase.attlist"/>
+	</xs:complexType>
+	<xs:element name="rulebase" type="rulebase.type"/>
+
+	<!--
+		*** @direction ***
+		
+		The direction attribute indicates the intended direction of implication rule
+		inferencing in a rulebase.  It has a neutral default value of "bidirectional".
+	-->
+	<xs:attributeGroup name="direction.attrib">
+		<xs:attribute name="direction" use="optional" default="bidirectional">
+			<xs:simpleType>
+				<xs:restriction base="xs:NMTOKEN">
+					<xs:enumeration value="forward"/>
+					<xs:enumeration value="backward"/>
+					<xs:enumeration value="bidirectional"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:attributeGroup>
+
+	<!--
+		*** fact ***
+		content model: ( (_rlab, _head) | (_head, _rlab?) )
+
+		A fact within the rulebase.
+
+		'fact' assertions are usable as degenerate rules on the top-level, using just 
+		a conclusion role '_head'.  They can be viewed logically as implication rules
+		that have empty bodies.
+		e.g. "<fact>_head</fact>" stands for "_head is implied by true", i.e., "_head is true".
+
+		A fact may also have a label, '_rlab', useful for various purposes within the rulebase.
+	-->
+	<xs:attributeGroup name="fact.attlist"/>
+	<xs:group name="fact.content">
+		<xs:choice>
+			<xs:sequence>
+				<xs:element ref="_rlab"/>
+				<xs:element ref="_head"/>
+			</xs:sequence>
+			<xs:sequence>
+				<xs:element ref="_head"/>
+				<xs:element ref="_rlab" minOccurs="0"/>
+			</xs:sequence>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="fact.type">
+		<xs:group ref="fact.content"/>
+		<xs:attributeGroup ref="fact.attlist"/>
+	</xs:complexType>
+	<xs:element name="fact" type="fact.type"/>
+
+	<!--
+		*** imp ***
+		content model: (
+					(_rlab, ( (_head, _body) |  (_body, _head) )) | 
+					(_head, ( (_rlab, _body) | (_body, _rlab?) )) | 
+					(_body, ( (_rlab, _head) | (_head, _rlab?) ))
+				)
+
+		An implication rule.
+
+		'imp' rules are usable as general implications on the top-level.  They use
+		a conclusion role '_head' followed by a premise role '_body', or, equivalently
+		(since roles constitute unordered elements), a premise role '_body'
+		followed by a conclusion role '_head'.
+
+		e.g.
+		"<imp>_head _body</imp>" stands for "_head is implied by _body",
+		i.e., "_head is true is implied by _body is true" or, equivalently,
+		"<imp>_body _head</imp>" stands for "_body implies _head",
+		i.e., "_body is true implies _head is true".
+
+		An imp may also have a label, '_rlab', useful for various purposes within the rulebase.
+	-->
+	<xs:attributeGroup name="imp.attlist"/>
+	<xs:group name="imp.content">
+		<xs:choice>
+			<xs:sequence>
+				<xs:element ref="_rlab"/>
+				<xs:choice>
+					<xs:sequence>
+						<xs:element ref="_head"/>
+						<xs:element ref="_body"/>
+					</xs:sequence>
+					<xs:sequence>
+						<xs:element ref="_body"/>
+						<xs:element ref="_head"/>
+					</xs:sequence>
+				</xs:choice>
+			</xs:sequence>
+			<xs:sequence>
+				<xs:element ref="_head"/>
+				<xs:choice>
+					<xs:sequence>
+						<xs:element ref="_rlab"/>
+						<xs:element ref="_body"/>
+					</xs:sequence>
+					<xs:sequence>
+						<xs:element ref="_body"/>
+						<xs:element ref="_rlab" minOccurs="0"/>
+					</xs:sequence>
+				</xs:choice>
+			</xs:sequence>
+			<xs:sequence>
+				<xs:element ref="_body"/>
+				<xs:choice>
+					<xs:sequence>
+						<xs:element ref="_rlab"/>
+						<xs:element ref="_head"/>
+					</xs:sequence>
+					<xs:sequence>
+						<xs:element ref="_head"/>
+						<xs:element ref="_rlab" minOccurs="0"/>
+					</xs:sequence>
+				</xs:choice>
+			</xs:sequence>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="imp.type">
+		<xs:group ref="imp.content"/>
+		<xs:attributeGroup ref="imp.attlist"/>
+	</xs:complexType>
+	<xs:element name="imp" type="imp.type"/>
+
+	<!--
+		*** query ***
+		content model: ( (_rlab, _body) | (_body, _rlab?) )
+
+		A query within the rulebase.
+
+		'query' elements are usable as degenerate rules on the rulebase top-level, using
+		just a premise role '_body' in the same way that facts use '_head'.
+
+		e.g.
+		"<query>_body</query>" stands for "false is implied by _body",
+		i.e., "_body cannot be proved", which is to be refuted by generating
+		the bindings for free variables in _body.
+
+		A query may also have a label, '_rlab', useful for various purposes within the rulebase.
+	-->
+	<xs:attributeGroup name="query.attlist"/>
+	<xs:group name="query.content">
+		<xs:choice>
+			<xs:sequence>
+				<xs:element ref="_rlab"/>
+				<xs:element ref="_body"/>
+			</xs:sequence>
+			<xs:sequence>
+				<xs:element ref="_body"/>
+				<xs:element ref="_rlab" minOccurs="0"/>
+			</xs:sequence>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="query.type" mixed="true">
+		<xs:group ref="query.content"/>
+		<xs:attributeGroup ref="query.attlist"/>
+	</xs:complexType>
+	<xs:element name="query" type="query.type"/>
+	
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			Description RuleML elements module.
+			This is the XML Schema description elements module for RuleML.
+			File: desc_module.xsd
+			Version: 0.86
+			Last Modification: 2004-06-23
+			
+			This module declares the following description RuleML elements:
+			* _rbaselab
+			* _rlab
+			
+			The approach is modelled after that used in "Modularization of XHTML in XML Schema"
+			WD [http://www.w3.org/TR/xhtml-m12n-schema/], which will soon be integrated with
+			"Modularization of XHTML" (REC-xhtml-modularization-20010410)
+			[http://www.w3.org/TR/xhtml-modularization/].
+		</xs:documentation>
+	</xs:annotation>
+
+	<!--
+		*** _rbaselab ***
+		content model: (ind)
+		
+		A rulebase label.
+	
+		Rulebases may have an optional label, '_rbaselab', allowing the naming of an entire
+		individual rulebase in a fashion that is accessible within the knowledge representation.
+		These labels use individual constants (or, in hornlog, complex terms).
+
+		For example, this can help for representing prioritization between rulebases, or perhaps
+		to enable forward inferencing of selected rulebase(s).
+	-->
+	<xs:attributeGroup name="_rbaselab.attlist"/>
+	<xs:group name="_rbaselab.content">
+		<xs:choice>
+			<xs:element ref="ind"/>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="_rbaselab.type">
+		<xs:group ref="_rbaselab.content"/>
+		<xs:attributeGroup ref="_rbaselab.attlist"/>
+	</xs:complexType>
+	<xs:element name="_rbaselab" type="_rbaselab.type"/>
+	
+	<!--
+		*** _rlab ***
+		content model: (ind)
+
+		A rule label.
+
+		A rule (an imp, fact, or query) may have an optional label, '_rlab', creating accessibility
+		within the knowledge representation. This can help for representing prioritization between
+		rules, for example. These labels use individual constants (or, in hornlog, complex terms).
+		
+		NOTE: rule labels are not required to be unique within a rulebase.
+	-->
+	<xs:attributeGroup name="_rlab.attlist"/>
+	<xs:group name="_rlab.content">
+		<xs:choice>
+			<xs:element ref="ind"/>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="_rlab.type">
+		<xs:group ref="_rlab.content"/>
+		<xs:attributeGroup ref="_rlab.attlist"/>
+	</xs:complexType>
+	<xs:element name="_rlab" type="_rlab.type"/>
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			Clause RuleML elements module.
+			This is the XML Schema clause elements module for RuleML.
+			File: clause_module.xsd
+			Version: 0.86
+			Last Modification: 2004-06-24
+			
+			This module declares the following clause RuleML elements:
+			* _head
+			* _body
+			
+			The approach is modelled after that used in "Modularization of XHTML in XML Schema"
+			WD [http://www.w3.org/TR/xhtml-m12n-schema/], which will soon be integrated with
+			"Modularization of XHTML" (REC-xhtml-modularization-20010410)
+			[http://www.w3.org/TR/xhtml-modularization/].
+		</xs:documentation>
+	</xs:annotation>
+
+	<!--
+		*** _head ***
+		content model: (atom)
+		
+		The head of a rule, also known as the "consequent" or "then" part of the rule.
+
+		The '_head' role is usable within facts and implication rules.  '_head' uses
+		an atomic (or, in equalog, equational) formula.
+	-->
+	<xs:attributeGroup name="_head.attlist"/>
+	<xs:group name="_head.content">
+		<xs:choice>
+			<xs:element ref="atom"/>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="_head.type">
+		<xs:group ref="_head.content"/>
+		<xs:attributeGroup ref="_head.attlist"/>
+	</xs:complexType>
+	<xs:element name="_head" type="_head.type"/>
+
+	<!-- 
+		*** _body ***
+		content model: (atom | and | or)
+	
+		The body of a rule, also known as the "antecedent" or "if" part of the rule.
+
+		The '_body' role is usable within query tests and implication rules. '_body'
+		uses an atomic (or, in equalog, equational) formula, an 'and' or an 'or'.
+	-->
+	<xs:attributeGroup name="_body.attlist"/>
+	<xs:group name="_body.content">
+		<xs:choice>
+			<xs:element ref="atom"/>
+			<xs:element ref="and"/>
+			<xs:element ref="or"/>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="_body.type">
+		<xs:group ref="_body.content"/>
+		<xs:attributeGroup ref="_body.attlist"/>
+	</xs:complexType>
+	<xs:element name="_body" type="_body.type"/>
+	
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			Boolean RuleML elements module.
+			This is the XML Schema boolean elements module for RuleML.
+			File: boole_module.xsd
+			Version: 0.86
+			Last Modification: 2004-06-24
+			
+			This module declares the following boolean RuleML elements:
+			* and
+			* or
+			
+			The approach is modelled after that used in "Modularization of XHTML in XML Schema"
+			WD [http://www.w3.org/TR/xhtml-m12n-schema/], which will soon be integrated with
+			"Modularization of XHTML" (REC-xhtml-modularization-20010410)
+			[http://www.w3.org/TR/xhtml-modularization/].
+		</xs:documentation>
+	</xs:annotation>
+	
+	<!--
+		*** and ***
+		content model: ( (atom | or)* )
+
+		A conjunctive body expression.
+
+		An 'and' uses zero or more atomic (or, in equalog, equational) formulas or disjunctions.
+		It is usable within '_body'. "<and>atom</and>" is equivalent to "atom", while "<and></and>"
+		is equivalent to "true".
+	-->
+	<xs:attributeGroup name="and.attlist"/>
+	<xs:group name="and.content">
+		<!-- note the min and maxOccurs constraints on the reference to this content model -->
+		<xs:choice>
+			<xs:element ref="atom"/>
+			<xs:element ref="or"/>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="and.type">
+		<xs:group ref="and.content" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:attributeGroup ref="and.attlist"/>
+	</xs:complexType>
+	<xs:element name="and" type="and.type"/>
+
+	<!--
+		*** or ***
+		content model: ( (atom | and)* )
+
+		An 'or' uses zero or more atomic formulas or conjunctions.  It is usable within '_body'.
+		"<or>atom</or>" is equivalent to "atom".
+	-->
+	<xs:attributeGroup name="or.attlist"/>
+	<xs:group name="or.content">
+		<!-- note the min and maxOccurs constraints on the reference to this content model -->
+		<xs:choice>
+			<xs:element ref="atom"/>
+			<xs:element ref="and"/>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="or.type">
+		<xs:group ref="or.content" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:attributeGroup ref="or.attlist"/>
+	</xs:complexType>
+	<xs:element name="or" type="or.type"/>
+	
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			Atom RuleML elements module.
+			This is the XML Schema atom elements module for RuleML.
+			File: atom_module.xsd
+			Version: 0.86
+			Last Modification: 2004-06-24
+			
+			This module declares the following RuleML elements:
+			* atom
+			* _opr
+			* rel
+			
+			The approach is modelled after that used in "Modularization of XHTML in XML Schema"
+			WD [http://www.w3.org/TR/xhtml-m12n-schema/], which will soon be integrated with
+			"Modularization of XHTML" (REC-xhtml-modularization-20010410)
+			[http://www.w3.org/TR/xhtml-modularization/].
+		</xs:documentation>
+	</xs:annotation>
+
+	<!--
+		*** atom ***
+		content model:
+		( (_opr, (_slot)*, (ind | var)*, (_slot)*) | ((_slot)*, (ind | var)+, (_slot)*, _opr) )
+		
+		however, this is non-deterministic, so it is (equivalently) restructured as follows:
+
+                        (
+                            ( _opr,
+                              (_slot)*, 
+                              ( (ind | var)+, (_slot)*)?
+                            ) 
+                          |
+                            (
+                               (
+                                  ( (_slot)+, 
+                                    ( (ind | var)+, (_slot)* )?
+                                  )
+                                |
+                                  ((ind | var)+, (_slot)*)
+                               ),
+                               _opr
+                            )
+                         )
+
+		A logical atom, i.e. an expression formed from a predicate applied to a collection of its
+		(logical) arguments.
+
+		An atomic formula is usable within '_head','_body', or 'and'. Atom elements use an '_opr' role
+		followed by a sequence of zero or more arguments, or equivalently, with '_opr' at the end.
+		The arguments may be individuals or variables (or, in hornlog, complex terms or plexs).
+		Optional user-defined metaroles ('_slot') are also permitted before and/or after the individuals.
+	-->
+	<xs:group name="atom.extend">
+		<xs:sequence>
+			<xs:choice minOccurs="1" maxOccurs="unbounded">
+				<xs:element ref="ind"/>
+				<xs:element ref="var"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:group>
+	<xs:attributeGroup name="atom.attlist"/>
+	<xs:group name="atom.content">
+		<xs:choice>
+			<xs:sequence>
+				<xs:element ref="_opr"/>
+				<xs:element ref="_slot" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:sequence minOccurs="0">
+					<xs:group ref="atom.extend"/>
+					<xs:element ref="_slot" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:sequence>
+			<xs:sequence>
+				<xs:choice>
+					<xs:sequence>
+						<xs:element ref="_slot" minOccurs="1" maxOccurs="unbounded"/>
+						<xs:sequence minOccurs="0">
+							<xs:group ref="atom.extend"/>
+							<xs:element ref="_slot" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:sequence>
+					<xs:sequence>
+						<xs:group ref="atom.extend"/>
+						<xs:element ref="_slot" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:choice>
+				<xs:element ref="_opr"/>
+			</xs:sequence>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="atom.type">
+		<xs:group ref="atom.content"/>
+		<xs:attributeGroup ref="atom.attlist"/>
+	</xs:complexType>
+	<xs:element name="atom" type="atom.type"/>
+
+	<!--
+		*** _opr ***
+		content model: (rel)
+
+		A relational operator expression.
+
+		'_opr' is usable within atoms. It uses a rel(ation) symbol.
+	-->
+	<xs:attributeGroup name="_opr.attlist"/>
+	<xs:group name="_opr.content">
+		<xs:sequence>
+			<xs:element ref="rel"/>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="_opr.type">
+		<xs:group ref="_opr.content"/>
+		<xs:attributeGroup ref="_opr.attlist"/>
+	</xs:complexType>
+	<xs:element name="_opr" type="_opr.type"/>
+
+	<!--
+		*** rel ***
+		content model: (#PCDATA)
+
+		A relation, i.e. a logical predicate.
+	-->
+	<xs:attributeGroup name="rel.attlist"/>
+	<xs:group name="rel.content">
+		<xs:sequence/>
+	</xs:group>
+	<xs:complexType name="rel.type" mixed="true">
+		<xs:group ref="rel.content"/>
+		<xs:attributeGroup ref="rel.attlist"/>
+	</xs:complexType>
+	<xs:element name="rel" type="rel.type"/>
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			Role RuleML elements module.
+			This is the XML Schema role elements module for RuleML.
+			File: role_module.xsd
+			Version: 0.86
+			Last Modification: 2004-06-23
+			
+			This module declares the following RuleML element:
+			* _slot
+			* @name
+			* @card
+			* @weight
+			
+			The approach is modelled after that used in "Modularization of XHTML in XML Schema"
+			WD [http://www.w3.org/TR/xhtml-m12n-schema/], which will soon be integrated with
+			"Modularization of XHTML" (REC-xhtml-modularization-20010410)
+			[http://www.w3.org/TR/xhtml-modularization/].
+		</xs:documentation>
+	</xs:annotation>
+	
+	<!--
+		*** _slot ***
+		content model: ( ind | var )
+
+		User-defined non-positional metaroles.
+
+		'_slot' uses either an individual constant or a variable (or, in hornlog, a complex term),
+		and must have a name given in the 'name' attribute.  Optional attributes are 'card',
+		specifying the role's cardinality, and 'weight', specifying the role's relative weight.
+	-->
+	<xs:attributeGroup name="_slot.attlist">
+		<xs:attributeGroup ref="name.attrib"/>
+		<xs:attributeGroup ref="card.attrib"/>
+		<xs:attributeGroup ref="weight.attrib"/>
+	</xs:attributeGroup>
+	<xs:group name="_slot.content">
+		<xs:choice>
+			<xs:element ref="ind"/>
+			<xs:element ref="var"/>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="_slot.type">
+		<xs:group ref="_slot.content"/>
+		<xs:attributeGroup ref="_slot.attlist"/>
+	</xs:complexType>
+	<xs:element name="_slot" type="_slot.type"/>
+
+	<!--
+		*** @name ***
+		
+		Specifies a user-defined name.  It is required for metaroles.
+	-->
+	<xs:attributeGroup name="name.attrib">
+		<xs:attribute name="name" type="xs:string" use="required"/>
+	</xs:attributeGroup>
+
+	<!--
+		*** @card ***
+		
+		Optionally specifies the metarole's cardinality.
+	-->
+	<xs:attributeGroup name="card.attrib">
+		<xs:attribute name="card" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:attributeGroup>
+
+	<!--
+		*** @card ***
+		
+		Optionally specifies the metarole's relative weight.
+	-->
+	<xs:attributeGroup name="weight.attrib">
+		<xs:attribute name="weight" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:decimal">
+					<xs:minInclusive value="0"/>
+					<xs:maxInclusive value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:attributeGroup>
+	
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+			Data RuleML elements module.
+			This is the XML Schema data module for RuleML.
+			File: data_module.xsd
+			Version: 0.86
+			Last Modification: 2004-06-24
+			
+			This module declares the following data RuleML elements/attributes:
+			* @type
+			* ind
+			* var
+			
+			The approach is modelled after that used in "Modularization of XHTML in XML Schema"
+			WD [http://www.w3.org/TR/xhtml-m12n-schema/], which will soon be integrated with
+			"Modularization of XHTML" (REC-xhtml-modularization-20010410)
+			[http://www.w3.org/TR/xhtml-modularization/].
+		</xs:documentation>
+	</xs:annotation>
+
+	<!--
+		*** @type ***
+		
+		Optionally specifies the term's type.
+	-->
+	<xs:attributeGroup name="type.attrib">
+		<xs:attribute name="type" type="xs:anyURI" use="optional"/>
+	</xs:attributeGroup>
+
+	<!--
+		*** ind ***
+		content model: (#PCDATA)
+
+		An individual constant, as in predicate logic.
+		
+		The one kind of fixed argument, generalizing RDF literals and resources.  It can be
+		viewed logically as logical function whose arity is zero.
+
+		Individuals may have an optional 'type' attribute for term typing.
+	-->
+	<xs:attributeGroup name="ind.attlist">
+		<xs:attributeGroup ref="type.attrib"/>
+	</xs:attributeGroup>
+	<xs:group name="ind.content">
+		<xs:sequence/>
+	</xs:group>
+	<xs:complexType name="ind.type" mixed="true">
+		<xs:group ref="ind.content"/>
+		<xs:attributeGroup ref="ind.attlist"/>
+	</xs:complexType>
+	<xs:element name="ind" type="ind.type"/>
+
+	<!--
+		*** var ***
+		content model: (#PCDATA)
+
+		A logical variable, as in logic programming.
+
+		The one kind of variable argument.
+ 
+		Variables may have an optional 'type' attribute for term typing.
+	-->
+	<xs:attributeGroup name="var.attlist">
+		<xs:attributeGroup ref="type.attrib"/>
+	</xs:attributeGroup>
+	<xs:group name="var.content">
+		<xs:sequence/>
+	</xs:group>
+	<xs:complexType name="var.type" mixed="true">
+		<xs:group ref="var.content"/>
+		<xs:attributeGroup ref="var.attlist"/>
+	</xs:complexType>
+	<xs:element name="var" type="var.type"/>
+
+</xs:schema>

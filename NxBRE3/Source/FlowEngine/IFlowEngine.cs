@@ -2,9 +2,7 @@ namespace NxBRE.FlowEngine
 {
 	using System;
 	using System.Xml.XPath;
-	
-	using NxBRE.FlowEngine;
-	using NxBRE.FlowEngine.IO;
+	using IO;
 	
 	/// <summary>
 	/// This interface defines the Flow Engine (FE) of NxBRE.

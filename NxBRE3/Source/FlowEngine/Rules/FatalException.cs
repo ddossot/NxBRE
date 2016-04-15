@@ -1,11 +1,10 @@
 namespace NxBRE.FlowEngine.Rules
 {
-	using System;
-	using System.Collections;
+    using System.Collections;
 	using System.Diagnostics;
 	
-	using NxBRE.FlowEngine;
-	using NxBRE.Util;
+	using FlowEngine;
+	using Util;
 
 	/// <summary> This rule will always throw a fatal exception
 	/// </summary>
@@ -28,11 +27,9 @@ namespace NxBRE.FlowEngine.Rules
 		/// <returns>The exception</returns>
 		public object ExecuteRule(IBRERuleContext aBrc, IDictionary aMap, object aStep)
 		{
-			string message = (string) aMap[MESSAGE];
-			
-			BRERuleFatalException breRuleFatalException;
-			if (message == null) breRuleFatalException = new BRERuleFatalException();
-			else breRuleFatalException = new BRERuleFatalException(message);			
+			var message = (string) aMap[MESSAGE];
+
+		    var breRuleFatalException = message == null ? new BRERuleFatalException() : new BRERuleFatalException(message);			
 			
 			if (Logger.IsFlowEngineRuleBaseCritical) Logger.FlowEngineRuleBaseSource.TraceData(TraceEventType.Critical, 0, breRuleFatalException);
 			

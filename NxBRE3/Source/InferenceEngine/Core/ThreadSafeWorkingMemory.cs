@@ -1,8 +1,7 @@
 namespace NxBRE.InferenceEngine.Core {
-	using System;
-	using System.Threading;
+    using System.Threading;
 
-	using NxBRE.InferenceEngine;
+	using InferenceEngine;
 	using NxBRE.InferenceEngine.Rules;
 	
 	/// <summary>
@@ -49,21 +48,25 @@ namespace NxBRE.InferenceEngine.Core {
 				lockStrategy.ReleaseSharedLock();
 				
 				// Depending on the working memory isolation type
-				if (value == WorkingMemoryTypes.Isolated) {
-					lockStrategy.AcquireSharedLock(lockTimeOut);
+				switch (value)
+				{
+				    case WorkingMemoryTypes.Isolated:
+				        lockStrategy.AcquireSharedLock(lockTimeOut);
 
-					// Clone the global base as the working base
-					WorkingFactBase = (FactBase) globalFactBase.Clone();
-				}
-				else if (value == WorkingMemoryTypes.IsolatedEmpty) {
-					lockStrategy.AcquireSharedLock(lockTimeOut);
+				        // Clone the global base as the working base
+				        WorkingFactBase = (FactBase) globalFactBase.Clone();
+				        break;
+				    case WorkingMemoryTypes.IsolatedEmpty:
+				        lockStrategy.AcquireSharedLock(lockTimeOut);
 
-					// Create an empty base as the working base
-					WorkingFactBase = new FactBase();
-				}
-				else {
-					// Release the working memory
-					WorkingFactBase = null;
+				        // Create an empty base as the working base
+				        WorkingFactBase = new FactBase();
+				        break;
+				    case WorkingMemoryTypes.Global:
+				        break;
+				    default:
+				        WorkingFactBase = null;
+				        break;
 				}
 				
 				WorkingType = value;
@@ -76,7 +79,7 @@ namespace NxBRE.InferenceEngine.Core {
 			
 			lockStrategy.AcquireUniqueLock(lockTimeOut);
 			
-			foreach(Fact f in FB) globalFactBase.Assert(f);
+			foreach(var f in FB) globalFactBase.Assert(f);
 			WorkingType = WorkingMemoryTypes.Global;
 			
 			lockStrategy.ReleaseUniqueLock();

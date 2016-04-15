@@ -1,9 +1,11 @@
+using System.Linq;
+
 namespace NxBRE.InferenceEngine.Core {
 	using System;
 	using System.Collections.Generic;
 	
-	using NxBRE.InferenceEngine.Rules;
-	using NxBRE.Util;
+	using Rules;
+	using Util;
 	
 	/// <summary>
 	/// The QueryBase is the repository of queries for the inference engine.
@@ -45,15 +47,12 @@ namespace NxBRE.InferenceEngine.Core {
 			return (Query)queryDefs[queryIndex];
 		}
 
-		public Query Get(string queryLabel) {
-			foreach(Query query in queryDefs)
-				if (query.Label == queryLabel)
-					return query;
-
-			return null;
+		public Query Get(string queryLabel)
+		{
+		    return queryDefs.FirstOrDefault(query => query.Label == queryLabel);
 		}
-		
-		public void Remove(Query query) {
+
+	    public void Remove(Query query) {
 			queryDefs.Remove(query);
 		}
 		

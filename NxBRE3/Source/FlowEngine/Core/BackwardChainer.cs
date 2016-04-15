@@ -1,6 +1,5 @@
 ﻿namespace NxBRE.FlowEngine.Core {
-	using System;
-	using System.Collections.Generic;
+    using System.Collections.Generic;
 	using System.Xml.XPath;
 	
 	using NxBRE;
@@ -41,17 +40,12 @@
 				return flowEngine.RuleContext.GetObject(targetObjectId);
 			}
 			
-			object result = ExploreBreadth(targetObjectId, resolutionPath);
-			
-			if (result == null) {
-				result = ExplorePrecursors(targetObjectId, resolutionPath);
-			}
-			
-			return result;
+			var result = ExploreBreadth(targetObjectId, resolutionPath) ?? ExplorePrecursors(targetObjectId, resolutionPath);
+		    return result;
 		}
 		
 		private object ExploreBreadth(string targetObjectId, Stack<string> resolutionPath) {
-			foreach(string setId in GetSetIdsFromTargetObjectId(targetObjectId)) {
+			foreach(var setId in GetSetIdsFromTargetObjectId(targetObjectId)) {
 				resolutionPath.Push("{Set:" + setId + "}");
 				
 				if ((flowEngine.Process(setId)) && (flowEngine.RuleContext.ResultsMap.Contains(targetObjectId))) {
@@ -65,7 +59,7 @@
 		}
 		
 		private object ExplorePrecursors(string targetObjectId, Stack<string> resolutionPath) {
-			foreach(string setId in GetSetIdsFromTargetObjectId(targetObjectId)) {
+			foreach(var setId in GetSetIdsFromTargetObjectId(targetObjectId)) {
 				// do not resolve a set that is already in the stack
 				if (!resolutionPath.Contains("{Set:" + setId + "}")) {
 					resolutionPath.Push("{Set:" + setId + "}");
@@ -91,7 +85,7 @@
 		/// Ensures rules are backward chainable.
 		/// </summary>
 		/// <param name="xmlRules"></param>
-		internal void ValidateXmlDocumentRules() {
+		private void ValidateXmlDocumentRules() {
 			// ensures all rules are in sets
 			if (flowEngine.XmlDocumentRules.CreateNavigator().Select("//Rule[not(ancestor::Set) and not(starts-with(@id,'#'))] | //Retract[not(ancestor::Set)]").Count != 0) {
 				throw new BREException("All rules must be defined in Sets to be backward chainable!");
@@ -107,7 +101,7 @@
 			else {
 				setIds = new List<string>();
 			
-				XPathNodeIterator setIdAttributes = flowEngine.XmlDocumentRules.CreateNavigator().Select("//Set[.//Rule[@id='"
+				var setIdAttributes = flowEngine.XmlDocumentRules.CreateNavigator().Select("//Set[.//Rule[@id='"
 				                                                                                         + objectId
 				                                                                                         + "']/@id | .//Retract[@id='"
 				                                                                                         + objectId
@@ -130,7 +124,7 @@
 			else {
 				objectIds = new List<string>();
 				
-				XPathNodeIterator setIdAttributes = flowEngine.XmlDocumentRules.CreateNavigator().Select("//Set[@id='"
+				var setIdAttributes = flowEngine.XmlDocumentRules.CreateNavigator().Select("//Set[@id='"
 				                                                                                         + setId
 				                                                                                         + "']//Condition/Compare/@leftId | //Set[@id='"
 				                                                                                         + setId

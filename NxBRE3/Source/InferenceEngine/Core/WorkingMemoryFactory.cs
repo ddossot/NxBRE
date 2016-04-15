@@ -7,11 +7,19 @@ namespace NxBRE.InferenceEngine.Core
 	{
 		private WorkingMemoryFactory() {}
 		
-		public static IWorkingMemory NewWorkingMemory(ThreadingModelTypes threadingModelType, int lockTimeOut) {
-			if (threadingModelType == ThreadingModelTypes.Single) return new WorkingMemory();
-			else if (threadingModelType == ThreadingModelTypes.Multi) return new ThreadSafeWorkingMemory(false, lockTimeOut);
-			else if (threadingModelType == ThreadingModelTypes.MultiHotSwap) return new ThreadSafeWorkingMemory(true, lockTimeOut);
-			else throw new BREException("Unsupported threading model type: " + threadingModelType);
+		public static IWorkingMemory NewWorkingMemory(ThreadingModelTypes threadingModelType, int lockTimeOut)
+		{
+		    switch (threadingModelType)
+		    {
+		        case ThreadingModelTypes.Single:
+		            return new WorkingMemory();
+		        case ThreadingModelTypes.Multi:
+		            return new ThreadSafeWorkingMemory(false, lockTimeOut);
+		        case ThreadingModelTypes.MultiHotSwap:
+		            return new ThreadSafeWorkingMemory(true, lockTimeOut);
+		        default:
+		            throw new BREException("Unsupported threading model type: " + threadingModelType);
+		    }
 		}
 	}
 }

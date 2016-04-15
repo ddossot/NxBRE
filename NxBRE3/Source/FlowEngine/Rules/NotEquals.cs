@@ -16,16 +16,16 @@ namespace NxBRE.FlowEngine.Rules
 			}
 		}
 		
-		public bool ExecuteComparison(IBRERuleContext aBRC, IDictionary aMap, object aObj, object aCompareTo) {
-			if ((aObj == null) || (aCompareTo == null)) {
+		public bool ExecuteComparison(IBRERuleContext aBRC, IDictionary aMap, object aObj, object aCompareTo)
+		{
+		    if ((aObj == null) || (aCompareTo == null)) {
 				return true;
 			}
-			else if ((aObj is IComparable) && (aCompareTo is IComparable)) {
-				return ((IComparable) aObj).CompareTo(aCompareTo) != 0;
-			}
-			else {
-				return !aCompareTo.Equals(aObj);
-			}
+		    var obj = aObj as IComparable;
+		    if ((obj != null) && (aCompareTo is IComparable)) {
+		        return obj.CompareTo(aCompareTo) != 0;
+		    }
+		    return !aCompareTo.Equals(aObj);
 		}
 	}
 }

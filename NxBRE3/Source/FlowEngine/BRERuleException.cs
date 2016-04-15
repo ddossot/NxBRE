@@ -1,8 +1,6 @@
 namespace NxBRE.FlowEngine
 {
-	using System;
-	
-	/// <summary> This error is thrown when an error is generated from
+    /// <summary> This error is thrown when an error is generated from
 	/// the Busines Rule (BRF), usually from the executeRule().
 	/// Not really used much....
 	/// </summary>

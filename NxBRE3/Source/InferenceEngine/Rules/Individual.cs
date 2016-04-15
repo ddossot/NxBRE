@@ -38,9 +38,9 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <param name="predicates">The array of predicate values.</param>
 		/// <returns>The array of Individual built on the predicate values.</returns>
 		public static Individual[] NewArray(params object[] predicates) {
-			Individual[] individuals = new Individual[predicates.Length];
+			var individuals = new Individual[predicates.Length];
 			
-			for (int i=0; i<predicates.Length; i++)
+			for (var i=0; i<predicates.Length; i++)
 				individuals[i] = new Individual(predicates[i]);
 				
 			return individuals;

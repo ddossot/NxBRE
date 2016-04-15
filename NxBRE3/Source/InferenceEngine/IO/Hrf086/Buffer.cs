@@ -9,11 +9,8 @@
  */
 namespace NxBRE.InferenceEngine.IO.Hrf086
 {
-	
-	using System;
-	using System.IO;
-	using System.Collections;
-	using System.Text;
+    using System.IO;
+    using System.Text;
 	
 	internal class Buffer {
 		private const char EOF = (char)256;
@@ -28,20 +25,22 @@ namespace NxBRE.InferenceEngine.IO.Hrf086
 			pos = 0;
 		}
 		
-		public int Read () {
-			if (pos < bufLen) return buf[pos++];
-			else return EOF;
+		public int Read ()
+		{
+		    if (pos < bufLen) return buf[pos++];
+		    return EOF;
 		}
-	
-		public int Peek () {
-			if (pos < bufLen) return buf[pos];
-			else return EOF;
+
+	    public int Peek ()
+		{
+		    if (pos < bufLen) return buf[pos];
+		    return EOF;
 		}
-		
-		/* AW 2003-03-10 moved this from ParserGen.cs */
+
+	    /* AW 2003-03-10 moved this from ParserGen.cs */
 		public string GetString (int beg, int end) {
-			StringBuilder s = new StringBuilder(64);
-			int oldPos = Pos;
+			var s = new StringBuilder(64);
+			var oldPos = Pos;
 			Pos = beg;
 			while (beg < end) { s.Append((char)Read()); beg++; }
 			Pos = oldPos;

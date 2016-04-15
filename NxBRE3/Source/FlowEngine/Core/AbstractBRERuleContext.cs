@@ -1,10 +1,8 @@
 namespace NxBRE.FlowEngine.Core
 {
-	using System;
-	using System.Collections;
-	using System.Reflection;
-	
-	/// <summary> Abstract definition of BRERuleContext.
+    using System.Collections;
+
+    /// <summary> Abstract definition of BRERuleContext.
 	/// There is a good chance that RuleContexts may change per
 	/// client, so an abstract object is provided to assist this.
 	/// Use this if you wish to do inheritance.

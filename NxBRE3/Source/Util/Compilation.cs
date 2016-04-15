@@ -1,3 +1,6 @@
+using System.Linq;
+using static System.String;
+
 namespace NxBRE.Util
 {
 	using Microsoft.CSharp;
@@ -36,7 +39,7 @@ namespace NxBRE.Util
 	/// <summary>NxBRE utilities for on-the-fly compiling C# code</summary>
 	/// <author>David Dossot</author>
 	public abstract class Compilation {
-		private static string nxbreAssemblyLocation = String.Empty;
+		private static string nxbreAssemblyLocation = Empty;
 		private const string NXBRE_DLL = "NxBRE.dll";
 		private const string SECURITY_RESTRICTION = "[System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.PermitOnly)]";
 		
@@ -50,7 +53,7 @@ namespace NxBRE.Util
 		
 		private static string SecurityAttribute {
 			get {
-				return securitySandbox ? SECURITY_RESTRICTION : String.Empty;
+				return securitySandbox ? SECURITY_RESTRICTION : Empty;
 			}
 		}
 		
@@ -136,7 +139,7 @@ namespace NxBRE.Util
 		/// <param name="expression">The C# expression to compile.</param>
 		/// <returns>The compiled evaluator.</returns>
 		public static IEvaluator NewEvaluator(string expression) {
-			string code = "class Evaluator:NxBRE.Util.IEvaluator { " + SecurityAttribute + " public object Run() {return ("
+			var code = "class Evaluator:NxBRE.Util.IEvaluator { " + SecurityAttribute + " public object Run() {return ("
 										+ PrepareExpression(expression)
 										+ ");}}";
 			
@@ -168,7 +171,7 @@ namespace NxBRE.Util
 		/// <param name="values">The list of values.</param>
 		/// <returns>The compiled evaluator.</returns>
 		public static IListEvaluator NewEvaluator(string expression, string placeHolderRegexpPattern, IList variableNames, IList values) {
-			string code = "class Evaluator:NxBRE.Util.IListEvaluator { " + SecurityAttribute + " public object Run(System.Collections.IList values) {return ("
+			var code = "class Evaluator:NxBRE.Util.IListEvaluator { " + SecurityAttribute + " public object Run(System.Collections.IList values) {return ("
 										+ Regex.Replace(PrepareExpression(expression), placeHolderRegexpPattern, new MatchEvaluator(new ListVariableReplacer(variableNames, values).ReplaceListVariable))
 										+ ");}}";
 			
@@ -224,7 +227,7 @@ namespace NxBRE.Util
 		/// <param name="arguments">The key/value pairs of arguments.</param>
 		/// <returns>The compiled evaluator.</returns>
 		public static IDictionaryEvaluator NewEvaluator(string expression, string placeHolderRegexpPattern, string numericArgumentPattern, IDictionary arguments) {
-			string code = "class Evaluator:NxBRE.Util.IDictionaryEvaluator { " + SecurityAttribute + " public object Run(System.Collections.IDictionary values) {return ("
+			var code = "class Evaluator:NxBRE.Util.IDictionaryEvaluator { " + SecurityAttribute + " public object Run(System.Collections.IDictionary values) {return ("
 				+ Regex.Replace(PrepareExpression(expression), placeHolderRegexpPattern, new MatchEvaluator(new DictionaryVariableReplacer(arguments, numericArgumentPattern).ReplaceDictionaryVariable))
 										+ ");}}";
 			
@@ -267,15 +270,15 @@ namespace NxBRE.Util
 			private readonly IDictionary arguments;
 			private readonly Regex numericArgumentRegex;
 			
-			public DictionaryVariableReplacer(IDictionary arguments, string numericArgumentPattern) {
-				this.arguments = arguments;
-				if (numericArgumentPattern != null)	numericArgumentRegex = new Regex(numericArgumentPattern);
-				else numericArgumentRegex = null;
+			public DictionaryVariableReplacer(IDictionary arguments, string numericArgumentPattern)
+			{
+			    this.arguments = arguments;
+			    numericArgumentRegex = numericArgumentPattern != null ? new Regex(numericArgumentPattern) : null;
 			}
-			
-			public string ReplaceDictionaryVariable(Match m) {
+
+		    public string ReplaceDictionaryVariable(Match m) {
 				if ((numericArgumentRegex != null) && (numericArgumentRegex.IsMatch(m.Groups[0].Value))) {
-					int variableName = Convert.ToInt32(m.Groups[1].Value);
+					var variableName = Convert.ToInt32(m.Groups[1].Value);
 					
 					if (!arguments.Contains(variableName)) throw new BREException("Not enough arguments to resolve expression: missing " + variableName);
 					
@@ -283,7 +286,7 @@ namespace NxBRE.Util
 								 arguments[variableName].GetType().FullName +
 								 ")values[" + variableName + "])";
 				} else {
-					string variableName = m.Groups[1].Value;
+					var variableName = m.Groups[1].Value;
 					
 					if (!arguments.Contains(variableName)) throw new BREException("Not enough arguments to resolve expression: missing '" + variableName + "'");
 					
@@ -294,12 +297,12 @@ namespace NxBRE.Util
 			}
 		}
 		
-		private static string PrepareExpression(string expression) {
-			if (expression.StartsWith("expr:")) return expression.Substring(5);
-			else return expression;
+		private static string PrepareExpression(string expression)
+		{
+		    return expression.StartsWith("expr:") ? expression.Substring(5) : expression;
 		}
 
-		///<remarks>Brendan Ingram has greatly improved this method.</remarks>		
+	    ///<remarks>Brendan Ingram has greatly improved this method.</remarks>		
 		private static object LoadClass(CodeDomProvider codeProvider, string targetClassName, string source, bool sourceIsString) {
 			CompilerParameters compilerParameters = new CompilerParameters();
 			compilerParameters.GenerateExecutable = false;
@@ -309,17 +312,14 @@ namespace NxBRE.Util
 			compilerParameters.CompilerOptions = compilerOptions;
 			
 			// Chuck Cross has vastly improved the loading of NxBRE DLL reference mechanism
-			bool nxbreAssemblyLoaded = false;
+			var nxbreAssemblyLoaded = false;
 			
 			// Add all implicitly referenced assemblies
 			if ((ReferenceLinkMode == ReferenceLinkModes.CurrentDomain) || (ReferenceLinkMode == ReferenceLinkModes.Full)) {
-				foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) {
-					// do not add AssemblyBuilders (bug 1482753), thanks to Bob Brumfield
-					// handle .NET4 dynamic assemblies correctly, thanks to Nich
-					 if (!(assembly is AssemblyBuilder) && (assembly.ManifestModule.GetType().Namespace != "System.Reflection.Emit")) {
-						AddReferencedAssembly(compilerParameters, assembly.Location);
-						if(assembly.ManifestModule.ScopeName.Equals(NXBRE_DLL)) nxbreAssemblyLoaded = true;
-					}
+				foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies().Where(assembly => !(assembly is AssemblyBuilder) && (assembly.ManifestModule.GetType().Namespace != "System.Reflection.Emit")))
+				{
+				    AddReferencedAssembly(compilerParameters, assembly.Location);
+				    if(assembly.ManifestModule.ScopeName.Equals(NXBRE_DLL)) nxbreAssemblyLoaded = true;
 				}
 			}
 			
@@ -331,21 +331,14 @@ namespace NxBRE.Util
 			}
 			
 			// Add any extra DLL listed in the application configuration
-			String extraReferences = Parameter.GetString("extraReferences");
+			var extraReferences = Parameter.GetString("extraReferences");
 			if (extraReferences != null) {
 				foreach(String dllToReference in extraReferences.Split(';')) {
 					AddReferencedAssembly(compilerParameters, dllToReference);
 				}
 			}
-		
-			CompilerResults cr;
-			
-			if (sourceIsString) {
-				cr = codeProvider.CompileAssemblyFromSource(compilerParameters, source);
-			}
-			else {
-				cr = codeProvider.CompileAssemblyFromFile(compilerParameters, source);
-			}
+
+	        var cr = sourceIsString ? codeProvider.CompileAssemblyFromSource(compilerParameters, source) : codeProvider.CompileAssemblyFromFile(compilerParameters, source);
 			
 			if (cr.Errors.Count != 0) {
 				throw new BREException(GetCompilerErrors(cr));
@@ -364,7 +357,7 @@ namespace NxBRE.Util
 				throw new BREException("Unable to create evaluator class instance - assembly loading problem", e);
 			}
 
-			object evaluatorInstance = cr.CompiledAssembly.CreateInstance(targetClassName);
+			var evaluatorInstance = cr.CompiledAssembly.CreateInstance(targetClassName);
 			
 			if(evaluatorInstance == null) {
 				throw new BREException("Unable to create evaluator class instance");
@@ -377,8 +370,7 @@ namespace NxBRE.Util
 		
 		private static void AddReferencedAssembly(CompilerParameters compilerParameters, string assemblyLocation) {
 			try	{
-				if ((assemblyLocation != null)
-				    && (assemblyLocation != String.Empty)
+				if ((!IsNullOrEmpty(assemblyLocation))
 				    && (!compilerParameters.ReferencedAssemblies.Contains(assemblyLocation)))
 					compilerParameters.ReferencedAssemblies.Add(assemblyLocation);
 			}
@@ -399,7 +391,7 @@ namespace NxBRE.Util
 			get {
 				lock(nxbreAssemblyLocation) {
 					
-					if (nxbreAssemblyLocation != String.Empty) return nxbreAssemblyLocation;
+					if (nxbreAssemblyLocation != Empty) return nxbreAssemblyLocation;
 					
 					// ------------------------------------------------------------------------------
 					// Find the NxBRE.dll assembly and add reference - the assembly could be found
@@ -428,18 +420,13 @@ namespace NxBRE.Util
 		}
 		
 		private static string GetCompilerErrors(CompilerResults cr) {
-			string errors = "Compiler returned with result code: " +
+			var errors = "Compiler returned with result code: " +
 											cr.NativeCompilerReturnValue.ToString() +
 											";\n";
 			
 		    // If errors occurred during compilation, output the compiler output and errors.
-		    foreach(CompilerError ce in cr.Errors) {
-		    	if (!(ce.IsWarning)) {
-		    		errors += ("CompilerError::" + ce.ToString() + ";\n");
-		    	}
-		    }
 
-			return errors;
+		    return cr.Errors.Cast<CompilerError>().Where(ce => !(ce.IsWarning)).Aggregate(errors, (current, ce) => current + ("CompilerError::" + ce.ToString() + ";\n"));
 		}
 
 	}

@@ -1,12 +1,7 @@
 namespace NxBRE.InferenceEngine.Rules {
 	using System;
-	using System.Collections;
-	
-	using NxBRE.InferenceEngine.Rules;
-	
-	using NxBRE.Util;
-	
-	/// <summary>
+
+    /// <summary>
 	/// A Fact is a specialization of Atom, which can be labelled and
 	/// contains only Individual predicates. It is immutable.
 	/// </summary>
@@ -43,7 +38,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <param name="atom">The Atom that the Fact will be built on.</param>
 		public Fact(string label, Atom atom):base(label, atom) {}
 		
-		private Fact(Fact source, IPredicate[] members):base(source.Label, source, members) {}
+		private Fact(Atom source, IPredicate[] members):base(source.Label, source, members) {}
 
 		/// <summary>
 		/// Returns a cloned Fact, of same label, type and containing a clone of the array of predicates.
@@ -59,7 +54,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// </summary>
 		/// <param name="newLabel">The new label to use.</param>
 		/// <returns>A new Fact based on the current one and the provided new label.</returns>
-		public Fact ChangeLabel(String newLabel) {
+		public Fact ChangeLabel(string newLabel) {
 			return new Fact(newLabel, this);
 		}
 		

@@ -1,8 +1,6 @@
 namespace NxBRE.InferenceEngine.IO {
 	using System.Collections;
-
-	using NxBRE.InferenceEngine.Core;
-	using NxBRE.InferenceEngine.Rules;
+	using Rules;
 
 	/// <summary>
 	/// The types of business object binding that determines the inversion of control

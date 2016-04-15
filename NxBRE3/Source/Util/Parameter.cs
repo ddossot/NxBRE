@@ -76,11 +76,11 @@ namespace NxBRE.Util
 		/// <param name="defaultValue">The default value to use in case the configuration entry is not found.</param>
 		/// <returns>The config entry enum value, unless it is not found then it returns the default value.</returns>
 		public static object GetEnum(string settingKey, Type enumType, object defaultValue) {
-			try {
-				// I wish I could have used a constrained generic for this method but Enums can not be used as contraints...
-				string settingValue = Get<string>(settingKey, null);
-				if (settingValue == null) return defaultValue;
-				else return Enum.Parse(enumType, settingValue, false);
+			try
+			{
+			    // I wish I could have used a constrained generic for this method but Enums can not be used as contraints...
+				var settingValue = Get<string>(settingKey, null);
+			    return settingValue == null ? defaultValue : Enum.Parse(enumType, settingValue, false);
 			}
 			catch (Exception e) {
 				// exceptions at this stage might be confusing, let's throw a more detailed one
@@ -111,13 +111,12 @@ namespace NxBRE.Util
 		/// <param name="tag">The sought tag, without column (:).</param>
 		/// <returns>The value from the selected tag.</returns>
 		public static string GetTaggedInfo(string source, string tag) {
-			string result = String.Empty;
-			if ((source != null) && (tag != null)) {
-				int posTag = source.IndexOf(tag + COLUMN);
-				if (posTag >= 0)
-					result = source.Substring(posTag + tag.Length + 1).Split(';')[0];
-			}
-			return result;
+			var result = string.Empty;
+		    if ((source == null) || (tag == null)) return result;
+		    var posTag = source.IndexOf(tag + COLUMN, StringComparison.Ordinal);
+		    if (posTag >= 0)
+		        result = source.Substring(posTag + tag.Length + 1).Split(';')[0];
+		    return result;
 		}
 
 		/// <summary>
@@ -131,8 +130,8 @@ namespace NxBRE.Util
 		public static object[] GroupFinal(object[] arguments) {
 			if (arguments.Length < 2)	return arguments;
 			
-			int posLastSame = arguments.Length;
-			for(int i=arguments.Length-2;i>=0;i--) {
+			var posLastSame = arguments.Length;
+			for(var i=arguments.Length-2;i>=0;i--) {
 				if ((arguments[i] != null) &&
 				    (arguments[i+1] != null) &&
 				    (arguments[i].GetType() == arguments[i+1].GetType())) {
@@ -144,20 +143,18 @@ namespace NxBRE.Util
 			}
 			if (posLastSame != arguments.Length) {
 				// create a new Array and copy the non grouped arguments
-				object[] result = new object[posLastSame + 1];
+				var result = new object[posLastSame + 1];
 				Array.Copy(arguments, result, result.Length - 1);
-				Array parameters = Array.CreateInstance(arguments[posLastSame].GetType(), arguments.Length - posLastSame);
-				int j=0;
-				for(int i=posLastSame;i<arguments.Length;i++) {
+				var parameters = Array.CreateInstance(arguments[posLastSame].GetType(), arguments.Length - posLastSame);
+				var j=0;
+				for(var i=posLastSame;i<arguments.Length;i++) {
 					parameters.SetValue(arguments[i], j);
 					j++;
 				}
 				result[result.Length - 1] = parameters;
 				return result;
 			}
-			else
-				// no grouping possible
-				return arguments;
+		    return arguments;
 		}
 	
 		/// <summary>
@@ -169,16 +166,16 @@ namespace NxBRE.Util
 		/// <param name="targetType">The type of array that will contain the grouped arguments.</param>
 		/// <returns>A new array of arguments, with the final objects grouped in an array.</returns>
 		public static object[] GroupFinal(object[] arguments, int lengthToReach, Type targetType) {
-			int numberToGroup = arguments.Length - lengthToReach + 1;
+			var numberToGroup = arguments.Length - lengthToReach + 1;
 			if ((numberToGroup) < 2) return arguments;
 			// create a new Array and copy the non grouped arguments
-			object[] result = new object[lengthToReach];
+			var result = new object[lengthToReach];
 			Array.Copy(arguments, result, lengthToReach-1);
 			
 			// group the last arguments
 			if (targetType.IsArray) targetType = targetType.GetElementType();
-			Array grouped = Array.CreateInstance(targetType, numberToGroup);
-			for (int i=0; i<numberToGroup; i++) grouped.SetValue(arguments[lengthToReach + i - 1], i);
+			var grouped = Array.CreateInstance(targetType, numberToGroup);
+			for (var i=0; i<numberToGroup; i++) grouped.SetValue(arguments[lengthToReach + i - 1], i);
 			result[lengthToReach-1] = grouped;
 			
 			return result;
@@ -191,9 +188,9 @@ namespace NxBRE.Util
 		/// <param name="arguments">An array of arguments.</param>
 		/// <returns>A string that represents the function signature.</returns>
 		internal static string BuildFunctionSignature(string functionName, object[] arguments) {
-			string functionSignature = TrimPrefix(functionName.Split(PARENTHESIS)[0]);
+			var functionSignature = TrimPrefix(functionName.Split(PARENTHESIS)[0]);
 			
-			for(int i=0; i<arguments.Length; i++) functionSignature += "_Arg" + i;
+			for(var i=0; i<arguments.Length; i++) functionSignature += "_Arg" + i;
 			
 			return functionSignature;
 		}
@@ -204,11 +201,11 @@ namespace NxBRE.Util
 		/// <param name="source"></param>
 		/// <returns></returns>
 		internal static ObjectPair ParseOperatorCall(string source) {
-			int indexOfFirstOpeningParenthesis = source.IndexOf('(');
-			string operatorName = source.Substring(0, indexOfFirstOpeningParenthesis);
+			var indexOfFirstOpeningParenthesis = source.IndexOf('(');
+			var operatorName = source.Substring(0, indexOfFirstOpeningParenthesis);
 			
-			int indexOfLastClosingParenthesis = source.LastIndexOf(')');
-			string operatorArgument = source.Substring(indexOfFirstOpeningParenthesis + 1, indexOfLastClosingParenthesis - indexOfFirstOpeningParenthesis -1);
+			var indexOfLastClosingParenthesis = source.LastIndexOf(')');
+			var operatorArgument = source.Substring(indexOfFirstOpeningParenthesis + 1, indexOfLastClosingParenthesis - indexOfFirstOpeningParenthesis -1);
 				
 			return new ObjectPair(operatorName, operatorArgument);
 		}
@@ -219,11 +216,10 @@ namespace NxBRE.Util
 		/// <param name="formula">The complete formula.</param>
 		/// <returns>A string that represents the function signature.</returns>
 		internal static FormulaSignature BuildFormulaSignature(string formula) {
-			string[] formulaTokens = formula.Split(PARENTHESIS);
-			string formulaName = TrimPrefix(formulaTokens[0]);
+			var formulaTokens = formula.Split(PARENTHESIS);
+			var formulaName = TrimPrefix(formulaTokens[0]);
 
-			if (formulaTokens.Length > 1) return new FormulaSignature(formulaName, formulaTokens[1]);
-			else return new FormulaSignature(formulaName);
+			return formulaTokens.Length > 1 ? new FormulaSignature(formulaName, formulaTokens[1]) : new FormulaSignature(formulaName);
 		}
 		
 		/// <summary>
@@ -231,12 +227,11 @@ namespace NxBRE.Util
 		/// </summary>
 		/// <param name="formulaName">The formula name, which could be prefixed</param>
 		/// <returns>The unprefixed formula name</returns>
-		private static string TrimPrefix(string formulaName) {
-			int posFirstColumn = formulaName.IndexOf(COLUMN);
-			if (posFirstColumn >= 0) return formulaName.Substring(posFirstColumn + 1);
-			else return formulaName;
+		private static string TrimPrefix(string formulaName)
+		{
+		    var posFirstColumn = formulaName.IndexOf(COLUMN);
+		    return posFirstColumn >= 0 ? formulaName.Substring(posFirstColumn + 1) : formulaName;
 		}
-
 	}
 	
 	/// <summary>
@@ -255,7 +250,7 @@ namespace NxBRE.Util
 			IList tempArgumentList = new ArrayList();
 			
 			if (arguments != null)
-				foreach(string argument in arguments.Split(','))
+				foreach(var argument in arguments.Split(','))
 					tempArgumentList.Add(argument.Trim());
 			
 			this.arguments = ArrayList.ReadOnly(tempArgumentList);

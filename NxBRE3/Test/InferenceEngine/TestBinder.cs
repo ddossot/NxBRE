@@ -1,3 +1,5 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 namespace NxBRE.Test.InferenceEngine {
 	using System;
 	using System.Collections;

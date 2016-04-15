@@ -1,3 +1,5 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 namespace NxBRE.Test.InferenceEngine {
 	using System;
 	using System.Collections;
@@ -280,12 +282,12 @@ namespace NxBRE.Test.InferenceEngine {
 						Assert.IsTrue(i.Deduction.HasFormula, "imp1: HasFormula");
 						Atom atom = (Atom)i.AtomGroup.Members[0];
 						Assert.IsTrue(atom.HasSlot, "Has Slot");
-						Assert.IsInstanceOfType(typeof(byte[]), atom.GetPredicateValue(1), "Typed predicate support");
+						Assert.IsInstanceOf(typeof(byte[]), atom.GetPredicateValue(1), "Typed predicate support");
 						
-						Assert.IsInstanceOfType(typeof(Function), atom.Members[2], "Basic slot type predicate support");
+						Assert.IsInstanceOf(typeof(Function), atom.Members[2], "Basic slot type predicate support");
 						Assert.AreEqual("Size", atom.SlotNames[2], "Basic slot name predicate support");
 						
-						Assert.IsInstanceOfType(typeof(int), atom.GetPredicateValue(3), "Typed slot type predicate support");
+						Assert.IsInstanceOf(typeof(int), atom.GetPredicateValue(3), "Typed slot type predicate support");
 						Assert.AreEqual("Year", atom.SlotNames[3], "Typed slot name predicate support");
 						Assert.AreEqual(2006, atom.GetPredicate("Year").Value, "Typed slot value support");
 						break;

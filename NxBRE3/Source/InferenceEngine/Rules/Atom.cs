@@ -1,3 +1,6 @@
+using System.Linq;
+using static System.String;
+
 namespace NxBRE.InferenceEngine.Rules {
 	using System;
 	using System.Collections;
@@ -175,7 +178,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <remarks>This is the principal constructor for Atom and descendant objects.</remarks>
 		internal Atom(bool negative, string label, string type, params IPredicate[] members) {
 			this.negative = negative;
-			this.label = (label == String.Empty)?null:label;
+			this.label = (label == Empty)?null:label;
 			this.type = type;
 			
 			// load the predicates, extracting the slot names if any
@@ -183,28 +186,30 @@ namespace NxBRE.InferenceEngine.Rules {
 			slotNames = new string[members.Length];
 			hasSlot = false;
 			
-			for(int i=0; i<members.Length; i++) {
-				if (members[i] is Slot) {
+			for(var i=0; i<members.Length; i++)
+			{
+			    var slot1 = members[i] as Slot;
+			    if (slot1 != null) {
 					hasSlot = true;
-					Slot slot = (Slot)members[i];
+					var slot = slot1;
 					predicates[i] = slot.Predicate;
 					slotNames[i] = slot.Name;
 				}
 				else {
 					predicates[i] = members[i];
-					slotNames[i] = String.Empty;
+					slotNames[i] = Empty;
 				}
 			}
-			
-			// initialize long hashcode & other characteristics
-			HashCodeBuilder hcb = new HashCodeBuilder().Append(type);
+
+		    // initialize long hashcode & other characteristics
+			var hcb = new HashCodeBuilder().Append(type);
 			isFact = true;
 			hasFunction = false;
 			hasFormula = false;
 			hasIndividual = false;
 			onlyVariables = true;
 			
-			foreach(IPredicate member in predicates) {
+			foreach(var member in predicates) {
 				hcb.Append(member);
 				
 				if (member is Individual) hasIndividual = true;
@@ -267,47 +272,49 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <param name="ignoredPredicates">A list of predicate positions to exclude from comparison, or null if all predicates must be matched</param>
 		/// <returns>True if the two atoms have matching predicates, False otherwise.</returns>
 		internal bool PredicatesMatch(Atom atom, bool strictTyping, IList<int> ignoredPredicates) {
-			for(int position=0; position<predicates.Length; position++) {
-				if ((ignoredPredicates == null) || ((ignoredPredicates != null) && (!ignoredPredicates.Contains(position)))) {
-					if ((predicates[position] is Individual) &&
-					    (atom.predicates[position] is Function) &&
-					    (!((Function)atom.predicates[position]).Evaluate((Individual)predicates[position]))) {
-						return false;
-					}
-					else if ((predicates[position] is Function) &&
-					         (atom.predicates[position] is Individual) &&
-					         (!((Function)predicates[position]).Evaluate((Individual)atom.predicates[position]))) {
-						return false;
-					}
-					else if ((predicates[position] is Function) &&
-					         (atom.predicates[position] is Function) &&
-					         (!(predicates[position].Equals(atom.predicates[position])))) {
-						return false;
-					}
-					else if ((predicates[position] is Individual) && (atom.predicates[position] is Individual)) {
-						// we have two individuals
-						if (predicates[position].Value.GetType() == atom.predicates[position].Value.GetType()) {
-						  if (!predicates[position].Equals(atom.predicates[position])) 
-								// the two individuals are of same types: if equals fail, no match
-								return false;
-						}
-						else {
-							if (!strictTyping) {
-								// the two individuals are of different types and we are not in strict typing, so
-								// we try to cast to stronger type and compare
-								ObjectPair pair = new ObjectPair(predicates[position].Value, atom.predicates[position].Value);
-								Reflection.CastToStrongType(pair);
-								if (!pair.First.Equals(pair.Second)) return false;
-							}
-							else {
-								return false;
-							}
-						}
-					}
-				}
+			for(var position=0; position<predicates.Length; position++)
+			{
+			    if ((ignoredPredicates != null) && ((ignoredPredicates == null) || (ignoredPredicates.Contains(position))))
+			        continue;
+			    var individual = predicates[position] as Individual;
+			    if ((individual != null) &&
+			        (atom.predicates[position] is Function) &&
+			        (!((Function)atom.predicates[position]).Evaluate(individual))) {
+			            return false;
+			        }
+			    var function = predicates[position] as Function;
+			    if ((function != null) &&
+			        (atom.predicates[position] is Individual) &&
+			        (!function.Evaluate((Individual)atom.predicates[position]))) {
+			            return false;
+			        }
+			    if ((predicates[position] is Function) &&
+			        (atom.predicates[position] is Function) &&
+			        (!(predicates[position].Equals(atom.predicates[position])))) {
+			            return false;
+			        }
+			    if ((!(predicates[position] is Individual)) || (!(atom.predicates[position] is Individual))) continue;
+			    // we have two individuals
+			    if (predicates[position].Value.GetType() == atom.predicates[position].Value.GetType()) {
+			        if (!predicates[position].Equals(atom.predicates[position])) 
+			            // the two individuals are of same types: if equals fail, no match
+			            return false;
+			    }
+			    else {
+			        if (!strictTyping) {
+			            // the two individuals are of different types and we are not in strict typing, so
+			            // we try to cast to stronger type and compare
+			            var pair = new ObjectPair(predicates[position].Value, atom.predicates[position].Value);
+			            Reflection.CastToStrongType(pair);
+			            if (!pair.First.Equals(pair.Second)) return false;
+			        }
+			        else {
+			            return false;
+			        }
+			    }
 			}
-			
-			// we went through all the comparisons without a scratch, it means the atoms do match
+
+		    // we went through all the comparisons without a scratch, it means the atoms do match
 			return true;			
 		}
 
@@ -324,13 +331,12 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// </description>
 		/// <param name="atom">The other atom to determine the matching.</param>
 		/// <returns>True if the two atoms match.</returns>
-		public bool Matches(Atom atom) {
-			if (!BasicMatches(atom)) return false;
-			
-			return PredicatesMatch(atom, false, null);
+		public bool Matches(Atom atom)
+		{
+		    return BasicMatches(atom) && PredicatesMatch(atom, false, null);
 		}
-		
-		/// <summary>
+
+	    /// <summary>
 		/// Check if the current intersects with another one, which means that:
 		///  - they Match() together,
 		///  - their predicate types are similar,
@@ -342,24 +348,24 @@ namespace NxBRE.InferenceEngine.Rules {
 		public bool IsIntersecting(Atom atom) {
 			if (!Matches(atom)) return false;
 
-			for(int i=0; i<predicates.Length; i++)
-				if (predicates[i].GetType() != atom.predicates[i].GetType())
-					return false;
+			if (predicates.Where((t, i) => t.GetType() != atom.predicates[i].GetType()).Any())
+			{
+			    return false;
+			}
 			
 			if (!HasVariable) return true;
 			
-			int nonMatchingVariables = 0;
-			int variableCount = 0;
+			var nonMatchingVariables = 0;
+			var variableCount = 0;
 			
-			for(int i=0; i<predicates.Length; i++) {
+			for(var i=0; i<predicates.Length; i++) {
 				variableCount++;
-				if (predicates[i] is Variable) {
-					if (!(predicates[i].Equals(atom.predicates[i])))	nonMatchingVariables++;
-				}
+			    if (!(predicates[i] is Variable)) continue;
+			    if (!(predicates[i].Equals(atom.predicates[i])))	nonMatchingVariables++;
 			}
 	
 			if (variableCount < predicates.Length) return true;
-			else return (nonMatchingVariables < variableCount);
+	        return (nonMatchingVariables < variableCount);
 		}		
 		
 		/// <summary>
@@ -380,14 +386,14 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <param name="outputType">If True, the type of non String predicates will be displayed</param>
 		/// <returns>The String representation of the Atom.</returns>
 		public string ToString(bool outputType) {
-			StringBuilder result = new StringBuilder(negative?"!":"");
+			var result = new StringBuilder(negative?"!":"");
 			result.Append(type).Append("{");
-			bool first = true;
+			var first = true;
 			
-			for(int i=0; i<predicates.Length; i++) {
-				IPredicate member = predicates[i];
+			for(var i=0; i<predicates.Length; i++) {
+				var member = predicates[i];
 				if (!first) result.Append(",");
-				if (slotNames[i] != String.Empty) result.Append(slotNames[i]).Append("=");
+				if (slotNames[i] != Empty) result.Append(slotNames[i]).Append("=");
 				result.Append(member.ToString());
 				
 				// Type is displayed for non-string predicates, as suggested by Chuck Cross
@@ -409,15 +415,11 @@ namespace NxBRE.InferenceEngine.Rules {
 		public override bool Equals(object o) {
 			if (o.GetType() != this.GetType()) return false;
 			
-			Atom other = (Atom)o;
+			var other = (Atom)o;
 			
 			if (Signature != other.Signature) return false;
-			
-			for(int i=0; i<Members.Length; i++)
-				if (!Members[i].Equals(other.Members[i]))
-					return false;
-			
-			return true;
+
+		    return !Members.Where((t, i) => !t.Equals(other.Members[i])).Any();
 		}
 		
 		/// <summary>
@@ -443,9 +445,9 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <param name="slotName">The name of the slot in which the predicate is stored</param>
 		/// <returns>The actual value of the predicate, or throws an exception if no slot matches the name.</returns>
 		public object GetPredicateValue(string slotName) {
-			IPredicate predicate = GetPredicate(slotName);
+			var predicate = GetPredicate(slotName);
 			if (predicate == null) throw new ArgumentException("There is no slot named: " + slotName);
-			else return predicate.Value;
+		    return predicate.Value;
 		}
 		
 		/// <summary>
@@ -454,12 +456,11 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <param name="slotName">The name of the slot in which the predicate is stored</param>
 		/// <returns>The predicate or null if no slot matches the name.</returns>
 		public IPredicate GetPredicate(string slotName) {
-			if ((slotName == null) || (slotName == String.Empty)) throw new ArgumentException("The name of a slot can not be null or empty");
+			if ((slotName == null) || (slotName == Empty)) throw new ArgumentException("The name of a slot can not be null or empty");
 			
-			int slotIndex = Array.IndexOf(slotNames, slotName);
+			var slotIndex = Array.IndexOf(slotNames, slotName);
 			
-			if (slotIndex < 0) return null;
-			else return predicates[slotIndex];
+			return slotIndex < 0 ? null : predicates[slotIndex];
 		}
 		
 		/// <summary>
@@ -471,8 +472,8 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// </remarks>
 		public object[] PredicateValues {
 			get {
-				ArrayList values = new ArrayList();
-				foreach(IPredicate member in predicates)values.Add(member.Value);
+				var values = new ArrayList();
+				foreach(var member in predicates)values.Add(member.Value);
 				return values.ToArray();
 			}
 		}

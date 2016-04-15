@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using NxBRE.InferenceEngine.Rules;
 
 namespace NxBRE.InferenceEngine.IO
@@ -89,7 +88,7 @@ namespace NxBRE.InferenceEngine.IO
                 }
 
                 //create the merged lists
-                List<T> mergedFacts = new List<T>(numberOfItems);
+                var mergedFacts = new List<T>(numberOfItems);
 
                 //for each adapter merge the lists
                 foreach (IRuleBaseAdapter adapter in m_Adapters)
@@ -120,31 +119,42 @@ namespace NxBRE.InferenceEngine.IO
                 case AdapterListType.Query:
                     return (IList<T>)adapter.Queries;
 
+                case AdapterListType.Assertion:
+                    break;
+                case AdapterListType.Retraction:
+                    break;
+                case AdapterListType.Equivalent:
+                    break;
+                case AdapterListType.IntegrityQuery:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(listType), listType, null);
             }
 
-            IExtendedRuleBaseAdapter extendedAdapter = adapter as IExtendedRuleBaseAdapter;
-            if (adapter != null)
+            var extendedAdapter = adapter as IExtendedRuleBaseAdapter;
+            if (adapter == null) return new List<T>(0);
+            switch (listType)
             {
-                switch (listType)
-                {
-                    case AdapterListType.Retraction:
-                        return (IList<T>)extendedAdapter.Retractions;
-                    case AdapterListType.IntegrityQuery:
-                        return (IList<T>)extendedAdapter.IntegrityQueries;
-                    case AdapterListType.Equivalent:
-                        return (IList<T>)extendedAdapter.Equivalents;
-                    case AdapterListType.Assertion:
-                        return (IList<T>)extendedAdapter.Assertions;
-                }
+                case AdapterListType.Retraction:
+                    return (IList<T>) extendedAdapter.Retractions;
+                case AdapterListType.IntegrityQuery:
+                    return (IList<T>) extendedAdapter.IntegrityQueries;
+                case AdapterListType.Equivalent:
+                    return (IList<T>) extendedAdapter.Equivalents;
+                case AdapterListType.Assertion:
+                    return (IList<T>) extendedAdapter.Assertions;
+                case AdapterListType.Fact:
+                    break;
+                case AdapterListType.Query:
+                    break;
+                case AdapterListType.Implication:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(listType), listType, null);
             }
 
             return new List<T>(0);
         }
-
-
-
-
-
 
         #region IRuleBaseAdapter interface members
 
@@ -247,9 +257,8 @@ namespace NxBRE.InferenceEngine.IO
             get { return GetMergedList<Query>(AdapterListType.IntegrityQuery); }
             set { throw new NotImplementedException("Composite Adapter is read only."); }
         }
-        
-        #endregion
 
+        #endregion
 
         #region IDisposable Members
 
@@ -272,16 +281,14 @@ namespace NxBRE.InferenceEngine.IO
                     //Dispose contained adapters
                     if (m_Adapters != null)
                     {
-                        for (int i = 0; i < m_Adapters.Count; i++)
+                        foreach (var t in m_Adapters)
                         {
-                            m_Adapters[i].Dispose();
+                            t.Dispose();
                         }
                     }
                 }
             }
             m_Disposed = true;
-
-
         }
 
         #endregion

@@ -73,7 +73,7 @@ namespace NxBRE.InferenceEngine.IO.Hrf086
 			
 			//--- AW: fill token list
 			tokens = new Token();  // first token is a dummy
-			Token node = tokens;
+			var node = tokens;
 			do {
 				node.next = NextToken();
 				node = node.next;
@@ -90,7 +90,8 @@ namespace NxBRE.InferenceEngine.IO.Hrf086
 				// replace isolated '\r' by '\n' in order to make
 				// eol handling uniform across Windows, Unix and Mac
 				if (ch == '\r' && buffer.Peek() != '\n') ch = EOL;
-				if (ch == EOL) { line++; lineStart = pos + 1; }
+			    if (ch != EOL) return;
+			    line++; lineStart = pos + 1;
 			}
 		}
 	
@@ -110,11 +111,10 @@ namespace NxBRE.InferenceEngine.IO.Hrf086
 					} else if (ch == EOF) return false;
 					else NextCh();
 				}
-			} else {
-				if (ch==EOL) {line--; lineStart = lineStart0;}
-				pos = pos - 2; buffer.Pos = pos+1; NextCh();
 			}
-			return false;
+		    if (ch==EOL) {line--; lineStart = lineStart0;}
+		    pos = pos - 2; buffer.Pos = pos+1; NextCh();
+		    return false;
 		}
 	
 		
@@ -128,10 +128,15 @@ namespace NxBRE.InferenceEngine.IO.Hrf086
 		private Token NextToken() {
 			while (ignore[ch]) NextCh();
 			if (ch == '/' && Comment0()) return NextToken();
-			t = new Token();
-			t.pos = pos; t.col = pos - lineStart + 1; t.line = line; 
-			int state = start[ch];
-			StringBuilder buf = new StringBuilder(16);
+		    t = new Token
+		    {
+		        pos = pos,
+		        col = pos - lineStart + 1,
+		        line = line
+		    };
+
+		    int state = start[ch];
+			var buf = new StringBuilder(16);
 			buf.Append(ch); NextCh();
 		
 			switch (state) 

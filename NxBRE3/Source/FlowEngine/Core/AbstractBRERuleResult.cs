@@ -1,7 +1,6 @@
 namespace NxBRE.FlowEngine.Core
 {
-	using System;
-	using System.Text;
+    using System.Text;
 	
 	/// <summary> Abstract definition of BRERuleResult.
 	/// Use this if you wish to do inheritance.
@@ -64,7 +63,7 @@ namespace NxBRE.FlowEngine.Core
 		/// <returns> String containing info</returns>
 		public override string ToString()
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			if (metaData != null) sb.Append("MetaData   :\n").Append(metaData.ToString()).Append("\n");
 			

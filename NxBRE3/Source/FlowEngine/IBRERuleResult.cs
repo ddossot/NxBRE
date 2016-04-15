@@ -1,7 +1,6 @@
 namespace NxBRE.FlowEngine
 {
-	using System;
-	/// <summary> This object defines the interface for all objects that wish to contain
+    /// <summary> This object defines the interface for all objects that wish to contain
 	/// a result created by a BusinessRuleFactory.
 	/// *
 	/// The result can be of any type.  The BRERuleMetaData object contains 

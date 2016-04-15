@@ -1,12 +1,10 @@
 namespace NxBRE.FlowEngine.IO {
-	using System;
-	using System.IO;
-	using System.Text;
-	using System.Xml;
+    using System.IO;
+    using System.Xml;
 	using System.Xml.XPath;
 	using System.Xml.Xsl;
 	
-	using NxBRE.FlowEngine;
+	using FlowEngine;
 	using NxBRE.Util;
 
 	/// <summary>
@@ -15,7 +13,7 @@ namespace NxBRE.FlowEngine.IO {
 	/// </summary>
 	/// <author>David Dossot</author>
 	public class XBusinessRulesStreamDriver : AbstractRulesDriver {
-		Stream xmlStream;
+	    readonly Stream xmlStream;
 		
 		public XBusinessRulesStreamDriver(Stream xmlStream) {
 			if (xmlStream == null) throw new BRERuleFatalException("Null is not a valid XML source");
@@ -25,11 +23,11 @@ namespace NxBRE.FlowEngine.IO {
 		
 		protected override XmlReader GetReader() {
 			//Loading the XSL file in a XSLTransform object
-			XslCompiledTransform xslt = Xml.GetCachedCompiledTransform("transformXRules.xsl");
+			var xslt = Xml.GetCachedCompiledTransform("transformXRules.xsl");
 			
 		 	//We have the xmlSource in hand, transform it to the native NXBRE XSD Format
-			MemoryStream xsltResult = new MemoryStream();
-			XmlReader xmlSourceReader = GetXmlInputReader(xmlStream, "xBusinessRules.xsd");
+			var xsltResult = new MemoryStream();
+			var xmlSourceReader = GetXmlInputReader(xmlStream, "xBusinessRules.xsd");
 			
 			xslt.Transform(new XPathDocument(xmlSourceReader), null, xsltResult);
 			

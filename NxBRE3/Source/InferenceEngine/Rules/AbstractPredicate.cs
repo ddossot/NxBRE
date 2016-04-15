@@ -1,7 +1,7 @@
 namespace NxBRE.InferenceEngine.Rules {
 	using System;
 	
-	using NxBRE.Util;
+	using Util;
 	
 	/// <summary>
 	/// AbstractPredicate is the prototype for predicates. It is immutable.

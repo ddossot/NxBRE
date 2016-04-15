@@ -1,9 +1,6 @@
 namespace NxBRE.FlowEngine.Core
 {
-	using System;
-	
-	using NxBRE.FlowEngine;
-	/// <summary>An helper class that allows adding business objects in the result context
+    /// <summary>An helper class that allows adding business objects in the result context
 	/// </summary>
 	/// <seealso cref="NxBRE.FlowEngine.Core.AbstractBRERuleResult">
 	/// </seealso>

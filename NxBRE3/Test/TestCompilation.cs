@@ -1,6 +1,9 @@
 //
 // NUnit v2.1 Test Class for Compilation
 //
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 namespace NxBRE.Test
 {
 	using System;

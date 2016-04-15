@@ -67,15 +67,11 @@ namespace NxBRE.InferenceEngine.Rules {
 
 			this.resolutionType = resolutionType;
 			this.bob = bob;
-			
-			if (resolutionType == RelationResolutionType.Binder) {
-				// precalculate the function signature to use in the binder to evaluate the function
-				if (functionSignature == null)
-					this.functionSignature = Parameter.BuildFunctionSignature(type, members);
-				else
-					this.functionSignature = functionSignature;
-			}
-		}
+
+		    if (resolutionType != RelationResolutionType.Binder) return;
+		    // precalculate the function signature to use in the binder to evaluate the function
+		    this.functionSignature = functionSignature ?? Parameter.BuildFunctionSignature(type, members);
+		                    }
 		
 		/// <summary>
 		/// Private constructor used for cloning.
@@ -121,23 +117,25 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// function, to which the atom's predicates have been passed, has been positive.
 		/// </summary>
 		public bool PositiveRelation {
-			get {
-				if (!IsFact)
+			get
+			{
+			    if (!IsFact)
 					throw new BREException("A function relation can not be estimated if any member is a variable: " + ToString());
-				
-				if (resolutionType == RelationResolutionType.NxBRE) {
-					return FlowEngineBinder.EvaluateFERIOperator(Type, PredicateValues);
-				}
-				else if ((resolutionType == RelationResolutionType.Binder)
-				      || (resolutionType == RelationResolutionType.Expression)) {
-					try {
-						return bob.Relate(functionSignature, PredicateValues);
-					} catch(Exception e) {
-						throw new BREException("Error when evaluating '"+ functionSignature + "' with predicates: " + Misc.ArrayToString(PredicateValues) ,e);
-					}
-				}
-				else
-					throw new BREException("Relation evaluation mode not supported: " + resolutionType);
+
+			    switch (resolutionType)
+			    {
+			        case RelationResolutionType.NxBRE:
+			            return FlowEngineBinder.EvaluateFERIOperator(Type, PredicateValues);
+			        case RelationResolutionType.Binder:
+			        case RelationResolutionType.Expression:
+			            try {
+			                return bob.Relate(functionSignature, PredicateValues);
+			            } catch(Exception e) {
+			                throw new BREException("Error when evaluating '"+ functionSignature + "' with predicates: " + Misc.ArrayToString(PredicateValues) ,e);
+			            }
+			        default:
+			            throw new BREException("Relation evaluation mode not supported: " + resolutionType);
+			    }
 			}
 		}
 		

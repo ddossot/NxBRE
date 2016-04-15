@@ -1,19 +1,15 @@
+using System.Linq;
+
 namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.IO;
-	using System.Xml.XPath;
-	
-	using NxBRE.Util;
-
-	using NxBRE.InferenceEngine.Core;
-	using NxBRE.InferenceEngine.Rules;
-
-	using NxBRE.FlowEngine;
-	using NxBRE.FlowEngine.IO;
-	using NxBRE.FlowEngine.Factories;
+	using Util;
+	using FlowEngine;
+	using FlowEngine.IO;
+	using FlowEngine.Factories;
 	
 	/// <summary>
 	/// Provides an implementation of IBinder that is based on AbstractBinder
@@ -78,11 +74,10 @@ namespace NxBRE.InferenceEngine.IO {
 				businessObjectsMap = value;
 				
 				if (businessObjectsMap != null)
-					foreach(string reservedId in reservedIds)
-						if (businessObjectsMap.Contains(reservedId))
-							throw new BREException("Business Object key '" +
-							                       reservedId +
-							                       "' conflicts with a reserved key of the Flow Engine Binder.");
+					foreach (var reservedId in reservedIds.Where(reservedId => businessObjectsMap.Contains(reservedId)))
+					    throw new BREException("Business Object key '" +
+					                           reservedId +
+					                           "' conflicts with a reserved key of the Flow Engine Binder.");
 				
 				PrepareBRE();
 			}
@@ -173,12 +168,12 @@ namespace NxBRE.InferenceEngine.IO {
 		public override bool Evaluate(object predicate, string function, string[] arguments) {
 			NewWorkingBRE();
 			working_bre.RuleContext.SetObject(PREDICATE_ID, predicate);
-			for(int i=0; i<arguments.Length; i++) working_bre.RuleContext.SetObject("Arg" + i, arguments[i]);
+			for(var i=0; i<arguments.Length; i++) working_bre.RuleContext.SetObject("Arg" + i, arguments[i]);
 			working_bre.RuleContext.SetObject(INFERENCE_ENGINE_ID, IEF);
 			working_bre.Process(EVALUATE_PREFIX + function);
-			object result = working_bre.RuleContext.GetObject(RESULT_ID);
+			var result = working_bre.RuleContext.GetObject(RESULT_ID);
 			if (result != null) return (bool)result;
-			else return false;
+		    return false;
 		}
 
 		/// <summary>
@@ -197,12 +192,12 @@ namespace NxBRE.InferenceEngine.IO {
 		/// <returns>True if the function relation is positive.</returns>
 		public override bool Relate(string function, object[] predicates) {
 			NewWorkingBRE();
-			for(int i=0; i<predicates.Length; i++) working_bre.RuleContext.SetObject("Arg" + i, predicates[i]);
+			for(var i=0; i<predicates.Length; i++) working_bre.RuleContext.SetObject("Arg" + i, predicates[i]);
 			working_bre.RuleContext.SetObject(INFERENCE_ENGINE_ID, IEF);
 			working_bre.Process(RELATE_PREFIX + function);
-			object result = working_bre.RuleContext.GetObject(RESULT_ID);
+			var result = working_bre.RuleContext.GetObject(RESULT_ID);
 			if (result != null) return (bool)result;
-			else return false;
+		    return false;
 		}
 		
 		/// <summary>
@@ -243,11 +238,11 @@ namespace NxBRE.InferenceEngine.IO {
 		/// </remarks>
 		/// <see cref="NxBRE.InferenceEngine.NewFactEventArgs">Definition of NewFactEventArgs.</see>
 		public override NewFactEvent OnNewFact {
-			get {
-				if (HasFactEventHandler(ON_NEW_FACT)) return new NewFactEvent(NewFactHandler);
-				else return null;
+			get
+			{
+			    return HasFactEventHandler(ON_NEW_FACT) ? new NewFactEvent(NewFactHandler) : null;
 			}
-	  }
+		}
 	
 		/// <summary>
 		/// NewFactEvent delegate called by the Inference Engine whenever a fact is deleted
@@ -264,10 +259,9 @@ namespace NxBRE.InferenceEngine.IO {
 		/// <see cref="NxBRE.InferenceEngine.NewFactEventArgs">Definition of NewFactEventArgs.</see>
 		public override NewFactEvent OnDeleteFact {
 			get {
-				if (HasFactEventHandler(ON_DELETE_FACT)) return new NewFactEvent(DeleteFactHandler);
-				else return null;
+			    return HasFactEventHandler(ON_DELETE_FACT) ? new NewFactEvent(DeleteFactHandler) : null;
 			}
-	  }
+		}
 	  
 		/// <summary>
 		/// NewFactEvent delegate called by the Inference Engine whenever a new fact is deducted
@@ -285,10 +279,9 @@ namespace NxBRE.InferenceEngine.IO {
 		/// <see cref="NxBRE.InferenceEngine.NewFactEventArgs">Definition of NewFactEventArgs.</see>
 		public override NewFactEvent OnModifyFact {
 			get {
-				if (HasFactEventHandler(ON_MODIFY_FACT)) return new NewFactEvent(ModifyFactHandler);
-				else return null;
+			    return HasFactEventHandler(ON_MODIFY_FACT) ? new NewFactEvent(ModifyFactHandler) : null;
 			}
-	  }
+		}
 
 		public override string ToString() {
 	  	return "FlowEngineBinder w/BindingType:" + this.BindingType;
@@ -332,10 +325,10 @@ namespace NxBRE.InferenceEngine.IO {
 		
 		private void PrepareBRE() {
 			prepared_bre = (IFlowEngine)bre.Clone();
-						
-			if (businessObjectsMap != null)
-				foreach(object key in BusinessObjects.Keys)
-					prepared_bre.RuleContext.SetObject(key, BusinessObjects[key]);			
+
+		    if (businessObjectsMap == null) return;
+		    foreach(var key in BusinessObjects.Keys)
+		        prepared_bre.RuleContext.SetObject(key, BusinessObjects[key]);
 		}
 		
 		private void NewWorkingBRE() {
@@ -411,7 +404,7 @@ namespace NxBRE.InferenceEngine.IO {
 				                       functionName +
 				                       ", only 2 is supported.");
 			
-			string operatorType = "NxBRE.FlowEngine.Rules.";
+			var operatorType = "NxBRE.FlowEngine.Rules.";
 			
 			if (functionName.ToLower().StartsWith("nxbre:")) operatorType += functionName.Substring(6).Split(Parameter.PARENTHESIS)[0];
 			else operatorType += functionName.Split(Parameter.PARENTHESIS)[0];
@@ -428,7 +421,7 @@ namespace NxBRE.InferenceEngine.IO {
 				}
 			}
 			
-			ObjectPair pair = new ObjectPair(values[0], values[1]);
+			var pair = new ObjectPair(values[0], values[1]);
 			Reflection.CastToStrongType(pair);
 			
 			return operatorObject.ExecuteComparison(null,

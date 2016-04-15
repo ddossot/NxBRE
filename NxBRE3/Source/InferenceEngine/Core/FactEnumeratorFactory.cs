@@ -4,7 +4,7 @@ namespace NxBRE.InferenceEngine.Core
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	
-	using NxBRE.InferenceEngine.Rules;
+	using Rules;
 	
 	using NxBRE.Util;
 	
@@ -81,19 +81,19 @@ namespace NxBRE.InferenceEngine.Core
 				
 				// if the current fact is in the excluded list, automatically move to the next record
 				if ((excludedFacts != null) && (excludedFacts.Contains(currentFact))) return MoveNext();
-				else return true;
+			    return true;
 			}
 			
 			protected abstract bool DoMoveNext();
 		}
 	
 		private class SingleFactEnumerator : AbstractExcludingFactEnumerator<Fact> {
-			private readonly Fact singleFactResult;
+			private readonly Fact _singleFactResult;
 			
 			private bool readyToRead = true;
 			
 			public SingleFactEnumerator(Fact singleFactResult):base() {
-				this.singleFactResult = singleFactResult;
+				this._singleFactResult = singleFactResult;
 			}
 			
 			public override void Reset() {
@@ -107,7 +107,7 @@ namespace NxBRE.InferenceEngine.Core
 					return false;
 				}
 				else {
-					currentFact = singleFactResult;
+					currentFact = _singleFactResult;
 					readyToRead = false;
 					return true;
 				}
@@ -159,18 +159,13 @@ namespace NxBRE.InferenceEngine.Core
 				ignoredPredicates = null;
 			}
 			
-			public override bool MoveNext() {
-				if (base.MoveNext()) {
-					if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "FactListPredicateMatchingEnumerator.MoveNext: currentFact=" + currentFact + " -> " + currentFact.PredicatesMatch(filter, strictTyping, ignoredPredicates));
-					
-					if (!currentFact.PredicatesMatch(filter, strictTyping, ignoredPredicates)) return MoveNext();
-					else return true;
-				}
-				else {
-					return false;
-				}
+			public override bool MoveNext()
+			{
+			    if (!base.MoveNext()) return false;
+			    if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "FactListPredicateMatchingEnumerator.MoveNext: currentFact=" + currentFact + " -> " + currentFact.PredicatesMatch(filter, strictTyping, ignoredPredicates));
+
+			    return currentFact.PredicatesMatch(filter, strictTyping, ignoredPredicates) || MoveNext();
 			}
-			
 		}
 
 	}

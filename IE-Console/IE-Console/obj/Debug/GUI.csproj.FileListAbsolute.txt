@@ -1,0 +1,7 @@
+C:\Project\NxBRE\IE-Console\IE-Console\bin\Debug\NxBRE-IE-Console.exe
+C:\Project\NxBRE\IE-Console\IE-Console\bin\Debug\NxBRE-IE-Console.pdb
+C:\Project\NxBRE\IE-Console\IE-Console\bin\Debug\NxBRE.dll
+C:\Project\NxBRE\IE-Console\IE-Console\bin\Debug\NxBRE.pdb
+C:\Project\NxBRE\IE-Console\IE-Console\obj\Debug\GUI.csprojResolveAssemblyReference.cache
+C:\Project\NxBRE\IE-Console\IE-Console\obj\Debug\NxBRE-IE-Console.exe
+C:\Project\NxBRE\IE-Console\IE-Console\obj\Debug\NxBRE-IE-Console.pdb

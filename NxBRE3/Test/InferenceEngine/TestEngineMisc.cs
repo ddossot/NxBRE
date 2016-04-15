@@ -1,3 +1,5 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 namespace NxBRE.Test.InferenceEngine {
 	using System;
 	using System.Collections;
@@ -21,12 +23,12 @@ namespace NxBRE.Test.InferenceEngine {
 			ie.LoadRuleBase(new RuleML09NafDatalogAdapter(ruleFilesFolder + "agenda-scheduler-test.ruleml", FileAccess.Read));
 			
 			deductionsToCheck = new string[]{"deduction{B}", "then{C}"};
-		  	NewFactEvent honf = new NewFactEvent(HandleExpectedNewFact);
-		  	ie.NewFactHandler += honf;
+			NewFactEvent honf = new NewFactEvent(HandleExpectedNewFact);
+			ie.NewFactHandler += honf;
 	
-		  	Process();
+			Process();
 	
-		  	Assert.AreEqual(2, deducted, "Deducted");
+			Assert.AreEqual(2, deducted, "Deducted");
 			Assert.IsFalse(wrongDeduction, "Wrong deduction");
 	
 			ie.NewFactHandler -= honf;
@@ -43,27 +45,27 @@ namespace NxBRE.Test.InferenceEngine {
 			deductionsToCheck = new string[] {"discount{Peter Miller,Honda,5.0 percent}",
 																				"discount{Peter Miller,Porsche,7.5 percent}"};
 			qrs = ie.RunQuery(new Query(new AtomGroup(AtomGroup.LogicalOperator.And,
-			                                          new Atom("discount", new Variable("customer"),
-												                              				 new Variable("product"),
-												                              				 new Variable("amount")))));
+													  new Atom("discount", new Variable("customer"),
+																							 new Variable("product"),
+																							 new Variable("amount")))));
 			Assert.AreEqual(2, qrs.Count, "(1) Query Result Size");
 			ParseResult();
 			Assert.IsFalse(wrongDeduction, "(1) Query Results");
 
 			// Fact 4 - this is a bummer
 			Fact fact4 = new Fact("bummer",
-                            "spending",
-                            new Individual("John Q. Doe"),
-               						  new Individual("min 5000 euro"),
-               						  new Individual("previous year"),
-               						  new Individual("current year"));
+							"spending",
+							new Individual("John Q. Doe"),
+									  new Individual("min 5000 euro"),
+									  new Individual("previous year"),
+									  new Individual("current year"));
 			ie.Assert(fact4);
 			
 			// Fact 5
 			ie.Assert(new Fact("spending",
-			                    new Individual("Jean Dupont"),
-	             						new Individual("min 5000 euro"),
-	             						new Individual("previous year")));
+								new Individual("Jean Dupont"),
+										new Individual("min 5000 euro"),
+										new Individual("previous year")));
 	
 			Process();
 			
@@ -108,9 +110,9 @@ namespace NxBRE.Test.InferenceEngine {
 																				"Discount{Peter Miller,Porsche,7.5}"};
 			
 			qrs = ie.RunQuery(new Query(new AtomGroup(AtomGroup.LogicalOperator.And,
-			                                          new Atom("Discount", new Variable("customer"),
-												                              				 new Variable("product"),
-												                              				 new Variable("amount")))));
+													  new Atom("Discount", new Variable("customer"),
+																							 new Variable("product"),
+																							 new Variable("amount")))));
 			
 			Assert.AreEqual(2, qrs.Count, "(1) Query Result Size");
 			ParseResult();
@@ -118,23 +120,23 @@ namespace NxBRE.Test.InferenceEngine {
 
 			// Spending JQDoe
 			Assert.IsTrue(ie.Assert(new Fact("Spending",
-		                          new Individual("John Q. Doe"),
-		             						  new Individual(2004),
-		             						  new Individual(123.45f))),
-		             		"jqdoeSpending asserted");
+								  new Individual("John Q. Doe"),
+											  new Individual(2004),
+											  new Individual(123.45f))),
+							"jqdoeSpending asserted");
 			
 			Fact jqdoePremiumRating = new Fact("Customer Rating",
-			                                   new Individual("John Q. Doe"),
-			                                   new Individual("Premium"));
+											   new Individual("John Q. Doe"),
+											   new Individual("Premium"));
 			
 			Assert.IsTrue(ie.Assert(jqdoePremiumRating), "jqdoePremiumRating asserted");
 			
 			// SpendingJDupont
 			Assert.IsTrue(ie.Assert(new Fact("Spending",
-					                    new Individual("Jean Dupont"),
-			             						new Individual(2004),
-			             						new Individual(3245.25f))),
-		             		"jdupontSpending asserted");
+										new Individual("Jean Dupont"),
+												new Individual(2004),
+												new Individual(3245.25f))),
+							"jdupontSpending asserted");
 	
 			Process();
 			
@@ -165,20 +167,20 @@ namespace NxBRE.Test.InferenceEngine {
 		[Test]
 		public void DiscountVisio2003Pages() {
 			deductionsToCheck = new string[]{"Customer Rating{Peter Miller,Premium}"};
-	  	NewFactEvent honf = new NewFactEvent(HandleOrderedNewFact);
-	  	ie.NewFactHandler += honf;
+		NewFactEvent honf = new NewFactEvent(HandleOrderedNewFact);
+		ie.NewFactHandler += honf;
 
 			ie.LoadRuleBase(new Visio2003Adapter(ruleFilesFolder + "discount.vdx",
-			                                     FileAccess.Read,
-			                                     "Customer Rules",
-			                                     "Customer Data"));
+												 FileAccess.Read,
+												 "Customer Rules",
+												 "Customer Data"));
 			Process();
 			Assert.AreEqual(1, deducted, "(1) Deducted");
 			Assert.AreEqual(2, ie.FactsCount, "(2) Total Facts Count");
 			Assert.IsFalse(wrongDeduction, "(3) Query Results");
 
-	  	ie.NewFactHandler -= honf;
-	  	deductionsToCheck = null;
+		ie.NewFactHandler -= honf;
+		deductionsToCheck = null;
 		}
 		
 		[Test]
@@ -224,9 +226,9 @@ namespace NxBRE.Test.InferenceEngine {
 			ParseResult();
 			Assert.IsFalse(wrongDeduction, "(1) Query Results");
 			ie.Assert(new Fact("spending",
-			                    new Individual("Jean Dupont"),
-	             						new Individual("min 5000 euro"),
-	             						new Individual("previous year")));
+								new Individual("Jean Dupont"),
+										new Individual("min 5000 euro"),
+										new Individual("previous year")));
 			Process();
 			Assert.AreEqual(3, deducted, "(1bis) Deducted, Isolated");
 
@@ -267,13 +269,13 @@ namespace NxBRE.Test.InferenceEngine {
 		[Test]
 		public void NafSupportRuleML() {
 			PerformNafSupport(new RuleML086NafDatalogAdapter(ruleFilesFolder + "fire-alarm.ruleml",
-			                                               	 FileAccess.Read));
+															 FileAccess.Read));
 		}
 	
 		[Test]
 		public void NafSupportVisio2003() {
 			PerformNafSupport(new Visio2003Adapter(ruleFilesFolder + "fire-alarm.vdx",
-			                                       FileAccess.Read));
+												   FileAccess.Read));
 		}
 	
 		private void PerformNafSupport(IRuleBaseAdapter irba) {
@@ -288,12 +290,12 @@ namespace NxBRE.Test.InferenceEngine {
 			
 			deductionsToCheck = new string[] {"Alarm Fault In Room{Smoke Detected,A100}",
 																				"Safe Room{A102}"};
-	  	NewFactEvent henf = new NewFactEvent(HandleExpectedNewFact);
-	  	ie.NewFactHandler += henf;
+		NewFactEvent henf = new NewFactEvent(HandleExpectedNewFact);
+		ie.NewFactHandler += henf;
 			Process();
 			Assert.AreEqual(2, deducted, "Deducted");
 			Assert.IsFalse(wrongDeduction, "Deductions OK");
-	  	ie.NewFactHandler -= henf;
+		ie.NewFactHandler -= henf;
 
 			deductionsToCheck = new string[] {"Detector In Room{A102}", "Firemen In Room{A102}"};
 			qrs = ie.RunQuery("Safe Room List");
@@ -306,22 +308,22 @@ namespace NxBRE.Test.InferenceEngine {
 	
 		[Test]
 		public void CountingImpFunctionRelSupportFEB() {
-      InitIE(new FlowEngineBinder(ruleFilesFolder + "exams.ruleml.xbre",
-			                       			BindingTypes.BeforeAfter));
-      
-      PerformCountingImpFunctionRelSupport(new RuleML086NafDatalogAdapter(ruleFilesFolder + "exams.ruleml",
-			                                               											FileAccess.Read),
-			                                     true);
+	  InitIE(new FlowEngineBinder(ruleFilesFolder + "exams.ruleml.xbre",
+											BindingTypes.BeforeAfter));
+	  
+	  PerformCountingImpFunctionRelSupport(new RuleML086NafDatalogAdapter(ruleFilesFolder + "exams.ruleml",
+																									FileAccess.Read),
+												 true);
 		}
 	
 		[Test]
 		public void CountingImpFunctionRelSupportFEBVisio2003() {
-      InitIE(new FlowEngineBinder(ruleFilesFolder + "exams.ruleml.xbre",
-			                       			BindingTypes.BeforeAfter));
-      
-      PerformCountingImpFunctionRelSupport(new Visio2003Adapter(ruleFilesFolder + "exams.vdx",
-			                                               						FileAccess.Read),
-			                                     true);
+	  InitIE(new FlowEngineBinder(ruleFilesFolder + "exams.ruleml.xbre",
+											BindingTypes.BeforeAfter));
+	  
+	  PerformCountingImpFunctionRelSupport(new Visio2003Adapter(ruleFilesFolder + "exams.vdx",
+																				FileAccess.Read),
+												 true);
 		}
 
 		[Test]
@@ -329,34 +331,34 @@ namespace NxBRE.Test.InferenceEngine {
 			// use this binder load method to overcome loading problems because 
 			// the ccb file is not in the same folder as NxBRE.dll
 			using (StreamReader sr = File.OpenText(ruleFilesFolder + "exams.ruleml.ccb"))
-	      InitIE(CSharpBinderFactory.LoadFromString("NxBRE.Examples.ExamsBinder", sr.ReadToEnd()));
+		  InitIE(CSharpBinderFactory.LoadFromString("NxBRE.Examples.ExamsBinder", sr.ReadToEnd()));
 			
-      PerformCountingImpFunctionRelSupport(new RuleML086NafDatalogAdapter(ruleFilesFolder + "exams.ruleml",
-			                                               											FileAccess.Read),
-			                                     true);
+	  PerformCountingImpFunctionRelSupport(new RuleML086NafDatalogAdapter(ruleFilesFolder + "exams.ruleml",
+																									FileAccess.Read),
+												 true);
 		}
 
 		[Test]
 		public void CountingImpFunctionExpression() {
-	   	InitIE();
+		InitIE();
 			
-      PerformCountingImpFunctionRelSupport(new RuleML086NafDatalogAdapter(ruleFilesFolder + "exams-binderless.ruleml",
-			                                               											FileAccess.Read),
-			                                     false);
+	  PerformCountingImpFunctionRelSupport(new RuleML086NafDatalogAdapter(ruleFilesFolder + "exams-binderless.ruleml",
+																									FileAccess.Read),
+												 false);
 		}
 
-    private void PerformCountingImpFunctionRelSupport(IRuleBaseAdapter irba, bool withBinder) {
+	private void PerformCountingImpFunctionRelSupport(IRuleBaseAdapter irba, bool withBinder) {
 			ie.LoadRuleBase(irba);
 			
 			ie.NewWorkingMemory(WorkingMemoryTypes.Isolated);
 			deductionsToCheck = new string[] {"Result{Physics,Passed}", "Result{Poetry,Passed}",
 																				"Result Count{2,Passed}"};
-	  	NewFactEvent henf = new NewFactEvent(HandleExpectedNewFact);
-	  	ie.NewFactHandler += henf;
-	  	Process(withBinder?new Hashtable():null);
+		NewFactEvent henf = new NewFactEvent(HandleExpectedNewFact);
+		ie.NewFactHandler += henf;
+		Process(withBinder?new Hashtable():null);
 			Assert.AreEqual(3, deducted, "(1) Deducted");
 			Assert.IsFalse(wrongDeduction, "(1) Deductions OK");
-	  	ie.NewFactHandler -= henf;
+		ie.NewFactHandler -= henf;
 			
 			ie.NewWorkingMemory(WorkingMemoryTypes.Isolated);
 			// let's turn maths failure into success
@@ -365,12 +367,12 @@ namespace NxBRE.Test.InferenceEngine {
 			deductionsToCheck = new string[] {"Result{Physics,Passed}", "Result{Poetry,Passed}",
 																				"Result{Maths,Passed}", "Result Count{3,Passed}",
 																				"Graduation Success{}"};
-	  	henf = new NewFactEvent(HandleExpectedNewFact);
-	  	ie.NewFactHandler += henf;
+		henf = new NewFactEvent(HandleExpectedNewFact);
+		ie.NewFactHandler += henf;
 			Process(withBinder?new Hashtable():null);
 			Assert.AreEqual(5, deducted, "(2) Deducted");
 			Assert.IsFalse(wrongDeduction, "(2) Deductions OK");
-	  	ie.NewFactHandler -= henf;
+		ie.NewFactHandler -= henf;
 
 			deductionsToCheck = null;
 		}
@@ -378,8 +380,8 @@ namespace NxBRE.Test.InferenceEngine {
 		[Test]
 		public void ChocolateBox() {
 			PerformChocolateBoxTwiddling(new RuleML09NafDatalogAdapter(ruleFilesFolder + "chocolatebox-binderless.ruleml",
-			                                                           FileAccess.Read),
-			                             false);
+																	   FileAccess.Read),
+										 false);
 		}
 
 		[Test]
@@ -387,21 +389,21 @@ namespace NxBRE.Test.InferenceEngine {
 			// use this binder load method to overcome loading problems because 
 			// the ccb file is not in the same folder as NxBRE.dll
 			using (StreamReader sr = File.OpenText(ruleFilesFolder + "chocolatebox.ruleml.ccb"))
-	      InitIE(CSharpBinderFactory.LoadFromString("NxBRE.Test.InferenceEngine.ChocolateBoxBinder", sr.ReadToEnd()));
+		  InitIE(CSharpBinderFactory.LoadFromString("NxBRE.Test.InferenceEngine.ChocolateBoxBinder", sr.ReadToEnd()));
 
 			PerformChocolateBoxTwiddling(new RuleML09NafDatalogAdapter(ruleFilesFolder + "chocolatebox.ruleml",
-			                                                           FileAccess.Read),
-			                             true);
+																	   FileAccess.Read),
+										 true);
 		}
 
 		[Test]
 		public void ChocolateBoxFEB() {
-      		InitIE(new FlowEngineBinder(ruleFilesFolder + "chocolatebox.ruleml.xbre",
-			                       			BindingTypes.BeforeAfter));
+			InitIE(new FlowEngineBinder(ruleFilesFolder + "chocolatebox.ruleml.xbre",
+											BindingTypes.BeforeAfter));
 			
 			PerformChocolateBoxTwiddling(new RuleML09NafDatalogAdapter(ruleFilesFolder + "chocolatebox.ruleml",
-			                                                           FileAccess.Read),
-			                             true);
+																	   FileAccess.Read),
+										 true);
 		}
 		
 		private void PerformChocolateBoxTwiddling(IRuleBaseAdapter irba, bool withBinder) {
@@ -418,16 +420,16 @@ namespace NxBRE.Test.InferenceEngine {
 		[Test]
 		public void SecuritySandboxViolation() {
 			ie.LoadRuleBase(new RuleML091NafDatalogAdapter(ruleFilesFolder + "sandbox-violation.ruleml",
-			                                               FileAccess.Read),
-			                true);
+														   FileAccess.Read),
+							true);
 			
 			try {
 				ie.RunQuery("Security Sandbox Violation");
 				Assert.Fail("An exception should have been thrown!");
 			} catch(BREException e) {
-				Assert.IsInstanceOfType(typeof(System.Security.SecurityException),
-				                        e.InnerException,
-				                        "A SecurityException was expected");
+				Assert.IsInstanceOf(typeof(System.Security.SecurityException),
+										e.InnerException,
+										"A SecurityException was expected");
 			}
 		}
 

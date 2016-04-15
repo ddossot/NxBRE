@@ -34,14 +34,9 @@ namespace NxBRE.InferenceEngine.Core
 		}
 		
 		
-		public FactBase FB {
-			get {
-				if (Type == WorkingMemoryTypes.Global) return globalFactBase;
-				else return WorkingFactBase;
-			}
-		}
-		
-		public void DisposeIsolated() {
+		public FactBase FB => Type == WorkingMemoryTypes.Global ? globalFactBase : WorkingFactBase;
+
+	    public void DisposeIsolated() {
 			if (Type == WorkingMemoryTypes.Global)
 				throw new BREException("Current Working Memory is not Isolated and can not be committed.");
 			
