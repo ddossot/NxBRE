@@ -307,7 +307,7 @@ namespace NxBRE.Test.FlowEngine
 		
 		[Test]
 		public void GenericTypeAssertions() {
-			Assert.IsInstanceOfType(typeof(Dictionary<string,string>), GetObject("dictionaryStringString"), "Dictionary");
+		    Assert.IsInstanceOf(typeof(Dictionary<string,string>), GetObject("dictionaryStringString"), "Dictionary");
 		}
 		
 		[Test]

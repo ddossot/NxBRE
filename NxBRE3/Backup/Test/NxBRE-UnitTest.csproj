@@ -1,0 +1,75 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{2D105A1A-E216-43B6-8403-52C57F2D6E1A}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>NxBRE_UnitTest</RootNamespace>
+    <AssemblyName>NxBRE-UnitTest</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+  <ItemGroup>
+    <Reference Include="nunit.framework" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="FlowEngine\StringContainsOperator.cs" />
+    <Compile Include="FlowEngine\TestBackwardChainer.cs" />
+    <Compile Include="FlowEngine\TestBREImpl.cs" />
+    <Compile Include="FlowEngine\TestDrivers.cs" />
+    <Compile Include="FlowEngine\TestExtra.cs" />
+    <Compile Include="FlowEngine\TestRule.cs" />
+    <Compile Include="InferenceEngine\AbstractTestEngine.cs" />
+    <Compile Include="InferenceEngine\TestAdapter.cs" />
+    <Compile Include="InferenceEngine\TestBinder.cs" />
+    <Compile Include="InferenceEngine\TestCompositeAdapter.cs" />
+    <Compile Include="InferenceEngine\TestCore.cs" />
+    <Compile Include="InferenceEngine\TestEngineCoreFeaturesHRF.cs" />
+    <Compile Include="InferenceEngine\TestEngineCoreFeaturesRuleML086.cs" />
+    <Compile Include="InferenceEngine\TestEngineCoreFeaturesRuleML09.cs" />
+    <Compile Include="InferenceEngine\TestEngineCoreFeaturesRuleML091.cs" />
+    <Compile Include="InferenceEngine\TestEngineCoreFeaturesRuleML09Compact.cs" />
+    <Compile Include="InferenceEngine\TestEngineCoreFeaturesRuleML09Expanded.cs" />
+    <Compile Include="InferenceEngine\TestEngineMisc.cs" />
+    <Compile Include="InferenceEngine\TestEngineMiscHotSwapWM.cs" />
+    <Compile Include="InferenceEngine\TestEngineMiscThreadSafeWM.cs" />
+    <Compile Include="InferenceEngine\TestEngineRuleML09MultiSyntax.cs" />
+    <Compile Include="InferenceEngine\TestEventContext.cs" />
+    <Compile Include="InferenceEngine\TestFileRegistry.cs" />
+    <Compile Include="InferenceEngine\TestQueryResultsExporter.cs" />
+    <Compile Include="InferenceEngine\TestTypedFacts.cs" />
+    <Compile Include="TestCompilation.cs" />
+    <Compile Include="TestDataSet.cs" />
+    <Compile Include="TestObject.cs" />
+    <Compile Include="TestSchema.cs" />
+    <Compile Include="TestUtil.cs" />
+    <Content Include="NxBRE-UnitTest.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Source\NxBRE.csproj">
+      <Project>{C5A2507E-550E-4EEC-B3C2-A278ECB27E30}</Project>
+      <Name>NxBRE</Name>
+    </ProjectReference>
+    <Folder Include="FlowEngine" />
+    <Folder Include="InferenceEngine" />
+  </ItemGroup>
+</Project>

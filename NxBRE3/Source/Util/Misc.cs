@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace NxBRE.Util
 {
 	using System;
@@ -36,21 +38,12 @@ namespace NxBRE.Util
 		/// <remarks>
 		/// For performance reasons, it iterates on the smallest collection and use contains on the other.
 		/// </remarks>
-		public static bool AreIntersecting<T>(IList<T> collectionA, IList<T> collectionB) {
-			if (collectionA.Count > collectionB.Count) {
-				foreach(T o in collectionB)
-					if (collectionA.Contains(o))
-						return true;
-			}
-			else {
-				foreach(T o in collectionA)
-					if (collectionB.Contains(o))
-						return true;
-			}
-			return false;
+		public static bool AreIntersecting<T>(IList<T> collectionA, IList<T> collectionB)
+		{
+		    return collectionA.Count > collectionB.Count ? collectionB.Any(collectionA.Contains) : collectionA.Any(collectionB.Contains);
 		}
 
-		///<summary>
+	    ///<summary>
 		/// Determines if two ArrayList are intersecting, i.e. have an object in common.
 		///</summary>
 		/// <param name="collectionA">One of the two collections to evaluate.</param>
@@ -60,17 +53,7 @@ namespace NxBRE.Util
 		/// For performance reasons, it iterates on the smallest collection and use contains on the other.
 		/// </remarks>
 		public static bool AreIntersecting(IList collectionA, IList collectionB) {
-			if (collectionA.Count > collectionB.Count) {
-				foreach(object o in collectionB)
-					if (collectionA.Contains(o))
-						return true;
-			}
-			else {
-				foreach(object o in collectionA)
-					if (collectionB.Contains(o))
-						return true;
-			}
-			return false;	
+			return collectionA.Count > collectionB.Count ? collectionB.Cast<object>().Any(collectionA.Contains) : collectionA.Cast<object>().Any(collectionB.Contains);
 		}
 		
 		/// <summary>
@@ -100,7 +83,7 @@ namespace NxBRE.Util
 		/// <param name="objects">The IList to output.</param>
 		/// <returns>The content of the IList in a string.</returns>
 		public static string IListToString(IList objects) {
-			return IListToString(objects, String.Empty);	
+			return IListToString(objects, string.Empty);	
 		}
 
 		/// <summary>
@@ -109,7 +92,7 @@ namespace NxBRE.Util
 		/// <param name="array">The Array to output.</param>
 		/// <returns>The content of the Array in a string.</returns>
 		public static string ArrayToString(Array array) {
-			return IListToString(array, String.Empty);	
+			return IListToString(array, string.Empty);	
 		}
 		
 		/// <summary>
@@ -118,7 +101,7 @@ namespace NxBRE.Util
 		/// <param name="objects">The IList to output.</param>
 		/// <returns>The content of the IList in a string.</returns>
 		public static string IListToString<T>(IList<T> objects) {
-			return IListToString((IList)objects, String.Empty);
+			return IListToString((IList)objects, string.Empty);
 		}
 		
 		/// <summary>
@@ -138,25 +121,25 @@ namespace NxBRE.Util
 		/// <param name="margin">A left margin string to place before each value.</param>
 		/// <returns>The content of the IList in a string.</returns>
 		public static string IListToString(IList objects, string margin) {
-			string result = "(";
-			
-			if (objects != null) {
-				bool first = true;
-				foreach (object o in objects) {
-					string stringContent;
+			var result = "(";
+
+		    if (objects == null) return result + ")";
+		    var first = true;
+		    foreach (var o in objects) {
+		        string stringContent;
+
+		        var map = o as IDictionary;
+		        if (map != null) stringContent = IDictionaryToString(map);
+		        else if (o is IList) stringContent = IListToString((IList)o);
+		        else stringContent = o.ToString();
 					
-					if (o is IDictionary) stringContent = IDictionaryToString((IDictionary)o);
-					else if (o is IList) stringContent = IListToString((IList)o);
-					else stringContent = o.ToString();
+		        if (margin != String.Empty) result = result + margin + stringContent + "\n";
+		        else result = result + (first?String.Empty:",") + stringContent;
 					
-					if (margin != String.Empty) result = result + margin + stringContent + "\n";
-					else result = result + (first?String.Empty:",") + stringContent;
-					
-					first = false;
-				}
-			}
-				
-			return result + ")";	
+		        first = false;
+		    }
+
+		    return result + ")";	
 		}
 				
 		/// <summary>
@@ -174,25 +157,25 @@ namespace NxBRE.Util
 		/// <param name="map">The IDictionary to output.</param>
 		/// <returns>The content of the IDictionary in a string.</returns>
 		public static string IDictionaryToString(IDictionary map) {
-			string result = "[";
+			var result = "[";
 
-			if (map != null) {
-				bool first = true;
-				foreach(object key in map.Keys) {
-					object content = map[key];
-					string stringContent;
+		    if (map == null) return result + "]";
+		    var first = true;
+		    foreach(var key in map.Keys) {
+		        var content = map[key];
+		        string stringContent;
+
+		        var dictionary = content as IDictionary;
+		        if (dictionary != null) stringContent = IDictionaryToString(dictionary);
+		        else if (content is IList) stringContent = IListToString((IList)content);
+		        else stringContent = content.ToString();
 					
-					if (content is IDictionary) stringContent = IDictionaryToString((IDictionary)content);
-					else if (content is IList) stringContent = IListToString((IList)content);
-					else stringContent = content.ToString();
+		        result = result + (first?string.Empty:";") + key + "=" + stringContent;
 					
-					result = result + (first?String.Empty:";") + key + "=" + stringContent;
-					
-					first = false;
-				}
-			}
-				
-			return result + "]";
+		        first = false;
+		    }
+
+		    return result + "]";
 		}
 
 	}

@@ -1,15 +1,16 @@
+using System.Linq;
+
 namespace NxBRE.InferenceEngine.Core {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
-	using System.Data;
 	using System.Diagnostics;
 	using System.Text;
 	
-	using NxBRE.InferenceEngine.Rules;
+	using Rules;
 	
-	using NxBRE.Util;
+	using Util;
 	
 	/// <summary>
 	/// The FactBase is the repository of facts for the inference engine.
@@ -143,14 +144,14 @@ namespace NxBRE.InferenceEngine.Core {
 		/// Gets the enumeration of all facts in the fact base.
 		/// </summary>
 		/// <returns>An IEnumerator of all facts.</returns>
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
+		IEnumerator IEnumerable.GetEnumerator() {
 			return factListReferences.Keys.GetEnumerator();
 		}
 		
 		///<summary>Clones the fact base.</summary>
 		public object Clone() {
-			FactBase fb = new FactBase();
-			for(IEnumerator<Fact> e = GetEnumerator(); e.MoveNext(); ) fb.Assert(e.Current);
+			var fb = new FactBase();
+			for(var e = GetEnumerator(); e.MoveNext(); ) fb.Assert(e.Current);
 			return fb;
 		}
 		
@@ -160,11 +161,11 @@ namespace NxBRE.InferenceEngine.Core {
 			if (fact == null) throw new ArgumentNullException("Null is not a valid fact to assert");
 			
 			if (!fact.IsFact)
-				throw new BREException("Can not add non-facts to the fact base: "+fact.ToString());
+				throw new BREException("Can not add non-facts to the fact base: "+fact);
 			
 			if (!Exists(fact)) {
-				for(int position=0; position<fact.Members.Length; position++) {
-					object individualValue = fact.Members[position].Value;
+				for(var position=0; position<fact.Members.Length; position++) {
+					var individualValue = fact.Members[position].Value;
 					StoreFactForIndividualValue(fact, position, individualValue);
 					
 					// if we do not want strict typing, we also store the non-string individuals under their string representation
@@ -207,29 +208,26 @@ namespace NxBRE.InferenceEngine.Core {
 		public bool Retract(Fact fact) {
 			if (fact == null) throw new ArgumentNullException("Null is not a valid fact to retract");
 			
-			IEnumerator<Fact> e = Select(fact, null);
-			
-			if (e.MoveNext()) {
-				Fact storedFact = e.Current;
-				
-				// remove the fact from the lists of reference where it is referenced
-				foreach(ICollection<Fact> factList in factListReferences[storedFact]) {
-					factList.Remove(storedFact);
-				}
-				
-				// and from the reference map itself
-				factListReferences.Remove(storedFact);
-				
-				// and from the label map
-				if ((storedFact.Label != null) && (labelMap.ContainsKey(storedFact.Label))) labelMap.Remove(storedFact.Label);
-				
-				// the fact existing and removed from the factbase, return true
-				if (!ModifiedFlag) ModifiedFlag = true;
+			var e = Select(fact, null);
 
-				return true;
-			}
-			
-			return false;
+		    if (!e.MoveNext()) return false;
+		    var storedFact = e.Current;
+				
+		    // remove the fact from the lists of reference where it is referenced
+		    foreach(var factList in factListReferences[storedFact]) {
+		        factList.Remove(storedFact);
+		    }
+				
+		    // and from the reference map itself
+		    factListReferences.Remove(storedFact);
+				
+		    // and from the label map
+		    if ((storedFact.Label != null) && (labelMap.ContainsKey(storedFact.Label))) labelMap.Remove(storedFact.Label);
+				
+		    // the fact existing and removed from the factbase, return true
+		    if (!ModifiedFlag) ModifiedFlag = true;
+
+		    return true;
 		}
 		
 		/// <summary>
@@ -242,29 +240,28 @@ namespace NxBRE.InferenceEngine.Core {
 		public bool Modify(Fact currentFact, Fact newFact) {
 			if (currentFact == null) throw new ArgumentNullException("Null is not a valid fact to modify");
 			if (newFact == null) throw new ArgumentNullException("Null is not a valid fact to use as a new value");
-			
-			if (Retract(currentFact)) {
-				// Retraction is done, let's Assert
-				try {
-					// If the new fact already exists, retract it first
-					if (Exists(newFact)) Retract(newFact);
+
+		    if (!Retract(currentFact)) return false;
+		    // Retraction is done, let's Assert
+		    try {
+		        // If the new fact already exists, retract it first
+		        if (Exists(newFact)) Retract(newFact);
 					
-					// Preserve the label if no new one provided
-					if ((currentFact.Label != null) && (currentFact.Label != String.Empty)
-					    && ((newFact.Label == null) || (newFact.Label == String.Empty)))
-						Assert(newFact.ChangeLabel(currentFact.Label));
-					else
-						Assert(newFact);
-					return true;
-				} catch(Exception e) {
-					// Assert mysteriously failed: compensate the retraction
-					Assert(currentFact);
-					// and throw a wrapped exception
-					throw new BREException("Modify failed because Assert failed.", e);
-				}
-			}
-			
-			return false;
+		        // Preserve the label if no new one provided
+		        if ((currentFact.Label != null) && (currentFact.Label != String.Empty)
+		            && ((newFact.Label == null) || (newFact.Label == String.Empty)))
+		            Assert(newFact.ChangeLabel(currentFact.Label));
+		        else
+		            Assert(newFact);
+		        return true;
+		    } catch(Exception e) {
+		        // Assert mysteriously failed: compensate the retraction
+		        Assert(currentFact);
+		        // and throw a wrapped exception
+		        throw new BREException("Modify failed because Assert failed.", e);
+		    }
+
+		    return false;
 		}
 		
 		/// <summary>
@@ -281,12 +278,12 @@ namespace NxBRE.InferenceEngine.Core {
 		/// </summary>
 		/// <param name="factLabel">The label of the Fact to get.</param>
 		/// <returns>The Fact matching the label if present in the FactBase, otherwise null.</returns>
-		public Fact GetFact(string factLabel) {
-			if (labelMap.ContainsKey(factLabel)) return labelMap[factLabel];
-			else return null;
+		public Fact GetFact(string factLabel)
+		{
+		    return labelMap.ContainsKey(factLabel) ? labelMap[factLabel] : null;
 		}
-		
-		/// <summary>
+
+	    /// <summary>
 		/// A String representation of the FactBase for display purpose only.
 		/// </summary>
 		/// <returns>The String representation of the FactBase.</returns>
@@ -299,12 +296,13 @@ namespace NxBRE.InferenceEngine.Core {
 		/// </summary>
 		/// <param name="signature"></param>
 		/// <returns></returns>
-		public bool HasFactsForSignature(string signature) {
-			if (signatureMap.ContainsKey(signature)) return signatureMap[signature].Count > 0;
-			else return false;
+		public bool HasFactsForSignature(string signature)
+		{
+		    if (signatureMap.ContainsKey(signature)) return signatureMap[signature].Count > 0;
+		    return false;
 		}
-		
-		/// <summary>
+
+	    /// <summary>
 		/// Runs a Query against a the FactBase.
 		/// </summary>
 		/// <param name="query">The Query to run.</param>
@@ -318,55 +316,32 @@ namespace NxBRE.InferenceEngine.Core {
 		/// </summary>
 		/// <param name="processResults">The process results from which facts must be extracted.</param>
 		/// <returns>An <code>IList&lt;Fact></code> of extracted facts.</returns>
-		public static IList<Fact> ExtractAllFacts(IList<IList<PositiveMatchResult>> processResults) {
-			IList<Fact> result = new List<Fact>();
-			
-			foreach(IList<PositiveMatchResult> processResult in processResults) {
-				foreach(PositiveMatchResult pmr in processResult) {
-					// naf atom dummy results are skipped
-					if (!(pmr.Fact is FactBase.NegativeFact)) {
-						result.Add(pmr.Fact);
-					}
-				}
-			}
-			
-			return result;
+		public static IList<Fact> ExtractAllFacts(IList<IList<PositiveMatchResult>> processResults)
+		{
+		    return (from processResult in processResults from pmr in processResult where !(pmr.Fact is FactBase.NegativeFact) select pmr.Fact).ToList();
 		}
 
-		/// <summary>
+	    /// <summary>
 		/// Extract the facts found in process results and return them as a standard query result.
 		/// </summary>
 		/// <param name="processResults">The process results from which facts must be extracted.</param>
 		/// <returns>An <code>IList&lt;IList&lt;Fact>></code> of extracted facts.</returns>
-		public static IList<IList<Fact>> ExtractFacts(IList<IList<PositiveMatchResult>> processResults) {
-			IList<IList<Fact>> result = new List<IList<Fact>>();
-			
-			foreach(IList<PositiveMatchResult> processResult in processResults) {
-				result.Add(ExtractFacts(processResult));
-			}
-			
-			return result;
-		}
+		public static IList<IList<Fact>> ExtractFacts(IList<IList<PositiveMatchResult>> processResults)
+	    {
+	        return processResults.Select(ExtractFacts).ToList();
+	    }
 
-		/// <summary>
+	    /// <summary>
 		/// Extract the facts found in one row of a process results and return them as one row of a standard query result.
 		/// </summary>
 		/// <param name="processResult">One row of process results from which facts must be extracted.</param>
 		/// <returns>An <code>IList&lt;Fact></code></returns>
-		public static IList<Fact> ExtractFacts(IList<PositiveMatchResult> processResult) {
-			IList<Fact> result = new List<Fact>();
-			
-			foreach(PositiveMatchResult pmr in processResult) {
-				// naf atom dummy results are skipped
-				if (!(pmr.Fact is FactBase.NegativeFact)) {
-					result.Add(pmr.Fact);
-				}
-			}
-			
-			return result;
-		}
-		
-		/// <summary>
+		public static IList<Fact> ExtractFacts(IList<PositiveMatchResult> processResult)
+	    {
+	        return (from pmr in processResult where !(pmr.Fact is FactBase.NegativeFact) select pmr.Fact).ToList();
+	    }
+
+	    /// <summary>
 		/// Runs an AtomGroup against the FactBase.
 		/// </summary>
 		/// <remarks>
@@ -375,14 +350,19 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="AG">The AtomGroup to execute</param>
 		/// <returns>An <code>IList&lt;IList&lt;PositiveMatchResult>></code> object containing the results.</returns>
 		public IList<IList<PositiveMatchResult>> ProcessAtomGroup(AtomGroup AG) {
-			List<IList<PositiveMatchResult>> runResult = new List<IList<PositiveMatchResult>>();
+			var runResult = new List<IList<PositiveMatchResult>>();
 			
-			if (AG.Operator == AtomGroup.LogicalOperator.And)
-				ProcessAnd(AG, runResult, 0, new List<PositiveMatchResult>());
-			else if (AG.Operator == AtomGroup.LogicalOperator.Or)
-				ProcessOr(AG, runResult, new List<PositiveMatchResult>());
-			else
-				throw new BREException("Processor encountered unsupported logical operator: " + AG.Operator);
+			switch (AG.Operator)
+			{
+			    case AtomGroup.LogicalOperator.And:
+			        ProcessAnd(AG, runResult, 0, new List<PositiveMatchResult>());
+			        break;
+			    case AtomGroup.LogicalOperator.Or:
+			        ProcessOr(AG, runResult, new List<PositiveMatchResult>());
+			        break;
+			    default:
+			        throw new BREException("Processor encountered unsupported logical operator: " + AG.Operator);
+			}
 			
 			return runResult.AsReadOnly();
 		}
@@ -395,74 +375,73 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="evaluateFormulas"></param>
 		/// <returns></returns>
 		public static Atom Populate(Atom targetAtom, IList<PositiveMatchResult> resultStack, bool evaluateFormulas) {
-		  	IPredicate[] members = (IPredicate[])targetAtom.Members.Clone();
+		  	var members = (IPredicate[])targetAtom.Members.Clone();
 		  	
 		  	// populate the variable elements with predicate values coming
 		  	// from the query part of the implication
-		  	foreach(PositiveMatchResult pmr in resultStack)
-		  		if (!(pmr.Fact is FactBase.NegativeFact))
-		  			RulesUtil.Populate(pmr.Fact, pmr.Source, members);
+		  	foreach (var pmr in resultStack.Where(pmr => !(pmr.Fact is FactBase.NegativeFact)))
+		  	    RulesUtil.Populate(pmr.Fact, pmr.Source, members);
 	
 		  	// if there are formulas in the atom, resolve these expressions, passing
 		  	// the variable values as arguments
-		  	if ((evaluateFormulas) && (targetAtom.HasFormula)) {
-		  			// formulas must be evaluated and the results placed in individual predicates
-			  		IDictionary arguments = new Hashtable();
+		    if ((!evaluateFormulas) || (!targetAtom.HasFormula)) return targetAtom.CloneWithNewMembers(members);
+		    {
+		        // formulas must be evaluated and the results placed in individual predicates
+		        IDictionary arguments = new Hashtable();
 			  		
-			  		foreach(PositiveMatchResult pmr in resultStack) {
-			  			if (!(pmr.Fact is FactBase.NegativeFact)) {
-				  			for(int i=0; i<pmr.Source.Members.Length; i++) {
-				  				object sourcePredicateKey = null;
+		        foreach (var pmr in resultStack.Where(pmr => !(pmr.Fact is FactBase.NegativeFact)))
+		        {
+		            for(var i=0; i<pmr.Source.Members.Length; i++) {
+		                object sourcePredicateKey = null;
 			  					
-			  					if (pmr.Source.Members[i] is Variable) {
-				  					sourcePredicateKey = pmr.Source.Members[i].Value;
-		    					}
-				  				else if (pmr.Source.SlotNames[i] != String.Empty) {
-			  						sourcePredicateKey = pmr.Source.SlotNames[i];
-			  					}
+		                if (pmr.Source.Members[i] is Variable) {
+		                    sourcePredicateKey = pmr.Source.Members[i].Value;
+		                }
+		                else if (pmr.Source.SlotNames[i] != String.Empty) {
+		                    sourcePredicateKey = pmr.Source.SlotNames[i];
+		                }
 				  				
-				  				if ((sourcePredicateKey != null) && (!arguments.Contains(sourcePredicateKey)))
-				  					arguments.Add(sourcePredicateKey, pmr.Fact.Members[i].Value);
+		                if ((sourcePredicateKey != null) && (!arguments.Contains(sourcePredicateKey)))
+		                    arguments.Add(sourcePredicateKey, pmr.Fact.Members[i].Value);
 				  				
-			  				}
-		  				}
-			  		}
+		            }
+		        }
 			  	
-			  		for(int i=0; i<members.Length; i++) {
-			  			if (members[i] is Formula) {
-	     					try {
-						      members[i] = new Individual(((Formula)members[i]).Evaluate(arguments));
-	     					}
-	     					catch (Exception ex) {
-			  					// Chuck Cross added try/catch block with addtional info in new thrown exception
-			  					StringBuilder sb = new StringBuilder("Error evaluating formula ")
-			  																				.Append(members[i])
-			  																				.Append(" in atom: ")
-			  																				.Append(targetAtom.Type)
-			  																				.Append(".\r\n  Arguments:");
+		        for(var i=0; i<members.Length; i++)
+		        {
+		            if (!(members[i] is Formula)) continue;
+		            try {
+		                members[i] = new Individual(((Formula)members[i]).Evaluate(arguments));
+		            }
+		            catch (Exception ex) {
+		                // Chuck Cross added try/catch block with addtional info in new thrown exception
+		                var sb = new StringBuilder("Error evaluating formula ")
+		                    .Append(members[i])
+		                    .Append(" in atom: ")
+		                    .Append(targetAtom.Type)
+		                    .Append(".\r\n  Arguments:");
 	      					
-			  					foreach(DictionaryEntry entry in arguments) {
-	      						sb.Append("   ")
-	      							.Append(entry.Key.ToString());
+		                foreach(DictionaryEntry entry in arguments) {
+		                    sb.Append("   ")
+		                        .Append(entry.Key.ToString());
 	      						
-	      						if (entry.Value != null) {
-	      							sb.Append("[")
-	      								.Append(entry.Value.GetType().ToString())
-	      								.Append("] = ")
-	      								.Append(entry.Value.ToString());
-	      						}
-	      						else sb.Append("[Null]");
+		                    if (entry.Value != null) {
+		                        sb.Append("[")
+		                            .Append(entry.Value.GetType().ToString())
+		                            .Append("] = ")
+		                            .Append(entry.Value.ToString());
+		                    }
+		                    else sb.Append("[Null]");
 	      						
-	      						sb.Append("\r\n");
-			  					}
+		                    sb.Append("\r\n");
+		                }
 	      					
-	      					throw new BREException(sb.ToString(), ex);
-							}
-			  			}
-			  		}
-		  	}
-		  	
-		  	// clone the target with new members, because atom is immutable
+		                throw new BREException(sb.ToString(), ex);
+		            }
+		        }
+		    }
+
+		    // clone the target with new members, because atom is immutable
 		  	return targetAtom.CloneWithNewMembers(members);
 		}
 
@@ -475,9 +454,8 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <returns>An arraylist containing the original result stack enriched by the new fact.</returns>
 		/// <remarks>The new fact is added at the top of the result stack, to give it maximum priority in further processing.</remarks>
 		public static IList<PositiveMatchResult> EnrichResults(IList<PositiveMatchResult> resultStack, Atom source, Fact result) {
-			List<PositiveMatchResult> enrichedProcessResult = new List<PositiveMatchResult>();
-			enrichedProcessResult.Add(new PositiveMatchResult(source, result));
-			enrichedProcessResult.AddRange(resultStack);
+		    var enrichedProcessResult = new List<PositiveMatchResult> {new PositiveMatchResult(source, result)};
+		    enrichedProcessResult.AddRange(resultStack);
 			return enrichedProcessResult;
 		}
 		
@@ -490,16 +468,16 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="resultStack">The implication result stack.</param>
 		/// <returns>The atom ready for querying facts.</returns>
 		public static Atom BuildQueryFromDeduction(Atom targetAtom, IList<PositiveMatchResult> resultStack) {
-	  	IPredicate[] members = (IPredicate[])targetAtom.Members.Clone();
+	  	var members = (IPredicate[])targetAtom.Members.Clone();
 	  	
 	  	// populate the variable elements with predicate values coming
 	  	// from the query part of the implication
-	  	foreach(PositiveMatchResult pmr in resultStack) RulesUtil.Populate(pmr.Fact, pmr.Source, members);
+	  	foreach(var pmr in resultStack) RulesUtil.Populate(pmr.Fact, pmr.Source, members);
 	  	
 	  	if ((targetAtom.HasFormula) || (targetAtom.HasIndividual)) {
   			// formulas and individuals must be replaced by variables
   			// named after the position of the predicate
-  			for(int i=0; i<members.Length; i++) {
+  			for(var i=0; i<members.Length; i++) {
 	  			if (members[i] is Formula) members[i] = new Variable(i);
 	  			// Individuals present in the deduction are static values (compared to values coming from
 	  			// variables) and must be transformed into variables in order to perform a selection of
@@ -601,49 +579,47 @@ namespace NxBRE.InferenceEngine.Core {
 			
 			// we build result lists and will reduce the biggest ones from the smallest ones
 			ICollection<Fact> resultList = null;
-			int smallestList = Int32.MaxValue;
-			int positionOfSmallestList = -1;
+			var smallestList = Int32.MaxValue;
+			var positionOfSmallestList = -1;
 			
-			for (int position=0; position < filter.Members.Length; position++) {
-				if (filter.Members[position] is Individual) {
-					bool matched = false;
-					object predicateValue = filter.Members[position].Value;
-					IDictionary<object, IDictionary<int, ICollection<Fact>>> predicateValueMap;
+			for (var position=0; position < filter.Members.Length; position++) {
+			    if (!(filter.Members[position] is Individual)) continue;
+			    var matched = false;
+			    var predicateValue = filter.Members[position].Value;
+			    IDictionary<object, IDictionary<int, ICollection<Fact>>> predicateValueMap;
 						
-					if (predicateMap[filter.Signature].TryGetValue(predicateValue.GetType(), out predicateValueMap)) {
-						IDictionary<int, ICollection<Fact>> predicatePositionMap;
+			    if (predicateMap[filter.Signature].TryGetValue(predicateValue.GetType(), out predicateValueMap)) {
+			        IDictionary<int, ICollection<Fact>> predicatePositionMap;
 						
-						if (predicateValueMap.TryGetValue(predicateValue, out predicatePositionMap)) {
+			        if (predicateValueMap.TryGetValue(predicateValue, out predicatePositionMap)) {
 							
-							if ((predicatePositionMap.ContainsKey(position)) && (predicatePositionMap[position].Count > 0)) {
-								if (Logger.IsInferenceEngineVerbose)
-									Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
-									                                        0,
-									                                        "Matched predicateValue: "+ predicateValue + " [" + predicateValue.GetType() + "]");
+			            if ((predicatePositionMap.ContainsKey(position)) && (predicatePositionMap[position].Count > 0)) {
+			                if (Logger.IsInferenceEngineVerbose)
+			                    Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
+			                        0,
+			                        "Matched predicateValue: "+ predicateValue + " [" + predicateValue.GetType() + "]");
 
-								if (predicatePositionMap[position].Count < smallestList) {
-									resultList = predicatePositionMap[position];
-									smallestList = predicatePositionMap[position].Count;
-									positionOfSmallestList = position;
+			                if (predicatePositionMap[position].Count < smallestList) {
+			                    resultList = predicatePositionMap[position];
+			                    smallestList = predicatePositionMap[position].Count;
+			                    positionOfSmallestList = position;
 									
-									if (Logger.IsInferenceEngineVerbose)
-										Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
-										                                        0,
-										                                        "Smallest list of size: "+ smallestList + " at position: " + positionOfSmallestList);
-								}
+			                    if (Logger.IsInferenceEngineVerbose)
+			                        Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose,
+			                            0,
+			                            "Smallest list of size: "+ smallestList + " at position: " + positionOfSmallestList);
+			                }
 								
-								matched = true;
-							}
-						}
-					}
+			                matched = true;
+			            }
+			        }
+			    }
 					
-					// no match found on a particular individual predicate? early return an empty result!
-					if (!matched) {
-						if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "No match -> Return no fact");
+			    // no match found on a particular individual predicate? early return an empty result!
+			    if (matched) continue;
+			    if (Logger.IsInferenceEngineVerbose) Logger.InferenceEngineSource.TraceEvent(TraceEventType.Verbose, 0, "No match -> Return no fact");
 
-						return EMPTY_SELECT_RESULT.GetEnumerator();
-					}
-				}
+			    return EMPTY_SELECT_RESULT.GetEnumerator();
 			}
 
 			// only one predicate in the filter and we matched it, no need for post matching, return filtered results directly
@@ -665,12 +641,15 @@ namespace NxBRE.InferenceEngine.Core {
 			// if a predicate has been previously matched, we do not compare it again in the matching process: we add its position
 			// to the ignore list
 			IList<int> ignoredPredicates = null;
-			if (positionOfSmallestList != -1) {
-				ignoredPredicates = new List<int>();
-				ignoredPredicates.Add(positionOfSmallestList);
-			}
-			
-			return FactEnumeratorFactory.NewFactListPredicateMatchingEnumerator(resultList,
+		    if (positionOfSmallestList == -1)
+		        return FactEnumeratorFactory.NewFactListPredicateMatchingEnumerator(resultList,
+		            filter,
+		            strictTyping,
+		            null,
+		            excludedFacts);
+		    ignoredPredicates = new List<int> {positionOfSmallestList};
+
+		    return FactEnumeratorFactory.NewFactListPredicateMatchingEnumerator(resultList,
 			                                                                    filter,
 			                                                                    strictTyping,
 			                                                                    ignoredPredicates,
@@ -685,16 +664,14 @@ namespace NxBRE.InferenceEngine.Core {
 		private static IList<IList<Fact>> FilterDistinct(IList<IList<PositiveMatchResult>> processResults) {
 			IDictionary<long, IList<Fact>> resultSet = new Dictionary<long, IList<Fact>>();
 			
-			foreach(IList<PositiveMatchResult> processResult in processResults) {
+			foreach(var processResult in processResults) {
 				IList<Fact> row = new List<Fact>();
 				long rowLongHashCode = 17;
 	  		
-				foreach(PositiveMatchResult pmr in processResult) {
-					// naf atom dummy results are skipped
-					if (!(pmr.Fact is FactBase.NegativeFact)) {
-						row.Add(pmr.Fact);
-						rowLongHashCode = unchecked(37L * rowLongHashCode + pmr.Fact.GetHashCode());
-					}
+				foreach (var pmr in processResult.Where(pmr => !(pmr.Fact is FactBase.NegativeFact)))
+				{
+				    row.Add(pmr.Fact);
+				    rowLongHashCode = unchecked(37L * rowLongHashCode + pmr.Fact.GetHashCode());
 				}
 				
 				// add only new rows to perform a "select distinct"
@@ -711,111 +688,104 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="processResult"></param>
 		/// <param name="depth"></param>
 		/// <param name="resultStack"></param>
-		private void ProcessAnd(AtomGroup AG, IList<IList<PositiveMatchResult>> processResult, int depth, IList<PositiveMatchResult> resultStack) {
-			if (AG.OrderedMembers[depth] is AtomGroup) {
-				if (((AtomGroup)AG.OrderedMembers[depth]).Operator == AtomGroup.LogicalOperator.And)
+		private void ProcessAnd(AtomGroup AG, IList<IList<PositiveMatchResult>> processResult, int depth, IList<PositiveMatchResult> resultStack)
+		{
+		    var ag = AG.OrderedMembers[depth] as AtomGroup;
+		    if (ag != null) {
+				if (ag.Operator == AtomGroup.LogicalOperator.And)
 					throw new BREException("Nested And unexpectedly found in atom group:" + AG.OrderedMembers[depth]);
 				
 				IList<IList<PositiveMatchResult>> subProcessResult = new List<IList<PositiveMatchResult>>();
 			  
-				ProcessOr((AtomGroup)AG.OrderedMembers[depth], subProcessResult, resultStack);
+				ProcessOr(ag, subProcessResult, resultStack);
 			  
-				foreach(IList<PositiveMatchResult> resultRow in subProcessResult) {
-					foreach(PositiveMatchResult rpRow in resultRow) {
-				  	if (resultStack.Count == 0) {
-							IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>(resultStack);
-							tempResultStack.Add(rpRow);
+				foreach (var rpRow in subProcessResult.SelectMany(resultRow => resultRow))
+				{
+				    if (resultStack.Count == 0) {
+				        IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>(resultStack);
+				        tempResultStack.Add(rpRow);
 							
-							if (depth < (AG.OrderedMembers.Count - 1)) ProcessAnd(AG, processResult, depth+1, tempResultStack);
-					  	else processResult.Add(tempResultStack);
-				  	}
-				  	else {
-					  	// exclude similar results for similar atoms (the engine must produce combinations
-					  	// of facts in this case)
-					  	bool ignore = false;
+				        if (depth < (AG.OrderedMembers.Count - 1)) ProcessAnd(AG, processResult, depth+1, tempResultStack);
+				        else processResult.Add(tempResultStack);
+				    }
+				    else {
+				        // exclude similar results for similar atoms (the engine must produce combinations
+				        // of facts in this case)
+				        var ignore = false;
 					  	
-					  	foreach(PositiveMatchResult pmr in resultStack) {
-					  		if (rpRow.Source.IsIntersecting(pmr.Source)) {
-					  			ignore = true;
-					  			break;
-					  		}
-					  		if (!ignore) {
-							  	IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>(resultStack);
-									tempResultStack.Add(rpRow);
+				        foreach(var pmr in resultStack) {
+				            if (rpRow.Source.IsIntersecting(pmr.Source)) {
+				                ignore = true;
+				                break;
+				            }
+				            IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>(resultStack);
+				            tempResultStack.Add(rpRow);
 									
-									if (depth < (AG.OrderedMembers.Count - 1)) ProcessAnd(AG, processResult, depth+1, tempResultStack);
-							  	else processResult.Add(tempResultStack);
-								}
-					  	}
-					  }
-			  	}
+				            if (depth < (AG.OrderedMembers.Count - 1)) ProcessAnd(AG, processResult, depth+1, tempResultStack);
+				            else processResult.Add(tempResultStack);
+				        }
+				    }
 				}
 			}
 			else {
 		  	// resolve the functions and var parts of the atom 
 		  	// from all the previous facts in the result stack
-				Atom atomToRun = Populate((Atom)AG.OrderedMembers[depth], resultStack, false);
-				IList<Fact> excludedFacts = new List<Fact>();
-				
-				foreach(PositiveMatchResult pmr in resultStack)
-					if (((Atom)AG.OrderedMembers[depth]).IsIntersecting(pmr.Source))
-						excludedFacts.Add(pmr.Fact);
-		  	
-		  	// then get the matching facts
-		  	IEnumerator results = ProcessAtom(atomToRun, excludedFacts);
-			
-				if (results != null) {
-		  		while(results.MoveNext()) {
-			  		Fact result = (Fact)results.Current;
-			  		IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>(resultStack);
-						tempResultStack.Add(new PositiveMatchResult((Atom)AG.OrderedMembers[depth], result));
+				var atomToRun = Populate((Atom)AG.OrderedMembers[depth], resultStack, false);
+				IList<Fact> excludedFacts = (from pmr in resultStack where ((Atom) AG.OrderedMembers[depth]).IsIntersecting(pmr.Source) select pmr.Fact).ToList();
 
-						if (depth < (AG.OrderedMembers.Count - 1))
-							ProcessAnd(AG, processResult, depth+1, tempResultStack);
-				  	else
-							processResult.Add(tempResultStack);
-				  }
-				}
+			    // then get the matching facts
+		  	IEnumerator results = ProcessAtom(atomToRun, excludedFacts);
+
+			    if (results == null) return;
+			    while(results.MoveNext()) {
+			        var result = (Fact)results.Current;
+			        IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>(resultStack);
+			        tempResultStack.Add(new PositiveMatchResult((Atom)AG.OrderedMembers[depth], result));
+
+			        if (depth < (AG.OrderedMembers.Count - 1))
+			            ProcessAnd(AG, processResult, depth+1, tempResultStack);
+			        else
+			            processResult.Add(tempResultStack);
+			    }
 			}
 		}
-		
-		/// <summary>
+
+	    /// <summary>
 		/// Processes an OR atom group.
 		/// </summary>
 		/// <param name="AG"></param>
 		/// <param name="processResult"></param>
 		/// <param name="resultStack"></param>
 		private void ProcessOr(AtomGroup AG, IList<IList<PositiveMatchResult>> processResult, IList<PositiveMatchResult> resultStack) {
-			foreach(object member in AG.OrderedMembers) {
-				if (member is AtomGroup) {
-					if (((AtomGroup)member).Operator == AtomGroup.LogicalOperator.Or)
+			foreach(var member in AG.OrderedMembers)
+			{
+			    var ag = member as AtomGroup;
+			    if (ag != null) {
+					if (ag.Operator == AtomGroup.LogicalOperator.Or)
 						throw new BREException("Nested Or unexpectedly found in atom group:" + member);
 
 					IList<IList<PositiveMatchResult>> subProcessResult = new List<IList<PositiveMatchResult>>();
-					ProcessAnd((AtomGroup)member, subProcessResult, 0, resultStack);
+					ProcessAnd(ag, subProcessResult, 0, resultStack);
 					
-					foreach(IList<PositiveMatchResult> resultRow in subProcessResult) processResult.Add(resultRow);
+					foreach(var resultRow in subProcessResult) processResult.Add(resultRow);
 				}
 				else if (member is Atom) {
 			  	// resolve the functions and var parts of the atom 
 			  	// from all the previous facts in the result stack
-					Atom atomToRun = Populate((Atom)member, resultStack, false);
+					var atomToRun = Populate((Atom)member, resultStack, false);
 
 					// return results found for the first atom that produces data
 					IEnumerator results = ProcessAtom(atomToRun, null);
-					
-					if (results != null) {
-						while(results.MoveNext()) {
-				  		Fact result = (Fact)results.Current;
-					  	IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>();
-						  tempResultStack.Add(new PositiveMatchResult((Atom)member, result));
-							processResult.Add(tempResultStack);
-					  }
-					}
+
+				    if (results == null) continue;
+				    while(results.MoveNext()) {
+				        var result = (Fact)results.Current;
+				        IList<PositiveMatchResult> tempResultStack = new List<PositiveMatchResult>();
+				        tempResultStack.Add(new PositiveMatchResult((Atom)member, result));
+				        processResult.Add(tempResultStack);
+				    }
 				}
-				
 			}
-			
 		} //ProcessOr
 
 		/// <summary>
@@ -825,11 +795,12 @@ namespace NxBRE.InferenceEngine.Core {
 		/// <param name="excludedFacts"></param>
 		/// <returns></returns>
 		private IEnumerator<Fact> ProcessAtom(Atom atomToRun, IList<Fact> excludedFacts) {
-			if (atomToRun is AtomFunction) {
+		    var run = atomToRun as AtomFunction;
+		    if (run != null) {
 				// an atom function is either positive or negative, it does not return any fact
 				// if this atom function is wrapped in naf, then the base result is negated,
 				// leading to a positive result if the underlying function is negative!
-				if (((AtomFunction)atomToRun).PositiveRelation != atomToRun.Negative) return FactEnumeratorFactory.NewSingleFactEnumerator(NAF);
+				if (run.PositiveRelation != run.Negative) return FactEnumeratorFactory.NewSingleFactEnumerator(NAF);
 			}
 			else {
 				if (atomToRun.Negative) {

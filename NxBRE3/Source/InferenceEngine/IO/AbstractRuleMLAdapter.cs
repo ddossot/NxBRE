@@ -1,3 +1,5 @@
+using static System.String;
+
 namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
@@ -6,11 +8,9 @@ namespace NxBRE.InferenceEngine.IO {
 	using System.Text;
 	using System.Xml;
 	using System.Xml.XPath;
-	using System.Xml.Schema;
+	using Rules;
 	
-	using NxBRE.InferenceEngine.Rules;
-	
-	using NxBRE.Util;
+	using Util;
 	
 	/// <summary>
 	/// An abstract RuleML adapter that contains common methods for loading and saving rule bases.
@@ -41,12 +41,12 @@ namespace NxBRE.InferenceEngine.IO {
              Parameter.GetTaggedInfo(label, "action"))  {
 	
 				// if we don't have a label tag
-				if (this.label == String.Empty) {
+				if (this.label == Empty) {
 					// then if we have any tagged info, it is an error!!!
 					if ((this.priority != -1) ||
-					    (this.mutex != String.Empty) ||
-					    (this.precondition != String.Empty) ||
-					    (this.action != String.Empty))
+					    (this.mutex != Empty) ||
+					    (this.precondition != Empty) ||
+					    (this.action != Empty))
 						throw new BREException("The implication label uses the tagged form but does not contain a label: "+label);
 					// else consider the whole label to be...a label (standard way of using RuleML label)
 					this.label = label;
@@ -64,7 +64,7 @@ namespace NxBRE.InferenceEngine.IO {
 			                             string action):
 				this(label, -1, mutex, precondition, action)
 			{
-				if (priority == String.Empty) this.priority = -1; // this means: someone has to assign me the default value for priority
+				if (priority == Empty) this.priority = -1; // this means: someone has to assign me the default value for priority
 			  else this.priority = Int32.Parse(priority);
 			}
 			
@@ -81,18 +81,18 @@ namespace NxBRE.InferenceEngine.IO {
 			  this.action = action;
 			}
 			
-			public override string ToString() {
-				if ((priority != (int)ImplicationPriority.Medium) ||
-				    (mutex != String.Empty) ||
-				    (precondition != String.Empty) ||
-				    (action != String.Empty))
+			public override string ToString()
+			{
+			    if ((priority != (int)ImplicationPriority.Medium) ||
+				    (mutex != Empty) ||
+				    (precondition != Empty) ||
+				    (action != Empty))
 					return "label:" + label + ";" +
 								 ((priority != (int)ImplicationPriority.Medium)?"priority:" + priority + ";" : "") +
-								 ((mutex != String.Empty)?"mutex:" + mutex + ";" : "") +
-								 ((precondition != String.Empty)?"precondition:" + precondition + ";" : "") +
-								 ((action != String.Empty)?"action:" + action + ";" : "");
-				else
-					return label;
+								 ((mutex != Empty)?"mutex:" + mutex + ";" : "") +
+								 ((precondition != Empty)?"precondition:" + precondition + ";" : "") +
+								 ((action != Empty)?"action:" + action + ";" : "");
+			    return label;
 			}
 		}
 
@@ -170,64 +170,54 @@ namespace NxBRE.InferenceEngine.IO {
 		
 		///<remarks>in case of any failure, this will throw enough exceptions for the user to
 		/// understand what is going wrong.</remarks>
-		protected virtual void Init(Stream streamRuleML, string uriRuleML, FileAccess mode) {
-			if (AdapterState == State.Disposed) {
-				throw new BREException("A disposed adapter can not accept new operations");
-			}
-			else if (AdapterState == State.NonInitialized) {
-				if (mode == FileAccess.Read) {
-					XmlReaderSettings settings = new XmlReaderSettings();
-					settings.ProhibitDtd = false;
-					settings.CloseInput = true;
+		protected virtual void Init(Stream streamRuleML, string uriRuleML, FileAccess mode)
+		{
+		    switch (AdapterState)
+		    {
+		        case State.Disposed:
+		            throw new BREException("A disposed adapter can not accept new operations");
+		        case State.NonInitialized:
+		            if (mode == FileAccess.Read) {
+		                var settings = new XmlReaderSettings {ProhibitDtd = false};
+		                settings.CloseInput = true;
 					
-					if (streamRuleML != null) {
-						reader = XmlReader.Create(streamRuleML, settings);
-					} else {
-						reader = XmlReader.Create(uriRuleML, settings);
-					}
+		                reader = streamRuleML != null ? XmlReader.Create(streamRuleML, settings) : XmlReader.Create(uriRuleML, settings);
 					
-					try {
-						navigator = new XPathDocument(GetXmlValidatingReader(DatalogSchema)).CreateNavigator();
-						nsmgr = new XmlNamespaceManager(navigator.NameTable);
-						nsmgr.AddNamespace("dl", DatalogNamespaceURL);
-						ValidateRulebase();
-					} catch(Exception e) {
-						// Fix for bug 1850290: release file on error
-						if (reader != null) {
-							reader.Close();
-						}
-						throw e;
-					}
+		                try {
+		                    navigator = new XPathDocument(GetXmlValidatingReader(DatalogSchema)).CreateNavigator();
+		                    nsmgr = new XmlNamespaceManager(navigator.NameTable);
+		                    nsmgr.AddNamespace("dl", DatalogNamespaceURL);
+		                    ValidateRulebase();
+		                } catch(Exception e) {
+		                    // Fix for bug 1850290: release file on error
+		                    reader?.Close();
+		                    throw;
+		                }
 					
-					AdapterState = State.Read;
-				}
-				else {
-					XmlWriterSettings settings = new XmlWriterSettings();
-					settings.Encoding = Encoding.UTF8;
-					settings.Indent = true;
-					settings.CloseOutput = true;
+		                AdapterState = State.Read;
+		            }
+		            else {
+		                var settings = new XmlWriterSettings();
+		                settings.Encoding = Encoding.UTF8;
+		                settings.Indent = true;
+		                settings.CloseOutput = true;
 						
-					if (streamRuleML != null) {
-						writer = XmlWriter.Create(streamRuleML, settings);
-					}
-					else {
-						writer = XmlWriter.Create(uriRuleML, settings);
-					}
+		                writer = streamRuleML != null ? XmlWriter.Create(streamRuleML, settings) : XmlWriter.Create(uriRuleML, settings);
 					
-					document = new XmlDocument();
-					CreateDocumentElement();
-					Document.InsertBefore(Document.CreateXmlDeclaration("1.0", "utf-8", "no"), Document.DocumentElement);
-					Document.InsertBefore(Document.CreateComment(" Generated by " + this.GetType() + " "), Document.DocumentElement);
-					AdapterState = State.Write;
-				}
-			}
-			else {
-				throw new BREException("A RuleML adapter can not be initialized several times.");
-			}
+		                document = new XmlDocument();
+		                CreateDocumentElement();
+		                Document.InsertBefore(Document.CreateXmlDeclaration("1.0", "utf-8", "no"), Document.DocumentElement);
+		                Document.InsertBefore(Document.CreateComment(" Generated by " + this.GetType() + " "), Document.DocumentElement);
+		                AdapterState = State.Write;
+		            }
+		            break;
+		        default:
+		            throw new BREException("A RuleML adapter can not be initialized several times.");
+		    }
 		}
-		
-		
-		// -------------- Interface methods, some being left for implementation to subclasses ---------------
+
+
+	    // -------------- Interface methods, some being left for implementation to subclasses ---------------
 		
 		public abstract string Direction {	get; set; }
 		
@@ -283,8 +273,8 @@ namespace NxBRE.InferenceEngine.IO {
 		
 		// ---------------- Attributes, properties and methods related to XML parsing ------------------
 		
-		private XmlReader reader = null;
-		private XmlWriter writer = null;
+		private XmlReader reader;
+		private XmlWriter writer;
 		private XmlNamespaceManager nsmgr;
 		private XPathNavigator navigator;
 		private XmlDocument document;
@@ -335,13 +325,12 @@ namespace NxBRE.InferenceEngine.IO {
 		
 		protected string GetString(XPathNavigator nav, XPathExpression xpe) {
 			string result = null;
-			XPathNodeIterator rbaselab = nav.Select(xpe);
-			if (rbaselab.MoveNext()) {
-				result = rbaselab.Current.Value;
-				if ((result != null) && (result == String.Empty))
-					result = null;
-			}
-			return result;
+			var rbaselab = nav.Select(xpe);
+		    if (!rbaselab.MoveNext()) return result;
+		    result = rbaselab.Current.Value;
+		    if ((result != null) && (result == Empty))
+		        result = null;
+		    return result;
 		}
 		
 		// --------------------- RuleML Parsing Methods --------------
@@ -383,19 +372,19 @@ namespace NxBRE.InferenceEngine.IO {
 		}
 		
 		protected List<Implication> ExtractImplications() {
-			List<Implication> result = new List<Implication>();
+			var result = new List<Implication>();
 				
-			XPathNodeIterator imps = Navigator.Select(ImplicationElementXPath);
+			var imps = Navigator.Select(ImplicationElementXPath);
 			
 			while(imps.MoveNext()) {
-				XPathNavigator imp = imps.Current;
-				Query query = GetQuery(imp);
+				var imp = imps.Current;
+				var query = GetQuery(imp);
 				
-				XPathNodeIterator head_atom = imp.Select(RelativeHeadXPath);
+				var head_atom = imp.Select(RelativeHeadXPath);
 				if (head_atom.Count != 1) throw new BREException("Found " + head_atom.Count + " head atoms in implication '" + query.Label + "'");
 				head_atom.MoveNext();
 
-				ImplicationProperties ip = new ImplicationProperties(query.Label);
+				var ip = new ImplicationProperties(query.Label);
 				
 				// action matching
 				ImplicationAction action;
@@ -435,94 +424,101 @@ namespace NxBRE.InferenceEngine.IO {
 				
 		protected Atom GetAtom(XPathNavigator atom, bool negative, bool inHead, bool resolveImmediatly) {
 			// build the array of predicates
-			List<IPredicate> relationPredicates = new List<IPredicate>();
-			XPathNodeIterator predicates = atom.Select(RelativePredicatesXPath);
+			var relationPredicates = new List<IPredicate>();
+			var predicates = atom.Select(RelativePredicatesXPath);
 			while(predicates.MoveNext()) relationPredicates.Add(BuildPredicate(predicates.Current, inHead, resolveImmediatly));
-			IPredicate[] predicatesArray = relationPredicates.ToArray();
+			var predicatesArray = relationPredicates.ToArray();
 			
 			// identify function based atom relations
-			XPathNodeIterator rel = atom.Select(RelativeRelationXPath);
+			var rel = atom.Select(RelativeRelationXPath);
 			rel.MoveNext();
-			RelationResolution relationResolution = AnalyzeRelationResolution(rel.Current);
+			var relationResolution = AnalyzeRelationResolution(rel.Current);
 			
-			if ((relationResolution.type == AtomFunction.RelationResolutionType.NxBRE) ||
-			    (relationResolution.type == AtomFunction.RelationResolutionType.Binder)) {
-				
-				return new AtomFunction(relationResolution.type,
-				                        negative,
-				                        Binder,
-				                        relationResolution.atomRelation,
-					          	  				predicatesArray);
-			}
-			else if (relationResolution.type == AtomFunction.RelationResolutionType.Expression) {
-				
-				return new AtomFunction(relationResolution.type,
-				                        negative,
-				                        new ExpressionRelater(relationResolution.atomRelation, predicatesArray),
-				                        relationResolution.atomRelation,
-				                        predicatesArray);
-			}
-			else {
-				return new Atom(negative,
-				                GetString(atom, RelativeLabelXPath),
-	              				relationResolution.atomRelation,
-	          	  				predicatesArray);
+			switch (relationResolution.type)
+			{
+			    case AtomFunction.RelationResolutionType.NxBRE:
+			    case AtomFunction.RelationResolutionType.Binder:
+
+			        return new AtomFunction(relationResolution.type,
+			            negative,
+			            Binder,
+			            relationResolution.atomRelation,
+			            predicatesArray);
+			    case AtomFunction.RelationResolutionType.Expression:
+
+			        return new AtomFunction(relationResolution.type,
+			            negative,
+			            new ExpressionRelater(relationResolution.atomRelation, predicatesArray),
+			            relationResolution.atomRelation,
+			            predicatesArray);
+			    default:
+			        return new Atom(negative,
+			            GetString(atom, RelativeLabelXPath),
+			            relationResolution.atomRelation,
+			            predicatesArray);
 			}
 		}
 		
 				
 		private object[] GetAtomGroupContent(XPathNodeIterator body_atom) {
-			ArrayList result = new ArrayList();
+			var result = new ArrayList();
 			
 			while (body_atom.MoveNext()) {
-				XPathNavigator currentBodyAtom = body_atom.Current;
-				string name = currentBodyAtom.Name.ToLower();
+				var currentBodyAtom = body_atom.Current;
+				var name = currentBodyAtom.Name.ToLower();
 					
-				if (name == "atom")
-					result.Add(GetAtom(currentBodyAtom, false, false, false));
-				else if (name == "naf") {
-					currentBodyAtom.MoveToFirstChild();
+				switch (name)
+				{
+				    case "atom":
+				        result.Add(GetAtom(currentBodyAtom, false, false, false));
+				        break;
+				    case "naf":
+				        currentBodyAtom.MoveToFirstChild();
 
-					if (currentBodyAtom.Name.ToLower() == "weak") {
-						currentBodyAtom.MoveToFirstChild();
-						result.Add(GetAtom(currentBodyAtom, true, false, false));
-						currentBodyAtom.MoveToParent();
-					}
-					else {
-						result.Add(GetAtom(currentBodyAtom, true, false, false));
-					}
+				        if (currentBodyAtom.Name.ToLower() == "weak") {
+				            currentBodyAtom.MoveToFirstChild();
+				            result.Add(GetAtom(currentBodyAtom, true, false, false));
+				            currentBodyAtom.MoveToParent();
+				        }
+				        else {
+				            result.Add(GetAtom(currentBodyAtom, true, false, false));
+				        }
 						
-					currentBodyAtom.MoveToParent();
+				        currentBodyAtom.MoveToParent();
+				        break;
+				    case "and":
+				        result.Add(NewAtomGroup(AtomGroup.LogicalOperator.And, GetAtomGroupContent(currentBodyAtom.SelectChildren(XPathNodeType.Element))));
+				        break;
+				    case "or":
+				        result.Add(NewAtomGroup(AtomGroup.LogicalOperator.Or, GetAtomGroupContent(currentBodyAtom.SelectChildren(XPathNodeType.Element))));
+				        break;
+				    default:
+				        throw new BREException("Found an unrecognized element in body: " + currentBodyAtom.Name);
 				}
-				else if (name == "and")
-					result.Add(NewAtomGroup(AtomGroup.LogicalOperator.And, GetAtomGroupContent(currentBodyAtom.SelectChildren(XPathNodeType.Element))));
-				else if (name == "or")
-					result.Add(NewAtomGroup(AtomGroup.LogicalOperator.Or, GetAtomGroupContent(currentBodyAtom.SelectChildren(XPathNodeType.Element))));
-				else
-					throw new BREException("Found an unrecognized element in body: " + currentBodyAtom.Name);
 			}
 			
 			return result.ToArray();
 		}
 
 		protected Query GetQuery(XPathNavigator query) {
-			string label = GetString(query, RelativeLabelXPath);
-			XPathNodeIterator body = query.Select(RelativeBodyXPath);
-			
-			if (!body.MoveNext())	throw new BREException("Query '" + label + "' is bodyless");
+			var label = GetString(query, RelativeLabelXPath);
+			var body = query.Select(RelativeBodyXPath);
 
-			object[] content = GetAtomGroupContent(body.Current.Select(RelativeBodyContentXPath));
-			
-			if (content.Length == 0) throw new BREException("Can not locate any atom or atom group in: " + body.Current.Name);
-			if (content.Length != 1) throw new BREException("Found unexpected query '" + label + "' body of size " + content.Length);
-			
-			if (content[0] is Atom)
-				return new Query(label, NewAtomGroup(AtomGroup.LogicalOperator.And, content));
-			else if (content[0] is AtomGroup)
-				return new Query(label, (AtomGroup)content[0]);
-			else
-				throw new BREException("Found unexpected query '" + label +
-			                         "' content of type " + content[0].GetType().FullName);
+		    if (!body.MoveNext()) throw new BREException("Query '" + label + "' is bodyless");
+		    var content = GetAtomGroupContent(body.Current.Select(RelativeBodyContentXPath));
+
+		    if (content.Length == 0)
+		        throw new BREException("Can not locate any atom or atom group in: " + body.Current.Name);
+		    if (content.Length != 1)
+		        throw new BREException("Found unexpected query '" + label + "' body of size " + content.Length);
+
+		    if (content[0] is Atom)
+		        return new Query(label, NewAtomGroup(AtomGroup.LogicalOperator.And, content));
+		    var @group = content[0] as AtomGroup;
+		    if (@group != null)
+		        return new Query(label, @group);
+		    throw new BREException("Found unexpected query '" + label +
+		                           "' content of type " + content[0].GetType().FullName);
 		}
 		
 		protected virtual AtomGroup NewAtomGroup(AtomGroup.LogicalOperator logicalOperator, object[] content) {
@@ -551,7 +547,7 @@ namespace NxBRE.InferenceEngine.IO {
 			public ExpressionEvaluator(string individual):base(BindingTypes.Control){
 				expression = individual;
 				variableNames = new ArrayList();
-				variableNames.Add(String.Empty); // an individual has no name
+				variableNames.Add(Empty); // an individual has no name
 				evaluator = null;
 			}
 			
@@ -576,7 +572,7 @@ namespace NxBRE.InferenceEngine.IO {
 			public ExpressionRelater(string atomRelation, IPredicate[] variables):base(BindingTypes.Control){
 				expression = atomRelation;
 				variableNames = new ArrayList();
-				foreach(IPredicate variable in variables) variableNames.Add(variable.Value);
+				foreach(var variable in variables) variableNames.Add(variable.Value);
 				evaluator = null;
 			}
 			
@@ -593,7 +589,7 @@ namespace NxBRE.InferenceEngine.IO {
 		// ------------------- RuleML writing methods ------------------
 		
 		protected void WriteLabel(XmlElement target, string labelElement, string labelContentElement, string labelContent) {
-			if ((labelContent != null) && (labelContent != String.Empty)) {
+			if ((labelContent != null) && (labelContent != Empty)) {
 				XmlElement rbaselab = Document.CreateElement(labelElement, DatalogNamespaceURL);
 				XmlElement ind = Document.CreateElement(labelContentElement, DatalogNamespaceURL);
 				ind.InnerText = labelContent;
@@ -614,12 +610,14 @@ namespace NxBRE.InferenceEngine.IO {
 		
 		protected void WriteAtomGroup(XmlElement target, AtomGroup atomGroup, string andElement, string orElement) {
 			if (atomGroup.Members.Length != 1) {
-				XmlElement op = Document.CreateElement((atomGroup.Operator == AtomGroup.LogicalOperator.And)?andElement:orElement, DatalogNamespaceURL);
+				var op = Document.CreateElement((atomGroup.Operator == AtomGroup.LogicalOperator.And)?andElement:orElement, DatalogNamespaceURL);
 				target.AppendChild(op);
-				for(int i=0; i<atomGroup.Members.Length; i++) {
-					if (atomGroup.Members[i] is Atom) WriteAtom(op, (Atom)atomGroup.Members[i], false);
-					else if (atomGroup.Members[i] is AtomGroup) WriteAtomGroup(op, (AtomGroup)atomGroup.Members[i]);
-				}
+                foreach (var t in atomGroup.Members)
+                {
+                    var atom = t as Atom;
+                    if (atom != null) WriteAtom(op, atom, false);
+				    else if (t is AtomGroup) WriteAtomGroup(op, (AtomGroup)t);
+                }
 			}
 			else
 				WriteAtom(target, (Atom)atomGroup.Members[0], false);

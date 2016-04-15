@@ -1,8 +1,5 @@
 namespace NxBRE.FlowEngine.IO {
-	using System.Xml;
-	using System.Xml.Xsl;
-
-	using NxBRE.Util;
+    using Util;
 	
 	/// <summary>
 	/// Driver for loading rules files valid against xBusinessRules.xsd (simplified NxBRE grammar).
@@ -14,7 +11,7 @@ namespace NxBRE.FlowEngine.IO {
 	/// </remarks>
 	public class XBusinessRulesFileDriver:XSLTRulesFileDriver {
 		
-		public XBusinessRulesFileDriver(string xmlFileURI):base(xmlFileURI) {
+		public XBusinessRulesFileDriver(string xmlFileUri):base(xmlFileUri) {
 			inputXMLSchema = "xBusinessRules.xsd";
 			xslt = Xml.GetCachedCompiledTransform("transformXRules.xsl");
 		}

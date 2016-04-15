@@ -10,12 +10,8 @@
 namespace NxBRE.InferenceEngine.IO.Hrf086
 {
 	using System.Collections;
-	using System.Text;
-	using System.Reflection;
-	
-	using System;
-	
-	internal class Errors {
+
+    internal class Errors {
 	  public const string ERRMSGFORMAT = "-- line {0} col {1}: {2}"; // 0=line, 1=column, 2=text
 		
 		private ArrayList list;
@@ -57,15 +53,15 @@ namespace NxBRE.InferenceEngine.IO.Hrf086
 				default: s = "error " + n; break;
 			}
 			
-			list.Add(String.Format(ERRMSGFORMAT, line, col, s));
+			list.Add(string.Format(ERRMSGFORMAT, line, col, s));
 		}
 	
 		public void SemErr (int line, int col, int n) {
-			list.Add(String.Format(ERRMSGFORMAT, line, col, ("error " + n)));
+			list.Add(string.Format(ERRMSGFORMAT, line, col, ("error " + n)));
 		}
 	
 		public void Error (int line, int col, string s) {
-			list.Add(String.Format(ERRMSGFORMAT, line, col, s));
+			list.Add(string.Format(ERRMSGFORMAT, line, col, s));
 		}
 	
 		public void Exception (string s) {

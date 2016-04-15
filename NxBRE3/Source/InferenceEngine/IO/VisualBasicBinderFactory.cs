@@ -1,7 +1,5 @@
 namespace NxBRE.InferenceEngine.IO {
-	using System;
-
-	using NxBRE.Util;
+    using Util;
 
 	/// <summary>
 	/// This class is a helper for instantiating IBinder objects from VB.NET files,

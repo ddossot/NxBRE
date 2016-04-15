@@ -1,7 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
-# SharpDevelop 2.1.0.2429
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NxBRE", "Source\NxBRE.csproj", "{C5A2507E-550E-4EEC-B3C2-A278ECB27E30}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NxBRE-UnitTest", "Test\NxBRE-UnitTest.csproj", "{2D105A1A-E216-43B6-8403-52C57F2D6E1A}"
@@ -12,13 +13,16 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C5A2507E-550E-4EEC-B3C2-A278ECB27E30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5A2507E-550E-4EEC-B3C2-A278ECB27E30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C5A2507E-550E-4EEC-B3C2-A278ECB27E30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5A2507E-550E-4EEC-B3C2-A278ECB27E30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5A2507E-550E-4EEC-B3C2-A278ECB27E30}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2D105A1A-E216-43B6-8403-52C57F2D6E1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5A2507E-550E-4EEC-B3C2-A278ECB27E30}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2D105A1A-E216-43B6-8403-52C57F2D6E1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2D105A1A-E216-43B6-8403-52C57F2D6E1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D105A1A-E216-43B6-8403-52C57F2D6E1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D105A1A-E216-43B6-8403-52C57F2D6E1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D105A1A-E216-43B6-8403-52C57F2D6E1A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

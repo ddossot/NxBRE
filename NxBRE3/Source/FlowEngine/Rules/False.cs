@@ -1,7 +1,6 @@
 namespace NxBRE.FlowEngine.Rules
 {
-	using System;
-	using System.Collections;
+    using System.Collections;
 	
 	using NxBRE.FlowEngine;
 

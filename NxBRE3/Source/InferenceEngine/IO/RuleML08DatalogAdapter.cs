@@ -2,9 +2,7 @@ namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.IO;
 	using System.Xml;
-	using System.Xml.XPath;
-	
-	using NxBRE.Util;
+	using Util;
 	
 	///<summary>Adapter supporting RuleML 0.8 Datalog Sublanguage.</summary>
 	///<remarks>UTF-8 is the default encoding.</remarks>

@@ -3,7 +3,7 @@ namespace NxBRE.FlowEngine.Rules
 	using System;
 	using System.Collections;
 	
-	using NxBRE.FlowEngine;
+	using FlowEngine;
 
 	/// <summary> This class is designed to be used to increment everytime the executeRule is called.
 	/// </summary>
@@ -22,17 +22,14 @@ namespace NxBRE.FlowEngine.Rules
 		/// </param>
 		public bool Init(object aObj)
 		{
-			if (aObj is Int32)
+			if (aObj is int)
 			{
-				sIdx = ((Int32) aObj);
+				sIdx = ((int) aObj);
 				return true;
 			}
-			else if (aObj is string)
-			{
-				sIdx = Int32.Parse((string) aObj);
-				return true;
-			}
-			return false;
+		    if (!(aObj is string)) return false;
+		    sIdx = int.Parse((string) aObj);
+		    return true;
 		}
 		
 		/// <summary> If passed the parameter Increment it will increment the index.
@@ -51,7 +48,7 @@ namespace NxBRE.FlowEngine.Rules
 		public object ExecuteRule(IBRERuleContext aBrc, IDictionary aMap, object aStep)
 		{
 			if (aMap.Contains(INCREMENT))
-				sIdx = sIdx + Int32.Parse((string) aMap[INCREMENT]);
+				sIdx = sIdx + int.Parse((string) aMap[INCREMENT]);
 			
 			return sIdx;
 		}

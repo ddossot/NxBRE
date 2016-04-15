@@ -3,7 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	
-	using NxBRE.InferenceEngine.Rules;
+	using Rules;
 	
 	/// <summary>
 	/// A utility class that allows exporting query results.
@@ -24,7 +24,7 @@
 				throw new ArgumentNullException("A non-null fact base label must be provided");
 			}
 			
-			List<Fact> flattenedResults = new List<Fact>();
+			var flattenedResults = new List<Fact>();
 			foreach(IList<Fact> row in results) {
 				flattenedResults.AddRange(row);
 			}

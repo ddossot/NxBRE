@@ -11,32 +11,27 @@
 		
 		private bool defaultValue = false;
 				
-		public bool Init(object defaultValue) {
-			if (defaultValue is bool) {
-				this.defaultValue = (bool) defaultValue;
-				return true;
-			} else {
-				return false;
-			}
-		}
-		
-		protected abstract bool AnalyzeCompared(int compare);
-		
-		public bool ExecuteComparison(IBRERuleContext ruleContext, IDictionary arguments, object left, object right) {
-			if ((left == null) || (right == null)) {
-				return defaultValue;	
-			}
-			else if ((left is IComparable) && (right is IComparable)) {
-				if ((! right.GetType().IsInstanceOfType(left)) || (! right.GetType().IsSubclassOf(left.GetType()))) {
-					right = Convert.ChangeType(right, left.GetType());
-				}
-				
-				return AnalyzeCompared(((IComparable) left).CompareTo(right));
-			}
-			else {
-				return defaultValue;
-			}
+		public bool Init(object defaultValue)
+		{
+		    if (!(defaultValue is bool)) return false;
+		    this.defaultValue = (bool) defaultValue;
+		    return true;
 		}
 
+	    protected abstract bool AnalyzeCompared(int compare);
+		
+		public bool ExecuteComparison(IBRERuleContext ruleContext, IDictionary arguments, object left, object right)
+		{
+		    if ((left == null) || (right == null)) {
+				return defaultValue;	
+			}
+		    var comparable = left as IComparable;
+		    if ((comparable == null) || (!(right is IComparable))) return defaultValue;
+		    if ((! right.GetType().IsInstanceOfType(comparable)) || (! right.GetType().IsSubclassOf(comparable.GetType()))) {
+		        right = Convert.ChangeType(right, comparable.GetType());
+		    }
+				
+		    return AnalyzeCompared(comparable.CompareTo(right));
+		}
 	}
 }

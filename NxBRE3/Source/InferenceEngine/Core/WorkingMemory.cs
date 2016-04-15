@@ -18,19 +18,25 @@ namespace NxBRE.InferenceEngine.Core {
 			get {
 				return WorkingType;
 			}
-			set {
-				// Depending on the working memory isolation type
-				if (value == WorkingMemoryTypes.Isolated)
-					// Clone the global base as the working base
-					WorkingFactBase = (FactBase)globalFactBase.Clone();
-				else if (value == WorkingMemoryTypes.IsolatedEmpty)
-					// Create an empty base as the working base
-					WorkingFactBase = new FactBase();
-				else 
-					// Use the global base as the working base
-					WorkingFactBase = globalFactBase;
-				
-				WorkingType = value;
+			set
+			{
+			    // Depending on the working memory isolation type
+			    switch (value)
+			    {
+			        case WorkingMemoryTypes.Isolated:
+			            WorkingFactBase = (FactBase)globalFactBase.Clone();
+			            break;
+			        case WorkingMemoryTypes.IsolatedEmpty:
+			            WorkingFactBase = new FactBase();
+			            break;
+			        case WorkingMemoryTypes.Global:
+			            break;
+			        default:
+			            WorkingFactBase = globalFactBase;
+			            break;
+			    }
+
+			    WorkingType = value;
 			}
 		}
 		
@@ -42,18 +48,23 @@ namespace NxBRE.InferenceEngine.Core {
 		
 		public override void FinishInitialization() {}
 				
-		public override void CommitIsolated() {
-			if (Type == WorkingMemoryTypes.Isolated) {
-				globalFactBase = WorkingFactBase;
-				Type = WorkingMemoryTypes.Global;
-			}
-			else if (Type == WorkingMemoryTypes.IsolatedEmpty) {
-				foreach(Fact f in WorkingFactBase) globalFactBase.Assert(f);
-				Type = WorkingMemoryTypes.Global;
-			}
-			else
-				throw new BREException("Current Working Memory is not Isolated and can not be committed.");
+		public override void CommitIsolated()
+		{
+		    switch (Type)
+		    {
+		        case WorkingMemoryTypes.Isolated:
+		            globalFactBase = WorkingFactBase;
+		            Type = WorkingMemoryTypes.Global;
+		            break;
+		        case WorkingMemoryTypes.IsolatedEmpty:
+		            foreach(Fact f in WorkingFactBase) globalFactBase.Assert(f);
+		            Type = WorkingMemoryTypes.Global;
+		            break;
+		        case WorkingMemoryTypes.Global:
+		            break;
+		        default:
+		            throw new BREException("Current Working Memory is not Isolated and can not be committed.");
+		    }
 		}
-		
 	}
 }

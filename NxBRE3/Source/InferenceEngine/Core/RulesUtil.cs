@@ -4,7 +4,7 @@ namespace NxBRE.InferenceEngine.Core
 	using System.Collections;
 	using System.Collections.Generic;
 	
-	using NxBRE.InferenceEngine.Rules;
+	using Rules;
 
 	internal abstract class RulesUtil
 	{
@@ -34,20 +34,20 @@ namespace NxBRE.InferenceEngine.Core
 		/// <param name="atom">The Atom to resolve.</param>
 		/// <returns>A new Atom where all Function predicates have been resolved. If no
 		/// Function predicate exists, it returns a clone of the current Atom.</returns>
-		internal static Atom ResolveFunctions(Atom atom) {
-			if (atom.HasFunction) {
-				IPredicate[] predicates = new IPredicate[atom.Members.Length];
+		internal static Atom ResolveFunctions(Atom atom)
+		{
+		    if (atom.HasFunction) {
+				var predicates = new IPredicate[atom.Members.Length];
 				
-				for(int i=0; i<atom.Members.Length; i++)
+				for(var i=0; i<atom.Members.Length; i++)
 					if (atom.Members[i] is Function) predicates[i] = new Individual(atom.Members[i].ToString());
 					else predicates[i] = atom.Members[i];
 				return new Atom(atom.Negative, atom.Type, predicates);
 			}
-			else
-				return (Atom)atom.Clone();
+		    return (Atom)atom.Clone();
 		}
-		
-		/// <summary>
+
+	    /// <summary>
 		/// Translates variable names of a target atom with names from a template atom matching the position of a
 		/// source atom.
 		/// </summary>
@@ -57,13 +57,13 @@ namespace NxBRE.InferenceEngine.Core
 		/// <param name="target"></param>
 		/// <returns></returns>
 		internal static Atom TranslateVariables(Atom template, Atom source, Atom target) {
-			IPredicate[] resultMembers = new IPredicate[target.Members.Length];
+			var resultMembers = new IPredicate[target.Members.Length];
 			
-			for(int i=0; i<target.Members.Length; i++) {
-				IPredicate targetMember = target.Members[i];
+			for(var i=0; i<target.Members.Length; i++) {
+				var targetMember = target.Members[i];
 				
 				if (targetMember is Variable) {
-					int indexOfSourceMember = Array.IndexOf(source.Members, targetMember);
+					var indexOfSourceMember = Array.IndexOf(source.Members, targetMember);
 					if (indexOfSourceMember >= 0) resultMembers[i] = template.Members[indexOfSourceMember];
 					else resultMembers[i] = targetMember;
 				}
@@ -84,10 +84,10 @@ namespace NxBRE.InferenceEngine.Core
 		/// <param name="template">The template of Atom being populated.</param>
 		/// <param name="members">The members to populate.</param>
 		internal static void Populate(Fact data, Atom template, IPredicate[] members) {
-			for(int i=0;i<members.Length;i++)
+			for(var i=0;i<members.Length;i++)
 				if (members[i] is Variable) {
 					// try to locate a Variable with the same name in the template
-					int j = Array.IndexOf(template.Members, members[i]);
+					var j = Array.IndexOf(template.Members, members[i]);
 					if (j >= 0) {
 						members[i] = data.Members[j];
 					}
@@ -131,11 +131,11 @@ namespace NxBRE.InferenceEngine.Core
 		/// <param name="atom">The atom with which the current fact matches.</param>
 		/// <returns>A new fact with only String individuals.</returns>
 		internal static Fact Resolve(bool fully, Fact factToResolve, Atom atom) {
-			IPredicate[] predicates = new IPredicate[factToResolve.Members.Length];
+			var predicates = new IPredicate[factToResolve.Members.Length];
 			
-			for(int i=0; i<factToResolve.Members.Length; i++) {
-				if ((atom.Members[i] is Function)
-						|| ((fully) && (atom.Members[i] is Individual) && (!(factToResolve.Members[i].Value is System.String)))) {
+			for(var i=0; i<factToResolve.Members.Length; i++) {
+				if (atom.Members[i] is Function
+						|| ((fully) && (atom.Members[i] is Individual) && (!(factToResolve.Members[i].Value is string)))) {
 					predicates[i] = new Individual(atom.Members[i].ToString());
 				}
 				else {

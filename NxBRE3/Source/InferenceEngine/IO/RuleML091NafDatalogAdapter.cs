@@ -1,20 +1,18 @@
 /// <summary>
 /// CURRENTLY INTERNAL BECAUSE NOT READY FOR PRIME TIME!
 /// </summary>
+
+using System.Linq;
+
 namespace NxBRE.InferenceEngine.IO {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Xml;
-	using System.Xml.Schema;
 	using System.Xml.XPath;
-	
-	using NxBRE.InferenceEngine.Core;
-	using NxBRE.InferenceEngine.Rules;
-	using NxBRE.Util;
+	using Rules;
 
-	///<summary>Adapter supporting RuleML 0.91 NafDatalog Sublanguage.</summary>
+    ///<summary>Adapter supporting RuleML 0.91 NafDatalog Sublanguage.</summary>
 	///<remarks>UTF-8 is the default encoding.</remarks>
 	/// <author>David Dossot</author>
 	internal class RuleML091NafDatalogAdapter:AccumulatingExtendedRuleBaseAdapter {
@@ -102,11 +100,10 @@ namespace NxBRE.InferenceEngine.IO {
 			base.ValidateRulebase();
 			
 			//TODO FR-1546485: enable the currently unsupported features: retraction, multiple rulebases, "named" rulebases
-			string[] notSupportedXPaths = new string[] {"//dl:Retract", "//dl:Assert/dl:Rulebase", "//dl:Rulebase/dl:oid"};
+			var notSupportedXPaths = new string[] {"//dl:Retract", "//dl:Assert/dl:Rulebase", "//dl:Rulebase/dl:oid"};
 			
-			foreach(string notSupportedXPath in notSupportedXPaths)
-				if (Navigator.Select(BuildXPathExpression(notSupportedXPath)).MoveNext())
-					throw new BREException("RuleML syntax '" + notSupportedXPath + "' is currently not supported by this adapter.");
+			foreach (var notSupportedXPath in notSupportedXPaths.Where(notSupportedXPath => Navigator.Select(BuildXPathExpression(notSupportedXPath)).MoveNext()))
+			    throw new BREException("RuleML syntax '" + notSupportedXPath + "' is currently not supported by this adapter.");
 		}
 		
 		protected override void WriteIntegrityQuery(XmlElement target, Query query) {
@@ -117,44 +114,41 @@ namespace NxBRE.InferenceEngine.IO {
 		protected override void BuildDomRulebase(IList<Fact> facts, IList<Query> queries, IList<Implication> implications, IList<Equivalent> equivalents, IList<Query> integrityQueries) {
 			WriteQueries(queries);
 			
-			XmlElement assert = WriteMapElement("Assert");
+			var assert = WriteMapElement("Assert");
 			
-			XmlElement mainRuleBaseParent = assert;
+			var mainRuleBaseParent = assert;
 			
 			if (integrityQueries.Count > 0) {
-				XmlElement entails = Document.CreateElement("Entails", DatalogNamespaceURL);
+				var entails = Document.CreateElement("Entails", DatalogNamespaceURL);
 				assert.AppendChild(entails);
 				mainRuleBaseParent = entails;
 			}
 			
-			XmlElement mainRuleBase = Document.CreateElement("Rulebase", DatalogNamespaceURL);
+			var mainRuleBase = Document.CreateElement("Rulebase", DatalogNamespaceURL);
 			mainRuleBaseParent.AppendChild(mainRuleBase);
 			
 			if (implications.Count > 0) {
 				mainRuleBase.AppendChild(Document.CreateComment("Implications"));
-				foreach(Implication implication in implications) WriteImplication(mainRuleBase, implication);
+				foreach(var implication in implications) WriteImplication(mainRuleBase, implication);
 			}
 			
 			if (equivalents.Count > 0) {
 				mainRuleBase.AppendChild(Document.CreateComment("Equivalents"));
-				foreach(Equivalent equivalent in equivalents) WriteEquivalent(mainRuleBase, equivalent);
+				foreach(var equivalent in equivalents) WriteEquivalent(mainRuleBase, equivalent);
 			}
 			
 			if (facts.Count > 0) {
 				mainRuleBase.AppendChild(Document.CreateComment("Facts"));
-				foreach(Fact fact in facts)	WriteFact(mainRuleBase, fact);
+				foreach(var fact in facts)	WriteFact(mainRuleBase, fact);
 			}
-			
-			if (integrityQueries.Count > 0) {
-				XmlElement integrityRuleBase = Document.CreateElement("Rulebase", DatalogNamespaceURL);
-				mainRuleBaseParent.AppendChild(integrityRuleBase);
-				
-				if (integrityQueries.Count > 0) {
-					integrityRuleBase.AppendChild(Document.CreateComment("Integrity Queries"));
-					foreach(Query integrityQuery in integrityQueries) WriteIntegrityQuery(integrityRuleBase, integrityQuery);
-				}
-			}
-			
+
+		    if (integrityQueries.Count <= 0) return;
+		    var integrityRuleBase = Document.CreateElement("Rulebase", DatalogNamespaceURL);
+		    mainRuleBaseParent.AppendChild(integrityRuleBase);
+
+		    if (integrityQueries.Count <= 0) return;
+		    integrityRuleBase.AppendChild(Document.CreateComment("Integrity Queries"));
+		    foreach(var integrityQuery in integrityQueries) WriteIntegrityQuery(integrityRuleBase, integrityQuery);
 		}
 		
 	}

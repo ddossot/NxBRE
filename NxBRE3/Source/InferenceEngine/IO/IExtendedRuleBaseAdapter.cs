@@ -1,9 +1,7 @@
 namespace NxBRE.InferenceEngine.IO {
-
-	using System;
-	using System.Collections.Generic;
+    using System.Collections.Generic;
 	
-	using NxBRE.InferenceEngine.Rules;
+	using Rules;
 	
 	/// <summary>
 	/// Provides attributes for defining saving format of rule base

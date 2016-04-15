@@ -1,9 +1,7 @@
 namespace NxBRE.FlowEngine.Factories
 {
-	using System;
-	
-	using NxBRE.FlowEngine;
-	using NxBRE.FlowEngine.IO;
+    using FlowEngine;
+	using IO;
 	
 	/// <summary>This factory allows an easy creation of a BRE object</summary>
 	/// <author>David Dossot</author>
@@ -17,13 +15,12 @@ namespace NxBRE.FlowEngine.Factories
 		}
 		
 		public IFlowEngine NewBRE(IRulesDriver rulesDriver) {
-			BREImpl bre = new BREImpl();
+			var bre = new BREImpl();
 			
 			// Lets register the result handler
 			if (resultHandler != null) bre.ResultHandlers += resultHandler;
 
-			if (!bre.Init(rulesDriver)) return null;
-			else return bre;
+			return !bre.Init(rulesDriver) ? null : bre;
 		}
 	}
 	

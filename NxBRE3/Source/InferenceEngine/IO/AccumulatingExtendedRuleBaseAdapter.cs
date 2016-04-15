@@ -3,7 +3,7 @@ namespace NxBRE.InferenceEngine.IO {
 	using System.Collections.Generic;
 	using System.IO;
 	
-	using NxBRE.InferenceEngine.Rules;
+	using Rules;
 	
 	/// <summary>
 	/// An abstract rule base adapter that accumulate all collections and restitutes them in one method

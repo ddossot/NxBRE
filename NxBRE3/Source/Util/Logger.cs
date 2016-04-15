@@ -265,9 +265,10 @@ namespace NxBRE.Util
 		/// </summary>
 		/// <param name="traceLevel">The integer representing the trace level in the old system.</param>
 		/// <returns>The matching TraceEventType or TraceEventType.Information if no match found.</returns>
-		public static TraceEventType ConvertFromObsoleteIntLevel(int traceLevel) {
-			if ((traceLevel >= 0) && (traceLevel < traceEventTypeValues.Length)) return traceEventTypeValues[traceLevel];
-			else return TraceEventType.Information;
+		public static TraceEventType ConvertFromObsoleteIntLevel(int traceLevel)
+		{
+		    if ((traceLevel >= 0) && (traceLevel < traceEventTypeValues.Length)) return traceEventTypeValues[traceLevel];
+		    return TraceEventType.Information;
 		}
 	}
 }

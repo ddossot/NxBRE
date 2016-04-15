@@ -1,10 +1,7 @@
 namespace NxBRE.FlowEngine.IO {
-	using System;
 	using System.Diagnostics;
 	using System.Xml;
-	
-	using NxBRE.FlowEngine;
-	using NxBRE.Util;
+	using Util;
 	
 	/// <summary>
 	/// Driver for loading rules files valid against businessRules.xsd (native NxBRE grammar)
@@ -14,7 +11,7 @@ namespace NxBRE.FlowEngine.IO {
 	///  businessRules.xsd must be included in the assembly.
 	/// </remarks>
 	public sealed class BusinessRulesFileDriver:AbstractRulesDriver {
-		public BusinessRulesFileDriver(string xmlFileURI):base(xmlFileURI) {}
+		public BusinessRulesFileDriver(string xmlFileUri):base(xmlFileUri) {}
 		
 		protected override XmlReader GetReader() {
 			if (Logger.IsFlowEngineInformation) Logger.FlowEngineSource.TraceEvent(TraceEventType.Information, 0, "BusinessRulesFileDriver loading " + xmlSource);

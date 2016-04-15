@@ -1,7 +1,7 @@
 namespace NxBRE.InferenceEngine {
 	using System;
 	
-	using NxBRE.InferenceEngine.Rules;
+	using InferenceEngine.Rules;
 	
 	/// <summary>
 	/// Delegate for listening new events for Facts. This class is immutable.

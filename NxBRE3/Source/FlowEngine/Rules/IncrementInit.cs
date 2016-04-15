@@ -1,9 +1,8 @@
 namespace NxBRE.FlowEngine.Rules
 {
-	using System;
-	using System.Collections;
+    using System.Collections;
 	
-	using NxBRE.FlowEngine;
+	using FlowEngine;
 
 	/// <summary> This class is designed to reset increments or decrements
 	/// <P>
@@ -48,22 +47,19 @@ namespace NxBRE.FlowEngine.Rules
 			{
 				throw new BRERuleException("Parameter 'Id' not found");
 			}
-			else if (!aMap.Contains(INIT))
-			{
-				throw new BRERuleException("Parameter 'Init' not found");
-			}
-			else
-			{
-				if (aBrc.FactoryMap.Contains(aMap[ID]))
-				{
-					((IInitializable)aBrc.GetFactory(aMap[ID])).Init(aMap[INIT]);
-				}
-				else
-				{
-					throw new BRERuleException("Increment '"+aMap[ID]+"' not found");				
-				}
-			}
-			return null;
+		    if (!aMap.Contains(INIT))
+		    {
+		        throw new BRERuleException("Parameter 'Init' not found");
+		    }
+		    if (aBrc.FactoryMap.Contains(aMap[ID]))
+		    {
+		        ((IInitializable)aBrc.GetFactory(aMap[ID])).Init(aMap[INIT]);
+		    }
+		    else
+		    {
+		        throw new BRERuleException("Increment '"+aMap[ID]+"' not found");				
+		    }
+		    return null;
 		}
 	}
 }

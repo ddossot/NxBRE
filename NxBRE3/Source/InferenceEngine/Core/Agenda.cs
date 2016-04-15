@@ -3,9 +3,9 @@ namespace NxBRE.InferenceEngine.Core {
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	
-	using NxBRE.InferenceEngine.Rules;
+	using Rules;
 	
-	using NxBRE.Util;
+	using Util;
 
 	///<summary>
 	/// The agenda is the "maestro" of the inference engine.
@@ -30,10 +30,12 @@ namespace NxBRE.InferenceEngine.Core {
 		}
 		
 		public object Clone() {
-			Agenda agenda = new Agenda();
-			agenda.scheduledImplication = new List<Implication>(this.scheduledImplication);
-			agenda.implicationComparer = this.implicationComparer;
-			return agenda;
+		    var agenda = new Agenda
+		    {
+		        scheduledImplication = new List<Implication>(this.scheduledImplication),
+		        implicationComparer = this.implicationComparer
+		    };
+		    return agenda;
 		}
 		
 		public void PrepareExecution() {
@@ -67,28 +69,28 @@ namespace NxBRE.InferenceEngine.Core {
 		public void Schedule(IList<Implication> positiveImplications, ImplicationBase implicationBase) {
 			if (positiveImplications == null) {
 				// schedule all implications
-				foreach(Implication implication in implicationBase) Schedule(implication);
+				foreach(var implication in implicationBase) Schedule(implication);
 			}
 			else {
-				foreach(Implication positiveImplication in positiveImplications) {
+				foreach(var positiveImplication in positiveImplications) {
 					if (positiveImplication.Action != ImplicationAction.Retract) {
 						// for positive implications, schedule only the implications
 						// relevant to the newly asserted facts.
 						IList<Implication> listeningImplications = implicationBase.GetListeningImplications(positiveImplication.Deduction);
 						if (listeningImplications != null)
-							foreach(Implication implication in listeningImplications)
+							foreach(var implication in listeningImplications)
 								Schedule(implication);
 					}
 					else {
 						// for negative implications, schedule only the implications
 						// that can potentially assert a fact of same type that was retracted
-						foreach(Implication implication in implicationBase)
+						foreach(var implication in implicationBase)
 							if (implication.Deduction.Type == positiveImplication.Deduction.Type)
 								Schedule(implication);
 					}
 					
 					// schedule implications potentially pre-condition unlocked
-					foreach(Implication implication in implicationBase.GetPreconditionChildren(positiveImplication))
+					foreach(var implication in implicationBase.GetPreconditionChildren(positiveImplication))
 						Schedule(implication);
 				}
 			}
@@ -108,7 +110,7 @@ namespace NxBRE.InferenceEngine.Core {
 				if (!HasMoreToExecute)
 					throw new BREException("The Executing Agenda can not provide any more Implication.");
 				
-				Implication executingImplication = (Implication)scheduledImplication[0];
+				var executingImplication = (Implication)scheduledImplication[0];
 				scheduledImplication.RemoveAt(0);
 				return executingImplication;
 			}

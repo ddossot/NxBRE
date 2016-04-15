@@ -1,10 +1,9 @@
 namespace NxBRE.InferenceEngine.Core {
-	using System;
-	using System.Collections.Generic;
+    using System.Collections.Generic;
 	
-	using NxBRE.InferenceEngine;
-	using NxBRE.InferenceEngine.Rules;
-	using NxBRE.Util;
+	using InferenceEngine;
+	using Rules;
+	using Util;
 	
 	/// <summary>
 	/// A factory for building event contexts.
@@ -34,7 +33,7 @@ namespace NxBRE.InferenceEngine.Core {
 			
 			public override string ToString()
 			{
-				return string.Format("[EventContext: Implication={0} - Facts={1}]", Implication.Label, Misc.IListToString(Facts));
+				return $"[EventContext: Implication={Implication.Label} - Facts={Misc.IListToString(Facts)}]";
 			}
 			
 		}

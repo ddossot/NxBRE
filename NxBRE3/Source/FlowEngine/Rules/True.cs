@@ -1,9 +1,8 @@
 namespace NxBRE.FlowEngine.Rules
 {
-	using System;
-	using System.Collections;
+    using System.Collections;
 	
-	using NxBRE.FlowEngine;
+	using FlowEngine;
 	
 	/// <summary> This rule will always return true.
 	/// </summary>

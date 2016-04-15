@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace NxBRE.InferenceEngine.Rules {
 	using System;
 	using System.Collections.Generic;
@@ -146,7 +148,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// </summary>
 		/// <returns>The String representation of the Implication.</returns>
 		public override string ToString() {
-			string result = "Implication[Action:" + Action +
+			var result = "Implication[Action:" + Action +
 											";Label:" + Label + 
 											";Priority:" + Priority + 
 											";Salience:" + Salience + 
@@ -166,12 +168,13 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// If the label is present, it becomes the main identifier of the Implication.
 		/// </summary>
 		/// <returns>The hashcode of the current Query.</returns>
-		public override int GetHashCode() {
-			if (Label != null) return Label.GetHashCode();
-			else return (base.GetHashCode() ^ Deduction.GetHashCode());
+		public override int GetHashCode()
+		{
+		    if (Label != null) return Label.GetHashCode();
+		    return (base.GetHashCode() ^ Deduction.GetHashCode());
 		}
 
-		/// <summary>
+	    /// <summary>
 		/// Instantiates a new Implication.
 		/// </summary>
 		/// <param name="label">The label of the new implication.</param>
@@ -286,8 +289,8 @@ namespace NxBRE.InferenceEngine.Rules {
 				                                      "] range.");
 			if (action == ImplicationAction.Count) {
 				if (deduction.IsFact) throw new BREException("A counting Implication must have one Variable predicate in its deduction atom.");
-				int varCount = 0;
-				foreach(IPredicate member in deduction.Members) {
+				var varCount = 0;
+				foreach(var member in deduction.Members) {
 					if (member is Variable) varCount++;
 					if (varCount > 1) throw new BREException("A counting Implication must have only one Variable predicate in its deduction atom.");
 				}
@@ -300,11 +303,10 @@ namespace NxBRE.InferenceEngine.Rules {
 			this.action = action;
 			
 			hasNaf = false;
-			foreach(Atom atom in AtomGroup.AllAtoms) {
-				if (atom.Negative) {
-					hasNaf = true;
-					break;
-				}
+			foreach (var atom in AtomGroup.AllAtoms.Where(atom => atom.Negative))
+			{
+			    hasNaf = true;
+			    break;
 			}
 			
 		}

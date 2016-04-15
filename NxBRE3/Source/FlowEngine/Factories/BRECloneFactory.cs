@@ -1,9 +1,7 @@
 namespace NxBRE.FlowEngine.Factories
 {
-	using System;
-	
-	using NxBRE.FlowEngine;
-	using NxBRE.FlowEngine.IO;
+    using FlowEngine;
+	using IO;
 	
 	/// <summary>This factory allows an easy creation of a BRE objects from a unique Clone,<br/>
 	/// which is very convenient for a multi-threaded environment where each thread will

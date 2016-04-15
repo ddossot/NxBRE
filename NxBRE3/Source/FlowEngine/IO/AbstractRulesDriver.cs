@@ -1,12 +1,8 @@
 namespace NxBRE.FlowEngine.IO {
-	using System;
-	using System.IO;
-	using System.Net;
-	using System.Xml;
-	using System.Xml.Schema;
-	
-	using NxBRE.FlowEngine;
-	using NxBRE.Util;
+    using System.IO;
+    using System.Xml;
+    using FlowEngine;
+	using Util;
 	
 	/// <summary>
 	/// Driver for loading NxBRE rules from different sources.
@@ -34,25 +30,16 @@ namespace NxBRE.FlowEngine.IO {
 		}
 		
 		protected AbstractRulesDriver() {}
-		
-		protected XmlReader GetXmlInputReader(XmlTextReader xmlReader, string xsdResourceName) {
-			XmlReader sourceReader;
-			
-			if (xsdResourceName != null) {
-				// we validate against a well defined schema
-				sourceReader = Xml.NewValidatingReader(xmlReader, ValidationType.Schema, xsdResourceName);
-			}
-			else {
-				// it is easier to by default be lax if no internal XSD resource has been given
-				sourceReader = xmlReader;
-			}
-			
-			return sourceReader;
-		}
-		
-		protected XmlReader GetXmlInputReader(string sourceURI, string xsdResourceName) {
+
+	    private XmlReader GetXmlInputReader(XmlReader xmlReader, string xsdResourceName)
+	    {
+	        var sourceReader = xsdResourceName != null ? Xml.NewValidatingReader(xmlReader, ValidationType.Schema, xsdResourceName) : xmlReader;
+	        return sourceReader;
+	    }
+
+	    protected XmlReader GetXmlInputReader(string sourceUri, string xsdResourceName) {
 			// manually open the file so that we can specify share permissions
-			Stream sourceStream = new FileStream(sourceURI, FileMode.Open, FileAccess.Read , FileShare.ReadWrite); 
+			Stream sourceStream = new FileStream(sourceUri, FileMode.Open, FileAccess.Read , FileShare.ReadWrite); 
 			return GetXmlInputReader(sourceStream, xsdResourceName);
 		}
 		

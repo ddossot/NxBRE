@@ -1,8 +1,5 @@
 namespace NxBRE.FlowEngine.Rules {
-	using System;
-	using System.Collections;
-
-	using NxBRE.FlowEngine;
+    using FlowEngine;
 
 	/// <summary> Compares two objects to see if one is greater than the other
 	/// </summary>

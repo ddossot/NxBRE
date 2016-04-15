@@ -1,19 +1,15 @@
+using System.Linq;
+
 namespace NxBRE.FlowEngine
 {
 	using System;
-	using System.IO;
 	using System.Collections;
 	using System.Diagnostics;
-	using System.Reflection;
 	using System.Xml;
-	using System.Xml.Schema;
 	using System.Xml.XPath;
-	using System.Xml.Xsl;
-	
-	using NxBRE.Util;
-	using NxBRE.FlowEngine;
-	using NxBRE.FlowEngine.Core;
-	using NxBRE.FlowEngine.IO;
+	using Util;
+	using Core;
+	using IO;
 	
 	/// <summary>The Rule Interpretor implementation of IBRE, the Flow Engine of NxBRE.</summary>
 	/// <remarks>[Author: Sloan Seaman] Take a deep breath.... Inhale... Exhale... Lets begin:
@@ -304,8 +300,9 @@ namespace NxBRE.FlowEngine
 				return false;
 			}
 
-			if (aObj is IRulesDriver)	{
-				rulesDriver = (IRulesDriver) aObj;
+		    var obj = aObj as IRulesDriver;
+		    if (obj != null)	{
+				rulesDriver = obj;
 				xmlDocument = null;
 			}
 			else if (aObj is XPathDocument) {
@@ -325,9 +322,8 @@ namespace NxBRE.FlowEngine
 				                                     new Hashtable());
 
 			// pre-load all operators
-			foreach(Type type in Reflection.NxBREAssembly.GetTypes())
-				if (null != type.GetInterface(typeof(IBREOperator).FullName, false)) 
-						GetOperator(type.FullName);
+			foreach (var type in Reflection.NxBREAssembly.GetTypes().Where(type => null != type.GetInterface(typeof(IBREOperator).FullName, false)))
+			    GetOperator(type.FullName);
 			
 			// pre-load factories
 			initialized = LoadFactories(GetXmlDocumentRules().Select("//"+RULE+"[@"+RULE_ATTRS.FACTORY+"]"));
@@ -356,7 +352,7 @@ namespace NxBRE.FlowEngine
 		/// </summary>
 		private XPathNavigator GetXmlDocumentRules() {
 			if ((rulesDriver != null) && (xmlDocument == null)) {
-				XmlReader reader = rulesDriver.GetXmlReader();
+				var reader = rulesDriver.GetXmlReader();
 				xmlDocument = new XPathDocument(reader);
 				
 				// this close is very important for freeing the underlying resource, which can be a file
@@ -364,7 +360,7 @@ namespace NxBRE.FlowEngine
 			}
 			
 			if (xmlDocument != null) {
-				XPathNodeIterator navDoc = xmlDocument.CreateNavigator().Select(BUSINESS_RULES);
+				var navDoc = xmlDocument.CreateNavigator().Select(BUSINESS_RULES);
 				navDoc.MoveNext();
 				return navDoc.Current;
 			}
@@ -391,7 +387,7 @@ namespace NxBRE.FlowEngine
 			if (!initialized)
 				throw new BREException("Process in not available if BRE is not initialized.");
 
-			bool wasRunning = running;
+			var wasRunning = running;
 			
 			// an empty string is of no interest
 			if (setId == String.Empty) setId = null;
@@ -456,8 +452,8 @@ namespace NxBRE.FlowEngine
 		/// <param name="defaultValue">The value to return if the ID was not resolvable.</param>
 		/// <returns>The value of the object ID to resolve, or defaultValue if the resolution was not possible.</returns>
 		public object Resolve(string objectId, object defaultValue) {
-			object result = Resolve(objectId);
-			return result==null?defaultValue:result;
+			var result = Resolve(objectId);
+			return result ?? defaultValue;
 		}
 
 		/// <summary> This method preloads all defined factories with the XML document.
@@ -477,44 +473,41 @@ namespace NxBRE.FlowEngine
 		private bool LoadFactories(XPathNodeIterator aNodeList)
 		{
 			if (Logger.IsInferenceEngineInformation) Logger.FlowEngineSource.TraceEvent(TraceEventType.Information, 0, "BRE Loading RuleFactories...");
-			
-			if (aNodeList != null)
-			{
-				try
-				{
-					while(aNodeList.MoveNext())
-					{
-						string factory = aNodeList.Current.GetAttribute(RULE_ATTRS.FACTORY, String.Empty);
-						
-						if (factory != String.Empty)
-						{
-							string id = aNodeList.Current.GetAttribute(RULE_ATTRS.ID, String.Empty);
+
+		    if (aNodeList == null) return false;
+		    try
+		    {
+		        while(aNodeList.MoveNext())
+		        {
+		            var factory = aNodeList.Current.GetAttribute(RULE_ATTRS.FACTORY, String.Empty);
+
+		            if (factory == string.Empty) continue;
+		            var id = aNodeList.Current.GetAttribute(RULE_ATTRS.ID, String.Empty);
 							
-							if (Logger.IsFlowEngineVerbose) Logger.FlowEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Found Factory: " + factory + " Id: " + id);
-							if (Logger.IsFlowEngineVerbose) Logger.FlowEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Loading Factory: " + id);
+		            if (Logger.IsFlowEngineVerbose) Logger.FlowEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Found Factory: " + factory + " Id: " + id);
+		            if (Logger.IsFlowEngineVerbose) Logger.FlowEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Loading Factory: " + id);
 							
-							object tmpClass = Reflection.ClassNew(factory, null);
-							
-							if (tmpClass is IBRERuleFactory)
-							{
-								IBRERuleFactory brf = (IBRERuleFactory) tmpClass;
-								ruleContext.SetFactory(id, brf);
-								if (Logger.IsFlowEngineVerbose) Logger.FlowEngineSource.TraceEvent(TraceEventType.Verbose, 0, "BRE RuleFactory " + id + " loaded and added to RuleContext");
-							}
-							else
-							{
-								throw new BREException("Specified Rule Factory " + factory + " with id " + id + " not of type IBRERuleFactory");
-							}
-						}
-					}
-					return true;
-				}
-				catch (System.Exception e)
-				{
-					if (Logger.IsFlowEngineCritical) Logger.FlowEngineSource.TraceData(TraceEventType.Critical, 0, e);
-				}
-			}
-			return false;
+		            var tmpClass = Reflection.ClassNew(factory, null);
+
+		            var @class = tmpClass as IBRERuleFactory;
+		            if (@class != null)
+		            {
+		                var brf = @class;
+		                ruleContext.SetFactory(id, brf);
+		                if (Logger.IsFlowEngineVerbose) Logger.FlowEngineSource.TraceEvent(TraceEventType.Verbose, 0, "BRE RuleFactory " + id + " loaded and added to RuleContext");
+		            }
+		            else
+		            {
+		                throw new BREException("Specified Rule Factory " + factory + " with id " + id + " not of type IBRERuleFactory");
+		            }
+		        }
+		        return true;
+		    }
+		    catch (Exception e)
+		    {
+		        if (Logger.IsFlowEngineCritical) Logger.FlowEngineSource.TraceData(TraceEventType.Critical, 0, e);
+		    }
+		    return false;
 		}
 		
 		/// <summary> This method processes the XML Document.
@@ -535,7 +528,7 @@ namespace NxBRE.FlowEngine
 			if (!running) throw new BREProcessInterruptedException("Processing stopped in node: "+aNode);
 			if (aNode == null) return null;
 			
-			string nodeName = aNode.LocalName;
+			var nodeName = aNode.LocalName;
 			
 			if (Logger.IsFlowEngineVerbose) Logger.FlowEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Element Node: " + nodeName);
 
@@ -543,24 +536,20 @@ namespace NxBRE.FlowEngine
 			A lot of this code is the same but it is broken up for
 			scalability reasons...
 			*/
-			if (nodeName == BUSINESS_RULES) {
-				// Instead of parsing all sub nodes perform an xPath pre-selection of nodes
+			if (nodeName == BUSINESS_RULES)
+			{
+			    // Instead of parsing all sub nodes perform an xPath pre-selection of nodes
 				// depending if a set is selected or not.
-				XPathNodeIterator selectedNodes;
-				if (aSetId == null)
-					selectedNodes = aNode.Select("*[count(ancestor-or-self::"+SET+")=0]");
-				else 
-					selectedNodes = aNode.Select("*[count(ancestor-or-self::"+SET+")=0] | "+SET+"[@"+SET_ATTRS.ID+"='"+aSetId+"']/*");
-				
-				while(selectedNodes.MoveNext())
+			    var selectedNodes = aSetId == null ? aNode.Select("*[count(ancestor-or-self::"+SET+")=0]") : aNode.Select("*[count(ancestor-or-self::"+SET+")=0] | "+SET+"[@"+SET_ATTRS.ID+"='"+aSetId+"']/*");
+
+			    while(selectedNodes.MoveNext())
 					ProcessXML(selectedNodes.Current, aSetId, aObj);
 			}
 			else if (nodeName == COMPARE)
 			{
-				Hashtable map = new Hashtable();
+				var map = new Hashtable();
 				DoRecursion(aNode, aSetId, map);
 				aObj = ProcessCompareNode(aNode, map);
-				map = null;
 			}
 			else if (nodeName == CONDITION)
 			{
@@ -576,28 +565,26 @@ namespace NxBRE.FlowEngine
 			}
 			else if (nodeName == FOREACH)
 			{
-				string resultToAssert = aNode.GetAttribute(FOREACH_ATTRS.ID, String.Empty);
-				string objectToEnumerate = aNode.GetAttribute(FOREACH_ATTRS.RULE_VALUE, String.Empty);
+				var resultToAssert = aNode.GetAttribute(FOREACH_ATTRS.ID, String.Empty);
+				var objectToEnumerate = aNode.GetAttribute(FOREACH_ATTRS.RULE_VALUE, String.Empty);
 				
-				IBRERuleResult ruleObjectToEnumerate = ruleContext.GetResult(objectToEnumerate);
-				
-				if (ruleObjectToEnumerate != null) {
-					IEnumerable enumerable = (IEnumerable)ruleObjectToEnumerate.Result;
-					if (enumerable != null) {
-						foreach(object parser in enumerable)
-						{
-							ruleContext.SetObject(resultToAssert, parser);
-							DoRecursion(aNode, aSetId, aObj);
-						}
-					}
-				}
+				var ruleObjectToEnumerate = ruleContext.GetResult(objectToEnumerate);
+
+			    if (ruleObjectToEnumerate == null) return aObj;
+			    var enumerable = (IEnumerable)ruleObjectToEnumerate.Result;
+			    if (enumerable == null) return aObj;
+			    foreach(var parser in enumerable)
+			    {
+			        ruleContext.SetObject(resultToAssert, parser);
+			        DoRecursion(aNode, aSetId, aObj);
+			    }
 			}
 			else if ((nodeName == IF) || (nodeName == ELSEIF) || (nodeName == WHILE))
 			{
-				bool exitWhile = false;
+				var exitWhile = false;
 				do {
-					bool firstChild = true;
-					XPathNodeIterator children = aNode.SelectChildren(XPathNodeType.Element);
+					var firstChild = true;
+					var children = aNode.SelectChildren(XPathNodeType.Element);
 					
 					while ((children.MoveNext()) && (running))
 					{
@@ -624,7 +611,7 @@ namespace NxBRE.FlowEngine
 			}
 			else if (nodeName == LOGIC)
 			{
-				XPathNodeIterator children = aNode.SelectChildren(XPathNodeType.Element);
+				var children = aNode.SelectChildren(XPathNodeType.Element);
 				while ((children.MoveNext()) && (running))
 				{
 					aObj = ProcessXML(children.Current, aSetId, aObj);
@@ -633,21 +620,21 @@ namespace NxBRE.FlowEngine
 			}
 			else if (nodeName == PARAMETER)
 			{
-				if (aObj is Hashtable)
-					ProcessParameterNode(aNode, (Hashtable) aObj);
+			    var obj = aObj as Hashtable;
+			    if (obj != null)
+					ProcessParameterNode(aNode, obj);
 			}
 			else if (nodeName == RETRACT)
 			{
-				string idToRetract = aNode.GetAttribute(RETRACT_ATTRS.ID, String.Empty);
+				var idToRetract = aNode.GetAttribute(RETRACT_ATTRS.ID, String.Empty);
 				if (ruleContext.ResultsMap.Contains(idToRetract))
 					ruleContext.ResultsMap.Remove(idToRetract);
 			}
 			else if (nodeName == RULE)
 			{
-				Hashtable map = new Hashtable();
+				var map = new Hashtable();
 				DoRecursion(aNode, aSetId, map);
 				ProcessRuleNode(aNode, map);
-				map = null;
 			}
 			else if (nodeName == SET)
 			{
@@ -680,13 +667,12 @@ namespace NxBRE.FlowEngine
 		{
 			object o = null;
 
-			if (running) {
-				XPathNodeIterator children = aNode.SelectChildren(XPathNodeType.Element);
-				while(children.MoveNext())
-					o = ProcessXML(children.Current, aSetId, aObj);
-			}
-			
-			return o;
+		    if (!running) return o;
+		    var children = aNode.SelectChildren(XPathNodeType.Element);
+		    while(children.MoveNext())
+		        o = ProcessXML(children.Current, aSetId, aObj);
+
+		    return o;
 		}
 		
 		/// <summary> Processes the Condition Node.
@@ -737,50 +723,39 @@ namespace NxBRE.FlowEngine
 		/// </returns>
 		private bool ProcessConditionNode(XPathNavigator aNode, string aSetId, object aObj)
 		{
-			bool returnBool = true;
-			bool childrenBool = true;
-			string processType = aNode.GetAttribute(CONDITION_ATTRS.TYPE, String.Empty);
-			int trueCount = 0;
+			var returnBool = true;
+			var childrenBool = true;
+			var processType = aNode.GetAttribute(CONDITION_ATTRS.TYPE, String.Empty);
+			var trueCount = 0;
 			
-			XPathNodeIterator children = aNode.SelectChildren(XPathNodeType.Element);
+			var children = aNode.SelectChildren(XPathNodeType.Element);
 			while(children.MoveNext())
 			{
-				object tmpObj = ProcessXML(children.Current, aSetId, aObj);
-				childrenBool = ((Boolean) tmpObj);
-				if (tmpObj is Boolean)
-				{
-					/* If we are doing a NOT, break at first child element */
-					if (processType == CONDITION_ATTRS.NOT)
-					{
-						childrenBool = !childrenBool;
-						trueCount++;
-						break;
-					}
-					/* If we are doing an OR, count the number of TRUE, we only need one. */
-					else if (processType == CONDITION_ATTRS.OR)
-					{
-						if (childrenBool)
-						{
-							trueCount++;
-							break;
-						}
-					}
-					/* If we are doing an AND (or anything else that we default to AND)
+				var tmpObj = ProcessXML(children.Current, aSetId, aObj);
+				childrenBool = ((bool) tmpObj);
+			    /* If we are doing a NOT, break at first child element */
+			    if (processType == CONDITION_ATTRS.NOT)
+			    {
+			        childrenBool = !childrenBool;
+			        trueCount++;
+			        break;
+			    }
+			    /* If we are doing an OR, count the number of TRUE, we only need one. */
+			    if (processType == CONDITION_ATTRS.OR)
+			    {
+			        if (!childrenBool) continue;
+			        trueCount++;
+			        break;
+			    }
+			    /* If we are doing an AND (or anything else that we default to AND)
 					 * break out any time we hit a FALSE */
-					else
-					{
-						if (!childrenBool) {
-							trueCount = 0;
-							break;
-						}
-						else trueCount++;
-					}
-				}
+			    if (!childrenBool) {
+			        trueCount = 0;
+			        break;
+			    }
+			    trueCount++;
 			}
-			
-			if (trueCount == 0) returnBool = false;
-			else returnBool = childrenBool;
-
+			returnBool = trueCount != 0 && childrenBool;
 			return returnBool;
 		}
 		
@@ -820,20 +795,20 @@ namespace NxBRE.FlowEngine
 		/// </returns>
 		private bool ProcessCompareNode(XPathNavigator aNode, Hashtable aMap)
 		{
-			bool resultBool = false;
+			var resultBool = false;
 				
 			// This is required in the XML, so we shouldn't have to worry about nulls....
-			string leftId = aNode.GetAttribute(COMPARE_ATTRS.LEFTID, String.Empty);
-			string rightId = aNode.GetAttribute(COMPARE_ATTRS.RIGHTID, String.Empty);
-			string operatorId = aNode.GetAttribute(COMPARE_ATTRS.OPERATOR, String.Empty);
+			var leftId = aNode.GetAttribute(COMPARE_ATTRS.LEFTID, String.Empty);
+			var rightId = aNode.GetAttribute(COMPARE_ATTRS.RIGHTID, String.Empty);
+			var operatorId = aNode.GetAttribute(COMPARE_ATTRS.OPERATOR, String.Empty);
 			
-			IBREOperator ruleOperator = GetOperator(operatorId);
+			var ruleOperator = GetOperator(operatorId);
 			
 			if (ruleOperator != null)
 			{
 				// Get the results
-				IBRERuleResult leftResult = (IBRERuleResult) ruleContext.GetResult(leftId);
-				IBRERuleResult rightResult = (IBRERuleResult) ruleContext.GetResult(rightId);
+				var leftResult = ruleContext.GetResult(leftId);
+				var rightResult = ruleContext.GetResult(rightId);
 	
 				// If it does not, consider a null in left or right members as exceptions!
 				if ((!ruleOperator.AcceptsNulls) && (leftResult == null)) {
@@ -846,8 +821,8 @@ namespace NxBRE.FlowEngine
 				{
 					if (Logger.IsFlowEngineVerbose) Logger.FlowEngineSource.TraceEvent(TraceEventType.Verbose, 0, "Retrieved results for comparison");
 					
-					object left = (leftResult==null)?null:leftResult.Result;
-					object right = (rightResult==null)?null:rightResult.Result;
+					var left = leftResult?.Result;
+					var right = rightResult?.Result;
 					
 					try
 					{
@@ -902,12 +877,12 @@ namespace NxBRE.FlowEngine
 		/// <returns> The Id found in the node attributes, null if nothing found</returns>
 		private string ProcessIdValueAttributes(XPathNavigator aNode, string idAttribute, string valueAttribute)
 		{
-			string idNode = aNode.GetAttribute(idAttribute, String.Empty);
-			string ruleValueNode = aNode.GetAttribute(valueAttribute, String.Empty);
+			var idNode = aNode.GetAttribute(idAttribute, String.Empty);
+			var ruleValueNode = aNode.GetAttribute(valueAttribute, String.Empty);
 
 			if ((idNode == String.Empty) && (ruleValueNode != String.Empty))
 			{
-				IBRERuleResult result = ruleContext.GetResult(ruleValueNode);
+				var result = ruleContext.GetResult(ruleValueNode);
 				if (result != null)	return result.Result.ToString();
 			}
 			else if (idNode != String.Empty) return idNode;
@@ -920,7 +895,7 @@ namespace NxBRE.FlowEngine
 		/// <param name="aNode">The InvokeSet node to process</param>
 		private void ProcessInvokeSetNode(XPathNavigator aNode)
 		{
-			string id = ProcessIdValueAttributes(aNode, INVOKESET_ATTRS.ID, INVOKESET_ATTRS.RULE_VALUE);
+			var id = ProcessIdValueAttributes(aNode, INVOKESET_ATTRS.ID, INVOKESET_ATTRS.RULE_VALUE);
 			
 			if (id == null) {
 				if (Logger.IsFlowEngineCritical) Logger.FlowEngineSource.TraceData(TraceEventType.Critical, 0, new BREException("Can not invoke a set with no Id: " + aNode.OuterXml));
@@ -937,8 +912,8 @@ namespace NxBRE.FlowEngine
 		/// </param>
 		private void ProcessLogNode(XPathNavigator aNode)
 		{
-			string msg = ProcessIdValueAttributes(aNode, LOG_ATTRS.MESSAGE, LOG_ATTRS.MESSAGE_ID);
-			int level = Int32.Parse(aNode.GetAttribute(LOG_ATTRS.LEVEL, String.Empty));
+			var msg = ProcessIdValueAttributes(aNode, LOG_ATTRS.MESSAGE, LOG_ATTRS.MESSAGE_ID);
+			var level = Int32.Parse(aNode.GetAttribute(LOG_ATTRS.LEVEL, string.Empty));
 			
 			Logger.FlowEngineRuleBaseSource.TraceEvent(Logger.ConvertFromObsoleteIntLevel(level), 0, msg);
 		}
@@ -952,24 +927,23 @@ namespace NxBRE.FlowEngine
 		/// </param>
 		private void ProcessParameterNode(XPathNavigator aNode, Hashtable aMap)
 		{
-			string valueNode = aNode.GetAttribute(PARAMETER_ATTRS.VALUE, String.Empty);
-			string typeNode = aNode.GetAttribute(PARAMETER_ATTRS.TYPE, String.Empty);
-			string ruleValueNode = aNode.GetAttribute(PARAMETER_ATTRS.RULE_VALUE, String.Empty);
+			var valueNode = aNode.GetAttribute(PARAMETER_ATTRS.VALUE, string.Empty);
+			var typeNode = aNode.GetAttribute(PARAMETER_ATTRS.TYPE, string.Empty);
+			var ruleValueNode = aNode.GetAttribute(PARAMETER_ATTRS.RULE_VALUE, string.Empty);
 			
 			// Used to be initialized with null: changed to String.Empty to solve bug #1190485
-			object finalValue = String.Empty;
+			object finalValue = string.Empty;
 			
-			if (valueNode != String.Empty) {
-				if (typeNode != String.Empty) finalValue = Reflection.CastValue(valueNode, typeNode);
-				else finalValue = valueNode;
+			if (valueNode != string.Empty) {
+				finalValue = typeNode != string.Empty ? Reflection.CastValue(valueNode, typeNode) : valueNode;
 			}
-			else if (ruleValueNode != String.Empty)
+			else if (ruleValueNode != string.Empty)
 			{
-				IBRERuleResult result = ruleContext.GetResult(ruleValueNode);
+				var result = ruleContext.GetResult(ruleValueNode);
 				if (result != null)	finalValue = result.Result;
 			}
 			
-			aMap.Add(aNode.GetAttribute(PARAMETER_ATTRS.NAME, String.Empty), finalValue);
+			aMap.Add(aNode.GetAttribute(PARAMETER_ATTRS.NAME, string.Empty), finalValue);
 		}
 		
 		
@@ -982,8 +956,8 @@ namespace NxBRE.FlowEngine
 		/// </param>
 		private void  ProcessRuleNode(XPathNavigator aNode, Hashtable aMap)
 		{
-			DoRule(aNode.GetAttribute(RULE_ATTRS.ID, String.Empty),
-			       aNode.GetAttribute(RULE_ATTRS.STEP, String.Empty),
+			DoRule(aNode.GetAttribute(RULE_ATTRS.ID, string.Empty),
+			       aNode.GetAttribute(RULE_ATTRS.STEP, string.Empty),
 			       aMap);
 		}
 		
@@ -1011,13 +985,13 @@ namespace NxBRE.FlowEngine
 		/// </param>
 		private void DoRule(object id, object step, Hashtable aMap)
 		{
-			int nextStackLoc = ruleContext.CallStack.Count;
+			var nextStackLoc = ruleContext.CallStack.Count;
 			
 			IBRERuleResult ruleResult = null;
 			
 			try
 			{
-				IBRERuleFactory factory = ruleContext.GetFactory(id);
+				var factory = ruleContext.GetFactory(id);
 				
 				/* 
 				I have to check for null because if the RuleContext
@@ -1030,7 +1004,7 @@ namespace NxBRE.FlowEngine
 					//setup metadata
 					IBRERuleMetaData metaData = new BRERuleMetaDataImpl(id, factory, aMap, nextStackLoc, step);
 					
-					object result = factory.ExecuteRule(ruleContext, aMap, step);
+					var result = factory.ExecuteRule(ruleContext, aMap, step);
 					
 					ruleResult = new BRERuleResultImpl(metaData, result);
 				}

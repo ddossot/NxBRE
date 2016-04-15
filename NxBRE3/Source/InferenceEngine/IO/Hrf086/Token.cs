@@ -9,13 +9,7 @@
  */
 namespace NxBRE.InferenceEngine.IO.Hrf086
 {
-	
-	using System;
-	using System.IO;
-	using System.Collections;
-	using System.Text;
-	
-	internal class Token {
+    internal class Token {
 		public int kind;    // token kind
 		public int pos;     // token position in the source text (starting at 0)
 		public int col;     // token column (starting at 0)

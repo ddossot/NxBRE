@@ -42,7 +42,7 @@ namespace NxBRE.Util
 		/// <returns>The XslCompiledTransform built from this resource</returns>
 		internal static XslCompiledTransform GetCachedCompiledTransform(string xslResourceName) {
 			lock(compiledTransformCache) {
-				XslCompiledTransform result = (XslCompiledTransform) compiledTransformCache[xslResourceName];
+				var result = (XslCompiledTransform) compiledTransformCache[xslResourceName];
 				
 				if (result == null) {
 					if (Logger.IsUtilVerbose) Logger.UtilSource.TraceEvent(TraceEventType.Verbose, 0, "XslCompiledTransform cache miss for: " + xslResourceName);
@@ -87,13 +87,13 @@ namespace NxBRE.Util
 		public static XmlReader NewValidatingReader(XmlReader xmlReader, ValidationType validationType, params string[] xsdResourceName) {
 			if (Logger.IsUtilVerbose) Logger.UtilSource.TraceEvent(TraceEventType.Verbose, 0, "Instantiating new validating reader with validation: " + validationType + " and XSDs " + Misc.ArrayToString(xsdResourceName));
 			
-			XmlReaderSettings xmlReaderSettings = new XmlReaderSettings();
+			var xmlReaderSettings = new XmlReaderSettings();
 			
 			if (validationType == ValidationType.DTD) {
 				xmlReaderSettings.ProhibitDtd = false;
 			}
 			else if ((validationType == ValidationType.Schema) && (xsdResourceName != null)) {
-				XmlSchemaSet sc = new XmlSchemaSet();
+				var sc = new XmlSchemaSet();
 				sc.Add(XmlSchema.Read(Parameter.GetEmbeddedResourceStream(xsdResourceName[0]),	null));
 				xmlReaderSettings.Schemas.Add(sc);
 			}

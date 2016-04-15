@@ -68,19 +68,19 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// </summary>
 		/// <param name="atom">The atom that is potentially equivalent to one of the atoms of the Equivalent pair.</param>
 		/// <returns>The atom equivalent to the passed one, or null if none of the atom pair is matching it.</returns>
-		public Atom Get(Atom atom) {
-			if (firstAtom.Matches(atom)) return RulesUtil.TranslateVariables(atom, firstAtom, secondAtom);
-			else if (secondAtom.Matches(atom)) return RulesUtil.TranslateVariables(atom, secondAtom, firstAtom);
-			else return null;
+		public Atom Get(Atom atom)
+		{
+		    if (firstAtom.Matches(atom)) return RulesUtil.TranslateVariables(atom, firstAtom, secondAtom);
+		    return secondAtom.Matches(atom) ? RulesUtil.TranslateVariables(atom, secondAtom, firstAtom) : null;
 		}
-		
-		/// <summary>
+
+	    /// <summary>
 		/// A basic string representation of the equivalent, for display purposes only.
 		/// </summary>
 		/// <returns></returns>
 		public override string ToString()
 		{
-			return firstAtom.ToString() + " == " + secondAtom.ToString();
+			return firstAtom + " == " + secondAtom.ToString();
 		}
 		
 	}

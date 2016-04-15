@@ -9,12 +9,8 @@
  */
 namespace NxBRE.InferenceEngine.IO.Hrf086
 {
-	using System.Collections;
-	using System.IO;
-	using System.Text;
-	using System.Reflection;
-	
-	using System;
+    using System.IO;
+    using System;
 	
 	internal class Parser {
 		const int _EOF = 0;
@@ -45,19 +41,19 @@ namespace NxBRE.InferenceEngine.IO.Hrf086
 		private bool IsAnd()
 		{
 			scanner.ResetPeek();
-			Token x = la ;
+			var x = la ;
 			while (x.kind != _closeBracket && x.kind != _EOF)
 				x = scanner.Peek();
 			
 			x = scanner.Peek();
-			bool returnVal = (x.kind == _andOperator);
+			var returnVal = (x.kind == _andOperator);
 			return returnVal ;
 		}
 
 		private bool IsOr()
 		{
 			scanner.ResetPeek();
-			Token x = la ;
+			var x = la ;
 			while (x.kind != _closeBracket && x.kind != _EOF)
 				x = scanner.Peek();
 			
@@ -146,7 +142,7 @@ namespace NxBRE.InferenceEngine.IO.Hrf086
 		private void Rules() {
 			sw.WriteLine("<?xml version=\"1.0\" encoding=\"us-ascii\"?>");
 			sw.Write("<rulebase xmlns=\"http://www.ruleml.org/0.86/xsd\" xsi:schemaLocation=\"http://www.ruleml.org/0.86/xsd ruleml-0_86-nafdatalog.xsd\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"");
-			if (!String.Empty.Equals(direction)) sw.Write(" direction=\"" + direction + "\"");
+			if (!string.Empty.Equals(direction)) sw.Write(" direction=\"" + direction + "\"");
 			sw.WriteLine(">");
 			
 			imp();
@@ -194,12 +190,10 @@ namespace NxBRE.InferenceEngine.IO.Hrf086
 			{
 				if (numberOfAtoms ==0 ) 
 				{
-					if (!rbaseLabFound && rbaseLabAllowed  && !impName.Equals(""))
-					{
-						/* file header : name of rules definition */
-						sw.WriteLine("<_rbaselab><ind>{0}</ind></_rbaselab>",impName);
-						rbaseLabFound = true;
-					}
+				    if (rbaseLabFound || !rbaseLabAllowed || impName.Equals("")) return;
+				    /* file header : name of rules definition */
+				    sw.WriteLine("<_rbaselab><ind>{0}</ind></_rbaselab>",impName);
+				    rbaseLabFound = true;
 				}
 				else 
 				{
@@ -253,8 +247,7 @@ namespace NxBRE.InferenceEngine.IO.Hrf086
 		}
 	
 		private void header(out string label) {
-			bool isThereSeparator= false;
-			label = "";
+		    label = "";
 		
 			Expect(12);
 			while (la.kind == 8) 
@@ -281,7 +274,7 @@ namespace NxBRE.InferenceEngine.IO.Hrf086
 					Get();
 				}
 				label += t.val;
-				isThereSeparator= true;
+				var isThereSeparator= true;
 			
 				while (la.kind == 8) 
 				{
@@ -297,10 +290,10 @@ namespace NxBRE.InferenceEngine.IO.Hrf086
 
 		private void andRelation(ref string atomListInXml, ref int numberOfAtoms) 
 		{
-			string lhInXml = "" ;
-			string rhInXml = "" ;
-			string rhPartInXml = "" ;
-			bool isFact = false ;	
+			var lhInXml = "" ;
+			var rhInXml = "" ;
+			var rhPartInXml = "" ;
+			var isFact = false ;	
 		
 			if (la.kind == 9) 
 			{
@@ -332,10 +325,10 @@ namespace NxBRE.InferenceEngine.IO.Hrf086
 
 		private void orRelation(ref string atomListInXml, ref int numberOfAtoms) 
 		{
-			string lhInXml = "" ;		
-			string rhInXml = "" ;		
-			string rhPartInXml = "" ;
-			bool isFact = false ;	
+			var lhInXml = "" ;		
+			var rhInXml = "" ;		
+			var rhPartInXml = "" ;
+			var isFact = false ;	
 		
 			if (la.kind == 9) 
 			{
@@ -366,10 +359,10 @@ namespace NxBRE.InferenceEngine.IO.Hrf086
 	
 		private void atom(ref string atomListInXml, ref int numberOfAtoms, ref bool isFact) 
 		{
-			bool isNAF = false ;
-			string name="";  string atomInXml="";
+			var isNAF = false ;
+			var name="";  string atomInXml="";
 			numberOfAtoms++; 
-			bool isThereVar = false;
+			var isThereVar = false;
 		
 			if (la.kind == 1 || la.kind == 14) 
 			{
@@ -393,7 +386,7 @@ namespace NxBRE.InferenceEngine.IO.Hrf086
 			Expect(6);
 			arg(out name, out isThereVar);
 			
-			if (name == String.Empty) {
+			if (name == string.Empty) {
 				SynErr(6);
 				throw new InvalidDataException("Bad HRF syntax: impossible to locate atom members!");
 			}
@@ -444,63 +437,64 @@ namespace NxBRE.InferenceEngine.IO.Hrf086
 		}
 	
 		private void arg(out string xmlArg, out bool isThereVar) {
-			string name = "";
-			string fctName = "";
-			string id = ""; 
+			string name;
+			string fctName;
+			string id; 
 			string argList = "";
 			xmlArg = "";
 			isThereVar = false;
 		
-			if (la.kind == 15) 
+			switch (la.kind)
 			{
-				Get();
-				identifier(out name);
-				xmlArg = name; 
-				isThereVar = true;
-			
-			} 
-			else if (la.kind == 8) 
-			{
-				identifier(out fctName);
-				while (la.kind == 11) 
-				{
-					Get();
-					identifier(out id);
-					fctName += ";" + id;
+			    case 15:
+			        Get();
+			        identifier(out name);
+			        xmlArg = name; 
+			        isThereVar = true;
+			        break;
+			    case 8:
+			        identifier(out fctName);
+			        while (la.kind == 11) 
+			        {
+			            Get();
+			            identifier(out id);
+			            fctName += ";" + id;
 				
-				}
-				if (la.kind == 9) 
-				{
-					Get();
-					arg(out name, out isThereVar);
-					argList = name;
+			        }
+			        if (la.kind == 9) 
+			        {
+			            Get();
+			            arg(out name, out isThereVar);
+			            argList = name;
 				
-					while (la.kind == 5) 
-					{
-						Get();
-						arg(out name, out isThereVar);
-						argList = argList + "," + name;
+			            while (la.kind == 5) 
+			            {
+			                Get();
+			                arg(out name, out isThereVar);
+			                argList = argList + "," + name;
 					
-					}
-					Expect(10);
-				}
-				xmlArg = fctName;
-				if (!argList.Equals(""))
-				{
-					xmlArg += '(' + argList + ')'; 
-				}
-			
-			} 
-			else SynErr(19);
+			            }
+			            Expect(10);
+			        }
+			        xmlArg = fctName;
+			        if (!argList.Equals(""))
+			        {
+			            xmlArg += '(' + argList + ')'; 
+			        }
+			        break;
+			    default:
+			        SynErr(19);
+			        break;
+			}
 		}
 	
 	
 	
 		public void Parse(Stream stream) {
 			sw = new StreamWriter(stream);
-			la = new Token();
-			la.val = "";		
-			Get();
+		    la = new Token {val = ""};
+
+		    Get();
 			Rules();
 			sw.Flush();
 		}

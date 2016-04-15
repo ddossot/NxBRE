@@ -1,14 +1,13 @@
+using static System.String;
+
 namespace NxBRE.InferenceEngine.IO {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Xml;
 	using System.Xml.XPath;
-	using System.Xml.Schema;
-	
-	using NxBRE.InferenceEngine.Rules;
-	using NxBRE.Util;
+	using Rules;
+	using Util;
 
 	///<summary>Adapter supporting RuleML 0.86 NafDatalog Sublanguage.</summary>
 	///<remarks>UTF-8 is the default encoding.</remarks>
@@ -63,7 +62,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// </summary>
 		public override string Direction {
 			get {
-				return String.Empty + GetString(Navigator, "dl:rulebase/@direction");
+				return Empty + GetString(Navigator, "dl:rulebase/@direction");
 			}
 			set {
 				Document.DocumentElement.SetAttribute("direction", value);
@@ -75,7 +74,7 @@ namespace NxBRE.InferenceEngine.IO {
 		/// </summary>
 		public override string Label {
 			get {
-				return String.Empty + GetString(Navigator, "dl:rulebase/dl:_rbaselab/dl:ind");
+				return Empty + GetString(Navigator, "dl:rulebase/dl:_rbaselab/dl:ind");
 			}
 			set {
 				WriteLabel(Document.DocumentElement, "_rbaselab", "ind", value);
@@ -156,9 +155,9 @@ namespace NxBRE.InferenceEngine.IO {
 		}
 		
 		protected override RelationResolution AnalyzeRelationResolution(XPathNavigator relationElement) {
-			RelationResolution result = new RelationResolution();
+			var result = new RelationResolution();
 
-			string lowerAtomRelation = relationElement.Value.ToLower();
+			var lowerAtomRelation = relationElement.Value.ToLower();
 				
 			if (lowerAtomRelation.StartsWith("nxbre:")) {
 				result.atomRelation = relationElement.Value;
@@ -185,8 +184,8 @@ namespace NxBRE.InferenceEngine.IO {
 		
 		protected override IPredicate BuildPredicate(XPathNavigator predicateElement, bool inHead, bool resolveImmediatly) {
 			IPredicate predicate;
-			string predicateName = predicateElement.Name;
-			string predicateValue = predicateElement.Value;
+			var predicateName = predicateElement.Name;
+			var predicateValue = predicateElement.Value;
 			
 			switch(predicateName) {
 				// --------- IND predicates --------
@@ -202,8 +201,8 @@ namespace NxBRE.InferenceEngine.IO {
 							predicate = new Function(Function.FunctionResolutionType.Binder,
 							                         predicateValue,
 							                         new ExpressionEvaluator(predicateValue),
-							                       	 String.Empty,
-							                      	 String.Empty);
+							                       	 Empty,
+							                      	 Empty);
 						}
 					}
 					else if (predicateValue.ToLower().StartsWith("nxbre:")) {
@@ -261,15 +260,15 @@ namespace NxBRE.InferenceEngine.IO {
 		/// Do not expect business object persistence with this adapter!</summary>
 		protected override void WriteAtom(XmlElement target, Atom atom, bool inFact) {
 			XmlElement eAtom = eAtom = Document.CreateElement("atom", DatalogNamespaceURL);
-			XmlElement rel = Document.CreateElement("rel", DatalogNamespaceURL);
+			var rel = Document.CreateElement("rel", DatalogNamespaceURL);
 			rel.InnerText = atom.Type;
-			XmlElement opr = Document.CreateElement("_opr", DatalogNamespaceURL);
+			var opr = Document.CreateElement("_opr", DatalogNamespaceURL);
 			opr.AppendChild(rel);
 			eAtom.AppendChild(opr);
 			
-			foreach(IPredicate pre in	atom.Members) {
-				XmlElement predicate = Document.CreateElement((pre is Variable)?"var":"ind", DatalogNamespaceURL);
-				object predicateValue = pre.Value;
+			foreach(var pre in	atom.Members) {
+				var predicate = Document.CreateElement((pre is Variable)?"var":"ind", DatalogNamespaceURL);
+				var predicateValue = pre.Value;
 				
 				if ((inFact) && (supportTypedFacts) && (!(predicateValue is string))) {
 					if (predicateValue is IConvertible) predicate.InnerText = "expr:System.Convert.To" + predicateValue.GetType().Name + "(\"" + predicateValue.ToString() + "\")";
@@ -282,7 +281,7 @@ namespace NxBRE.InferenceEngine.IO {
 				eAtom.AppendChild(predicate);
 			}
 			if (atom.Negative) {
-				XmlElement naf = Document.CreateElement("naf", DatalogNamespaceURL);
+				var naf = Document.CreateElement("naf", DatalogNamespaceURL);
 				naf.AppendChild(eAtom);
 				target.AppendChild(naf);
 			}
@@ -292,53 +291,53 @@ namespace NxBRE.InferenceEngine.IO {
 		}
 		
 		protected override void WriteFact(XmlElement target, Fact fact) {
-			XmlElement eFact = Document.CreateElement("fact", DatalogNamespaceURL);
+			var eFact = Document.CreateElement("fact", DatalogNamespaceURL);
 			WriteLabel(eFact, fact.Label);
-			XmlElement head = Document.CreateElement("_head", DatalogNamespaceURL);
+			var head = Document.CreateElement("_head", DatalogNamespaceURL);
 			WriteAtom(head, fact, true);
 			eFact.AppendChild(head);
 			target.AppendChild(eFact);
 		}
 		
 		protected override void WriteQueries(IList<Query> queries) {
-			foreach(Query query in queries) WriteQuery(Document.DocumentElement, query);
+			foreach(var query in queries) WriteQuery(Document.DocumentElement, query);
 		}
 
 		protected override void WriteImplications(IList<Implication> implications) {
-			foreach(Implication implication in implications) WriteImplication(Document.DocumentElement, implication);
+			foreach(var implication in implications) WriteImplication(Document.DocumentElement, implication);
 		}
 
 		protected override void WriteFacts(IList<Fact> facts) {
-			foreach(Fact fact in facts)	WriteFact(Document.DocumentElement, fact);
+			foreach(var fact in facts)	WriteFact(Document.DocumentElement, fact);
 		}
 		
 		protected override void WriteQuery(XmlElement target, Query query) {
-			XmlElement eQuery = Document.CreateElement("query", DatalogNamespaceURL);
+			var eQuery = Document.CreateElement("query", DatalogNamespaceURL);
 			WriteLabel(eQuery, query.Label);
-			XmlElement body = Document.CreateElement("_body", DatalogNamespaceURL);
+			var body = Document.CreateElement("_body", DatalogNamespaceURL);
 			WriteAtomGroup(body, query.AtomGroup);
 			eQuery.AppendChild(body);
 			target.AppendChild(eQuery);
 		}
 		
 		private void WriteImplication(XmlElement target, Implication implication) {
-			XmlElement eImplication = Document.CreateElement("imp", DatalogNamespaceURL);
+			var eImplication = Document.CreateElement("imp", DatalogNamespaceURL);
 			
 			// action mapping
-			String action = String.Empty;
+			var action = Empty;
 			if (implication.Action != ImplicationAction.Assert)
 				action = implication.Action.ToString().ToLower();
 			
-			ImplicationProperties ip = new ImplicationProperties(implication.Label,
+			var ip = new ImplicationProperties(implication.Label,
 			                                                     implication.Priority,
 			                                                     implication.Mutex,
 			                                                     implication.Precondition,
 			                                                     action);
 			WriteLabel(eImplication, ip.ToString());
-			XmlElement head = Document.CreateElement("_head", DatalogNamespaceURL);
+			var head = Document.CreateElement("_head", DatalogNamespaceURL);
 			WriteAtom(head, implication.Deduction, false);
 			eImplication.AppendChild(head);
-			XmlElement body = Document.CreateElement("_body", DatalogNamespaceURL);
+			var body = Document.CreateElement("_body", DatalogNamespaceURL);
 			WriteAtomGroup(body, implication.AtomGroup);
 			eImplication.AppendChild(body);
 			target.AppendChild(eImplication);

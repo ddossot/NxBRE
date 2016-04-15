@@ -27,8 +27,8 @@ namespace NxBRE.Util
 		}
 		
 		private void Render(Stream stream, string xslResourceName, XsltArgumentList args) {
-			XslCompiledTransform xslt = Xml.GetCachedCompiledTransform(xslResourceName);
-			XmlReader reader = Xml.NewValidatingReader(new XmlTextReader(ruleFileURI), ValidationType.Schema, "xBusinessRules.xsd");
+			var xslt = Xml.GetCachedCompiledTransform(xslResourceName);
+			var reader = Xml.NewValidatingReader(new XmlTextReader(ruleFileURI), ValidationType.Schema, "xBusinessRules.xsd");
 			xslt.Transform(reader, args, stream);
 			reader.Close();
 		}
@@ -38,7 +38,7 @@ namespace NxBRE.Util
 		/// <param name="title">Title for the HTML page.
 		/// If null, the default value defined in pseudocode_body.xsl will be used.</param>
 		public void RenderBody(string fileName, string title) {
-			FileStream fs = new FileStream(fileName, FileMode.Create);
+			var fs = new FileStream(fileName, FileMode.Create);
 			RenderBody(fs, title);
 			fs.Flush();
 			fs.Close();
@@ -49,7 +49,7 @@ namespace NxBRE.Util
 		/// <param name="title">Title for the HTML page.
 		/// If null, the default value defined in pseudocode_body.xsl will be used.</param>
 		public void RenderBody(Stream stream, string title) {
-			XsltArgumentList args = new XsltArgumentList();
+			var args = new XsltArgumentList();
 			if (title != null) args.AddParam("title", "", title);
 			Render(stream, "pseudocode_body.xsl", args);
 		}
@@ -76,7 +76,7 @@ namespace NxBRE.Util
 		/// </param>
 		/// <description>If title or bodyURI are null, the default value defined in pseudocode_index.xsl will be used.</description>
 		public void RenderIndex(string fileName, string title, string bodyURI) {
-			FileStream fs = new FileStream(fileName, FileMode.Create);
+			var fs = new FileStream(fileName, FileMode.Create);
 			RenderIndex(fs, title, bodyURI);
 			fs.Flush();
 			fs.Close();
@@ -90,7 +90,7 @@ namespace NxBRE.Util
 		/// </param>
 		/// <description>If title or bodyURI are null, the default value defined in pseudocode_index.xsl will be used.</description>
 		public void RenderIndex(Stream stream, string title, string bodyURI) {
-			XsltArgumentList args = new XsltArgumentList();
+			var args = new XsltArgumentList();
 			if (title != null) args.AddParam("title", null, title);
 			if (bodyURI != null) args.AddParam("bodyfile", "", bodyURI);
 			Render(stream, "pseudocode_index.xsl", args);
@@ -117,7 +117,7 @@ namespace NxBRE.Util
 		/// <param name="bodyURI">URI where the pseudo-code rules body is stored.</param>
 		/// <description>If title, indexURI or bodyURI are null, the default value defined in pseudocode_frames.xsl will be used.</description>
 		public void RenderFrameset(string fileName, string title, string indexURI, string bodyURI) {
-			FileStream fs = new FileStream(fileName, FileMode.Create);
+			var fs = new FileStream(fileName, FileMode.Create);
 			RenderFrameset(fs, title, indexURI, bodyURI);
 			fs.Flush();
 			fs.Close();
@@ -130,7 +130,7 @@ namespace NxBRE.Util
 		/// <param name="bodyURI">URI where the pseudo-code rules body is stored.</param>
 		/// <description>If title, indexURI or bodyURI are null, the default value defined in pseudocode_frames.xsl will be used.</description>
 		public void RenderFrameset(Stream stream, string title, string indexURI, string bodyURI) {
-			XsltArgumentList args = new XsltArgumentList();
+			var args = new XsltArgumentList();
 			if (title != null) args.AddParam("title", "", title);
 			if (indexURI != null) args.AddParam("indexfile", "", indexURI);
 			if (bodyURI != null) args.AddParam("bodyfile", "", bodyURI);

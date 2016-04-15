@@ -1,6 +1,9 @@
-﻿Microsoft Visual Studio Solution File, Format Version 9.00
-# SharpDevelop 2.0.0.1462
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IE-Console", "GUI.csproj", "{BA1EB4E1-7F49-4114-8EB4-C986FEC9CA24}"
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUI", "GUI.csproj", "{BA1EB4E1-7F49-4114-8EB4-C986FEC9CA24}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,9 +11,12 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BA1EB4E1-7F49-4114-8EB4-C986FEC9CA24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA1EB4E1-7F49-4114-8EB4-C986FEC9CA24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BA1EB4E1-7F49-4114-8EB4-C986FEC9CA24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA1EB4E1-7F49-4114-8EB4-C986FEC9CA24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA1EB4E1-7F49-4114-8EB4-C986FEC9CA24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA1EB4E1-7F49-4114-8EB4-C986FEC9CA24}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

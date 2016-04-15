@@ -3,7 +3,7 @@ namespace NxBRE.FlowEngine.Rules
 	using System;
 	using System.Collections;
 	
-	using NxBRE.FlowEngine;
+	using FlowEngine;
 
 	/// <summary> This class is designed to be used to decrement everytime the executeRule is called
 	/// </summary>
@@ -11,7 +11,7 @@ namespace NxBRE.FlowEngine.Rules
 	/// </author>
 	public class Decrement : IBRERuleFactory, IInitializable
 	{
-		public const string DECREMENT = "Decrement";
+	    private const string DECREMENT = "Decrement";
 		
 		private int sIdx = 0;
 		
@@ -23,17 +23,14 @@ namespace NxBRE.FlowEngine.Rules
 		/// </param>
 		public virtual bool Init(object aObj)
 		{
-			if (aObj is Int32)
+			if (aObj is int)
 			{
-				sIdx = ((Int32) aObj);
+				sIdx = ((int) aObj);
 				return true;
 			}
-			else if (aObj is string)
-			{
-				sIdx = Int32.Parse((string) aObj);
-				return true;
-			}
-			return false;
+		    if (!(aObj is string)) return false;
+		    sIdx = int.Parse((string) aObj);
+		    return true;
 		}
 		
 		/// <summary> If passed the parameter Decrement it will decrement the index.
@@ -53,7 +50,7 @@ namespace NxBRE.FlowEngine.Rules
 		{
 			if (aMap.Contains(DECREMENT))
 			{
-				sIdx = sIdx - System.Int32.Parse((System.String) aMap[DECREMENT]);
+				sIdx = sIdx - int.Parse((string) aMap[DECREMENT]);
 			}
 			return sIdx;
 		}

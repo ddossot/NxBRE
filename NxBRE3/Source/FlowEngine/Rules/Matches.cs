@@ -1,11 +1,10 @@
 namespace NxBRE.FlowEngine.Rules
 {
-	using System;
-	using System.Collections;
+    using System.Collections;
 	using System.Collections.Generic;
 	using System.Text.RegularExpressions;
 		
-	using NxBRE.FlowEngine;
+	using FlowEngine;
 
 	/// <summary> Compares one object to a regexp to see if they match.
 	/// </summary>
@@ -43,14 +42,13 @@ namespace NxBRE.FlowEngine.Rules
 			else {
 				lock(regexCache) {
 					Regex regex;
-					string regexPattern = regexPatternObject.ToString();
-					
-					if (!regexCache.TryGetValue(regexPattern, out regex)) {
-						regex = new Regex(regexPattern);
-						regexCache.Add(regexPattern, regex);
-					}
-					
-					return regex.IsMatch(compareTo.ToString());
+					var regexPattern = regexPatternObject.ToString();
+
+				    if (regexCache.TryGetValue(regexPattern, out regex)) return regex.IsMatch(compareTo.ToString());
+				    regex = new Regex(regexPattern);
+				    regexCache.Add(regexPattern, regex);
+
+				    return regex.IsMatch(compareTo.ToString());
 				}
 			}
 		}

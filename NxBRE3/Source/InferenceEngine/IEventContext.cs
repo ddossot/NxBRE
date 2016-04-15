@@ -1,8 +1,7 @@
 namespace NxBRE.InferenceEngine {
-	using System;
-	using System.Collections.Generic;
+    using System.Collections.Generic;
 	
-	using NxBRE.InferenceEngine.Rules;
+	using Rules;
 
 	/// <summary>
 	/// Defines the information available in the event context.

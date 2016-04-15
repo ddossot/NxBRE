@@ -1,9 +1,7 @@
 namespace NxBRE.InferenceEngine.IO {
-
-	using System;
-	using System.Collections.Generic;
+    using System.Collections.Generic;
 	
-	using NxBRE.InferenceEngine.Rules;
+	using Rules;
 	
 	/// <summary>
 	/// NxBRE Inference Engine rulebase adapter interface.

@@ -3,8 +3,7 @@
 //
 namespace NxBRE.Test.FlowEngine
 {
-	using System;
-	using System.IO;
+    using System.IO;
 	
 	using NxBRE.FlowEngine;
 	using NxBRE.FlowEngine.IO;
@@ -77,7 +76,7 @@ namespace NxBRE.Test.FlowEngine
 		[Test]
 		public void XBusinessRulesStringDriver()
 		{
-			string xmlRules = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+			var xmlRules = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
 												"<xBusinessRules xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"http://nxbre.org/xBusinessRules.xsd\">" +
 												"<Logic>" +
 												"	<If>" +

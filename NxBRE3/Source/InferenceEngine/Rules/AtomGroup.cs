@@ -2,10 +2,7 @@ namespace NxBRE.InferenceEngine.Rules {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	
-	using NxBRE.InferenceEngine.Core;
-	
-	using NxBRE.Util;
+	using Util;
 	
 	/// <summary>
 	/// Represents a container that can hold ordered atoms and other groups of atoms related together
@@ -92,30 +89,31 @@ namespace NxBRE.InferenceEngine.Rules {
 			this.logicalOperator = logicalOperator;
 			this.members = members;
 			
-			HashCodeBuilder hcb = new HashCodeBuilder();
+			var hcb = new HashCodeBuilder();
 			hcb.Append(logicalOperator);
-			SortedList<int, object> sortedMembers = new SortedList<int, object>(Comparer<int>.Default);
+			var sortedMembers = new SortedList<int, object>(Comparer<int>.Default);
 			
 			// check the members, compute hashcode and build sorted members list
-			for(int i=0; i < members.Length; i++) {
-				object member =members[i];
+			for(var i=0; i < members.Length; i++) {
+				var member =members[i];
 				
 				if (member == null) {
 					throw new BREException("An atom group can not contain a null member");
 				}
-				else if (member is AtomGroup) {
-					if (((AtomGroup)member).logicalOperator == logicalOperator)
-						throw new BREException("An atom group can not contain another group with the same logical operator");
-				}
-				else if (member is Atom) {
-					if (((Atom)member).HasFormula)
-						throw new BREException("An atom group can not contain an atom that contains a formula");
-				}
-				else {
-					throw new BREException("An atom group can not hold objects of type: " + member.GetType());
-				}
-				
-				hcb.Append(member);
+			    var @group = member as AtomGroup;
+			    if (@group != null) {
+			        if (@group.logicalOperator == logicalOperator)
+			            throw new BREException("An atom group can not contain another group with the same logical operator");
+			    }
+			    else if (member is Atom) {
+			        if (((Atom)member).HasFormula)
+			            throw new BREException("An atom group can not contain an atom that contains a formula");
+			    }
+			    else {
+			        throw new BREException("An atom group can not hold objects of type: " + member.GetType());
+			    }
+
+			    hcb.Append(member);
 				
 				if (runningMembers == null) sortedMembers.Add(GetMemberSortedIndex(members, i), member);
 			}
@@ -124,14 +122,16 @@ namespace NxBRE.InferenceEngine.Rules {
 			
 			// the members actually used when processing the atom group are not the ones defined in the rule file (usually because of equivalent atoms definitions)
 			if (runningMembers != null) {
-				for(int i=0; i < runningMembers.Length; i++) sortedMembers.Add(GetMemberSortedIndex(runningMembers, i), runningMembers[i]);
+				for(var i=0; i < runningMembers.Length; i++) sortedMembers.Add(GetMemberSortedIndex(runningMembers, i), runningMembers[i]);
 			}
 			
 			orderedMembers = sortedMembers.Values;
 			
 			allAtoms = new List<Atom>();
-			foreach(object member in orderedMembers) {
-				if (member is Atom) allAtoms.Add((Atom)member);
+			foreach(var member in orderedMembers)
+			{
+			    var atom = member as Atom;
+			    if (atom != null) allAtoms.Add(atom);
 				else if (member is AtomGroup) allAtoms.AddRange(((AtomGroup)member).AllAtoms);
 			}
 		}

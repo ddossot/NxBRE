@@ -1,12 +1,9 @@
+using static System.String;
+
 namespace NxBRE.InferenceEngine.Rules {
 	using System;
-	using System.Collections;
-	
-	using NxBRE.InferenceEngine.Rules;
-	
-	using NxBRE.Util;
-	
-	/// <summary>
+
+    /// <summary>
 	/// A Query is a collection of non-fact atoms that can be labelled, which can be executed
 	/// against a Fact base in order to produce an ArrayList of facts (a selection of the facts
 	/// matching the data pattern defined by the AtomGroups hierarchy. It is immutable.
@@ -46,7 +43,7 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <param name="label">The Label of the new Query.</param>
 		/// <param name="atomGroup">The AtomGroup used in the new Query.</param>
 		public Query(string label, AtomGroup atomGroup) {
-			if ((null != label) && (String.Empty == label)) this.label = null;
+			if ((null != label) && (Empty == label)) this.label = null;
 			else this.label = label;
 			
 			this.atomGroup = atomGroup;
@@ -75,11 +72,10 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// the main identifier, else the AtomGroup hashcode is returned.
 		/// </summary>
 		/// <returns>The hashcode of the current Query.</returns>
-		public override int GetHashCode() {
-			if ((Label != null) && (Label != String.Empty)) return Label.GetHashCode();
-			else return AtomGroup.GetHashCode();
+		public override int GetHashCode()
+		{
+		    return !IsNullOrEmpty(Label) ? Label.GetHashCode() : AtomGroup.GetHashCode();
 		}
-		
 	}
 
 }

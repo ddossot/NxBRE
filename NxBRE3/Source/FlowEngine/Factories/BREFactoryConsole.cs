@@ -1,10 +1,9 @@
 namespace NxBRE.FlowEngine.Factories
 {
-	using System;
-	using System.Diagnostics;
+    using System.Diagnostics;
 	
-	using NxBRE.FlowEngine.IO;
-	using NxBRE.Util;
+	using IO;
+	using Util;
 	
 	/// <summary>This factory allows an easy creation of a BRE object,
 	/// that redirects its log and error messages on Console Out and Error</summary>
@@ -17,7 +16,7 @@ namespace NxBRE.FlowEngine.Factories
 			Logger.FlowEngineRuleBaseSource.Switch.Level = ruleBaseTraceLevel;
 			Logger.RefreshBooleanSwitches();
 			
-			ConsoleTraceListener ctl = new ConsoleTraceListener();
+			var ctl = new ConsoleTraceListener();
 			Logger.FlowEngineSource.Listeners.Add(ctl);
 			Logger.FlowEngineRuleBaseSource.Listeners.Add(ctl);
 		}

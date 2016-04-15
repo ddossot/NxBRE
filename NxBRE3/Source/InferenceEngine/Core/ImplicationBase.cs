@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace NxBRE.InferenceEngine.Core {
 	using System;
 	using System.Collections.Generic;
@@ -27,7 +29,7 @@ namespace NxBRE.InferenceEngine.Core {
 		}
 
 		public void Add(Implication implication) {
-			int indexOfDuplicate = implications.IndexOf(implication);
+			var indexOfDuplicate = implications.IndexOf(implication);
 			
 			if (indexOfDuplicate >= 0)
 				throw new BREException("When adding: " + implication +
@@ -37,7 +39,7 @@ namespace NxBRE.InferenceEngine.Core {
 			
 			IList<Implication> typeListeners;
 			
-			foreach(Atom atom in implication.AtomGroup.AllAtoms) {
+			foreach(var atom in implication.AtomGroup.AllAtoms) {
 				if (!implicationsMap.ContainsKey(atom.Signature)) {
 					typeListeners = new List<Implication>();
 					implicationsMap.Add(atom.Signature, typeListeners);
@@ -58,49 +60,34 @@ namespace NxBRE.InferenceEngine.Core {
 			return implications.GetEnumerator();
 		}
 		
-		public Implication Get(string implicationLabel) {
-			foreach(Implication implication in implications)
-				if (implication.Label == implicationLabel)
-					return implication;
-			
-			return null;
+		public Implication Get(string implicationLabel)
+		{
+		    return implications.FirstOrDefault(implication => implication.Label == implicationLabel);
 		}
-		
-		/// <summary>
+
+	    /// <summary>
 		/// Lists all the implications that are children of the provided one on the basis of pre-condition relationship ;
 		/// ie all the implications that will fire only if the passed one is positive.
 		/// </summary>
 		/// <param name="parentImplication">The parent of pre-conditioned implications.</param>
 		/// <returns>The list of pre-conditioned implications.</returns>
-		public IList<Implication> GetPreconditionChildren(Implication parentImplication) {
-			IList<Implication> result = new List<Implication>();
-			
-			foreach(Implication implication in implications)
-				if (implication.PreconditionImplication == parentImplication)
-					result.Add(implication);
-			
-			return result;
-		}
-		
-		public IList<Implication> GetListeningImplications(Atom atom) {
-			IList<Implication> result;
-			if (implicationsMap.TryGetValue(atom.Signature, out result)) return result;
-			else return null;
-		}
+		public IList<Implication> GetPreconditionChildren(Implication parentImplication)
+	    {
+	        return implications.Where(implication => implication.PreconditionImplication == parentImplication).ToList();
+	    }
 
-		public override string ToString() {
-			string result = "";
-			
-			foreach(Implication implication in implications)
-				result = result + implication.ToString() + "\n";
-			
-			result += "\n";
-			
-			foreach (string signature in implicationsMap.Keys)
-				result = result + (implicationsMap[signature]).Count +
-													" listening atoms of signature '" + signature + "'\n";
-				
-			return result;	
+	    public IList<Implication> GetListeningImplications(Atom atom)
+	    {
+	        IList<Implication> result;
+	        return implicationsMap.TryGetValue(atom.Signature, out result) ? result : null;
+	    }
+
+	    public override string ToString() {
+			var result = implications.Aggregate("", (current, implication) => current + implication.ToString() + "\n");
+
+	        result += "\n";
+
+	        return implicationsMap.Keys.Aggregate(result, (current, signature) => current + (implicationsMap[signature]).Count + " listening atoms of signature '" + signature + "'\n");	
 		}
 		
 	}

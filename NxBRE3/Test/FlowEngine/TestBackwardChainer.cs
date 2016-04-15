@@ -1,4 +1,6 @@
-﻿namespace NxBRE.Test.FlowEngine {
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace NxBRE.Test.FlowEngine {
 	using System;
 	using System.Collections.Generic;
 	

@@ -1,7 +1,6 @@
 namespace NxBRE.FlowEngine.Core
 {
-	using System;
-	using System.Text;
+    using System.Text;
 	using System.Collections;
 	
 	/// <summary> Abstract implementation of BRERuleMetaData.
@@ -133,7 +132,7 @@ namespace NxBRE.FlowEngine.Core
 		/// </returns>
 		public override string ToString()
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			
 			sb.Append("ID Type : ")
 				.Append(id.GetType().FullName)

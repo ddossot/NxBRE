@@ -2,11 +2,8 @@ namespace NxBRE.InferenceEngine
 {	
 	using System.Collections;
 	using System.Collections.Generic;
-	
-	using NxBRE.InferenceEngine;
-	using NxBRE.InferenceEngine.IO;
-	using NxBRE.InferenceEngine.Core;
-	using NxBRE.InferenceEngine.Rules;
+	using IO;
+	using Rules;
 
 	/// <summary>
 	/// The available types of rules to process.

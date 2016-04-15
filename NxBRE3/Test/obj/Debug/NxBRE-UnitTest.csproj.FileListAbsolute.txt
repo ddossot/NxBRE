@@ -1,0 +1,13 @@
+C:\Project\NxBRE\NxBRE3\Test\obj\Debug\NxBRE-UnitTest.csprojResolveAssemblyReference.cache
+C:\Project\NxBRE\NxBRE3\Test\bin\Debug\NxBRE.dll.config
+C:\Project\NxBRE\NxBRE3\Test\bin\Debug\NxBRE-UnitTest.dll.config
+C:\Project\NxBRE\NxBRE3\Test\bin\Debug\NxBRE-UnitTest.dll
+C:\Project\NxBRE\NxBRE3\Test\bin\Debug\NxBRE-UnitTest.pdb
+C:\Project\NxBRE\NxBRE3\Test\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Project\NxBRE\NxBRE3\Test\bin\Debug\nunit.framework.dll
+C:\Project\NxBRE\NxBRE3\Test\bin\Debug\NxBRE.dll
+C:\Project\NxBRE\NxBRE3\Test\bin\Debug\NxBRE.pdb
+C:\Project\NxBRE\NxBRE3\Test\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml
+C:\Project\NxBRE\NxBRE3\Test\bin\Debug\nunit.framework.xml
+C:\Project\NxBRE\NxBRE3\Test\obj\Debug\NxBRE-UnitTest.dll
+C:\Project\NxBRE\NxBRE3\Test\obj\Debug\NxBRE-UnitTest.pdb

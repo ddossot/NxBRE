@@ -1,11 +1,9 @@
 namespace NxBRE.InferenceEngine.Rules {
 	using System;
-	using System.Collections;
 	using System.Text;
 	
-	using NxBRE.InferenceEngine.IO;
-	using NxBRE.InferenceEngine.Core;
-	using NxBRE.Util;
+	using IO;
+	using Util;
 	
 	/// <summary>
 	/// An Function is a special predicate that represents an evaluation of a function
@@ -58,8 +56,8 @@ namespace NxBRE.InferenceEngine.Rules {
 			this.name = name;
 			this.arguments = arguments;
 			
-			HashCodeBuilder hcb = new HashCodeBuilder(base.GetHashCode()).Append(resolutionType).Append(bob).Append(name);
-			foreach(string argument in arguments) hcb.Append(argument);
+			var hcb = new HashCodeBuilder(base.GetHashCode()).Append(resolutionType).Append(bob).Append(name);
+			foreach(var argument in arguments) hcb.Append(argument);
 			hashCode = hcb.Value;
 			
 			// precalculate the function signature to use in the binder to evaluate the function
@@ -86,21 +84,24 @@ namespace NxBRE.InferenceEngine.Rules {
 		/// <returns>True if the Individual matches the Function.</returns>
 		public bool Evaluate(Individual individual) {
 			try {
-				if (resolutionType == FunctionResolutionType.NxBRE)
-					return EvaluateNxBREOperator(individual.Value, name, arguments);
-				else if (resolutionType == FunctionResolutionType.Binder)
-					return bob.Evaluate(individual.Value, functionSignature, arguments);
-				else
-					throw new BREException("Function evaluation mode not supported: " + resolutionType);
+				switch (resolutionType)
+				{
+				    case FunctionResolutionType.NxBRE:
+				        return EvaluateNxBREOperator(individual.Value, name, arguments);
+				    case FunctionResolutionType.Binder:
+				        return bob.Evaluate(individual.Value, functionSignature, arguments);
+				    default:
+				        throw new BREException("Function evaluation mode not supported: " + resolutionType);
+				}
 			}
 			catch (Exception ex) {
 				// Chuck Cross added try/catch block with addtional info in new thrown exception
-				StringBuilder sb = new StringBuilder("Error evaluating formula ")
+				var sb = new StringBuilder("Error evaluating formula ")
 																			.Append(this)
 																			.Append(".\r\n  Arguments:");
 				
-				foreach(string argument in arguments) 
-					sb.Append("   ").Append(argument==null?"Null":argument).Append("\r\n");
+				foreach(var argument in arguments) 
+					sb.Append("   ").Append(argument ?? "Null").Append("\r\n");
 				
 				throw new BREException(sb.ToString(), ex);
 			}

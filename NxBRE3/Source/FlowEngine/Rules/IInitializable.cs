@@ -1,8 +1,6 @@
 namespace NxBRE.FlowEngine.Rules
 {
-	using System;
-	
-	/// <summary> Define a generic interface that allows developers to ensure
+    /// <summary> Define a generic interface that allows developers to ensure
 	/// that an Flow Engine Rules, upon newInstance() or creation, has a callable
 	/// method to initialize the object.
 	/// </summary>

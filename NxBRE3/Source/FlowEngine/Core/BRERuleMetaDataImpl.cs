@@ -1,9 +1,8 @@
 namespace NxBRE.FlowEngine.Core
 {
-	using System;
-	using System.Collections;
+    using System.Collections;
 	
-	using NxBRE.FlowEngine;
+	using FlowEngine;
 	
 	/// <summary> Strict implementation of BRERuleMetaData
 	/// <P>

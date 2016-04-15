@@ -2,9 +2,7 @@ namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
 	using System.Text.RegularExpressions;
-
-	using NxBRE.InferenceEngine.Core;
-	using NxBRE.InferenceEngine.Rules;
+	using Rules;
 
 	using NxBRE.Util;
 	

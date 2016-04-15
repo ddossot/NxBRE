@@ -1,7 +1,6 @@
 namespace NxBRE.FlowEngine
 {
-	using System;
-	using System.Collections;
+    using System.Collections;
 	/// <summary> This interface defines information about a specific Business Rule. 
 	/// *
 	/// </summary>

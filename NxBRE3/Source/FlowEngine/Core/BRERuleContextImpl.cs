@@ -1,9 +1,8 @@
 namespace NxBRE.FlowEngine.Core
 {
-	using System;
-	using System.Collections;
+    using System.Collections;
 	
-	using NxBRE.FlowEngine;
+	using FlowEngine;
 	/// <summary> Strict implementation of BRERuleContext.
 	/// <P>
 	/// This class is sealed so that no one tries to extend it. 
@@ -73,13 +72,10 @@ namespace NxBRE.FlowEngine.Core
 		/// </param>
 		/// <returns> The requested business object</returns>
 		/// <remarks>Never use this method in the engine itself: the engine should only rely on GetResult.</remarks>
-		public override object GetObject(object aId) {
-			IBRERuleResult ruleResult = GetResult(aId);
-			if (ruleResult != null) { 
-				return ruleResult.Result;
-			} else {
-				return null;
-			}
+		public override object GetObject(object aId)
+		{
+		    var ruleResult = GetResult(aId);
+		    return ruleResult?.Result;
 		}
 	}
 }

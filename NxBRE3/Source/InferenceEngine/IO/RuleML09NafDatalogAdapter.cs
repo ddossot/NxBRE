@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace NxBRE.InferenceEngine.IO {
 	using System;
 	using System.Collections;
@@ -5,12 +7,11 @@ namespace NxBRE.InferenceEngine.IO {
 	using System.Collections.ObjectModel;
 	using System.IO;
 	using System.Xml;
-	using System.Xml.Schema;
 	using System.Xml.XPath;
 	
-	using NxBRE.InferenceEngine.Core;
-	using NxBRE.InferenceEngine.Rules;
-	using NxBRE.Util;
+	using Core;
+	using Rules;
+	using Util;
 
 	///<summary>Adapter supporting RuleML 0.9 NafDatalog Sublanguage.</summary>
 	///<remarks>UTF-8 is the default encoding.</remarks>
@@ -125,9 +126,9 @@ namespace NxBRE.InferenceEngine.IO {
 		
 		public virtual IList<Query> IntegrityQueries {
 			get {
-				List<Query> result = new List<Query>();
+				var result = new List<Query>();
 				
-				XPathNodeIterator integrityQueries = Navigator.Select(IntegrityQueriesElementXPath);
+				var integrityQueries = Navigator.Select(IntegrityQueriesElementXPath);
 				while(integrityQueries.MoveNext()) result.Add(GetQuery(integrityQueries.Current));
 				
 				return result.AsReadOnly();
@@ -233,11 +234,10 @@ namespace NxBRE.InferenceEngine.IO {
 			
 			// quietly ignored elements : @mapClosure @closure
 			// check not supported elements for which we will throw an exception, as the engine might not react as expected
-			string[] notSupportedElements = new string[] {"declare", "slot[local-name(*[1]) != 'Ind']", "Exists", "Forall", "Reify", "Skolem", "Protect[not(dl:Integrity | dl:warden)]", "*[@type]"};
+			var notSupportedElements = new string[] {"declare", "slot[local-name(*[1]) != 'Ind']", "Exists", "Forall", "Reify", "Skolem", "Protect[not(dl:Integrity | dl:warden)]", "*[@type]"};
 			
-			foreach(string notSupportedElement in notSupportedElements)
-				if (Navigator.Select(BuildXPathExpression("//dl:" + notSupportedElement)).MoveNext())
-					throw new BREException("RuleML element '" + notSupportedElement + "' is not supported by this adapter.");
+			foreach (var notSupportedElement in notSupportedElements.Where(notSupportedElement => Navigator.Select(BuildXPathExpression("//dl:" + notSupportedElement)).MoveNext()))
+			    throw new BREException("RuleML element '" + notSupportedElement + "' is not supported by this adapter.");
 		}
 		
 		private void SetAttributes(SaveFormatAttributes attributes) {
@@ -252,54 +252,50 @@ namespace NxBRE.InferenceEngine.IO {
 		
 		protected override void Init(Stream streamRuleML, string uriRuleML, FileAccess mode) {
 			base.Init(streamRuleML, uriRuleML, mode);
-			
-			if (AdapterState == State.Read) {
-				// estimate the global direction: ie consistent direction attributes (empty are ignored)
-				globalDirection = String.Empty;
-				XPathNodeIterator directionAttributes = Navigator.Select(BuildXPathExpression("//dl:*/@direction|//dl:*/@mapDirection"));
+
+		    if (AdapterState != State.Read) return;
+		    // estimate the global direction: ie consistent direction attributes (empty are ignored)
+		    globalDirection = String.Empty;
+		    var directionAttributes = Navigator.Select(BuildXPathExpression("//dl:*/@direction|//dl:*/@mapDirection"));
 				
-				while(directionAttributes.MoveNext()) {
-					string direction = directionAttributes.Current.Value;
-					if ((direction != String.Empty) && (direction != "bidirectional")) {
-						if (globalDirection == String.Empty) {
-							globalDirection = direction;
-						}
-						else if (direction != globalDirection) {
-							globalDirection = "inconsistent";
-							break;
-						}
-					}
-				}
+		    while(directionAttributes.MoveNext()) {
+		        var direction = directionAttributes.Current.Value;
+		        if ((direction == String.Empty) || (direction == "bidirectional")) continue;
+		        if (globalDirection == String.Empty) {
+		            globalDirection = direction;
+		        }
+		        else if (direction != globalDirection) {
+		            globalDirection = "inconsistent";
+		            break;
+		        }
+		    }
 				
-				// load equivalent atom definitions
-				equivalents = new List<Equivalent>();
-				XPathNodeIterator equivalentElements = Navigator.Select(EquivalentElementXPath);
+		    // load equivalent atom definitions
+		    equivalents = new List<Equivalent>();
+		    var equivalentElements = Navigator.Select(EquivalentElementXPath);
 				
-				while (equivalentElements.MoveNext()) {
-					// extract label, if any
-					XPathNodeIterator labelIterator = equivalentElements.Current.Select(BuildXPathExpression("dl:oid/dl:Ind"));
-					string label = (labelIterator.MoveNext())?labelIterator.Current.Value:String.Empty;
+		    while (equivalentElements.MoveNext()) {
+		        // extract label, if any
+		        var labelIterator = equivalentElements.Current.Select(BuildXPathExpression("dl:oid/dl:Ind"));
+		        var label = (labelIterator.MoveNext())?labelIterator.Current.Value:String.Empty;
 					
-					XPathNodeIterator equivalentAtoms = equivalentElements.Current.Select(BuildXPathExpression(".//dl:Atom"));
-					if (equivalentAtoms.Count != 2) throw new BREException("An Equivalent group should contain exactly 2 atoms and not " + equivalentAtoms.Count);
+		        var equivalentAtoms = equivalentElements.Current.Select(BuildXPathExpression(".//dl:Atom"));
+		        if (equivalentAtoms.Count != 2) throw new BREException("An Equivalent group should contain exactly 2 atoms and not " + equivalentAtoms.Count);
 					
-					equivalentAtoms.MoveNext();
-					Atom firstAtom = GetAtom(equivalentAtoms.Current, false, false, false);
+		        equivalentAtoms.MoveNext();
+		        var firstAtom = GetAtom(equivalentAtoms.Current, false, false, false);
 					
-					equivalentAtoms.MoveNext();
-					Atom secondAtom = GetAtom(equivalentAtoms.Current, false, false, false);
+		        equivalentAtoms.MoveNext();
+		        var secondAtom = GetAtom(equivalentAtoms.Current, false, false, false);
 					
-					equivalents.Add(new Equivalent(label, firstAtom, secondAtom));
-				}
-				
-			}
+		        equivalents.Add(new Equivalent(label, firstAtom, secondAtom));
+		    }
 		}
 		
 		protected override RelationResolution AnalyzeRelationResolution(XPathNavigator relationElement) {
-			RelationResolution result = new RelationResolution();
-			result.atomRelation = relationElement.Value;
+		    var result = new RelationResolution {atomRelation = relationElement.Value};
 
-			string atomRelationURI = relationElement.GetAttribute("uri", String.Empty).ToLower();
+		    var atomRelationURI = relationElement.GetAttribute("uri", string.Empty).ToLower();
 			
 			switch(atomRelationURI) {
 				case "nxbre://operator":
@@ -325,13 +321,13 @@ namespace NxBRE.InferenceEngine.IO {
 		
 		protected override IPredicate BuildPredicate(XPathNavigator predicateElement, bool inHead, bool resolveImmediatly) {
 			IPredicate predicate;
-			string predicateName = predicateElement.Name;
-			string predicateValue = predicateElement.Value;
+			var predicateName = predicateElement.Name;
+			var predicateValue = predicateElement.Value;
 			
 			switch(predicateName) {
 				// --------- IND predicates --------
 				case "Ind":
-					string predicateURI = predicateElement.GetAttribute("uri", String.Empty).ToLower();
+					var predicateURI = predicateElement.GetAttribute("uri", String.Empty).ToLower();
 					
 					switch(predicateURI) {
 						case "nxbre://expression":
@@ -352,7 +348,7 @@ namespace NxBRE.InferenceEngine.IO {
 					
 						case "nxbre://operator":
 							// NxBRE operators must follow this pattern: operator(uniqueargument)
-							ObjectPair operatorCall = Parameter.ParseOperatorCall(predicateValue);
+							var operatorCall = Parameter.ParseOperatorCall(predicateValue);
 							predicate = new Function(Function.FunctionResolutionType.NxBRE,
 							                         predicateValue,
 							                         null,
@@ -389,7 +385,7 @@ namespace NxBRE.InferenceEngine.IO {
 				
 			// --------- DATA predicates --------
 			case "Data":
-				string schemaType = predicateElement.GetAttribute("type", "http://www.w3.org/2001/XMLSchema-instance");
+				var schemaType = predicateElement.GetAttribute("type", "http://www.w3.org/2001/XMLSchema-instance");
 				if (schemaType != String.Empty) {
 					// remove any preceding namespace, like in "xs:string"
 					if (schemaType.IndexOf(':')>=0) schemaType = schemaType.Split(':')[1];
@@ -409,7 +405,7 @@ namespace NxBRE.InferenceEngine.IO {
 				// the first child must be an Ind, we do not support other slot name holders
 				if (predicateElement.MoveToFirstChild()) {
 					if (predicateElement.Name != "Ind") throw new BREException("Only Ind is accepted as a slot name holder");
-					string slotName = predicateElement.Value;
+					var slotName = predicateElement.Value;
 					if (!predicateElement.MoveToNext()) throw new BREException("A slot should contain two children");
 					predicate = new Slot(slotName, BuildPredicate(predicateElement, inHead, resolveImmediatly));
 				}
@@ -431,12 +427,12 @@ namespace NxBRE.InferenceEngine.IO {
 			if (equivalents.Count == 0) return new AtomGroup(logicalOperator, content);
 			
 			// if we have equivalent atoms, try to translate content into equivalent sub-groups
-			ArrayList enrichedContent = new ArrayList();
+			var enrichedContent = new ArrayList();
 				
-			foreach(object atomOrAtomGroup in content) {
+			foreach(var atomOrAtomGroup in content) {
 				if (atomOrAtomGroup is Atom) {
-					Atom atom = (Atom)atomOrAtomGroup;
-					ArrayList atomEquivalents = RulesUtil.GetAll(equivalents, atom, new ArrayList());
+					var atom = (Atom)atomOrAtomGroup;
+					var atomEquivalents = RulesUtil.GetAll(equivalents, atom, new ArrayList());
 						
 					if (atomEquivalents.Count > 1) {
 						if (logicalOperator == AtomGroup.LogicalOperator.Or) {
@@ -475,11 +471,12 @@ namespace NxBRE.InferenceEngine.IO {
 			
 			if (atom.Label != null) WriteLabel(eAtom, atom.Label);
 			
-			XmlElement rel = Document.CreateElement("Rel", DatalogNamespaceURL);
+			var rel = Document.CreateElement("Rel", DatalogNamespaceURL);
 			rel.InnerText = atom.Type;
-			
-			if (atom is AtomFunction) {
-				switch (((AtomFunction)atom).ResolutionType) {
+
+		    var atomFunction = atom as AtomFunction;
+		    if (atomFunction != null) {
+				switch (atomFunction.ResolutionType) {
 					case AtomFunction.RelationResolutionType.Binder:
 						rel.SetAttribute("uri", "nxbre://binder");
 						break;
@@ -491,254 +488,289 @@ namespace NxBRE.InferenceEngine.IO {
 					case AtomFunction.RelationResolutionType.Expression:
 						rel.SetAttribute("uri", "nxbre://expression");
 						break;
+				    case AtomFunction.RelationResolutionType.None:
+				        break;
+				    default:
+				        throw new ArgumentOutOfRangeException();
 				}
 			}
-			
-			if (syntax != SaveFormatAttributes.Compact) {
-				XmlElement opr = Document.CreateElement("op", DatalogNamespaceURL);
-				opr.AppendChild(rel);
-				eAtom.AppendChild(opr);
-			}
-			else {
-				eAtom.AppendChild(rel);
-			}
-			
-			
-			for(int i=0; i<atom.Members.Length; i++) {
-				IPredicate pre = atom.Members[i];
-				
-				// build the predicate element depending on its type
-				XmlElement predicate;
-				
-				if (pre is Variable) {
-					predicate = Document.CreateElement("Var", DatalogNamespaceURL);
-					predicate.InnerText = pre.Value.ToString();
-				}
-				else if (pre is Individual) {
-					if (pre.Value is HyperLink) {
-						// we deal with the special case of hyperlinks
-						HyperLink hl = (HyperLink)pre.Value;
-						predicate = Document.CreateElement("Ind", DatalogNamespaceURL);
-						predicate.SetAttribute("uri", hl.Uri);
-						predicate.InnerText = hl.Text;
-					}
-					else {
-						string sourceType = ((Individual)pre).SourceType;
-						if ((forceDataTyping) && (!(pre.Value is string)) && ((sourceType == null) || (sourceType == String.Empty))) sourceType = Xml.GetSchemaTypeFromClr(pre.Value);
-		
-						if ((sourceType != null) && (sourceType != String.Empty)) {
-							// we persist as a typed data
-							predicate = Document.CreateElement("Data", DatalogNamespaceURL);
-							predicate.SetAttribute("type", Xml.NS_URI, "xs:" + sourceType);
-							predicate.InnerText = Xml.FromClr(pre.Value, sourceType);
-						}
-						else {
-							// we persist as a String based individual
-							predicate = Document.CreateElement("Ind", DatalogNamespaceURL);
-							predicate.InnerText = pre.Value.ToString();
-						}
-					}
-				}
-				else if (pre is Formula) {
-					predicate = Document.CreateElement("Ind", DatalogNamespaceURL);
-					predicate.SetAttribute("uri",
-					                       (((Formula)pre).ResolutionType == Formula.FormulaResolutionType.Binder)?"nxbre://binder":"nxbre://expression");
 
-					predicate.InnerText = pre.Value.ToString();
-				}
-				else if (pre is Function) {
-					Function function = (Function)pre;
-					predicate = Document.CreateElement("Ind", DatalogNamespaceURL);
-					predicate.SetAttribute("uri", (function.ResolutionType == Function.FunctionResolutionType.NxBRE)?"nxbre://operator":(IsExpressionBinder(function.Binder)?"nxbre://expression":"nxbre://binder"));
+		    if (syntax != SaveFormatAttributes.Compact)
+		    {
+		        var opr = Document.CreateElement("op", DatalogNamespaceURL);
+		        opr.AppendChild(rel);
+		        eAtom.AppendChild(opr);
+		    }
+		    else
+		    {
+		        eAtom.AppendChild(rel);
+		    }
 
-					predicate.InnerText = pre.Value.ToString();
-				}
-				else {
-					// should never happen
-					throw new BREException("Can not persist a rulebase containing a predicate of type: " + pre.GetType().FullName);
-				}
-				
-				// add wrapper elements if necessary: if there is one or more slot, args can not be used
-				string slotName = atom.SlotNames[i];
-				if (slotName != String.Empty) {
-					XmlElement slot = Document.CreateElement("slot", DatalogNamespaceURL);
-					XmlElement slotInd = Document.CreateElement("Ind", DatalogNamespaceURL);
-					slotInd.InnerText = slotName;
-					slot.AppendChild(slotInd);
-					slot.AppendChild(predicate);
-					eAtom.AppendChild(slot);
-				}
-				else if ((!atom.HasSlot) && (syntax == SaveFormatAttributes.Expanded)) {
-					XmlElement argument = Document.CreateElement("arg", DatalogNamespaceURL);
-					argument.SetAttribute("index", (i+1).ToString());
-					argument.AppendChild(predicate);
-					eAtom.AppendChild(argument);
-				}
-				else {
-					eAtom.AppendChild(predicate);
-				}
-			}
-			
-			if (atom.Negative) {
-				XmlElement naf = Document.CreateElement("Naf", DatalogNamespaceURL);
-				
-				if (syntax == SaveFormatAttributes.Expanded) {
-					XmlElement weak = Document.CreateElement("weak", DatalogNamespaceURL);
-					weak.AppendChild(eAtom);
-					naf.AppendChild(weak);
-				}
-				else {
-					naf.AppendChild(eAtom);
-				}
-				
-				target.AppendChild(naf);
-			}
-			else {
-				target.AppendChild(eAtom);
-			}
-		}
 
-		protected override void WriteAtomGroup(XmlElement target, AtomGroup atomGroup) {
-			WriteAtomGroup(target, atomGroup, "And", "Or");
-		}
-		
-		protected override void WriteQuery(XmlElement target, Query query) {
-			WriteQueryBody(target, Document.CreateElement("Query", DatalogNamespaceURL), query);
-		}
-		
-		protected void WriteQueryBody(XmlElement target, XmlElement queryElement, Query query) {
-			WriteLabel(queryElement, query.Label);
-			WriteAtomGroup(queryElement, query.AtomGroup);
-			target.AppendChild(queryElement);
-		}
-		
-		protected virtual void WriteIntegrityQuery(XmlElement target, Query query) {
-			if (syntax == SaveFormatAttributes.Expanded) {
-				XmlElement warden = Document.CreateElement("warden", DatalogNamespaceURL);
-				target.AppendChild(warden);
-				target = warden;
-			}
-			
-			WriteQueryBody(target, Document.CreateElement("Integrity", DatalogNamespaceURL), query);
-		}
-		
-		protected virtual void WriteEquivalent(XmlElement target, Equivalent equivalent) {
-			XmlElement equivalentElement = Document.CreateElement("Equivalent", DatalogNamespaceURL);
-			WriteLabel(equivalentElement, equivalent.Label);
-			WriteEquivalentAtom(equivalentElement, equivalent.FirstAtom);
-			WriteEquivalentAtom(equivalentElement, equivalent.SecondAtom);
-			target.AppendChild(equivalentElement);
-		}
-		
-		private void WriteEquivalentAtom(XmlElement target, Atom atom) {
-			if (syntax == SaveFormatAttributes.Expanded) {
-				XmlElement torso = Document.CreateElement("torso", DatalogNamespaceURL);
-				WriteAtom(torso, atom, false);
-				target.AppendChild(torso);
-			}
-			else {
-				WriteAtom(target, atom, false);
-			}
-		}
-		
-		protected void WriteImplication(XmlElement target, Implication implication) {
-			XmlElement implicationElement = Document.CreateElement("Implies", DatalogNamespaceURL);
-			
-			// action mapping
-			String action = String.Empty;
-			if (implication.Action != ImplicationAction.Assert)	action = implication.Action.ToString().ToLower();
-			
-			ImplicationProperties ip = new ImplicationProperties(implication.Label,
-			                                                     implication.Priority,
-			                                                     implication.Mutex,
-			                                                     implication.Precondition,
-			                                                     action);
+		    for (var i = 0; i < atom.Members.Length; i++)
+		    {
+		        var pre = atom.Members[i];
 
-			WriteLabel(implicationElement, ip.ToString());
+		        // build the predicate element depending on its type
+		        XmlElement predicate;
 
-			if (syntax == SaveFormatAttributes.Compact) {
-				// in compact mode, the order is forced to body,head (equivalent to if,then)
-				WriteAtomGroup(implicationElement, implication.AtomGroup);
-				WriteAtom(implicationElement, implication.Deduction, false);
-			}
-			else {
-				XmlElement body = Document.CreateElement("body", DatalogNamespaceURL);
-				WriteAtomGroup(body, implication.AtomGroup);
-				implicationElement.AppendChild(body);
-	
-				XmlElement head = Document.CreateElement("head", DatalogNamespaceURL);
-				WriteAtom(head, implication.Deduction, false);
-				implicationElement.AppendChild(head);
-			}
-			
-			if (syntax == SaveFormatAttributes.Expanded) {
-				XmlElement formula = Document.CreateElement("formula", DatalogNamespaceURL);
-				formula.AppendChild(implicationElement);
-				target.AppendChild(formula);
-			}
-			else {
-				target.AppendChild(implicationElement);
-			}
-		}
-				
-		protected override void WriteFact(XmlElement target, Fact fact) {
-			if (syntax == SaveFormatAttributes.Expanded) {
-				XmlElement formula = Document.CreateElement("formula", DatalogNamespaceURL);
-				WriteAtom(formula, fact, true);
-				target.AppendChild(formula);
-			}
-			else {
-				WriteAtom(target, fact, true);
-			}
-		}
-		
-		protected XmlElement WriteMapElement(string name) {
-			XmlElement element = Document.CreateElement(name, DatalogNamespaceURL);
-			// we ignore "bidirectional" which is the default
-			if ((Direction != null) && (Direction != String.Empty) && (Direction != "bidirectional")) element.SetAttribute("mapDirection", Direction);
-			Document.DocumentElement.AppendChild(element);
-			return element;
-		}
-		
-		protected override void WriteQueries(IList<Query> queries) {
-			if (queries.Count > 0) {
-				Document.DocumentElement.AppendChild(Document.CreateComment("Queries"));
-				foreach(Query query in queries) WriteQuery(Document.DocumentElement, query);
-			}
+		        if (pre is Variable)
+		        {
+		            predicate = Document.CreateElement("Var", DatalogNamespaceURL);
+		            predicate.InnerText = pre.Value.ToString();
+		        }
+		        else if (pre is Individual)
+		        {
+		            var link = pre.Value as HyperLink;
+		            if (link != null)
+		            {
+		                // we deal with the special case of hyperlinks
+		                var hl = link;
+		                predicate = Document.CreateElement("Ind", DatalogNamespaceURL);
+		                predicate.SetAttribute("uri", hl.Uri);
+		                predicate.InnerText = hl.Text;
+		            }
+		            else
+		            {
+		                var sourceType = ((Individual) pre).SourceType;
+		                if ((forceDataTyping) && (!(pre.Value is string)) && ((sourceType == null) || (sourceType == String.Empty))) sourceType = Xml.GetSchemaTypeFromClr(pre.Value);
+
+		                if (!string.IsNullOrEmpty(sourceType))
+		                {
+		                    // we persist as a typed data
+		                    predicate = Document.CreateElement("Data", DatalogNamespaceURL);
+		                    predicate.SetAttribute("type", Xml.NS_URI, "xs:" + sourceType);
+		                    predicate.InnerText = Xml.FromClr(pre.Value, sourceType);
+		                }
+		                else
+		                {
+		                    // we persist as a String based individual
+		                    predicate = Document.CreateElement("Ind", DatalogNamespaceURL);
+		                    predicate.InnerText = pre.Value.ToString();
+		                }
+		            }
+		        }
+		        else if (pre is Formula)
+		        {
+		            predicate = Document.CreateElement("Ind", DatalogNamespaceURL);
+		            predicate.SetAttribute("uri", (((Formula) pre).ResolutionType == Formula.FormulaResolutionType.Binder) ? "nxbre://binder" : "nxbre://expression");
+
+		            predicate.InnerText = pre.Value.ToString();
+		        }
+		        else if (pre is Function)
+		        {
+		            var function = (Function) pre;
+		            predicate = Document.CreateElement("Ind", DatalogNamespaceURL);
+		            predicate.SetAttribute("uri", (function.ResolutionType == Function.FunctionResolutionType.NxBRE) ? "nxbre://operator" : (IsExpressionBinder(function.Binder) ? "nxbre://expression" : "nxbre://binder"));
+
+		            predicate.InnerText = pre.Value.ToString();
+		        }
+		        else
+		        {
+		            // should never happen
+		            throw new BREException("Can not persist a rulebase containing a predicate of type: " + pre.GetType().FullName);
+		        }
+
+		        // add wrapper elements if necessary: if there is one or more slot, args can not be used
+		        var slotName = atom.SlotNames[i];
+		        if (slotName != String.Empty)
+		        {
+		            var slot = Document.CreateElement("slot", DatalogNamespaceURL);
+		            var slotInd = Document.CreateElement("Ind", DatalogNamespaceURL);
+		            slotInd.InnerText = slotName;
+		            slot.AppendChild(slotInd);
+		            slot.AppendChild(predicate);
+		            eAtom.AppendChild(slot);
+		        }
+		        else if ((!atom.HasSlot) && (syntax == SaveFormatAttributes.Expanded))
+		        {
+		            var argument = Document.CreateElement("arg", DatalogNamespaceURL);
+		            argument.SetAttribute("index", (i + 1).ToString());
+		            argument.AppendChild(predicate);
+		            eAtom.AppendChild(argument);
+		        }
+		        else
+		        {
+		            eAtom.AppendChild(predicate);
+		        }
+		    }
+
+		    if (atom.Negative)
+		    {
+		        var naf = Document.CreateElement("Naf", DatalogNamespaceURL);
+
+		        if (syntax == SaveFormatAttributes.Expanded)
+		        {
+		            var weak = Document.CreateElement("weak", DatalogNamespaceURL);
+		            weak.AppendChild(eAtom);
+		            naf.AppendChild(weak);
+		        }
+		        else
+		        {
+		            naf.AppendChild(eAtom);
+		        }
+
+		        target.AppendChild(naf);
+		    }
+		    else
+		    {
+		        target.AppendChild(eAtom);
+		    }
 		}
 
-		protected override void WriteImplications(IList<Implication> implications) {
-			if (implications.Count > 0) {
-				Document.DocumentElement.AppendChild(Document.CreateComment("Implications"));
-				XmlElement target = WriteMapElement("Assert");
-				foreach(Implication implication in implications) WriteImplication(target, implication);
-			}
-		}
+	    protected override void WriteAtomGroup(XmlElement target, AtomGroup atomGroup)
+	    {
+	        WriteAtomGroup(target, atomGroup, "And", "Or");
+	    }
 
-		protected virtual void WriteEquivalents(IList<Equivalent> equivalents) {
-			if (equivalents.Count > 0) {
-				Document.DocumentElement.AppendChild(Document.CreateComment("Equivalents"));
-				XmlElement target = WriteMapElement("Assert");
-				foreach(Equivalent equivalent in equivalents) WriteEquivalent(target, equivalent);
-			}
-		}
-		
-		protected override void WriteFacts(IList<Fact> facts) {
-			if (facts.Count > 0) {
-				Document.DocumentElement.AppendChild(Document.CreateComment("Facts"));
-				XmlElement target = WriteMapElement("Assert");
-				foreach(Fact fact in facts)	WriteFact(target, fact);
-			}
-		}
-		
-		protected virtual void WriteIntegrityQueries(IList<Query> integrityQueries) {
-			if (integrityQueries.Count > 0) {
-				Document.DocumentElement.AppendChild(Document.CreateComment("Integrity Queries"));
-				XmlElement target = WriteMapElement("Protect");
-				foreach(Query integrityQuery in integrityQueries) WriteIntegrityQuery(target, integrityQuery);
-			}
-		}
-		
+	    protected override void WriteQuery(XmlElement target, Query query)
+	    {
+	        WriteQueryBody(target, Document.CreateElement("Query", DatalogNamespaceURL), query);
+	    }
+
+	    protected void WriteQueryBody(XmlElement target, XmlElement queryElement, Query query)
+	    {
+	        WriteLabel(queryElement, query.Label);
+	        WriteAtomGroup(queryElement, query.AtomGroup);
+	        target.AppendChild(queryElement);
+	    }
+
+	    protected virtual void WriteIntegrityQuery(XmlElement target, Query query)
+	    {
+	        if (syntax == SaveFormatAttributes.Expanded)
+	        {
+	            var warden = Document.CreateElement("warden", DatalogNamespaceURL);
+	            target.AppendChild(warden);
+	            target = warden;
+	        }
+
+	        WriteQueryBody(target, Document.CreateElement("Integrity", DatalogNamespaceURL), query);
+	    }
+
+	    protected virtual void WriteEquivalent(XmlElement target, Equivalent equivalent)
+	    {
+	        var equivalentElement = Document.CreateElement("Equivalent", DatalogNamespaceURL);
+	        WriteLabel(equivalentElement, equivalent.Label);
+	        WriteEquivalentAtom(equivalentElement, equivalent.FirstAtom);
+	        WriteEquivalentAtom(equivalentElement, equivalent.SecondAtom);
+	        target.AppendChild(equivalentElement);
+	    }
+
+	    private void WriteEquivalentAtom(XmlElement target, Atom atom)
+	    {
+	        if (syntax == SaveFormatAttributes.Expanded)
+	        {
+	            var torso = Document.CreateElement("torso", DatalogNamespaceURL);
+	            WriteAtom(torso, atom, false);
+	            target.AppendChild(torso);
+	        }
+	        else
+	        {
+	            WriteAtom(target, atom, false);
+	        }
+	    }
+
+	    protected void WriteImplication(XmlElement target, Implication implication)
+	    {
+	        var implicationElement = Document.CreateElement("Implies", DatalogNamespaceURL);
+
+	        // action mapping
+	        var action = String.Empty;
+	        if (implication.Action != ImplicationAction.Assert) action = implication.Action.ToString().ToLower();
+
+	        var ip = new ImplicationProperties(implication.Label, implication.Priority, implication.Mutex, implication.Precondition, action);
+
+	        WriteLabel(implicationElement, ip.ToString());
+
+	        if (syntax == SaveFormatAttributes.Compact)
+	        {
+	            // in compact mode, the order is forced to body,head (equivalent to if,then)
+	            WriteAtomGroup(implicationElement, implication.AtomGroup);
+	            WriteAtom(implicationElement, implication.Deduction, false);
+	        }
+	        else
+	        {
+	            var body = Document.CreateElement("body", DatalogNamespaceURL);
+	            WriteAtomGroup(body, implication.AtomGroup);
+	            implicationElement.AppendChild(body);
+
+	            var head = Document.CreateElement("head", DatalogNamespaceURL);
+	            WriteAtom(head, implication.Deduction, false);
+	            implicationElement.AppendChild(head);
+	        }
+
+	        if (syntax == SaveFormatAttributes.Expanded)
+	        {
+	            var formula = Document.CreateElement("formula", DatalogNamespaceURL);
+	            formula.AppendChild(implicationElement);
+	            target.AppendChild(formula);
+	        }
+	        else
+	        {
+	            target.AppendChild(implicationElement);
+	        }
+	    }
+
+	    protected override void WriteFact(XmlElement target, Fact fact)
+	    {
+	        if (syntax == SaveFormatAttributes.Expanded)
+	        {
+	            var formula = Document.CreateElement("formula", DatalogNamespaceURL);
+	            WriteAtom(formula, fact, true);
+	            target.AppendChild(formula);
+	        }
+	        else
+	        {
+	            WriteAtom(target, fact, true);
+	        }
+	    }
+
+	    protected XmlElement WriteMapElement(string name)
+	    {
+	        var element = Document.CreateElement(name, DatalogNamespaceURL);
+	        // we ignore "bidirectional" which is the default
+	        if ((!string.IsNullOrEmpty(Direction)) && (Direction != "bidirectional")) element.SetAttribute("mapDirection", Direction);
+	        Document.DocumentElement.AppendChild(element);
+	        return element;
+	    }
+
+	    protected override void WriteQueries(IList<Query> queries)
+	    {
+	        if (queries.Count <= 0) return;
+	        Document.DocumentElement.AppendChild(Document.CreateComment("Queries"));
+	        foreach (var query in queries) WriteQuery(Document.DocumentElement, query);
+	    }
+
+	    protected override void WriteImplications(IList<Implication> implications)
+	    {
+	        if (implications.Count <= 0) return;
+	        Document.DocumentElement.AppendChild(Document.CreateComment("Implications"));
+	        var target = WriteMapElement("Assert");
+	        foreach (var implication in implications) WriteImplication(target, implication);
+	    }
+
+	    protected virtual void WriteEquivalents(IList<Equivalent> equivalents)
+	    {
+	        if (equivalents.Count <= 0) return;
+	        Document.DocumentElement.AppendChild(Document.CreateComment("Equivalents"));
+	        var target = WriteMapElement("Assert");
+	        foreach (var equivalent in equivalents) WriteEquivalent(target, equivalent);
+	    }
+
+	    protected override void WriteFacts(IList<Fact> facts)
+	    {
+	        if (facts.Count <= 0) return;
+	        Document.DocumentElement.AppendChild(Document.CreateComment("Facts"));
+	        var target = WriteMapElement("Assert");
+	        foreach (var fact in facts) WriteFact(target, fact);
+	    }
+
+	    protected virtual void WriteIntegrityQueries(IList<Query> integrityQueries)
+	    {
+	        if (integrityQueries.Count <= 0) return;
+	        Document.DocumentElement.AppendChild(Document.CreateComment("Integrity Queries"));
+	        var target = WriteMapElement("Protect");
+	        foreach (var integrityQuery in integrityQueries) WriteIntegrityQuery(target, integrityQuery);
+	    }
 	}
-	
 }

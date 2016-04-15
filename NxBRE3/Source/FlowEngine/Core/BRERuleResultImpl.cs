@@ -1,8 +1,6 @@
 namespace NxBRE.FlowEngine.Core
 {
-	using System;
-	
-	using NxBRE.FlowEngine;
+    using FlowEngine;
 	
 	/// <summary> Strict implementation of BRERuleRuleResult
 	/// *
